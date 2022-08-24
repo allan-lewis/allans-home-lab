@@ -1,0 +1,10 @@
+---
+
+#- name: scan and register  
+#  command: "ssh-keyscan {{ansible_host|default(inventory_hostname)}}"  
+#  register: "host_keys"  
+#  changed_when: false 
+
+- name: Ensure that SSH key is is known_hosts
+  ansible.builtin.ping:
+  

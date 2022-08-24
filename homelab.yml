@@ -1,0 +1,4 @@
+---
+- import_playbook: control.yml
+
+- import_playbook: docker.yml
