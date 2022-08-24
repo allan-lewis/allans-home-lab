@@ -1,0 +1,43 @@
+- name: Ensure that node is using New York time zone
+  community.general.timezone:
+    name: America/New_York
+
+- name: Ensure that {{ control_user }} user exists
+  ansible.builtin.user:
+    name: "{{ control_user }}"
+    password: "{{ control_password }}"
+    password_lock: no
+    shell: /bin/bash
+    groups:
+      - sudo
+    append: yes
+    state: present
+  register: control_user_data
+
+- name: Ensure {{ control_user }} user has an SSH folder
+  ansible.builtin.file:
+    path: "{{ control_user_data.home }}/.ssh"
+    state: directory
+    owner: "{{ control_user }}"
+    group: "{{ control_user }}"
+
+- name: Ensure that Ansible user has an SSH key
+  community.crypto.openssh_keypair:
+    path: "{{ control_user_data.home }}/.ssh/id_rsa"
+    owner: "{{ control_user }}"
+    group: "{{ control_user }}"
+
+- name: Ensure that control node SSH keys are authorized
+  ansible.posix.authorized_key:
+    user: "{{ control_user }}"
+    state: present
+    key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+
+- name: Ensure that we're controlling things as the {{ control_user }} user
+  ansible.builtin.assert:
+    that: "ansible_ssh_user == '{{ control_user }}'"
+    fail_msg: "Not proceeding further since we're using user {{ ansible_ssh_user }} instead of {{ control_user }}"
+    success_msg: "Proceeding because we're using user {{ ansible_ssh_user }}"
+
+- name: Ensure that managed node is ping-able
+  ansible.builtin.ping:

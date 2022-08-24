@@ -5,4 +5,5 @@
   gather_facts: false
 
   roles:
+    - baseline
     - docker
