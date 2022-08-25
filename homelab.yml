@@ -1,4 +1,3 @@
 ---
 - import_playbook: control.yml
-- import_playbook: baseline.yml
 - import_playbook: docker.yml

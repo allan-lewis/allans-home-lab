@@ -1,0 +1,59 @@
+- name: Ensure that we have Docker's GPG key
+  ansible.builtin.apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+  register: docker_key
+
+- name: Ensure that we have Docker's repository
+  ansible.builtin.apt_repository:
+    repo: deb https://download.docker.com/linux/ubuntu focal stable
+    state: present
+  register: docker_repo
+
+- name: Do an apt update, if necessary
+  ansible.builtin.apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+  when: (docker_key is changed) or (docker_repo is changed)
+
+- name: Ensure that all required dependencies are present
+  ansible.builtin.apt:
+    pkg:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - software-properties-common
+      - python3-pip
+      - virtualenv
+      - python3-setuptools
+      - containerd
+    state: latest
+    update_cache: true
+
+- name: Ensure that Docker is present
+  ansible.builtin.apt:
+    name:
+      - docker
+      - docker.io
+      - docker-compose
+      - docker-registry
+    state: latest
+    update_cache: true
+
+- name: Ensure that the {{ control_user }} user is in the Docker group
+  ansible.builtin.user:
+    name: "{{ control_user }}"
+    groups: 
+      - docker
+    append: yes
+
+- name: Ensure that the Docker volumes directory exists
+  ansible.builtin.file:
+    path: "{{ docker_volumes_directory }}"
+    state: directory
+    owner: "{{ docker_volumes_owner }}"
+    group: "{{ docker_volumes_group }}"
+
+- name: Ensure that the Docker deamon is running
+  ansible.builtin.service:
+    name: docker
+    state: started
+  become: true
