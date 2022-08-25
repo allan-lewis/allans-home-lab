@@ -21,7 +21,7 @@
     owner: "{{ control_user }}"
     group: "{{ control_user }}"
 
-- name: Ensure that Ansible user has an SSH key
+- name: Ensure that {{ control_user }} user has an SSH key
   community.crypto.openssh_keypair:
     path: "{{ control_user_data.home }}/.ssh/id_rsa"
     owner: "{{ control_user }}"
@@ -33,6 +33,13 @@
     state: present
     key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
 
+- name: Ensure that the {{ control_user }} user is in the sudoers file
+  ansible.builtin.lineinfile:
+    path: /etc/sudoers
+    regexp: '^{{ control_user }}'
+    line: '{{ control_user }} ALL=(ALL) NOPASSWD: ALL'
+    validate: 'visudo -cf %s'
+
 - name: Ensure that we're controlling things as the {{ control_user }} user
   ansible.builtin.assert:
     that: "ansible_ssh_user == '{{ control_user }}'"
@@ -41,3 +48,55 @@
 
 - name: Ensure that managed node is ping-able
   ansible.builtin.ping:
+
+- name: Ensure that only the {{ control_user }}  user can login
+  ansible.builtin.lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: '^AllowUsers'
+    line: 'AllowUsers {{ control_user }}'
+    state: present
+  register: ssh_allow_users
+
+- name: Ensure that root login access is disabled
+  ansible.builtin.lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: '^(#)?PermitRootLogin \w*$'
+    line: 'PermitRootLogin no'
+    state: present
+  register: ssh_disable_root
+
+- name: Disable SSH password authentication
+  ansible.builtin.lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: '^#?\s*PasswordAuthentication\s'
+    line: 'PasswordAuthentication no'
+    state: present
+  register: ssh_disable_password
+
+- name: Ensure that the SSH service has been restarted, if necessary
+  ansible.builtin.service:
+    name: sshd
+    state: restarted
+  when: (ssh_allow_users is changed) or (ssh_disable_root is changed) or (ssh_disable_password is changed)
+
+- name: Do an apt update
+  ansible.builtin.apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+
+- name: Do an apt upgrade
+  ansible.builtin.apt: upgrade=dist force_apt_get=yes
+
+- name: Check if a reboot is required
+  ansible.builtin.stat: 
+    path: /var/run/reboot-required
+    get_md5: no
+  register: reboot_required_file
+
+- name: Ensure that a reboot has been performed, if necessary
+  ansible.builtin.reboot:
+    msg: "Reboot initiated by Ansible for kernel updates"
+    connect_timeout: 5
+    reboot_timeout: 300
+    pre_reboot_delay: 0
+    post_reboot_delay: 30
+    test_command: uptime
+  when: reboot_required_file.stat.exists

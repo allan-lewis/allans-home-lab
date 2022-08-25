@@ -1,5 +1,5 @@
 ---
-- name: Ensure that Docker is up and running 
+- name: Ensure that Docker containers are up and running 
   hosts: docker_nodes
   become: yes
   gather_facts: false
