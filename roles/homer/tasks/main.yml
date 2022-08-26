@@ -1,0 +1,15 @@
+- name: Ensure that Homer Docker container(s) are up and running
+  ansible.builtin.include_role:
+    name: container
+  vars:
+    container: "{{ item }}"
+  with_items: 
+    - name: "homer"
+      pretty_name: "Homer"
+      image: "b4bz/homer"
+      paths:
+        - path: "{{ docker_volumes_directory }}/homer"
+      ports:
+        - "{{ homer_http_port }}:8080/tcp"
+      volumes:
+        - "{{ docker_volumes_directory }}/homer:/www/assets"
