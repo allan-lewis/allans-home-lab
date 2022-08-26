@@ -1,0 +1,51 @@
+- name: Ensure that Portainer is up and running
+  hosts: docker_nodes
+  become: yes
+  gather_facts: false
+
+  vars:
+    containers:
+      - name: "portainer"
+        pretty_name: "Portainer"
+        image: "portainer/portainer-ce"
+        restart_policy: always
+        paths:
+          - path: "{{ docker_volumes_directory }}/portainer"
+        ports:
+          - "{{ portainer_http_port }}:9000/tcp"
+        volumes:
+          - "/var/run/docker.sock:/var/run/docker.sock"
+          - "{{ docker_volumes_directory }}/portainer:/data"  
+
+  tasks:
+    - name: Ensure that container(s) are up and running
+      ansible.builtin.include_role:
+        name: container
+      vars:
+        container: "{{ item }}"
+      with_items: "{{ containers }}"
+
+- name: Ensure that Homer is up and running
+  hosts: homer_nodes
+  become: yes
+  gather_facts: false
+
+  vars:
+    containers:
+      - name: "homer"
+        pretty_name: "Homer"
+        image: "b4bz/homer"
+        paths:
+          - path: "{{ docker_volumes_directory }}/homer"
+        ports:
+          - "{{ homer_http_port }}:8080/tcp"
+        volumes:
+          - "{{ docker_volumes_directory }}/homer:/www/assets"
+
+  tasks:
+    - name: Ensure that container(s) are up and running
+      ansible.builtin.include_role:
+        name: container
+      vars:
+        container: "{{ item }}"
+      with_items: "{{ containers }}"
