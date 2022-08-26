@@ -4,7 +4,7 @@
     state: directory
     owner: "{{ container_path.owner | default(docker_volumes_owner) }}"
     group: "{{ container_path.group | default(docker_volumes_group) }}"
-  with_items: "{{ container.paths }}"
+  with_items: "{{ container.paths | default([]) }}"
   loop_control:
     loop_var: container_path
 
@@ -18,5 +18,5 @@
     recreate: "{{ container.recreate | default('yes') }}"
     pull: "{{ container.pull | default('yes') }}"
     restart_policy: "{{ container.restart_policy | default(docker_restart_policy) }}"
-    published_ports: "{{ container.ports }}"
-    volumes: "{{ container.volumes }}"
+    published_ports: "{{ container.ports | default([]) }}"
+    volumes: "{{ container.volumes | default([]) }}"

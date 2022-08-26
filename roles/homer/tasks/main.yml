@@ -1,4 +1,4 @@
-- name: Ensure that Homer Docker container(s) are up and running
+- name: Ensure that Docker container(s) are up and running
   ansible.builtin.include_role:
     name: container
   vars:

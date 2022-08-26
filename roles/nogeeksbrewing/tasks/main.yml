@@ -1,0 +1,11 @@
+- name: Ensure that Docker container(s) are up and running
+  ansible.builtin.include_role:
+    name: container
+  vars:
+    container: "{{ item }}"
+  with_items: 
+    - name: "nogeeksbrewing"
+      pretty_name: "No Geeks Brewing"
+      image: "nogeeksbrewing/site"
+      ports:
+        - "{{ nogeeksbrewing_http_port }}:80/tcp"
