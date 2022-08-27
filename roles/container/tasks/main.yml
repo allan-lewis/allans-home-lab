@@ -20,3 +20,5 @@
     restart_policy: "{{ container.restart_policy | default(docker_restart_policy) }}"
     published_ports: "{{ container.ports | default([]) }}"
     volumes: "{{ container.volumes | default([]) }}"
+    env: "{{ container.environment | default({}) }}"
+    capabilities: "{{ container.capabilities | default([]) }}"

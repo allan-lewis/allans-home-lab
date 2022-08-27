@@ -3,13 +3,14 @@
     name: container
   vars:
     container: "{{ item }}"
+    homer_assets_volume: "{{ docker_volumes_directory }}/homer"
   with_items: 
     - name: "homer"
       pretty_name: "Homer"
       image: "b4bz/homer"
       paths:
-        - path: "{{ docker_volumes_directory }}/homer"
+        - path: "{{ homer_assets_volume }}"
       ports:
         - "{{ homer_http_port }}:8080/tcp"
       volumes:
-        - "{{ docker_volumes_directory }}/homer:/www/assets"
+        - "{{ homer_assets_volume }}:/www/assets"

@@ -1,0 +1,21 @@
+- name: Ensure that Docker container(s) are up and running
+  ansible.builtin.include_role:
+    name: container
+  vars:
+    container: "{{ item }}"
+    npm_data_volume: "{{ docker_volumes_directory }}/npm/data"
+    npm_letsencrypt_volume: "{{ docker_volumes_directory }}/npm/letsencrypt"
+  with_items: 
+    - name: "npm"
+      pretty_name: "Nginx Proxy Manager"
+      image: "jc21/nginx-proxy-manager"
+      paths:
+        - path: "{{ npm_data_volume }}"
+        - path: "{{ npm_letsencrypt_volume }}"
+      ports:
+        - "{{ npm_http_port }}:80/tcp"
+        - "{{ npm_https_port }}:443/tcp"
+        - "{{ npm_admin_port }}:81/tcp"
+      volumes:
+        - "{{ npm_data_volume }}:/data"
+        - "{{ npm_letsencrypt_volume }}:/etc/letsencrypt"

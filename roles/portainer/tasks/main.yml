@@ -3,15 +3,16 @@
     name: container
   vars:
     container: "{{ item }}"
+    portainer_data_volume: "{{ docker_volumes_directory }}/portainer"
   with_items: 
     - name: "portainer"
       pretty_name: "Portainer"
       image: "portainer/portainer-ce"
       restart_policy: always
       paths:
-        - path: "{{ docker_volumes_directory }}/portainer"
+        - path: "{{ portainer_data_volume }}"
       ports:
         - "{{ portainer_http_port }}:9000/tcp"
       volumes:
         - "/var/run/docker.sock:/var/run/docker.sock"
-        - "{{ docker_volumes_directory }}/portainer:/data"
+        - "{{ portainer_data_volume }}:/data"

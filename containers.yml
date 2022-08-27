@@ -1,13 +1,5 @@
 ---
 - name: Ensure that Docker container(s) are up and running
-  hosts: docker_nodes
-  become: yes
-  gather_facts: false
-
-  roles:
-    - portainer 
-
-- name: Ensure that Docker container(s) are up and running
   hosts: homer_nodes
   become: yes
   gather_facts: false
@@ -22,3 +14,27 @@
 
   roles:
     - nogeeksbrewing
+
+- name: Ensure that Docker container(s) are up and running
+  hosts: npm_nodes
+  become: yes
+  gather_facts: false
+
+  roles:
+    - npm
+
+- name: Ensure that Docker container(s) are up and running
+  hosts: pihole_nodes
+  become: yes
+  gather_facts: false
+
+  roles:
+    - pihole
+
+- name: Ensure that Docker container(s) are up and running
+  hosts: docker_nodes
+  become: yes
+  gather_facts: false
+
+  roles:
+    - portainer
