@@ -1,0 +1,21 @@
+- name: Ensure that Docker container(s) are up and running
+  ansible.builtin.include_role:
+    name: container
+  vars:
+    container: "{{ item }}"
+    mariadb_config_volume: "{{ docker_volumes_directory }}/mariadb"
+  with_items: 
+    - name: "mariadb"
+      pretty_name: "MariaDB"
+      image: "lscr.io/linuxserver/mariadb"
+      paths: 
+        - path: "{{ mariadb_config_volume }}"
+      ports:
+        - "{{ mariadb_port}}:3306/tcp"
+      volumes: 
+        - "{{ mariadb_config_volume }}:/config" 
+      environment:
+        TZ: America/New_York
+        PUID: "{{ container_uid }}"
+        PGUID: "{{ container_gid }}"
+        MYSQL_ROOT_PASSWORD:  "{{ mariadb_root_password }}"

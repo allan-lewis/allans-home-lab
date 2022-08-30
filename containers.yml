@@ -8,6 +8,14 @@
     - homer
 
 - name: Ensure that Docker container(s) are up and running
+  hosts: mariadb_nodes
+  become: yes
+  gather_facts: false
+
+  roles:
+    - mariadb
+
+- name: Ensure that Docker container(s) are up and running
   hosts: nogeeksbrewing_nodes
   become: yes
   gather_facts: false
@@ -38,3 +46,4 @@
 
   roles:
     - portainer
+    - syncthing
