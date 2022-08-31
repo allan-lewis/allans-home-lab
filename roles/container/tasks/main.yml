@@ -1,12 +1,3 @@
-- name: Record information on the current user
-  ansible.builtin.getent:
-    database: passwd
-
-- name: Set user and group facts
-  ansible.builtin.set_fact:
-    container_uid: "{{ ansible_facts.getent_passwd[ansible_user].1 | int }}"
-    container_gid: "{{ ansible_facts.getent_passwd[ansible_user].2 | int }}"
-
 - name: Ensure that the {{ container.pretty_name }} volume(s) are present
   ansible.builtin.file:
     path: "{{ container_path.path }}"

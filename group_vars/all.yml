@@ -1,0 +1,7 @@
+ansible_ssh_user: ansible
+control_user: ansible
+control_password: !
+docker_restart_policy: unless-stopped
+docker_volumes_directory: /var/lib/docker-volumes
+docker_volumes_owner: "{{ control_user }}"
+docker_volumes_group: "{{ docker_volumes_owner }}"

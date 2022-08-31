@@ -1,0 +1,16 @@
+mariadb_config_volume: "{{ docker_volumes_directory }}/mariadb"
+mariadb_container:
+  - name: "mariadb"
+    pretty_name: "MariaDB"
+    image: "lscr.io/linuxserver/mariadb"
+    paths: 
+      - path: "{{ mariadb_config_volume }}"
+    ports:
+      - "{{ mariadb_port}}:3306/tcp"
+    volumes: 
+      - "{{ mariadb_config_volume }}:/config" 
+    environment:
+      TZ: America/New_York
+      PUID: "{{ control_uid }}"
+      PGID: "{{ control_gid }}"
+      MYSQL_ROOT_PASSWORD:  "{{ mariadb_root_password }}"
