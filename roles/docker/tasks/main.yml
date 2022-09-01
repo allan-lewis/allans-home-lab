@@ -25,6 +25,7 @@
       - virtualenv
       - python3-setuptools
       - containerd
+      - net-tools
     state: latest
     update_cache: true
 

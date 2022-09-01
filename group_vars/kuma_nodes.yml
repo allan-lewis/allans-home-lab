@@ -1,0 +1,11 @@
+kuma_volume: "{{ docker_volumes_directory }}/uptime-kuma"
+kuma_container: 
+  - name: "uptime-kuma"
+    pretty_name: "Uptime Kuma"
+    image: "louislam/uptime-kuma:1"
+    paths:
+      - path: "{{ kuma_volume }}"
+    ports:
+      - "{{ kuma_port }}:3001/tcp"
+    volumes:
+      - "{{ kuma_volume }}:/app/data"
