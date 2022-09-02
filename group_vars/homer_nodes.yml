@@ -1,0 +1,11 @@
+homer_assets_volume: "{{ docker_volumes_directory }}/homer"
+homer_container:
+  - name: "homer"
+    pretty_name: "Homer"
+    image: "b4bz/homer"
+    paths:
+      - path: "{{ homer_assets_volume }}"
+    ports:
+      - "{{ homer_port }}:8080/tcp"
+    volumes:
+      - "{{ homer_assets_volume }}:/www/assets"

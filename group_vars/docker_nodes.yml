@@ -23,6 +23,7 @@ syncthing_container:
       - 21027:21027/udp
     volumes:
       - "{{ docker_volumes_directory }}/syncthing:/config"
+      - "{{ docker_volumes_directory }}:/docker-volumes"
     environment:
       TZ: America/New_York
       PUID: "{{ control_uid }}"

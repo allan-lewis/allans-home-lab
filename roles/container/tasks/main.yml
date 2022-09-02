@@ -21,4 +21,5 @@
     published_ports: "{{ container.ports | default([]) }}"
     volumes: "{{ container.volumes | default([]) }}"
     env: "{{ container.environment | default({}) }}"
+    #user: "{{ control_uid }}:{{ control_gid }}"
     capabilities: "{{ container.capabilities | default([]) }}"

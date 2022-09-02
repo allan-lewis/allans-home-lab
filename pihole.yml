@@ -1,0 +1,14 @@
+---
+- hosts: pihole_nodes
+  become: yes
+  gather_facts: false
+
+  tasks:
+
+    - name: Setting up Docker container(s)
+      ansible.builtin.include_role:
+        name: container
+      vars:
+        container: "{{ item }}"
+      with_items:
+        - "{{ pihole_container }}"
