@@ -1,0 +1,12 @@
+mediawiki_volume: "{{ docker_volumes_directory }}/mediawiki"
+mediawiki_container:
+  - name: "mediawiki"
+    pretty_name: "Mediawiki"
+    image: "mediawiki"
+    paths: 
+      - path: "{{ mediawiki_volume }}"
+    ports:
+      - "{{ mediawiki_http_port}}:80/tcp"
+    volumes:
+      - "{{ mediawiki_volume }}/images:/var/www/html/images"
+      - "{{ mediawiki_volume }}/LocalSettings.php:/var/www/html/LocalSettings.php" 

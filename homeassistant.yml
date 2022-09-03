@@ -17,10 +17,30 @@
       with_items:
         - "{{ homeassistant_container }}"
 
-#    - name: Setting up configuration YAML
-#      ansible.builtin.template:
-#        src: configuration.yaml.j2
-#        dest: "{{ homeassistant_volume }}/configuration.yaml.tmp"
-#        owner: "{{ control_user }}"
-#        group: "{{ control_user }}"
-#        mode: 0644
+    - name: Creating HTTP reverse proxy YAML
+      ansible.builtin.template:
+        src: http.yaml.j2
+        dest: "{{ homeassistant_volume }}/http.yaml"
+        owner: "{{ control_user }}"
+        group: "{{ control_user }}"
+        mode: 0644
+      register: homeass_http
+
+    - name: Waiting for the main configuration YAML
+      ansible.builtin.wait_for:
+        path: "{{ homeassistant_volume }}/configuration.yaml"
+        timeout: 60
+
+    - name: Updating main configuration YAML
+      ansible.builtin.lineinfile:
+        dest: "{{ homeassistant_volume }}/configuration.yaml"
+        line: 'http: !include http.yaml'
+      register: homeass_conf
+
+    - name: Restarting to pick up config changes, if necessary
+      community.docker.docker_container:
+        container_default_behavior: no_defaults
+        name: homeassistant
+        state: started
+        restart: yes
+      when: (homeass_http is changed) or (homeass_conf is changed)
