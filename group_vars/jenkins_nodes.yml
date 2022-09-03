@@ -1,0 +1,13 @@
+jenkins_data_volume: "{{ docker_volumes_directory }}/jenkins" 
+jenkins_container:
+  name: jenkins
+  pretty_name: Jenkins
+  image:  jenkins/jenkins:lts-jdk11
+  paths:
+    - path: "{{ jenkins_data_volume }}"
+  ports:
+    - "{{ jenkins_http_port }}:8080"
+    - 50000:50000
+  volumes:
+    - "{{ jenkins_data_volume }}:/var/jenkins_home"
+  user: "{{ control_uid }}:{{ control_gid }}"

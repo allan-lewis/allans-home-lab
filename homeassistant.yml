@@ -1,0 +1,26 @@
+---
+- hosts: homeassistant_nodes
+  become: yes
+  gather_facts: false
+
+  tasks:
+
+    - name: Setting up Docker container(s)
+      ansible.builtin.include_role:
+        name: passwd
+
+    - name: Setting up Docker container(s)
+      ansible.builtin.include_role:
+        name: container
+      vars:
+        container: "{{ item }}"
+      with_items:
+        - "{{ homeassistant_container }}"
+
+#    - name: Setting up configuration YAML
+#      ansible.builtin.template:
+#        src: configuration.yaml.j2
+#        dest: "{{ homeassistant_volume }}/configuration.yaml.tmp"
+#        owner: "{{ control_user }}"
+#        group: "{{ control_user }}"
+#        mode: 0644

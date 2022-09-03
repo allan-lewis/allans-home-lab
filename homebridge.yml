@@ -1,12 +1,9 @@
 ---
-- hosts: homer_nodes
+- hosts: homebridge_nodes
   become: yes
   gather_facts: false
 
   tasks:
-    - name: Setting up Docker container(s)
-      ansible.builtin.include_role:
-        name: passwd
 
     - name: Setting up Docker container(s)
       ansible.builtin.include_role:
@@ -14,4 +11,4 @@
       vars:
         container: "{{ item }}"
       with_items:
-        - "{{ homer_container }}"
+        - "{{ homebridge_container }}"

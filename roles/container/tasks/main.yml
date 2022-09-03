@@ -15,11 +15,12 @@
     name: "{{ container.name }}" 
     image: "{{ container.image }}"
     state: started
+    network_mode: "{{ container.network | default('default') }}"
     recreate: "{{ container.recreate | default('yes') }}"
     pull: "{{ container.pull | default('yes') }}"
     restart_policy: "{{ container.restart_policy | default(docker_restart_policy) }}"
     published_ports: "{{ container.ports | default([]) }}"
     volumes: "{{ container.volumes | default([]) }}"
     env: "{{ container.environment | default({}) }}"
-    #user: "{{ control_uid }}:{{ control_gid }}"
     capabilities: "{{ container.capabilities | default([]) }}"
+    user: "{{ container.user | default('')}}"

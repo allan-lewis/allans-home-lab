@@ -9,3 +9,4 @@ homer_container:
       - "{{ homer_port }}:8080/tcp"
     volumes:
       - "{{ homer_assets_volume }}:/www/assets"
+    user: "{{ control_uid }}:{{ control_gid }}"

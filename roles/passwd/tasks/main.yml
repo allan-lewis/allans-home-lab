@@ -1,0 +1,8 @@
+- name: Recording passwd information
+  ansible.builtin.getent:
+    database: passwd
+
+- name: Setting user and group facts
+  ansible.builtin.set_fact:
+    control_uid: "{{ ansible_facts.getent_passwd[control_user].1 | int }}"
+    control_gid: "{{ ansible_facts.getent_passwd[control_user].2 | int }}"

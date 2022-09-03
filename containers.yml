@@ -6,15 +6,6 @@
 
   tasks:
 
-    - name: Recording passwd information 
-      ansible.builtin.getent:
-        database: passwd
-
-    - name: Setting user and group facts
-      ansible.builtin.set_fact:
-        control_uid: "{{ ansible_facts.getent_passwd[control_user].1 | int }}"
-        control_gid: "{{ ansible_facts.getent_passwd[control_user].2 | int }}"
-
 - import_playbook: portainer.yml
 - import_playbook: syncthing.yml
 - import_playbook: mariadb.yml
@@ -24,3 +15,6 @@
 - import_playbook: kuma.yml
 - import_playbook: homer.yml
 - import_playbook: nogeeksbrewing.yml
+- import_playbook: homeassistant.yml
+- import_playbook: homebridge.yml
+- import_playbook: jenkins.yml

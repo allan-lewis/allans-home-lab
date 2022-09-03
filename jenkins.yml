@@ -1,5 +1,5 @@
 ---
-- hosts: homer_nodes
+- hosts: jenkins_nodes
   become: yes
   gather_facts: false
 
@@ -14,4 +14,4 @@
       vars:
         container: "{{ item }}"
       with_items:
-        - "{{ homer_container }}"
+        - "{{ jenkins_container }}"
