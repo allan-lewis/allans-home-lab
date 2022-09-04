@@ -1,0 +1,64 @@
+---
+- name: Setting up Cloudflare DNS tunneling
+  hosts: cloudflare_nodes
+  become: yes
+  gather_facts: false
+
+  tasks:
+    - name: Recording user and group information
+      ansible.builtin.include_role:
+        name: passwd
+
+    - name: Adding the Cloudflare GPG key
+      ansible.builtin.apt_key:
+        url: "https://pkg.cloudflare.com/cloudflare-main.gpg"
+        keyring: "/usr/share/keyrings/cloudflare-main.gpg"
+        state: present
+      register: apt_key
+
+    - name: Adding the Cloudflare repository 
+      ansible.builtin.apt_repository:
+        repo: "deb [signed-by=/usr/share/keyrings/cloudflare-main.gpg] https://pkg.cloudflare.com/cloudflared focal main"
+        state: present
+      register: apt_repo
+
+    - name: Updating apt, if necessary
+      ansible.builtin.apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+      when: (apt_key is changed) or (apt_repo is changed)
+
+    - name: Installing cloudflared
+      ansible.builtin.apt:
+        update_cache: yes
+        name: cloudflared
+        state: latest
+
+    - name: Creating cloudflared directory
+      ansible.builtin.file:
+        path: "/etc/cloudlfared"
+        state: directory
+        owner: root
+        group: root
+
+    - name: Copying authentication certificate
+      ansible.builtin.copy:
+        src: "{{ cloudflare_certificate }}"
+        dest: /etc/cloudflared/cert.pem
+        owner: "{{ control_uid }}"
+        group: "{{ control_gid }}"
+        mode: '0600'
+
+    - name: Copying tunnel authentication JSON
+      ansible.builtin.copy:
+        src: "{{ cloudflare_tunnel }}"
+        dest: /etc/cloudflared/tunnel.json
+        owner: "{{ control_uid }}"
+        group: "{{ control_gid }}"
+        mode: '0600'
+
+    - name: Writing tunnel configuration YAML
+      ansible.builtin.template:
+        src: config.yml.j2
+        dest: /etc/cloudflared/config.yml
+        owner: "{{ control_uid }}"
+        group: "{{ control_gid }}"
+        mode: 0644
