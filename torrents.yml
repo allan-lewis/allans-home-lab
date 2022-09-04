@@ -1,0 +1,33 @@
+---
+- name: Setting up services for torrenting
+  hosts: torrent_nodes
+  become: yes
+  gather_facts: false
+
+  tasks:
+
+    - name: Setting up Jackett
+      ansible.builtin.include_role:
+        name: passwd
+
+    - name: Setting up Jackett
+      ansible.builtin.include_role:
+        name: container
+      vars:
+        container: "{{ item }}"
+      with_items:
+        - name: jackett
+          pretty_name: Jackett
+          image: lscr.io/linuxserver/jackett:latest
+          paths:
+            - path: "{{ docker_volumes_directory }}/jackett"
+            - path: "/volume1/jackett/downloads"
+          environment:
+            TZ: America/New_York
+            PUID: "{{ control_uid }}"
+            PGID: "{{ control_gid }}"
+          ports:
+            - "{{ jackett_http_port }}:9117/tcp"
+          volumes:
+            - "{{ docker_volumes_directory }}/jackett:/config"
+            - "/volume1/jackett/downloads:/downloads"
