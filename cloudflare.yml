@@ -34,7 +34,7 @@
 
     - name: Creating cloudflared directory
       ansible.builtin.file:
-        path: "/etc/cloudlfared"
+        path: "/etc/cloudflared"
         state: directory
         owner: root
         group: root
@@ -62,3 +62,18 @@
         owner: "{{ control_uid }}"
         group: "{{ control_gid }}"
         mode: 0644
+
+    - name: Recording service status
+      ansible.builtin.systemd:
+        name: "cloudflared"
+      register: service_status
+
+    - name: Installing cloudflared as a service
+      ansible.builtin.command:
+        cmd: cloudflared service install
+      when: service_status.status.ActiveState != "active"
+
+    - name: Ensure that the cloudflared service is running
+      ansible.builtin.service:
+        name: cloudflared
+        state: started
