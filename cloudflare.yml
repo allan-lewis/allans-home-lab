@@ -46,6 +46,7 @@
         owner: "{{ control_uid }}"
         group: "{{ control_gid }}"
         mode: '0600'
+      register: cf_cert
 
     - name: Copying tunnel authentication JSON
       ansible.builtin.copy:
@@ -54,6 +55,7 @@
         owner: "{{ control_uid }}"
         group: "{{ control_gid }}"
         mode: '0600'
+      register: tunnel_auth
 
     - name: Writing tunnel configuration YAML
       ansible.builtin.template:
@@ -62,6 +64,7 @@
         owner: "{{ control_uid }}"
         group: "{{ control_gid }}"
         mode: 0644
+      register: tunnel_yaml
 
     - name: Recording service status
       ansible.builtin.systemd:
@@ -73,7 +76,8 @@
         cmd: cloudflared service install
       when: service_status.status.ActiveState != "active"
 
-    - name: Ensure that the cloudflared service is running
+    - name: Restarting cloudflared if nexeccary
       ansible.builtin.service:
         name: cloudflared
-        state: started
+        state: restarted
+      when: (cf_cert is changed) or (tunnel_auth is changed) or (tunnel_yaml is changed)
