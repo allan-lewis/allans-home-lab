@@ -4,7 +4,38 @@
   become: yes
   gather_facts: false
 
+  vars:
+    mounts:
+      - path: /volume1/sonarr/television
+        src: "{{ hostvars['capella'].ansible_ssh_host }}:/volume1/nfs-television"
+      - path: /volume1/radarr/movies
+        src: "{{ hostvars['capella'].ansible_ssh_host }}:/volume1/nfs-movies"
+
   tasks:
+
+    - name: Ensure that all required dependencies are present
+      ansible.builtin.apt:
+        pkg:
+          - nfs-common
+        state: latest
+        update_cache: true
+
+    - name: Create mount points
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: directory
+        owner: "{{ control_user }}"
+        group: "{{ control_user }}"
+      with_items: "{{ mounts }}"
+
+    - name: Mount the NFS volumes
+      ansible.posix.mount:
+        path: "{{ item.path }}"
+        src: "{{ item.src }}"
+        fstype: nfs
+        opts: resvport,rw
+        state: mounted
+      with_items: "{{ mounts }}"
 
     - name: Setting up Jackett
       ansible.builtin.include_role:
@@ -31,3 +62,75 @@
           volumes:
             - "{{ docker_volumes_directory }}/jackett:/config"
             - "/volume1/jackett/downloads:/downloads"
+
+    - name: Setting up Sonarr
+      ansible.builtin.include_role:
+        name: container
+      vars:
+        container: "{{ item }}"
+      with_items:
+        - name: sonarr
+          pretty_name: Sonarr
+          image: lscr.io/linuxserver/sonarr:latest
+          paths:
+            - path: "{{ docker_volumes_directory }}/sonarr"
+            - path: "/volume1/sonarr/television"
+          volumes:
+            - "{{ docker_volumes_directory }}/sonarr:/config"
+            - /volume1/sonarr/television:/tv 
+            - /volume1/transmission/downloads:/downloads
+          ports:
+            - "{{ sonarr_http_port }}:8989/tcp"
+          environment:
+            TZ: America/New_York
+            PUID: "{{ control_uid }}"
+            PGID: "{{ control_gid }}"
+
+    - name: Setting up Radarr
+      ansible.builtin.include_role:
+        name: container
+      vars:
+        container: "{{ item }}"
+      with_items:
+        - name: radarr
+          pretty_name: Radarr
+          image: lscr.io/linuxserver/radarr:latest
+          paths:
+            - path: "{{ docker_volumes_directory }}/radarr"
+            - path: "/volume1/radarr/movies"
+          volumes:
+            - "{{ docker_volumes_directory }}/radarr:/config"
+            - /volume1/radarr/movies:/movies
+            - /volume1/transmission/downloads:/downloads
+          ports:
+            - "{{ radarr_http_port }}:7878/tcp"
+          environment:
+            TZ: America/New_York
+            PUID: "{{ control_uid }}"
+            PGID: "{{ control_gid }}"
+
+    - name: Setting up Transmission
+      ansible.builtin.include_role:
+        name: container
+      vars:
+        container: "{{ item }}"
+      with_items:
+        - name: transmission
+          pretty_name: Transmission
+          image: lscr.io/linuxserver/transmission:latest
+          environment:
+            TZ: America/New_York
+            PUID: "{{ control_uid }}"
+            PGID: "{{ control_gid }}"
+          paths:
+            - path: "{{ docker_volumes_directory }}/transmission"
+            - path: "/volume1/transmission/downloads"
+            - path: "/volume1/transmission/watch"
+          volumes:
+            - "{{ docker_volumes_directory }}/transmission:/config"
+            - "/volume1/transmission/downloads:/downloads"
+            - "/volume1/transmission/watch:/watch"
+          ports:
+            - "{{ transmission_port }}:9091/tcp"
+            - 51413:51413/tcp
+            - 51413:51413/udp

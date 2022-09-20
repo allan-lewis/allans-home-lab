@@ -1,0 +1,29 @@
+---
+- hosts: speedtest_nodes
+  become: yes
+  gather_facts: false
+
+  tasks:
+    - name: Setting up Docker container(s)
+      ansible.builtin.include_role:
+        name: passwd
+
+    - name: Setting up Speedtest Tracker
+      ansible.builtin.include_role:
+        name: container
+      vars:
+        container:
+          name: "speedtest"
+          pretty_name: "Speedtest Tracker"
+          image: "henrywhitaker3/speedtest-tracker"
+          paths:
+            - path: "{{ docker_volumes_directory }}/speedtest"
+          ports:
+            - "{{ speedtest_port }}:80/tcp"
+          volumes:
+            - "{{ docker_volumes_directory }}/speedtest:/config"
+          environment:
+            TZ: America/New_York
+            PUID: "{{ control_uid }}"
+            PGID: "{{ control_gid }}"
+            OOKLA_EULA_GDPR: "true"

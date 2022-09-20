@@ -1,0 +1,67 @@
+---
+- hosts: plex_nodes
+  become: yes
+  gather_facts: false
+
+  vars:
+    mounts:
+      - path: /opt/docker-volumes
+        src: "{{ hostvars['capella'].ansible_ssh_host }}:/volume1/docker-volumes-regulus"
+      - path: /television
+        src: "{{ hostvars['capella'].ansible_ssh_host }}:/volume1/nfs-television"
+      - path: /movies
+        src: "{{ hostvars['capella'].ansible_ssh_host }}:/volume1/nfs-movies"
+
+  tasks:
+    - name: Create mount points
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: directory
+        owner: "{{ control_user }}"
+        group: "{{ control_user }}"
+      with_items: "{{ mounts }}"
+
+    - name: Mount the NFS volumes
+      ansible.posix.mount:
+        path: "{{ item.path }}"
+        src: "{{ item.src }}"
+        fstype: nfs
+        opts: resvport,rw
+        state: mounted
+      with_items: "{{ mounts }}"
+
+    - name: Setting up Docker container(s)
+      ansible.builtin.include_role:
+        name: passwd
+
+    - name: Setting up Plex
+      ansible.builtin.include_role:
+        name: container
+      vars:
+        container:
+          name: "plex"
+          pretty_name: "Plex"
+          image: "lscr.io/linuxserver/plex:latest"
+          paths:
+            - path: "/opt/docker-volumes/plex"
+          ports:
+            - "32400:32400"
+            - 1900:1900/udp
+            - 3005:3005
+            - 5353:5353/udp
+            - 8324:8324
+            - 32410:32410/udp
+            - 32412:32412/udp
+            - 32413:32413/udp
+            - 32414:32414/udp
+            - 32469:32469
+          volumes:
+            - "/opt/docker-volumes/plex:/config"
+            - /television:/shows
+            - /movies:/movies
+          environment:
+            TZ: America/New_York
+            VERSION: docker
+            #PLEX_CLAIM: claim-_aznSz1k4GS9zvbBiKeJ
+            PUID: "{{ control_uid }}"
+            PGID: "{{ control_gid }}"

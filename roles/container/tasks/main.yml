@@ -14,7 +14,7 @@
     detach: yes
     name: "{{ container.name }}" 
     image: "{{ container.image }}"
-    state: started
+    state: "{{ container.state | default('started') }}"
     network_mode: "{{ container.network | default('default') }}"
     recreate: "{{ container.recreate | default('yes') }}"
     pull: "{{ container.pull | default('yes') }}"

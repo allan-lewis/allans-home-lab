@@ -1,0 +1,23 @@
+---
+- hosts: homepage_nodes
+  become: yes
+  gather_facts: false
+
+  tasks:
+    - name: Setting up Homepage
+      ansible.builtin.include_role:
+        name: container
+      vars:
+        container:
+          name: "homepage"
+          pretty_name: "Homepage"
+          image: "ghcr.io/benphelps/homepage:latest"
+          paths: 
+            - path: "{{ docker_volumes_directory }}/homepage"
+            - path: "{{ docker_volumes_directory }}/homepage/icons"
+          ports:
+            - "{{ homepage_port }}:3000/tcp"
+          volumes:
+            - "{{ docker_volumes_directory }}/homepage:/app/config"
+            - "{{ docker_volumes_directory }}/homepage/icons:/app/public/icons"
+            - /var/run/docker.sock:/var/run/docker.sock
