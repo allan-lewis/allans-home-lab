@@ -1,0 +1,49 @@
+---
+- hosts: authelia_nodes
+  become: yes
+  gather_facts: false
+
+  tasks:  
+    - name: Create Redis and Authelia volumes
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: directory
+        owner: "{{ item.owner | default(docker_volumes_owner) }}"
+        group: "{{ item.group | default(docker_volumes_group) }}"
+      with_items: 
+        - path: /var/lib/docker-volumes/redis
+        - path: /var/lib/docker-volumes/authelia
+
+    - name: Setup Redis
+      community.docker.docker_container:
+        container_default_behavior: no_defaults
+        detach: yes
+        name: "redis"
+        image: "redis:alpine"
+        state: "started"
+        recreate: "yes"
+        pull: "yes"
+        restart_policy: "unless-stopped"
+        published_ports: 
+          - "{{ redis_port }}:6379/tcp"
+        volumes: 
+          - "/var/lib/docker-volumes/redis:/data"
+        env: 
+          TZ: America/New_York 
+
+    - name: Setup Authelia
+      community.docker.docker_container:
+        container_default_behavior: no_defaults
+        detach: yes
+        name: "authelia"
+        image: "authelia/authelia"
+        state: "started"
+        recreate: "yes"
+        pull: "yes"
+        restart_policy: "unless-stopped"
+        published_ports:
+          - "{{ authelia_port }}:9091/tcp"
+        volumes:
+          - "/var/lib/docker-volumes/authelia:/config"
+        env:
+          TZ: America/New_York        
