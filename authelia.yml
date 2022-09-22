@@ -1,10 +1,11 @@
 ---
-- hosts: authelia_nodes
+- name: Setup Authelia and Redis
+  hosts: authelia_nodes
   become: yes
   gather_facts: false
 
   tasks:  
-    - name: Create Redis and Authelia volumes
+    - name: Create volumes
       ansible.builtin.file:
         path: "{{ item.path }}"
         state: directory
@@ -30,6 +31,38 @@
           - "/var/lib/docker-volumes/redis:/data"
         env: 
           TZ: America/New_York 
+
+    - name: Write Authelia config files
+      ansible.builtin.template:
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}" 
+        owner: root
+        group: root
+        mode: 0644
+      with_items:
+        - src: users_database.yml.j2
+          dest: /var/lib/docker-volumes/authelia/users_database.yml
+        - src: configuration.yml.j2
+          dest: /var/lib/docker-volumes/authelia/configuration.yml
+
+    - name: Write NPM advanced configurations
+      ansible.builtin.template:
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+        owner: root
+        group: root
+        mode: 0644
+      with_items:
+        - proxy_service: speedtest
+          src: npm_advanced.j2
+          dest: /var/lib/docker-volumes/authelia/npm_advanced_speedtest
+          downstream_host: "{{ speedtest_host }}"
+          downstream_port: "{{ speedtest_port }}"
+        - proxy_service: homepage
+          src: npm_advanced.j2
+          dest: /var/lib/docker-volumes/authelia/npm_advanced_homepage
+          downstream_host: "{{ homepage_host }}"
+          downstream_port: "{{ homepage_port }}"
 
     - name: Setup Authelia
       community.docker.docker_container:

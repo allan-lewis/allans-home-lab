@@ -1,0 +1,65 @@
+##############################################################################
+#                   Authelia configuration  thehomelab.wiki                  #
+##############################################################################
+
+host: 0.0.0.0
+port: 9091 # if you need this changed make sure it reflects also in the docker-compose.yml
+log_level: trace
+jwt_secret: {{ jwt_secret }} 
+default_redirection_url: https://auth.allanshomelab.com
+totp:
+  issuer: allanhomelab.com
+  period: 30
+  skew: 1
+
+authentication_backend:
+  disable_reset_password: false
+  file:
+    path: /config/users_database.yml # Make sure this file exists
+    password:
+      algorithm: argon2id
+      iterations: 1
+      salt_length: 16
+      parallelism: 8
+      memory: 64
+
+access_control:
+  default_policy: deny
+  rules:
+    # Rules applied to everyone
+    - domain:
+        - "bypass.allanshomelab.com"
+      policy: bypass
+    - domain: # Proxies only requiring username and password
+        - "speedtest.allanshomelab.com"
+        - "allanshomelab.com"
+        - "www.allanshomelab.com"
+      policy: one_factor
+
+session:
+  name: authelia_session
+  # This secret can also be set using the env variables AUTHELIA_SESSION_SECRET_FILE
+  secret: {{ session_secret }}
+  expiration: 3600 # 1 hour
+  inactivity: 7200 # 2 hours
+  domain: allanshomelab.com # Needs to be your root domain
+
+  redis:
+    host: {{ redis_host }}
+    port: {{ redis_port }}
+
+regulation:
+  max_retries: 5
+  find_time: 2m
+  ban_time: 10m
+
+theme: dark   # options: dark, light
+
+storage:
+  encryption_key: {{ encryption_key }}
+  local:
+    path: /config/db.sqlite3
+
+notifier:
+  filesystem:
+    filename: /config/notification.txt
