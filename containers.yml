@@ -14,7 +14,6 @@
 - import_playbook: guacamole.yml
 - import_playbook: kuma.yml
 - import_playbook: homepage.yml
-- import_playbook: homer.yml
 - import_playbook: nogeeksbrewing.yml
 - import_playbook: homeassistant.yml
 - import_playbook: homebridge.yml
