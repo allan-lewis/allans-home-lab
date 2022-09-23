@@ -7,6 +7,10 @@
 
     - name: Setting up Docker container(s)
       ansible.builtin.include_role:
+        name: passwd
+
+    - name: Setting up Docker container(s)
+      ansible.builtin.include_role:
         name: container
       vars:
         container: "{{ item }}"
