@@ -47,22 +47,24 @@
 
     - name: Write NPM advanced configurations
       ansible.builtin.template:
-        src: "{{ item.src }}"
+        src: npm_advanced.j2
         dest: "{{ item.dest }}"
         owner: root
         group: root
         mode: 0644
       with_items:
         - proxy_service: speedtest
-          src: npm_advanced.j2
           dest: /var/lib/docker-volumes/authelia/npm_advanced_speedtest
           downstream_host: "{{ speedtest_host }}"
           downstream_port: "{{ speedtest_port }}"
         - proxy_service: homepage
-          src: npm_advanced.j2
           dest: /var/lib/docker-volumes/authelia/npm_advanced_homepage
           downstream_host: "{{ homepage_host }}"
           downstream_port: "{{ homepage_port }}"
+        - proxy_service: wyl
+          dest: /var/lib/docker-volumes/authelia/npm_advanced_wyl
+          downstream_host: "{{ wyl_host }}"
+          downstream_port: "{{ wyl_port }}"
 
     - name: Setup Authelia
       community.docker.docker_container:
