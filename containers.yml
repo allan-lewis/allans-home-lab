@@ -7,7 +7,7 @@
   tasks:
 
 - import_playbook: portainer.yml
-- import_playbook: syncthing.yml
+# - import_playbook: syncthing.yml
 - import_playbook: mariadb.yml
 - import_playbook: npm.yml
 - import_playbook: pihole.yml
@@ -23,3 +23,4 @@
 - import_playbook: speedtest.yml
 - import_playbook: plex.yml
 - import_playbook: authelia.yml
+- import_playbook: wyl.yml

@@ -1,14 +1,30 @@
 ---
-- hosts: kuma_nodes
+- name: Setup Uptime Kuma
+  hosts: kuma_nodes
   become: yes
   gather_facts: false
 
-  tasks:
+  tasks:  
+    - name: Create volumes
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: directory
+        owner: "{{ docker_volumes_owner }}"
+        group: "{{ docker_volumes_group }}"
+      with_items: 
+        - path: "{{ docker_volumes_directory }}/kuma"
 
-    - name: Setting up Docker container(s)
-      ansible.builtin.include_role:
-        name: container
-      vars:
-        container: "{{ item }}"
-      with_items:
-        - "{{ kuma_container }}"
+    - name: Setup Uptime Kuma
+      community.docker.docker_container:
+        container_default_behavior: no_defaults
+        detach: yes
+        name: "kuma"
+        image: "louislam/uptime-kuma:1"
+        state: "started"
+        recreate: "yes"
+        pull: "yes"
+        restart_policy: "unless-stopped"
+        volumes: 
+          - "{{ docker_volumes_directory }}/kuma:/app/data"
+        published_ports:
+          - "{{ kuma_port }}:3001/tcp"
