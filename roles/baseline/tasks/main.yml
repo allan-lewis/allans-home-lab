@@ -100,3 +100,28 @@
     post_reboot_delay: 30
     test_command: uptime
   when: reboot_required_file.stat.exists
+
+- name: Ensure that all required dependencies are present
+  ansible.builtin.apt:
+    pkg:
+      - net-tools
+      - nfs-common
+    state: latest
+    update_cache: true
+
+- name: Create mount points
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: directory
+    owner: "{{ control_user }}"
+    group: "{{ control_user }}"
+  with_items: "{{ mounts }}"
+
+- name: Mount the NFS volumes
+  ansible.posix.mount:
+    path: "{{ item.path }}"
+    src: "{{ item.src }}"
+    fstype: nfs
+    opts: resvport,rw
+    state: mounted
+  with_items: "{{ mounts }}"

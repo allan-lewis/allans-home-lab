@@ -1,0 +1,34 @@
+---
+- name: Setup WatchYourLAN
+  hosts: wyl_nodes
+  become: yes
+  gather_facts: false
+
+  tasks:  
+    - name: Create volumes
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: directory
+        owner: "{{ docker_volumes_owner }}"
+        group: "{{ docker_volumes_group }}"
+      with_items: 
+        - path: "{{ docker_volumes_directory }}/wyl"
+
+    - name: Setup WatchYourLAN
+      community.docker.docker_container:
+        container_default_behavior: no_defaults
+        detach: yes
+        name: "wyl"
+        image: "aceberg/watchyourlan"
+        state: "started"
+        recreate: "yes"
+        pull: "yes"
+        restart_policy: "unless-stopped"
+        network_mode: host
+        volumes: 
+          - "{{ docker_volumes_directory }}/wyl:/data"
+        env: 
+          IFACE: "eth0"
+          GUIIP: "0.0.0.0"
+          GUIPORT: "{{ wyl_port | int }}"
+          TZ: America/New_York 
