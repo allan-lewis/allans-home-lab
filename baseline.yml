@@ -1,0 +1,10 @@
+---
+- import_playbook: control.yml
+
+- name: Apply baseline setup to all managed nodes
+  hosts: managed_nodes
+  become: yes
+  gather_facts: false
+  
+  roles:
+    - baseline

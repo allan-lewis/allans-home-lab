@@ -1,9 +1,8 @@
 ---
-- name: Ensure that Docker is up and running 
+- name: Setup Docker on all docker nodes 
   hosts: docker_nodes
   become: yes
   gather_facts: false
 
   roles:
-    - baseline
     - docker

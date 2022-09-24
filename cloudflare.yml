@@ -39,45 +39,44 @@
         owner: root
         group: root
 
-    - name: Copying authentication certificate
+    - name: Copying authentication certificate(s)
       ansible.builtin.copy:
-        src: "{{ cloudflare_certificate }}"
-        dest: /etc/cloudflared/cert.pem
+        src: "{{ item.cert }}"
+        dest: "/etc/cloudflared/{{ item.name }}.pem"
         owner: "{{ control_uid }}"
         group: "{{ control_gid }}"
         mode: '0600'
-      register: cf_cert
+      with_items: "{{ cloudflare_tunnels }}"
 
     - name: Copying tunnel authentication JSON
       ansible.builtin.copy:
-        src: "{{ cloudflare_tunnel }}"
-        dest: /etc/cloudflared/tunnel.json
+        src: "{{ item.tunnel }}"
+        dest: /etc/cloudflared/{{ item.name }}.json
         owner: "{{ control_uid }}"
         group: "{{ control_gid }}"
         mode: '0600'
-      register: tunnel_auth
+      with_items: "{{ cloudflare_tunnels }}"
 
-    - name: Writing tunnel configuration YAML
+    - name: Write tunnel configuration YAML
       ansible.builtin.template:
         src: config.yml.j2
-        dest: /etc/cloudflared/config.yml
+        dest: /etc/cloudflared/{{ item.name }}.yml
         owner: "{{ control_uid }}"
         group: "{{ control_gid }}"
         mode: 0644
-      register: tunnel_yaml
+      with_items: "{{ cloudflare_tunnels }}"
 
-    - name: Recording service status
+    - name: Write systemd service unit
+      ansible.builtin.template:
+        src: "cloudflare.j2"
+        dest: "/etc/systemd/system/cloudflared@.service"
+        owner: "root"
+        group: "root"
+        mode: 0644
+
+    - name: Enable Cloudflare service(s)
       ansible.builtin.systemd:
-        name: "cloudflared"
-      register: service_status
-
-    - name: Installing cloudflared as a service
-      ansible.builtin.command:
-        cmd: cloudflared service install
-      when: service_status.status.ActiveState != "active"
-
-    - name: Restarting cloudflared if nexeccary
-      ansible.builtin.service:
-        name: cloudflared
-        state: restarted
-      when: (cf_cert is changed) or (tunnel_auth is changed) or (tunnel_yaml is changed)
+        name: "cloudflared@{{ item.name }}"
+        state: started
+        enabled: yes
+      with_items: "{{ cloudflare_tunnels }}"
