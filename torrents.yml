@@ -7,9 +7,9 @@
   vars:
     mounts:
       - path: /volume1/sonarr/television
-        src: "{{ hostvars['capella'].ansible_ssh_host }}:/volume1/nfs-television"
+        src: "{{ nas_host }}:/volume1/nfs-television"
       - path: /volume1/radarr/movies
-        src: "{{ hostvars['capella'].ansible_ssh_host }}:/volume1/nfs-movies"
+        src: "{{ nas_host }}:/volume1/nfs-movies"
 
   tasks:
 

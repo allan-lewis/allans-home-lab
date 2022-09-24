@@ -5,12 +5,10 @@
 
   vars:
     mounts:
-      - path: /opt/docker-volumes
-        src: "{{ hostvars['capella'].ansible_ssh_host }}:/volume1/docker-volumes-regulus"
       - path: /television
-        src: "{{ hostvars['capella'].ansible_ssh_host }}:/volume1/nfs-television"
+        src: "{{ nas_host }}:/volume1/nfs-television"
       - path: /movies
-        src: "{{ hostvars['capella'].ansible_ssh_host }}:/volume1/nfs-movies"
+        src: "{{ nas_host }}:/volume1/nfs-movies"
 
   tasks:
     - name: Create mount points

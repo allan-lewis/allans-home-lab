@@ -115,13 +115,13 @@
     state: directory
     owner: "{{ control_user }}"
     group: "{{ control_user }}"
-  with_items: "{{ mounts }}"
+  with_items: "{{ mounts | default([]) }}"
 
-- name: Mount the NFS volumes
+- name: Mount NFS volumes
   ansible.posix.mount:
     path: "{{ item.path }}"
     src: "{{ item.src }}"
     fstype: nfs
     opts: resvport,rw
     state: mounted
-  with_items: "{{ mounts }}"
+  with_items: "{{ mounts | default([]) }}"
