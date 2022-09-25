@@ -1,14 +1,35 @@
 ---
-- hosts: npm_nodes
+- name: Setup Nginx Proxy Manager
+  hosts: npm_nodes
   become: yes
   gather_facts: false
 
-  tasks:
+  vars:
+    npm_data_volume: "{{ docker_volumes_directory }}/npm/data"
+    npm_letsencrypt_volume: "{{ docker_volumes_directory }}/npm/letsencrypt"
 
-    - name: Setting up Docker container(s)
-      ansible.builtin.include_role:
-        name: container
-      vars:
-        container: "{{ item }}"
-      with_items:
-        - "{{ npm_container }}"
+  tasks:
+    - name: Create volumes
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: directory
+        owner: "{{ item.owner | default(docker_volumes_owner) }}"
+        group: "{{ item.group | default(docker_volumes_group) }}"
+      with_items: 
+        - path: "{{ npm_data_volume }}"
+        - path: "{{ npm_letsencrypt_volume }}"
+
+    - name: Setup Nginx Proxy Manager
+      community.docker.docker_container:
+        container_default_behavior: no_defaults
+        detach: yes
+        name: "npm"
+        image: "jc21/nginx-proxy-manager"
+        state: "started"
+        recreate: "yes"
+        pull: "yes"
+        network_mode: host
+        restart_policy: "unless-stopped"
+        volumes:
+          - "{{ npm_data_volume }}:/data"
+          - "{{ npm_letsencrypt_volume }}:/etc/letsencrypt"
