@@ -57,5 +57,34 @@
 - name: Ensure that the Docker deamon is running
   ansible.builtin.service:
     name: docker
+    enabled: yes
     state: started
   become: true
+
+- name: Ensure that the Docker volumes directory exists
+  ansible.builtin.file:
+    path: /etc/systemd/system/docker.service.d
+    state: directory
+    owner: root
+    group: root
+
+- name: Write docker service override
+  ansible.builtin.template:
+    src: "docker_override.j2"
+    dest: "/etc/systemd/system/docker.service.d/override.conf"
+    owner: "root"
+    group: "root"
+    mode: 0644
+  register: docker_override
+
+- name: Just force systemd to reread configs (2.4 and above)
+  ansible.builtin.systemd:
+    daemon_reload: yes
+  when: (docker_override is changed)
+
+- name: Restart Docker to pick up override
+  ansible.builtin.service:
+    name: docker
+    state: restarted
+  become: true
+  when: (docker_override is changed)
