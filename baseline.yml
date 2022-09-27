@@ -4,7 +4,7 @@
 - name: Apply baseline setup to all managed nodes
   hosts: managed_nodes
   become: yes
-  gather_facts: false
+  gather_facts: true
   
   roles:
     - baseline

@@ -73,11 +73,29 @@
     state: present
   register: ssh_disable_password
 
+- name: Set host key algorithms
+  ansible.builtin.lineinfile:
+    dest: /etc/ssh/sshd_config
+    search_string: 'HostKeyAlgorithms'
+    line: 'HostKeyAlgorithms +ssh-rsa'
+    state: present
+  when: ansible_facts['distribution'] == 'Ubuntu'
+  register: ssh_host_key
+
+- name: Set host key algorithms
+  ansible.builtin.lineinfile:
+    dest: /etc/ssh/sshd_config
+    search_string: 'PubkeyAcceptedAlgorithms'
+    line: 'PubkeyAcceptedAlgorithms +ssh-rsa'
+    state: present
+  when: ansible_facts['distribution'] == 'Ubuntu'
+  register: ssh_pub_key
+
 - name: Ensure that the SSH service has been restarted, if necessary
   ansible.builtin.service:
     name: sshd
     state: restarted
-  when: (ssh_allow_users is changed) or (ssh_disable_root is changed) or (ssh_disable_password is changed)
+  when: (ssh_allow_users is changed) or (ssh_disable_root is changed) or (ssh_disable_password is changed) or (ssh_host_key is changed) or (ssh_pub_key is changed)
 
 - name: Do an apt update
   ansible.builtin.apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
