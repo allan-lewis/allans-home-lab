@@ -1,5 +1,5 @@
 ---
-- hosts: docker_nodes
+- hosts: syncthing_nodes
   become: yes
   gather_facts: false
 
@@ -9,10 +9,33 @@
       ansible.builtin.include_role:
         name: passwd
 
-    - name: Setting up Docker container(s)
-      ansible.builtin.include_role:
-        name: container
-      vars:
-        container: "{{ item }}"
-      with_items:
-        - "{{ syncthing_container }}"
+    - name: Create config volume
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: directory
+        owner: "{{ item.owner | default(docker_volumes_owner) }}"
+        group: "{{ item.group | default(docker_volumes_group) }}"
+      with_items: 
+        - path: "{{ docker_volumes_directory }}/syncthing"
+
+    - name: Setup Syncthing
+      community.docker.docker_container:
+        container_default_behavior: no_defaults
+        detach: yes
+        name: "syncthing"
+        image: "lscr.io/linuxserver/syncthing:latest"
+        state: "started"
+        recreate: "yes"
+        pull: "yes"
+        restart_policy: "unless-stopped"
+        published_ports: 
+          - "{{ syncthing_http_port}}:8384/tcp"
+          - 22000:22000/tcp
+          - 22000:22000/udp
+          - 21027:21027/udp
+        volumes: 
+          - "{{ docker_volumes_directory }}/syncthing:/config"
+        env: 
+          TZ: America/New_York
+          PUID: "{{ control_uid }}"
+          PGID: "{{ control_gid }}"

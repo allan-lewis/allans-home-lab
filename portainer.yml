@@ -5,10 +5,27 @@
 
   tasks:
 
-    - name: Setting up Docker container(s)
-      ansible.builtin.include_role:
-        name: container
-      vars:
-        container: "{{ item }}"
-      with_items:
-        - "{{ portainer_container }}"
+    - name: Create data volume
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: directory
+        owner: "{{ item.owner | default(docker_volumes_owner) }}"
+        group: "{{ item.group | default(docker_volumes_group) }}"
+      with_items: 
+        - path: "{{ docker_volumes_directory }}/portainer"
+
+    - name: Setup Portainer
+      community.docker.docker_container:
+        container_default_behavior: no_defaults
+        detach: yes
+        name: "portainer"
+        image: "portainer/portainer-ce"
+        state: "started"
+        recreate: "yes"
+        pull: "yes"
+        restart_policy: "unless-stopped"
+        published_ports: 
+          - "{{ portainer_http_port }}:9000/tcp"
+        volumes: 
+          - "/var/run/docker.sock:/var/run/docker.sock"
+          - "{{ docker_volumes_directory }}/portainer:/data"
