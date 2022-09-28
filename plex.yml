@@ -32,34 +32,43 @@
       ansible.builtin.include_role:
         name: passwd
 
-    - name: Setting up Plex
-      ansible.builtin.include_role:
-        name: container
-      vars:
-        container:
-          name: "plex"
-          pretty_name: "Plex"
-          image: "lscr.io/linuxserver/plex:latest"
-          paths:
-            - path: "/opt/docker-volumes/plex"
-          ports:
-            - "32400:32400"
-            - 1900:1900/udp
-            - 3005:3005
-            - 5353:5353/udp
-            - 8324:8324
-            - 32410:32410/udp
-            - 32412:32412/udp
-            - 32413:32413/udp
-            - 32414:32414/udp
-            - 32469:32469
-          volumes:
-            - "/opt/docker-volumes/plex:/config"
-            - /television:/shows
-            - /movies:/movies
-          environment:
-            TZ: America/New_York
-            VERSION: docker
-            #PLEX_CLAIM: claim-_aznSz1k4GS9zvbBiKeJ
-            PUID: "{{ control_uid }}"
-            PGID: "{{ control_gid }}"
+    - name: Create config volume
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: directory
+        owner: "{{ item.owner | default(docker_volumes_owner) }}"
+        group: "{{ item.group | default(docker_volumes_group) }}"
+      with_items: 
+        - path: "{{ docker_volumes_directory }}/plex"
+
+    - name: Setup Plex
+      community.docker.docker_container:
+        container_default_behavior: no_defaults
+        detach: yes
+        name: "plex"
+        image: "lscr.io/linuxserver/plex:latest"
+        state: "started"
+        recreate: "yes"
+        pull: "yes"
+        restart_policy: "unless-stopped"
+        published_ports: 
+          - "{{ plex_port }}:32400"
+          - 1900:1900/udp
+          - 3005:3005
+          - 5353:5353/udp
+          - 8324:8324
+          - 32410:32410/udp
+          - 32412:32412/udp
+          - 32413:32413/udp
+          - 32414:32414/udp
+          - 32469:32469
+        volumes: 
+          - "{{ docker_volumes_directory }}/plex:/config"
+          - /television:/shows
+          - /movies:/movies
+        env: 
+          TZ: America/New_York
+          VERSION: docker
+          # PLEX_CLAIM: "{{ plex_claim }}"
+          PUID: "{{ control_uid }}"
+          PGID: "{{ control_gid }}"
