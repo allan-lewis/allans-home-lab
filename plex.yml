@@ -4,6 +4,7 @@
   gather_facts: false
 
   vars:
+    tautulli_config: "{{ docker_volumes_directory }}/tautulli"
     mounts:
       - path: /television
         src: "{{ nas_host }}:/volume1/nfs-television"
@@ -40,6 +41,7 @@
         group: "{{ item.group | default(docker_volumes_group) }}"
       with_items: 
         - path: "{{ docker_volumes_directory }}/plex"
+        - path: "{{ tautulli_config }}"
 
     - name: Setup Plex
       community.docker.docker_container:
@@ -70,5 +72,24 @@
           TZ: America/New_York
           VERSION: docker
           # PLEX_CLAIM: "{{ plex_claim }}"
+          PUID: "{{ control_uid }}"
+          PGID: "{{ control_gid }}"
+
+    - name: Setup Tautulli
+      community.docker.docker_container:
+        container_default_behavior: no_defaults
+        detach: yes
+        name: "tautulli"
+        image: "lscr.io/linuxserver/tautulli:latest"
+        state: "started"
+        recreate: "yes"
+        pull: "yes"
+        restart_policy: "unless-stopped"
+        published_ports: 
+          - "{{ tautulli_port }}:8181"
+        volumes: 
+          - "{{ tautulli_config }}:/config"
+        env: 
+          TZ: America/New_York
           PUID: "{{ control_uid }}"
           PGID: "{{ control_gid }}"
