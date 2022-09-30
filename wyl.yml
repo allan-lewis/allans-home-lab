@@ -28,7 +28,7 @@
         volumes: 
           - "{{ docker_volumes_directory }}/wyl:/data"
         env: 
-          IFACE: "eth0"
+          IFACE: "{{ wyl_iface }}"
           GUIIP: "0.0.0.0"
           GUIPORT: "{{ wyl_port | int }}"
           TZ: America/New_York 
