@@ -1,0 +1,73 @@
+- name: Install required dependencies
+  ansible.builtin.apt:
+    pkg:
+      - openvpn
+      - openssh-server
+      - unzip
+    state: latest
+    update_cache: true
+
+- name: Create OpenVPN directory
+  ansible.builtin.file:
+    path: "/etc/openvpn"
+    state: directory
+    owner: root
+    group: root
+
+- name: Copy OpenVPN config
+  ansible.builtin.copy:
+    src: "{{ item.src }}"
+    dest: "/etc/openvpn/{{ item.dest }}"
+    owner: "root"
+    group: "root"
+    mode: '0600'
+  with_items: "{{ openvpn_configs }}"
+
+- name: Write OpenVPN authentication file
+  ansible.builtin.template:
+    src: openvpn_authn.j2
+    dest: /etc/openvpn/authn
+    owner: "root"
+    group: "root"
+    mode: 0600
+
+- name: Write OpenVPN connect script
+  ansible.builtin.template:
+    src: openvpn_connect.sh.j2
+    dest: /etc/openvpn/connect.sh
+    owner: "root"
+    group: "root"
+    mode: 0600
+
+- name: Write OpenVPN iptables script
+  ansible.builtin.template:
+    src: openvpn_iptables.sh.j2
+    dest: /etc/openvpn/iptables.sh
+    owner: "root"
+    group: "root"
+    mode: 0600
+
+- name: Enable port forwarding
+  ansible.builtin.command: sudo sh -c "echo 1 > /proc/sys/net/ipv4/ip_forward"
+
+- name: Write systemd service unit
+  ansible.builtin.template:
+    src: "openvpn_systemd.j2"
+    dest: "/etc/systemd/system/rc-local.service"
+    owner: "root"
+    group: "root"
+    mode: 0644
+
+- name: Write service script
+  ansible.builtin.template:
+    src: "openvpn_service.j2"
+    dest: "/etc/rc.local"
+    owner: "root"
+    group: "root"
+    mode: 0744
+
+- name: Enable VPN gateway
+  ansible.builtin.systemd:
+    name: "rc-local"
+    state: started
+    enabled: yes

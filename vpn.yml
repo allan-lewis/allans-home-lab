@@ -1,0 +1,8 @@
+---
+- name: Setup VPN gateway(s) 
+  hosts: vpn_nodes
+  become: yes
+  gather_facts: false
+
+  roles:
+    - vpn
