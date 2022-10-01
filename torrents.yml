@@ -43,6 +43,17 @@
         state: mounted
       with_items: "{{ mounts }}"
 
+    - name: Update netplan
+      ansible.builtin.template:
+        src: torrents_netplan.yml.j2
+        dest: "{{ netplan_dest }}"
+        owner: "root"
+        group: "root"
+        mode: 0644
+
+    - name: Apply netplan
+      ansible.builtin.command: sudo netplan apply
+
     - name: Gather user/group facts
       ansible.builtin.include_role:
         name: passwd

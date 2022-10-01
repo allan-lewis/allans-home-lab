@@ -1,0 +1,8 @@
+network:
+  ethernets:
+    {{ network_interface }}:
+      dhcp4: true
+      routes:
+       - to: default
+         via: {{ vpn_gateway }}      
+  version: 2
