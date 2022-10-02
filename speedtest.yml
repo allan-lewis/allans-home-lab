@@ -8,22 +8,31 @@
       ansible.builtin.include_role:
         name: passwd
 
-    - name: Setting up Speedtest Tracker
-      ansible.builtin.include_role:
-        name: container
-      vars:
-        container:
-          name: "speedtest"
-          pretty_name: "Speedtest Tracker"
-          image: "henrywhitaker3/speedtest-tracker"
-          paths:
-            - path: "{{ docker_volumes_directory }}/speedtest"
-          ports:
-            - "{{ speedtest_port }}:80/tcp"
-          volumes:
-            - "{{ docker_volumes_directory }}/speedtest:/config"
-          environment:
-            TZ: America/New_York
-            PUID: "{{ control_uid }}"
-            PGID: "{{ control_gid }}"
-            OOKLA_EULA_GDPR: "true"
+    - name: Create volume
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: directory
+        owner: "{{ item.owner | default(docker_volumes_owner) }}"
+        group: "{{ item.group | default(docker_volumes_group) }}"
+      with_items: 
+        - path: "{{ docker_volumes_directory }}/speedtest"
+
+    - name: Setup Speedtest Tracker
+      community.docker.docker_container:
+        container_default_behavior: no_defaults
+        detach: yes
+        name: "speedtest"
+        image: "henrywhitaker3/speedtest-tracker"
+        state: "started"
+        recreate: "yes"
+        pull: "yes"
+        restart_policy: "unless-stopped"
+        published_ports: 
+          - "{{ speedtest_port }}:80/tcp"
+        volumes: 
+          - "{{ docker_volumes_directory }}/speedtest:/config"
+        env: 
+          TZ: America/New_York
+          PUID: "{{ control_uid }}"
+          PGID: "{{ control_gid }}"
+          OOKLA_EULA_GDPR: "true"

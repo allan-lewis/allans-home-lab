@@ -4,20 +4,30 @@
   gather_facts: false
 
   tasks:
-    - name: Setting up Homepage
-      ansible.builtin.include_role:
-        name: container
-      vars:
-        container:
-          name: "homepage"
-          pretty_name: "Homepage"
-          image: "ghcr.io/benphelps/homepage:latest"
-          paths: 
-            - path: "{{ docker_volumes_directory }}/homepage"
-            - path: "{{ docker_volumes_directory }}/homepage/icons"
-          ports:
-            - "{{ homepage_port }}:3000/tcp"
-          volumes:
-            - "{{ docker_volumes_directory }}/homepage:/app/config"
-            - "{{ docker_volumes_directory }}/homepage/icons:/app/public/icons"
-            - /var/run/docker.sock:/var/run/docker.sock
+
+    - name: Create volumes
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: directory
+        owner: "{{ item.owner | default(docker_volumes_owner) }}"
+        group: "{{ item.group | default(docker_volumes_group) }}"
+      with_items: 
+        - path: "{{ docker_volumes_directory }}/homepage"
+        - path: "{{ docker_volumes_directory }}/homepage/icons"
+
+    - name: Setup Homepage
+      community.docker.docker_container:
+        container_default_behavior: no_defaults
+        detach: yes
+        name: "homepage"
+        image: "ghcr.io/benphelps/homepage:latest"
+        state: "started"
+        recreate: "yes"
+        pull: "yes"
+        restart_policy: "unless-stopped"
+        published_ports: 
+          - "{{ homepage_port }}:3000/tcp"
+        volumes: 
+          - "{{ docker_volumes_directory }}/homepage:/app/config"
+          - "{{ docker_volumes_directory }}/homepage/icons:/app/public/icons"
+          - /var/run/docker.sock:/var/run/docker.sock
