@@ -3,12 +3,33 @@
   become: yes
   gather_facts: false
 
+  vars:
+    vaultwarden_volume: "{{ docker_volumes_directory }}/vaultwarden"
+
   tasks:
 
-    - name: Setting up Docker container(s)
-      ansible.builtin.include_role:
-        name: container
-      vars:
-        container: "{{ item }}"
-      with_items:
-        - "{{ vaultwarden_container }}"
+    - name: Create volume
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: directory
+        owner: "{{ item.owner | default(docker_volumes_owner) }}"
+        group: "{{ item.group | default(docker_volumes_group) }}"
+      with_items: 
+        - path: "{{ vaultwarden_volume }}"
+
+    - name: Setup Vaultwarden
+      community.docker.docker_container:
+        container_default_behavior: no_defaults
+        detach: yes
+        name: "vaultwarden"
+        image: "vaultwarden/server"
+        state: "started"
+        recreate: "yes"
+        pull: "yes"
+        restart_policy: "unless-stopped"
+        published_ports: 
+          - "{{ vaultwarden_http_port}}:80/tcp"
+        volumes: 
+          - "{{ vaultwarden_volume }}:/data" 
+        env: 
+          ADMIN_TOKEN: "{{ vaultwarden_admin_token }}"

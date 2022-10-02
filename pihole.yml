@@ -3,6 +3,10 @@
   become: yes
   gather_facts: false
 
+  vars:
+    pihole_data_volume: "{{ docker_volumes_directory }}/pihole/data"
+    pihole_dns_volume: "{{ docker_volumes_directory }}/pihole/dns"
+
   tasks:
 
     - name: Disabling the default DNS service
@@ -19,10 +23,36 @@
         group: root
         mode: 0644
 
-    - name: Setting up Docker container(s)
-      ansible.builtin.include_role:
-        name: container
-      vars:
-        container: "{{ item }}"
-      with_items:
-        - "{{ pihole_container }}"
+    - name: Create volumes
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: directory
+        owner: "{{ item.owner | default(docker_volumes_owner) }}"
+        group: "{{ item.group | default(docker_volumes_group) }}"
+      with_items: 
+        - path: "{{ pihole_data_volume }}"
+        - path: "{{ pihole_dns_volume }}"
+
+    - name: Setup Pi-hole
+      community.docker.docker_container:
+        container_default_behavior: no_defaults
+        detach: yes
+        name: "pihole"
+        image: "pihole/pihole"
+        state: "started"
+        recreate: "yes"
+        pull: "yes"
+        restart_policy: "unless-stopped"
+        published_ports: 
+          - "53:53/tcp"
+          - "53:53/udp"
+          - "67:67/udp"
+          - "{{ pihole_http_port }}:80/tcp"
+        volumes: 
+          - "{{ pihole_data_volume }}:/etc/pihole"
+          - "{{ pihole_dns_volume }}:/etc/dnsmasq.d"
+        env: 
+          TZ: 'America/New_York'
+          WEBPASSWORD: "{{ pihole_admin_password }}"
+        capabilities:
+          - NET_ADMIN
