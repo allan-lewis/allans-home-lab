@@ -3,12 +3,32 @@
   become: yes
   gather_facts: false
 
+  vars:
+    homebridge_volume: "{{ docker_volumes_directory }}/homebridge"
+
   tasks:
 
-    - name: Setting up Docker container(s)
-      ansible.builtin.include_role:
-        name: container
-      vars:
-        container: "{{ item }}"
-      with_items:
-        - "{{ homebridge_container }}"
+    - name: Create config volume
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: directory
+        owner: "{{ item.owner | default(docker_volumes_owner) }}"
+        group: "{{ item.group | default(docker_volumes_group) }}"
+      with_items: 
+        - path: "{{ homebridge_volume }}"
+
+    - name: Setup Homebridge
+      community.docker.docker_container:
+        container_default_behavior: no_defaults
+        detach: yes
+        name: "homebridge"
+        image: "oznu/homebridge:latest"
+        state: "started"
+        recreate: "yes"
+        pull: "yes"
+        restart_policy: "unless-stopped"
+        network_mode: host
+        volumes: 
+          - "{{ homebridge_volume }}:/homebridge"
+        env: 
+          TZ: America/New_York

@@ -5,11 +5,34 @@
 
   tasks:
 
-    - name: Setting up Docker container(s)
-      ansible.builtin.include_role:
-        name: container
-      vars:
-        container: "{{ item }}"
-      with_items:
-        - "{{ guacd_container }}"
-        - "{{ guacamole_container }}"
+    - name: Setup guacd
+      community.docker.docker_container:
+        container_default_behavior: no_defaults
+        detach: yes
+        name: "guacd"
+        image: "guacamole/guacd"
+        state: "started"
+        recreate: "yes"
+        pull: "yes"
+        restart_policy: "unless-stopped"
+        published_ports: 
+          - "{{ guacd_port }}:4822/tcp"
+
+    - name: Setup Guacamole
+      community.docker.docker_container:
+        container_default_behavior: no_defaults
+        detach: yes
+        name: "guacamole"
+        image: "guacamole/guacamole"
+        state: "started"
+        recreate: "yes"
+        pull: "yes"
+        restart_policy: "unless-stopped"
+        published_ports: 
+          - "{{ guacamole_port }}:8080/tcp"
+        env: 
+          GUACD_HOSTNAME: "{{ guacd_host }}"
+          MYSQL_HOSTNAME: "{{ mysql_host }}"
+          MYSQL_DATABASE: "{{ mysql_database }}"
+          MYSQL_USER: "{{ mysql_user }}"
+          MYSQL_PASSWORD: "{{ mysql_password }}"  

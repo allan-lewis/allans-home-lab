@@ -3,15 +3,36 @@
   become: yes
   gather_facts: false
 
+  vars:
+    jenkins_data_volume: "{{ docker_volumes_directory }}/jenkins"
+
   tasks:
     - name: Setting up Docker container(s)
       ansible.builtin.include_role:
         name: passwd
 
-    - name: Setting up Docker container(s)
-      ansible.builtin.include_role:
-        name: container
-      vars:
-        container: "{{ item }}"
-      with_items:
-        - "{{ jenkins_container }}"
+    - name: Create volume
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: directory
+        owner: "{{ item.owner | default(docker_volumes_owner) }}"
+        group: "{{ item.group | default(docker_volumes_group) }}"
+      with_items: 
+        - path: "{{ jenkins_data_volume }}"
+
+    - name: Setup Jenkins
+      community.docker.docker_container:
+        container_default_behavior: no_defaults
+        detach: yes
+        name: "jenkins"
+        image: "jenkins/jenkins:lts-jdk11"
+        state: "started"
+        recreate: "yes"
+        pull: "yes"
+        restart_policy: "unless-stopped"
+        published_ports: 
+          - "{{ jenkins_http_port }}:8080"
+          - 50000:50000
+        volumes: 
+          - "{{ jenkins_data_volume }}:/var/jenkins_home"
+        user: "{{ control_uid }}:{{ control_gid }}"

@@ -3,19 +3,41 @@
   become: yes
   gather_facts: false
 
+  vars:
+    homeassistant_volume: "{{ docker_volumes_directory }}/homeassistant"
+
   tasks:
 
     - name: Setting up Docker container(s)
       ansible.builtin.include_role:
         name: passwd
 
-    - name: Setting up Docker container(s)
-      ansible.builtin.include_role:
-        name: container
-      vars:
-        container: "{{ item }}"
-      with_items:
-        - "{{ homeassistant_container }}"
+    - name: Create config volume
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: directory
+        owner: "{{ item.owner | default(docker_volumes_owner) }}"
+        group: "{{ item.group | default(docker_volumes_group) }}"
+      with_items: 
+        - path: "{{ homeassistant_volume }}"
+
+    - name: Setup Homeassistant
+      community.docker.docker_container:
+        container_default_behavior: no_defaults
+        detach: yes
+        name: "homeassistant"
+        image: "lscr.io/linuxserver/homeassistant"
+        state: "started"
+        recreate: "yes"
+        pull: "yes"
+        restart_policy: "unless-stopped"
+        network_mode: host
+        volumes: 
+          - "{{ homeassistant_volume }}:/config"
+        env: 
+          TZ: America/New_York
+          PUID: "{{ control_uid }}"
+          PGID: "{{ control_gid }}"
 
     - name: Creating HTTP reverse proxy YAML
       ansible.builtin.template:
