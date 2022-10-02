@@ -3,12 +3,33 @@
   become: yes
   gather_facts: false
 
+  vars:
+    mediawiki_volume: "{{ docker_volumes_directory }}/mediawiki"
+
   tasks:
 
-    - name: Setting up Docker container(s)
-      ansible.builtin.include_role:
-        name: container
-      vars:
-        container: "{{ item }}"
-      with_items:
-        - "{{ mediawiki_container }}"
+    - name: Create volumes
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: directory
+        owner: "{{ item.owner | default(docker_volumes_owner) }}"
+        group: "{{ item.group | default(docker_volumes_group) }}"
+      with_items: 
+        - path: "{{ mediawiki_volume }}"
+        - path: "{{ mediawiki_volume }}/images"
+
+    - name: Setup Mediawiki
+      community.docker.docker_container:
+        container_default_behavior: no_defaults
+        detach: yes
+        name: "mediawiki"
+        image: "mediawiki"
+        state: "started"
+        recreate: "yes"
+        pull: "yes"
+        restart_policy: "unless-stopped"
+        published_ports: 
+          - "{{ mediawiki_http_port}}:80/tcp"
+        volumes: 
+          - "{{ mediawiki_volume }}/images:/var/www/html/images"
+          - "{{ mediawiki_volume }}/LocalSettings.php:/var/www/html/LocalSettings.php" 

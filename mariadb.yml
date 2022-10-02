@@ -3,16 +3,40 @@
   become: yes
   gather_facts: false
 
+  vars: 
+    mariadb_config_volume: "{{ docker_volumes_directory }}/mariadb"
+
   tasks:
 
     - name: Setting up Docker container(s)
       ansible.builtin.include_role:
         name: passwd
 
-    - name: Setting up Docker container(s)
-      ansible.builtin.include_role:
-        name: container
-      vars:
-        container: "{{ item }}"
-      with_items:
-        - "{{ mariadb_container }}"
+    - name: Create volume
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: directory
+        owner: "{{ item.owner | default(docker_volumes_owner) }}"
+        group: "{{ item.group | default(docker_volumes_group) }}"
+      with_items: 
+        - path: "{{ mariadb_config_volume }}"
+
+    - name: Setup MariaDB
+      community.docker.docker_container:
+        container_default_behavior: no_defaults
+        detach: yes
+        name: "mariadb"
+        image: "lscr.io/linuxserver/mariadb"
+        state: "started"
+        recreate: "yes"
+        pull: "yes"
+        restart_policy: "unless-stopped"
+        published_ports: 
+          - "{{ mariadb_port}}:3306/tcp"
+        volumes: 
+          - "{{ mariadb_config_volume }}:/config"
+        env: 
+          TZ: America/New_York
+          PUID: "{{ control_uid }}"
+          PGID: "{{ control_gid }}"
+          MYSQL_ROOT_PASSWORD:  "{{ mariadb_root_password }}"
