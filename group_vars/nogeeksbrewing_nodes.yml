@@ -1,6 +1,0 @@
-nogeeksbrewing_container:    
-  - name: "nogeeksbrewing"
-    pretty_name: "No Geeks Brewing"
-    image: "nogeeksbrewing/site"
-    ports:
-      - "{{ nogeeksbrewing_port }}:80/tcp"

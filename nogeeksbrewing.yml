@@ -5,10 +5,15 @@
 
   tasks:
 
-    - name: Setting up Docker container(s)
-      ansible.builtin.include_role:
-        name: container
-      vars:
-        container: "{{ item }}"
-      with_items:
-        - "{{ nogeeksbrewing_container }}"
+    - name: Setup No Geeks Brewing
+      community.docker.docker_container:
+        container_default_behavior: no_defaults
+        detach: yes
+        name: "nogeeksbrewing"
+        image: "nogeeksbrewing/site"
+        state: "started"
+        recreate: "yes"
+        pull: "yes"
+        restart_policy: "unless-stopped"
+        published_ports: 
+          - "{{ nogeeksbrewing_port }}:80/tcp"
