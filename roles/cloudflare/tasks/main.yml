@@ -1,0 +1,74 @@
+- ansible.builtin.include_role:
+    name: passwd
+
+- name: Add Cloudflare's GPG key
+  ansible.builtin.apt_key:
+    url: "https://pkg.cloudflare.com/cloudflare-main.gpg"
+    keyring: "/usr/share/keyrings/cloudflare-main.gpg"
+    state: present
+  register: apt_key
+
+- name: Add Cloudflare's repository 
+  ansible.builtin.apt_repository:
+    repo: "deb [signed-by=/usr/share/keyrings/cloudflare-main.gpg] https://pkg.cloudflare.com/cloudflared focal main"
+    state: present
+  register: apt_repo
+
+- name: Do an apt update
+  ansible.builtin.apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+  when: (apt_key is changed) or (apt_repo is changed)
+
+- name: Install cloudflared
+  ansible.builtin.apt:
+    update_cache: yes
+    name: cloudflared
+    state: latest
+
+- name: Create cloudflared config directory
+  ansible.builtin.file:
+    path: "/etc/cloudflared"
+    state: directory
+    owner: root
+    group: root
+
+- name: Copy authentication certificates
+  ansible.builtin.copy:
+    src: "{{ item.cert }}"
+    dest: "/etc/cloudflared/{{ item.name }}.pem"
+    owner: "{{ control_uid }}"
+    group: "{{ control_gid }}"
+    mode: '0600'
+  with_items: "{{ cloudflare_tunnels }}"
+
+- name: Copying tunnel authentication JSON
+  ansible.builtin.copy:
+    src: "{{ item.tunnel }}"
+    dest: /etc/cloudflared/{{ item.name }}.json
+    owner: "{{ control_uid }}"
+    group: "{{ control_gid }}"
+    mode: '0600'
+  with_items: "{{ cloudflare_tunnels }}"
+
+- name: Write tunnel configuration YAML
+  ansible.builtin.template:
+    src: config.yml.j2
+    dest: /etc/cloudflared/{{ item.name }}.yml
+    owner: "{{ control_uid }}"
+    group: "{{ control_gid }}"
+    mode: 0644
+  with_items: "{{ cloudflare_tunnels }}"
+
+- name: Write systemd service unit
+  ansible.builtin.template:
+    src: "cloudflare.j2"
+    dest: "/etc/systemd/system/cloudflared@.service"
+    owner: "root"
+    group: "root"
+    mode: 0644
+
+- name: Enable Cloudflare services
+  ansible.builtin.systemd:
+    name: "cloudflared@{{ item.name }}"
+    state: started
+    enabled: yes
+  with_items: "{{ cloudflare_tunnels }}"
