@@ -1,0 +1,12 @@
+---
+- import_playbook: control.yml
+
+- name: Shutdown all managed nodes
+  hosts: managed_nodes
+  become: yes
+  gather_facts: false
+  
+  tasks:
+
+    - name: Shutdown immediately
+      community.general.shutdown:
