@@ -14,12 +14,13 @@
     state: present
   register: control_user_data
 
-- name: Ensure {{ control_user }} user has an SSH folder
-  ansible.builtin.file:
-    path: "{{ control_user_data.home }}/.ssh"
-    state: directory
-    owner: "{{ control_user }}"
-    group: "{{ control_user }}"
+- import_role:
+    name: util_directory
+  vars:
+    util_dirs:
+      - path: "{{ control_user_data.home }}/.ssh"
+        owner: "{{ control_user }}"
+        group: "{{ control_user }}"
 
 - name: Ensure that {{ control_user }} user has an SSH key
   community.crypto.openssh_keypair:

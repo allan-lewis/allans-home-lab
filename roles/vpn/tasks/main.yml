@@ -7,12 +7,13 @@
     state: latest
     update_cache: true
 
-- name: Create OpenVPN directory
-  ansible.builtin.file:
-    path: "/etc/openvpn"
-    state: directory
-    owner: root
-    group: root
+- import_role:
+    name: util_directory
+  vars:
+    util_dirs:
+      - path: "/etc/openvpn"
+        owner: "root"
+        group: "root"
 
 - name: Copy OpenVPN config
   ansible.builtin.copy:

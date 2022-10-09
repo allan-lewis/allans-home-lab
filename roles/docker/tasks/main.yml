@@ -47,12 +47,13 @@
       - docker
     append: yes
 
-- name: Ensure that the Docker volumes directory exists
-  ansible.builtin.file:
-    path: "{{ docker_volumes_directory }}"
-    state: directory
-    owner: "{{ docker_volumes_owner }}"
-    group: "{{ docker_volumes_group }}"
+- import_role:
+    name: util_directory
+  vars:
+    util_dirs:
+      - path: "{{ docker_volumes_directory }}"
+        owner: "{{ docker_volumes_owner }}"
+        group: "{{ docker_volumes_group }}"
 
 - name: Ensure that the Docker deamon is running
   ansible.builtin.service:
@@ -61,12 +62,13 @@
     state: started
   become: true
 
-- name: Ensure that the Docker volumes directory exists
-  ansible.builtin.file:
-    path: /etc/systemd/system/docker.service.d
-    state: directory
-    owner: root
-    group: root
+- import_role:
+    name: util_directory
+  vars:
+    util_dirs:
+      - path: "/etc/systemd/system/docker.service.d"
+        owner: "root"
+        group: "root"
 
 - name: Write docker service override
   ansible.builtin.template:
