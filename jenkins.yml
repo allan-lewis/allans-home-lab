@@ -8,17 +8,12 @@
   
   roles:
     - role: util_getent
+    - role: util_directory
+      vars:
+        util_dirs:        
+          - path: "{{ jenkins_data_volume }}"
 
   tasks:
-    - name: Create volume
-      ansible.builtin.file:
-        path: "{{ item.path }}"
-        state: directory
-        owner: "{{ item.owner | default(docker_volumes_owner) }}"
-        group: "{{ item.group | default(docker_volumes_group) }}"
-      with_items: 
-        - path: "{{ jenkins_data_volume }}"
-
     - name: Setup Jenkins
       community.docker.docker_container:
         container_default_behavior: no_defaults

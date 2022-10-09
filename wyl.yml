@@ -4,16 +4,13 @@
   become: yes
   gather_facts: false
 
-  tasks:  
-    - name: Create volumes
-      ansible.builtin.file:
-        path: "{{ item.path }}"
-        state: directory
-        owner: "{{ docker_volumes_owner }}"
-        group: "{{ docker_volumes_group }}"
-      with_items: 
-        - path: "{{ docker_volumes_directory }}/wyl"
+  roles:
+    - role: util_directory
+      vars:
+        util_dirs:        
+          - path: "{{ docker_volumes_directory }}/wyl"
 
+  tasks:  
     - name: Setup WatchYourLAN
       community.docker.docker_container:
         container_default_behavior: no_defaults
