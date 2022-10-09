@@ -4,7 +4,14 @@
   become: yes
   gather_facts: false
 
+  vars:
+    redis_volume: "{{ docker_volumes_directory }}/redis"
+    authelia_volume: "{{ docker_volumes_directory }}/authelia"
+
   tasks:  
+    - ansible.builtin.include_role:
+        name: passwd
+
     - name: Create volumes
       ansible.builtin.file:
         path: "{{ item.path }}"
@@ -12,8 +19,8 @@
         owner: "{{ item.owner | default(docker_volumes_owner) }}"
         group: "{{ item.group | default(docker_volumes_group) }}"
       with_items: 
-        - path: /var/lib/docker-volumes/redis
-        - path: /var/lib/docker-volumes/authelia
+        - path: "{{ redis_volume }}"
+        - path: "{{ authelia_volume }}"
 
     - name: Setup Redis
       community.docker.docker_container:
@@ -28,7 +35,7 @@
         published_ports: 
           - "{{ redis_port }}:6379/tcp"
         volumes: 
-          - "/var/lib/docker-volumes/redis:/data"
+          - "{{ redis_volume }}:/data"
         env: 
           TZ: America/New_York 
 
@@ -36,33 +43,33 @@
       ansible.builtin.template:
         src: "{{ item.src }}"
         dest: "{{ item.dest }}" 
-        owner: root
-        group: root
+        owner: "{{ docker_volumes_owner }}"
+        group: "{{ docker_volumes_owner }}"
         mode: 0644
       with_items:
         - src: users_database.yml.j2
-          dest: /var/lib/docker-volumes/authelia/users_database.yml
+          dest: "{{ authelia_volume }}/users_database.yml"
         - src: configuration.yml.j2
-          dest: /var/lib/docker-volumes/authelia/configuration.yml
+          dest: "{{ authelia_volume }}/configuration.yml"
 
     - name: Write NPM advanced configurations
       ansible.builtin.template:
         src: npm_advanced.j2
         dest: "{{ item.dest }}"
-        owner: root
-        group: root
+        owner: "{{ docker_volumes_owner }}"
+        group: "{{ docker_volumes_owner }}"
         mode: 0644
       with_items:
         - proxy_service: speedtest
-          dest: /var/lib/docker-volumes/authelia/npm_advanced_speedtest
+          dest: "{{ authelia_volume }}/npm_advanced_speedtest"
           downstream_host: "{{ speedtest_host }}"
           downstream_port: "{{ speedtest_port }}"
         - proxy_service: homepage
-          dest: /var/lib/docker-volumes/authelia/npm_advanced_homepage
+          dest: "{{ authelia_volume }}/npm_advanced_homepage"
           downstream_host: "{{ homepage_host }}"
           downstream_port: "{{ homepage_port }}"
         - proxy_service: wyl
-          dest: /var/lib/docker-volumes/authelia/npm_advanced_wyl
+          dest: "{{ authelia_volume }}/npm_advanced_wyl"
           downstream_host: "{{ wyl_host }}"
           downstream_port: "{{ wyl_port }}"
 
@@ -79,6 +86,17 @@
         published_ports:
           - "{{ authelia_port }}:9091/tcp"
         volumes:
-          - "/var/lib/docker-volumes/authelia:/config"
+          - "{{ authelia_volume }}:/config"
         env:
           TZ: America/New_York        
+
+    - name: Fix permissions
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: directory
+        recurse: yes
+        owner: "{{ item.owner | default(docker_volumes_owner) }}"
+        group: "{{ item.group | default(docker_volumes_group) }}"
+      with_items: 
+        - path: "{{ redis_volume }}"
+        - path: "{{ authelia_volume }}"
