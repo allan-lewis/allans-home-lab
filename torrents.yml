@@ -33,7 +33,17 @@
             src: "{{ nfs_share_movies }}"
             owner: "{{ control_user }}" 
             group: "{{ control_user }}" 
-            access: "rw"
+            access: "rw"    
+    - role: util_directory
+      vars:
+        util_dirs: 
+          - path: "{{ jackett.config }}"
+          - path: "{{ radarr.config }}"
+          - path: "{{ sonarr.config }}"
+          - path: "{{ transmission.config }}"
+          - path: "{{ jackett.downloads }}"
+          - path: "{{ torrent_downloads }}"
+          - path: "{{ torrent_watch }}"
 
   tasks:
     - name: Update netplan
@@ -46,21 +56,6 @@
 
     - name: Apply netplan
       ansible.builtin.command: sudo netplan apply
-
-    - name: Create volumes
-      ansible.builtin.file:
-        path: "{{ item.path }}"
-        state: directory
-        owner: "{{ item.owner | default(docker_volumes_owner) }}"
-        group: "{{ item.group | default(docker_volumes_group) }}"
-      with_items: 
-        - path: "{{ jackett.config }}"
-        - path: "{{ radarr.config }}"
-        - path: "{{ sonarr.config }}"
-        - path: "{{ transmission.config }}"
-        - path: "{{ jackett.downloads }}"
-        - path: "{{ torrent_downloads }}"
-        - path: "{{ torrent_watch }}"
 
     - name: Setup Jackett
       community.docker.docker_container:

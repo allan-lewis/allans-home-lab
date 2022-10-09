@@ -6,17 +6,13 @@
   vars:
     vaultwarden_volume: "{{ docker_volumes_directory }}/vaultwarden"
 
+  roles:
+    - role: util_directory
+      vars:
+        util_dirs: 
+          - path: "{{ vaultwarden_volume }}"
+
   tasks:
-
-    - name: Create volume
-      ansible.builtin.file:
-        path: "{{ item.path }}"
-        state: directory
-        owner: "{{ item.owner | default(docker_volumes_owner) }}"
-        group: "{{ item.group | default(docker_volumes_group) }}"
-      with_items: 
-        - path: "{{ vaultwarden_volume }}"
-
     - name: Setup Vaultwarden
       community.docker.docker_container:
         container_default_behavior: no_defaults

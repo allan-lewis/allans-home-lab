@@ -6,18 +6,14 @@
   vars:
     mediawiki_volume: "{{ docker_volumes_directory }}/mediawiki"
 
+  roles:    
+    - role: util_directory
+      vars:
+        util_dirs: 
+          - path: "{{ mediawiki_volume }}"
+          - path: "{{ mediawiki_volume }}/images"
+
   tasks:
-
-    - name: Create volumes
-      ansible.builtin.file:
-        path: "{{ item.path }}"
-        state: directory
-        owner: "{{ item.owner | default(docker_volumes_owner) }}"
-        group: "{{ item.group | default(docker_volumes_group) }}"
-      with_items: 
-        - path: "{{ mediawiki_volume }}"
-        - path: "{{ mediawiki_volume }}/images"
-
     - name: Setup Mediawiki
       community.docker.docker_container:
         container_default_behavior: no_defaults

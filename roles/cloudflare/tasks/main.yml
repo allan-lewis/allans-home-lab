@@ -21,12 +21,13 @@
     name: cloudflared
     state: latest
 
-- name: Create cloudflared config directory
-  ansible.builtin.file:
-    path: "/etc/cloudflared"
-    state: directory
-    owner: root
-    group: root
+- import_role:
+    name: util_directory
+  vars:
+    util_dirs:
+      - path: "/etc/cloudflared"
+        owner: "root"
+        group: "root"
 
 - name: Copy authentication certificates
   ansible.builtin.copy:

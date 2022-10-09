@@ -7,6 +7,7 @@
     - role: util_directory
       vars:
         util_dirs: 
+        - path: "{{ docker_volumes_directory }}/homepage"
         - path: "{{ docker_volumes_directory }}/homepage/icons"
 
   tasks:

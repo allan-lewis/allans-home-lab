@@ -8,17 +8,14 @@
     npm_data_volume: "{{ docker_volumes_directory }}/npm/data"
     npm_letsencrypt_volume: "{{ docker_volumes_directory }}/npm/letsencrypt"
 
-  tasks:
-    - name: Create volumes
-      ansible.builtin.file:
-        path: "{{ item.path }}"
-        state: directory
-        owner: "{{ item.owner | default(docker_volumes_owner) }}"
-        group: "{{ item.group | default(docker_volumes_group) }}"
-      with_items: 
-        - path: "{{ npm_data_volume }}"
-        - path: "{{ npm_letsencrypt_volume }}"
+  roles:
+    - role: util_directory
+      vars:
+        util_dirs: 
+          - path: "{{ npm_data_volume }}"
+          - path: "{{ npm_letsencrypt_volume }}"
 
+  tasks:
     - name: Setup Nginx Proxy Manager
       community.docker.docker_container:
         container_default_behavior: no_defaults
