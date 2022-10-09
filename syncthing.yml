@@ -3,12 +3,19 @@
   become: yes
   gather_facts: false
 
+  roles:
+    - role: util_getent
+    - role: util_mount
+      vars: 
+        util_mounts: 
+          - path: "{{ mount_syncthing }}"
+            src: "{{ nfs_share_syncthing }}"
+            owner: "{{ control_user }}" 
+            group: "{{ control_user }}" 
+            access: "rw"
+      when: syncthing_mount is true
+
   tasks:
-
-    - name: Setting up Docker container(s)
-      ansible.builtin.include_role:
-        name: passwd
-
     - name: Create config volume
       ansible.builtin.file:
         path: "{{ item.path }}"

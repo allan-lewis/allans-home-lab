@@ -5,4 +5,5 @@
   gather_facts: false
 
   roles:
-    - cloudflare
+    - role: util_getent
+    - role: cloudflare

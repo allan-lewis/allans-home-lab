@@ -126,20 +126,3 @@
       - nfs-common
     state: latest
     update_cache: true
-
-- name: Create mount points
-  ansible.builtin.file:
-    path: "{{ item.path }}"
-    state: directory
-    owner: "{{ control_user }}"
-    group: "{{ control_user }}"
-  with_items: "{{ mounts | default([]) }}"
-
-- name: Mount NFS volumes
-  ansible.posix.mount:
-    path: "{{ item.path }}"
-    src: "{{ item.src }}"
-    fstype: nfs
-    opts: resvport,rw
-    state: mounted
-  with_items: "{{ mounts | default([]) }}"

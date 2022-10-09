@@ -1,6 +1,3 @@
-- ansible.builtin.include_role:
-    name: passwd
-
 - name: Add Cloudflare's GPG key
   ansible.builtin.apt_key:
     url: "https://pkg.cloudflare.com/cloudflare-main.gpg"

@@ -8,10 +8,10 @@
     redis_volume: "{{ docker_volumes_directory }}/redis"
     authelia_volume: "{{ docker_volumes_directory }}/authelia"
 
-  tasks:  
-    - ansible.builtin.include_role:
-        name: passwd
+  roles:
+    - role: util_getent
 
+  tasks:  
     - name: Create volumes
       ansible.builtin.file:
         path: "{{ item.path }}"

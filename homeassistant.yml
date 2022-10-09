@@ -6,12 +6,10 @@
   vars:
     homeassistant_volume: "{{ docker_volumes_directory }}/homeassistant"
 
+  roles:
+    - role: util_getent
+
   tasks:
-
-    - name: Setting up Docker container(s)
-      ansible.builtin.include_role:
-        name: passwd
-
     - name: Create config volume
       ansible.builtin.file:
         path: "{{ item.path }}"

@@ -3,11 +3,10 @@
   become: yes
   gather_facts: false
 
-  tasks:
-    - name: Setting up Docker container(s)
-      ansible.builtin.include_role:
-        name: passwd
+  roles:
+    - role: util_getent
 
+  tasks:
     - name: Create volume
       ansible.builtin.file:
         path: "{{ item.path }}"

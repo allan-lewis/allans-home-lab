@@ -1,0 +1,18 @@
+---
+- name: Create mount point(s)
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: directory
+    recurse: "{{ item.recurse | default('no') }}"
+    owner: "{{ item.owner | default(docker_volumes_owner) }}"
+    group: "{{ item.group | default(docker_volumes_group) }}"
+  with_items: "{{ util_mounts }}"
+
+- name: Mount NFS volume(s)
+  ansible.posix.mount:
+    path: "{{ item.path }}"
+    src: "{{ item.src }}"
+    fstype: nfs
+    opts: "resvport,{{ item.access }}"
+    state: mounted
+  with_items: "{{ util_mounts }}"

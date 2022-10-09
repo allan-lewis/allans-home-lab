@@ -5,34 +5,24 @@
 
   vars:
     tautulli_config: "{{ docker_volumes_directory }}/tautulli"
-    mounts:
-      - path: /television
-        src: "{{ nas_host }}:/volume1/nfs-television"
-      - path: /movies
-        src: "{{ nas_host }}:/volume1/nfs-movies"
+
+  roles:
+    - role: util_getent
+    - role: util_mount
+      vars: 
+        util_mounts: 
+          - path: "/television"
+            src: "{{ nfs_share_shows }}"
+            owner: "{{ control_user }}" 
+            group: "{{ control_user }}" 
+            access: "ro"
+          - path: "/movies"
+            src: "{{ nfs_share_movies }}"
+            owner: "{{ control_user }}" 
+            group: "{{ control_user }}" 
+            access: "ro"
 
   tasks:
-    - name: Create mount points
-      ansible.builtin.file:
-        path: "{{ item.path }}"
-        state: directory
-        owner: "{{ control_user }}"
-        group: "{{ control_user }}"
-      with_items: "{{ mounts }}"
-
-    - name: Mount the NFS volumes
-      ansible.posix.mount:
-        path: "{{ item.path }}"
-        src: "{{ item.src }}"
-        fstype: nfs
-        opts: resvport,rw
-        state: mounted
-      with_items: "{{ mounts }}"
-
-    - name: Setting up Docker container(s)
-      ansible.builtin.include_role:
-        name: passwd
-
     - name: Create config volume
       ansible.builtin.file:
         path: "{{ item.path }}"
