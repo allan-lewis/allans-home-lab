@@ -1,8 +1,11 @@
-- name: Recording passwd information
+- name: Get entries from passwd database
   ansible.builtin.getent:
     database: passwd
+  when: ahl_getent_passwd is undefined
 
-- name: Setting user and group facts
+- name: Set uid and gid facts
   ansible.builtin.set_fact:
     control_uid: "{{ ansible_facts.getent_passwd[control_user].1 | int }}"
     control_gid: "{{ ansible_facts.getent_passwd[control_user].2 | int }}"
+  register: ahl_getent_passwd
+  when: ahl_getent_passwd is undefined
