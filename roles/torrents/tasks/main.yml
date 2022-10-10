@@ -1,0 +1,124 @@
+---
+- import_role: 
+    name: util_getent
+- import_role: 
+    name: util_mount      
+  vars: 
+      util_mounts: 
+        - path: "{{ shows_volume }}"
+          src: "{{ nfs_share_shows }}"
+          owner: "{{ control_user }}" 
+          group: "{{ control_user }}" 
+          access: "rw"
+        - path: "{{ movies_volume }}"
+          src: "{{ nfs_share_movies }}"
+          owner: "{{ control_user }}" 
+          group: "{{ control_user }}" 
+          access: "rw"  
+- import_role: 
+    name: util_directory
+  vars:
+    util_dirs: 
+      - path: "{{ jackett.config }}"
+      - path: "{{ radarr.config }}"
+      - path: "{{ sonarr.config }}"
+      - path: "{{ transmission.config }}"
+      - path: "{{ jackett.downloads }}"
+      - path: "{{ torrent_downloads }}"
+      - path: "{{ torrent_watch }}"
+
+- name: Update netplan
+  ansible.builtin.template:
+    src: netplan.j2
+    dest: "{{ netplan_dest }}"
+    owner: "root"
+    group: "root"
+    mode: 0644
+
+- name: Apply netplan
+  ansible.builtin.command: sudo netplan apply
+
+- name: Setup Jackett
+  community.docker.docker_container:
+    container_default_behavior: no_defaults
+    detach: yes
+    name: "jackett"
+    image: "lscr.io/linuxserver/jackett:latest"
+    state: "started"
+    recreate: "yes"
+    pull: "yes"
+    restart_policy: "unless-stopped"
+    published_ports: 
+      - "{{ jackett_http_port }}:9117/tcp"
+    volumes: 
+      - "{{ jackett.config }}:/config"
+      - "{{ jackett.downloads }}:/downloads"
+    env: 
+      TZ: America/New_York
+      PUID: "{{ control_uid }}"
+      PGID: "{{ control_gid }}"
+
+- name: Setup Sonarr
+  community.docker.docker_container:
+    container_default_behavior: no_defaults
+    detach: yes
+    name: "sonarr"
+    image: "lscr.io/linuxserver/sonarr:latest"
+    state: "started"
+    recreate: "yes"
+    pull: "yes"
+    restart_policy: "unless-stopped"
+    published_ports: 
+      - "{{ sonarr_http_port }}:8989/tcp"
+    volumes: 
+      - "{{ sonarr.config }}:/config"
+      - "{{ shows_volume }}:/tv"
+      - "{{ torrent_downloads }}:/downloads"
+    env: 
+      TZ: America/New_York
+      PUID: "{{ control_uid }}"
+      PGID: "{{ control_gid }}"
+
+- name: Setup Radarr
+  community.docker.docker_container:
+    container_default_behavior: no_defaults
+    detach: yes
+    name: "radarr"
+    image: "lscr.io/linuxserver/radarr:latest"
+    state: "started"
+    recreate: "yes"
+    pull: "yes"
+    restart_policy: "unless-stopped"
+    published_ports: 
+      - "{{ radarr_http_port }}:7878/tcp"
+    volumes: 
+      - "{{ radarr.config }}:/config"
+      - "{{ movies_volume }}:/movies"
+      - "{{ torrent_downloads }}:/downloads"
+    env: 
+      TZ: America/New_York
+      PUID: "{{ control_uid }}"
+      PGID: "{{ control_gid }}"
+
+- name: Setup Transmission
+  community.docker.docker_container:
+    container_default_behavior: no_defaults
+    detach: yes
+    name: "transmission"
+    image: "lscr.io/linuxserver/transmission:latest"
+    state: "started"
+    recreate: "yes"
+    pull: "yes"
+    restart_policy: "unless-stopped"
+    published_ports: 
+      - "{{ transmission_port }}:9091/tcp"
+      - 51413:51413/tcp
+      - 51413:51413/udp
+    volumes: 
+        - "{{ transmission.config }}:/config"
+        - "{{ torrent_downloads }}:/downloads"
+        - "{{ torrent_watch }}:/watch"
+    env: 
+      TZ: America/New_York
+      PUID: "{{ control_uid }}"
+      PGID: "{{ control_gid }}"
