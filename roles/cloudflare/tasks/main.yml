@@ -49,7 +49,7 @@
 
 - name: Write tunnel configuration YAML
   ansible.builtin.template:
-    src: config.yml.j2
+    src: tunnel_config.j2
     dest: /etc/cloudflared/{{ item.name }}.yml
     owner: "{{ control_uid }}"
     group: "{{ control_gid }}"
@@ -58,7 +58,7 @@
 
 - name: Write systemd service unit
   ansible.builtin.template:
-    src: "cloudflare.j2"
+    src: "service_unit.j2"
     dest: "/etc/systemd/system/cloudflared@.service"
     owner: "root"
     group: "root"

@@ -34,7 +34,7 @@
 
 - name: Write OpenVPN connect script
   ansible.builtin.template:
-    src: openvpn_connect.sh.j2
+    src: script_connect.j2
     dest: /etc/openvpn/connect.sh
     owner: "root"
     group: "root"
@@ -42,7 +42,7 @@
 
 - name: Write OpenVPN iptables script
   ansible.builtin.template:
-    src: openvpn_iptables.sh.j2
+    src: script_iptables.j2
     dest: /etc/openvpn/iptables.sh
     owner: "root"
     group: "root"
@@ -53,7 +53,7 @@
 
 - name: Write systemd service unit
   ansible.builtin.template:
-    src: "openvpn_systemd.j2"
+    src: "service_unit.j2"
     dest: "/etc/systemd/system/rc-local.service"
     owner: "root"
     group: "root"
@@ -61,7 +61,7 @@
 
 - name: Write service script
   ansible.builtin.template:
-    src: "openvpn_service.j2"
+    src: "service.j2"
     dest: "/etc/rc.local"
     owner: "root"
     group: "root"
