@@ -1,0 +1,6 @@
+---
+- import_playbook: container_playbooks/uptime_kuma.yml
+- import_playbook: container_playbooks/prometheus.yml
+- import_playbook: container_playbooks/node_exporter.yml
+- import_playbook: container_playbooks/cadvisor.yml
+- import_playbook: container_playbooks/grafana.yml

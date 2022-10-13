@@ -5,3 +5,4 @@
 - import_playbook: cloudflare.yml
 - import_playbook: vpn.yml
 - import_playbook: torrents.yml
+- import_playbook: observability.yml

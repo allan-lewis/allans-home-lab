@@ -1,0 +1,25 @@
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+    - targets:
+{% for node in groups['prometheus_nodes'] %}
+        - '{{hostvars[node]['ansible_ssh_host']}}:{{ prometheus_http_port }}'
+{% endfor %}
+      labels:
+        alias: 'prometheus'
+  - job_name: 'cadvisor'
+    static_configs:
+    - targets:
+{% for node in groups['docker_nodes'] %}
+        - '{{hostvars[node]['ansible_ssh_host']}}:{{ cadvisor_port }}'
+{% endfor %}
+      labels:
+        alias: 'cadvisor'
+  - job_name: 'node-exporter'
+    static_configs:
+    - targets:
+{% for node in groups['docker_nodes'] %}
+        - '{{hostvars[node]['ansible_ssh_host']}}:{{ node_exporter_port }}'
+{% endfor %}
+      labels:
+        alias: 'node-exporter'

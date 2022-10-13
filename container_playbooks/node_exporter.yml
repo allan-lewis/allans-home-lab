@@ -1,0 +1,31 @@
+---
+- name: Export host metrics
+  hosts: docker_nodes
+  become: yes
+  gather_facts: false
+
+  tasks:
+    - name: Setup Prometheus Node Exporter
+      community.docker.docker_container:
+        container_default_behavior: no_defaults
+        detach: yes
+        name: "node-exporter"
+        image: "quay.io/prometheus/node-exporter:latest"
+        state: "started"
+        recreate: "yes"
+        pull: "yes"
+        restart_policy: "unless-stopped"
+        published_ports: 
+          - "{{ node_exporter_port }}:9100/tcp"
+        volumes: 
+          - /proc:/host/proc:ro
+          - /sys:/host/sys:ro
+          - /:/rootfs:ro
+          - /:/host:ro,rslave
+        command:
+          - '--path.rootfs=/host'
+          - '--path.procfs=/host/proc' 
+          - '--path.sysfs=/host/sys'
+          - --collector.filesystem.ignored-mount-points
+          - "^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"
+

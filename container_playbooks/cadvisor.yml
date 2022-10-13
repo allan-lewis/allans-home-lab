@@ -1,0 +1,25 @@
+---
+- name: Export container metrics
+  hosts: docker_nodes
+  become: yes
+  gather_facts: false
+
+  tasks:
+    - name: Setup cAdvisor
+      community.docker.docker_container:
+        container_default_behavior: no_defaults
+        detach: yes
+        name: "cadvisor"
+        image: "gcr.io/cadvisor/cadvisor:latest"
+        state: "started"
+        recreate: "yes"
+        pull: "yes"
+        restart_policy: "unless-stopped"
+        published_ports: 
+          - "{{ cadvisor_port }}:8080/tcp"
+        volumes: 
+          - /:/rootfs:ro
+          - /var/run:/var/run:rw
+          - /sys:/sys:ro
+          - /var/lib/docker/:/var/lib/docker:ro
+

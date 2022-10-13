@@ -11,7 +11,6 @@
 - import_playbook: npm.yml
 - import_playbook: pihole.yml
 - import_playbook: guacamole.yml
-- import_playbook: kuma.yml
 - import_playbook: homepage.yml
 - import_playbook: nogeeksbrewing.yml
 - import_playbook: homeassistant.yml

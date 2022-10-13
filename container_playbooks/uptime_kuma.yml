@@ -5,10 +5,10 @@
   gather_facts: false
 
   roles:
-    - role: util_directory
-      vars:
-        util_dirs: 
-          - path: "{{ docker_volumes_directory }}/kuma"
+  - role: ../roles/util_directory
+    vars:
+      util_dirs: 
+        - path: "{{ docker_volumes_directory }}/kuma"
 
   tasks:  
     - name: Setup Uptime Kuma
