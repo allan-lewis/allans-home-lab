@@ -1,6 +1,54 @@
 ---
-- import_playbook: container_playbooks/uptime_kuma.yml
-- import_playbook: container_playbooks/prometheus.yml
-- import_playbook: container_playbooks/node_exporter.yml
-- import_playbook: container_playbooks/cadvisor.yml
-- import_playbook: container_playbooks/grafana.yml
+- name: Setup Prometheus
+  hosts: prometheus_nodes
+  become: yes
+  gather_facts: false
+
+  vars:
+    prometheus_docker_volume: "{{ docker_volumes_directory }}/prometheus"
+
+  roles:    
+    - role: util_getent
+    - role: util_directory
+      vars:
+        util_dirs: 
+          - path: "{{ prometheus_docker_volume }}"
+          - path: "{{ prometheus_data_volume }}"
+    - role: docker_container_prometheus
+
+- name: Setup Grafana
+  hosts: grafana_nodes
+  become: yes
+  gather_facts: false
+
+  vars:
+    grafana_data_volume: "{{ docker_volumes_directory }}/grafana"
+
+  roles:
+    - role: util_getent
+    - role: util_directory
+      vars:
+        util_dirs: 
+          - path: "{{ grafana_data_volume }}"
+    - role: docker_container_grafana
+
+- name: Export host and container metrics
+  hosts: docker_nodes
+  become: yes
+  gather_facts: false
+
+  roles:
+    - role: docker_container_cadvisor
+    - role: docker_container_node_exporter
+
+- name: Setup Uptime Kuma
+  hosts: kuma_nodes
+  become: yes
+  gather_facts: false
+
+  roles:
+  - role: ../roles/util_directory
+    vars:
+      util_dirs: 
+        - path: "{{ docker_volumes_directory }}/kuma"
+  - role: docker_container_uptime_kuma

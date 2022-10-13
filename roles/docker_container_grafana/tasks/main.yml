@@ -1,0 +1,16 @@
+---
+- name: Run Grafana Docker container
+  community.docker.docker_container:
+    container_default_behavior: no_defaults
+    detach: yes
+    name: "grafana"
+    image: "grafana/grafana"
+    state: "started"
+    recreate: "yes"
+    pull: "yes"
+    restart_policy: "unless-stopped"
+    published_ports: 
+      - "{{ grafana_port }}:3000/tcp"
+    volumes: 
+      - "{{ grafana_data_volume }}:/var/lib/grafana"
+    user: "{{ control_uid }}:{{ control_gid }}"

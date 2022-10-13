@@ -6,7 +6,7 @@
     owner: "{{ control_uid }}"
     group: "{{ control_gid }}"
 
-- name: Setup Prometheus
+- name: Run Prometheus Docker container
   community.docker.docker_container:
     container_default_behavior: no_defaults
     detach: yes

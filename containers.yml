@@ -22,4 +22,3 @@
 - import_playbook: authelia.yml
 - import_playbook: wyl.yml
 - import_playbook: plex.yml
-- import_playbook: syncthing.yml

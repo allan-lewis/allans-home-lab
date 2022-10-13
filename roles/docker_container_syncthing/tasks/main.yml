@@ -1,0 +1,17 @@
+---
+- name: Run Syncthing Docker container
+  community.docker.docker_container:
+    container_default_behavior: no_defaults
+    detach: yes
+    name: "syncthing"
+    image: "lscr.io/linuxserver/syncthing:latest"
+    state: "started"
+    recreate: "yes"
+    pull: "yes"
+    restart_policy: "unless-stopped"
+    network_mode: "host"
+    volumes: "{{ syncthing_volumes }}"
+    env: 
+      TZ: America/New_York
+      PUID: "{{ control_uid }}"
+      PGID: "{{ control_gid }}"

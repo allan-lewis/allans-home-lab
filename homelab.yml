@@ -6,3 +6,4 @@
 - import_playbook: vpn.yml
 - import_playbook: torrents.yml
 - import_playbook: observability.yml
+- import_playbook: backup.yml
