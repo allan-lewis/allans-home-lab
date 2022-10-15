@@ -2,10 +2,10 @@
   community.general.timezone:
     name: America/New_York
 
-- name: Ensure that {{ control_user }} user exists
+- name: Ensure that {{ ahl_control_user }} user exists
   ansible.builtin.user:
-    name: "{{ control_user }}"
-    password: "{{ control_password }}"
+    name: "{{ ahl_control_user }}"
+    password: "{{ ahl_control_password }}"
     password_lock: no
     shell: /bin/bash
     groups:
@@ -19,42 +19,42 @@
   vars:
     util_dirs:
       - path: "{{ control_user_data.home }}/.ssh"
-        owner: "{{ control_user }}"
-        group: "{{ control_user }}"
+        owner: "{{ ahl_control_user }}"
+        group: "{{ ahl_control_user }}"
 
-- name: Ensure that {{ control_user }} user has an SSH key
+- name: Ensure that {{ ahl_control_user }} user has an SSH key
   community.crypto.openssh_keypair:
     path: "{{ control_user_data.home }}/.ssh/id_rsa"
-    owner: "{{ control_user }}"
-    group: "{{ control_user }}"
+    owner: "{{ ahl_control_user }}"
+    group: "{{ ahl_control_user }}"
 
 - name: Ensure that control node SSH keys are authorized
   ansible.posix.authorized_key:
-    user: "{{ control_user }}"
+    user: "{{ ahl_control_user }}"
     state: present
     key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
 
-- name: Ensure that the {{ control_user }} user is in the sudoers file
+- name: Ensure that the {{ ahl_control_user }} user is in the sudoers file
   ansible.builtin.lineinfile:
     path: /etc/sudoers
-    regexp: '^{{ control_user }}'
-    line: '{{ control_user }} ALL=(ALL) NOPASSWD: ALL'
+    regexp: '^{{ ahl_control_user }}'
+    line: '{{ ahl_control_user }} ALL=(ALL) NOPASSWD: ALL'
     validate: 'visudo -cf %s'
 
-- name: Ensure that we're controlling things as the {{ control_user }} user
+- name: Ensure that we're controlling things as the {{ ahl_control_user }} user
   ansible.builtin.assert:
-    that: "ansible_ssh_user == '{{ control_user }}'"
-    fail_msg: "Not proceeding further since we're using user {{ ansible_ssh_user }} instead of {{ control_user }}"
+    that: "ansible_ssh_user == '{{ ahl_control_user }}'"
+    fail_msg: "Not proceeding further since we're using user {{ ansible_ssh_user }} instead of {{ ahl_control_user }}"
     success_msg: "Proceeding because we're using user {{ ansible_ssh_user }}"
 
 - name: Ensure that managed node is ping-able
   ansible.builtin.ping:
 
-- name: Ensure that only the {{ control_user }}  user can login
+- name: Ensure that only the {{ ansible_ssh_user }}  user can login
   ansible.builtin.lineinfile:
     dest: /etc/ssh/sshd_config
     regexp: '^AllowUsers'
-    line: 'AllowUsers {{ control_user }}'
+    line: 'AllowUsers {{ ansible_ssh_user }}'
     state: present
   register: ssh_allow_users
 

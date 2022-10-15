@@ -40,9 +40,9 @@
     state: latest
     update_cache: true
 
-- name: Ensure that the {{ control_user }} user is in the Docker group
+- name: Ensure that the {{ ansible_ssh_user }} user is in the Docker group
   ansible.builtin.user:
-    name: "{{ control_user }}"
+    name: "{{ ansible_ssh_user }}"
     groups: 
       - docker
     append: yes
@@ -51,9 +51,9 @@
     name: util_directory
   vars:
     util_dirs:
-      - path: "{{ docker_volumes_directory }}"
-        owner: "{{ docker_volumes_owner }}"
-        group: "{{ docker_volumes_group }}"
+      - path: "{{ ahl_docker_volume_root }}"
+        owner: "{{ ansible_ssh_user }}"
+        group: "{{ ansible_ssh_user }}"
 
 - name: Ensure that the Docker deamon is running
   ansible.builtin.service:

@@ -1,5 +1,5 @@
 - name: Ensure that SSH keys are known for all managed nodes
   ansible.builtin.known_hosts:
-    name: "{{ hostvars[item].ansible_ssh_host }}"
-    key: "{{ lookup('pipe', 'ssh-keyscan {{ hostvars[item].ansible_ssh_host }},`dig +short {{ hostvars[item].ansible_ssh_host }}`') }}"
+    name: "{{ hostvars[item].ansible_host }}"
+    key: "{{ lookup('pipe', 'ssh-keyscan {{ hostvars[item].ansible_host }},`dig +short {{ hostvars[item].ansible_host }}`') }}"
   with_items: "{{ groups['managed_nodes'] }}"

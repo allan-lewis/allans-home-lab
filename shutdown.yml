@@ -1,6 +1,4 @@
 ---
-- import_playbook: control.yml
-
 - name: Shutdown all managed nodes
   hosts: managed_nodes
   become: yes

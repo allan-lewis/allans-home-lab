@@ -1,4 +1,18 @@
 ---
+- import_role:
+    name: util_getent
+
+- import_role:
+    name: util_directory
+  vars:
+    util_dirs: 
+      - path: "{{ syncthing_config_volume }}"
+
+- import_role:
+    name: util_mount
+  vars: 
+    util_mounts: "{{ syncthing_nfs_mounts }}"
+
 - name: Run Syncthing Docker container
   community.docker.docker_container:
     container_default_behavior: no_defaults
@@ -13,5 +27,5 @@
     volumes: "{{ syncthing_volumes }}"
     env: 
       TZ: America/New_York
-      PUID: "{{ control_uid }}"
-      PGID: "{{ control_gid }}"
+      PUID: "{{ ahl_ansible_uid }}"
+      PGID: "{{ ahl_ansible_gid }}"

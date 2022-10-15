@@ -2,11 +2,11 @@
 - name: Get entries from passwd database
   ansible.builtin.getent:
     database: passwd
-  when: util_getent_passwd is undefined
+  when: ahl_util_getent_passwd is undefined
 
 - name: Set uid and gid facts
   ansible.builtin.set_fact:
-    control_uid: "{{ ansible_facts.getent_passwd[control_user].1 | int }}"
-    control_gid: "{{ ansible_facts.getent_passwd[control_user].2 | int }}"
-  register: util_getent_passwd
-  when: util_getent_passwd is undefined
+    ahl_ansible_uid: "{{ ansible_facts.getent_passwd[ansible_ssh_user].1 | int }}"
+    ahl_ansible_gid: "{{ ansible_facts.getent_passwd[ansible_ssh_user].2 | int }}"
+  register: ahl_util_getent_passwd
+  when: ahl_util_getent_passwd is undefined

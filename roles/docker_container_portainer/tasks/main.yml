@@ -1,0 +1,21 @@
+- import_role:
+    name: util_directory
+  vars:
+    util_dirs:
+      - path: "{{ portainer_data_directory }}"
+
+- name: Run Portainer Docker container
+  community.docker.docker_container:
+    container_default_behavior: no_defaults
+    detach: yes
+    name: "portainer"
+    image: "portainer/portainer-ce"
+    state: "started"
+    recreate: "yes"
+    pull: "yes"
+    restart_policy: "unless-stopped"
+    published_ports: 
+      - "{{ portainer_http_port }}:9000/tcp"
+    volumes: 
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "{{ portainer_data_directory }}:/data"

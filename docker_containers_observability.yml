@@ -1,0 +1,25 @@
+---
+- name: Setup containers for observability
+  hosts: prometheus_nodes
+  become: yes
+  gather_facts: false
+
+  roles:    
+    - role: util_getent
+    - role: util_directory
+    - role: docker_container_prometheus
+
+- name: Setup Grafana
+  hosts: grafana_nodes
+  become: yes
+  gather_facts: false
+
+  vars:
+    
+
+  roles:
+    - role: util_getent
+    - role: util_directory
+      vars:
+        util_dirs: 
+    - role: docker_container_grafana

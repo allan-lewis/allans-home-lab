@@ -10,7 +10,7 @@
     pull: "yes"
     restart_policy: "unless-stopped"
     published_ports: 
-      - "{{ node_exporter_port }}:9100/tcp"
+      - "{{ prometheus_node_exporter_port }}:9100/tcp"
     volumes: 
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro

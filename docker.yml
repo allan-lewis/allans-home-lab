@@ -1,8 +1,12 @@
 ---
-- name: Setup Docker on all docker nodes 
+- name: Run Docker and commmon containers 
   hosts: docker_nodes
   become: yes
   gather_facts: false
 
   roles:
     - docker
+    - docker_container_portainer
+    - docker_container_syncthing
+    - docker_container_prometheus_node_exporter
+    - docker_container_cadvisor
