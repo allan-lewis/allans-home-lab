@@ -1,0 +1,2 @@
+grafana_data_volume: "{{ ahl_docker_volume_root }}/grafana"
+grafana_http_port: 32700

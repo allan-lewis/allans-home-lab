@@ -1,4 +1,13 @@
 ---
+- import_role: 
+    name: util_getent
+
+- import_role: 
+    name: util_directory
+  vars:
+    util_dirs: 
+      - path: "{{ grafana_data_volume }}"
+
 - name: Run Grafana Docker container
   community.docker.docker_container:
     container_default_behavior: no_defaults
@@ -10,7 +19,7 @@
     pull: "yes"
     restart_policy: "unless-stopped"
     published_ports: 
-      - "{{ grafana_port }}:3000/tcp"
+      - "{{ grafana_http_port }}:3000/tcp"
     volumes: 
       - "{{ grafana_data_volume }}:/var/lib/grafana"
-    user: "{{ control_uid }}:{{ control_gid }}"
+    user: "{{ ahl_user_uid }}:{{ ahl_user_uid }}"

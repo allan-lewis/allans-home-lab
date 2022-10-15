@@ -1,0 +1,4 @@
+prometheus_config_volume: "{{ ahl_docker_volume_root }}/prometheus"
+prometheus_http_port: 32500
+cadvisor_port: 32800
+prometheus_node_exporter_port: 32600

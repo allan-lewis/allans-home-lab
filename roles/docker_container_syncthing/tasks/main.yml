@@ -27,5 +27,5 @@
     volumes: "{{ syncthing_volumes }}"
     env: 
       TZ: America/New_York
-      PUID: "{{ ahl_ansible_uid }}"
-      PGID: "{{ ahl_ansible_gid }}"
+      PUID: "{{ ahl_user_uid }}"
+      PGID: "{{ ahl_user_gid }}"

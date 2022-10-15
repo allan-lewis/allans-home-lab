@@ -1,0 +1,2 @@
+uptime_kuma_volume: "{{ ahl_docker_volume_root }}/kuma"
+uptime_kuma_http_port: 30400

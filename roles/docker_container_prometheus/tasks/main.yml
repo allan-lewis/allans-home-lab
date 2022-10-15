@@ -1,10 +1,20 @@
 ---
+- import_role:
+    name: util_getent
+
+- import_role:
+    name: util_directory
+  vars:
+    util_dirs:
+      - path: "{{ prometheus_config_volume }}"
+      - path: "{{ prometheus_data_volume }}"
+
 - name: Write Prometheus config YAML
   ansible.builtin.template:
     src: prometheus.yml.j2
-    dest: "{{ prometheus_docker_volume }}/prometheus.yml"
-    owner: "{{ control_uid }}"
-    group: "{{ control_gid }}"
+    dest: "{{ prometheus_config_volume }}/prometheus.yml"
+    owner: "{{ ahl_user_uid }}"
+    group: "{{ ahl_user_gid }}"
 
 - name: Run Prometheus Docker container
   community.docker.docker_container:
@@ -25,6 +35,6 @@
       - '--web.console.libraries=/usr/share/prometheus/console_libraries'
       - '--web.console.templates=/usr/share/prometheus/consoles'
     volumes:
-      - "{{ prometheus_docker_volume }}:/etc/prometheus/"
+      - "{{ prometheus_config_volume }}:/etc/prometheus/"
       - "{{ prometheus_data_volume }}:/prometheus"
-    user: "{{ control_uid }}:{{ control_gid }}"
+    user: "{{ ahl_user_uid }}:{{ ahl_user_gid }}"

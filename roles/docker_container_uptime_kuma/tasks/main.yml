@@ -1,4 +1,10 @@
 ---
+- import_role: 
+    name: util_directory
+  vars:
+    util_dirs: 
+      - path: "{{ uptime_kuma_volume }}"
+
 - name: Run Uptime Kuma Docker container
   community.docker.docker_container:
     container_default_behavior: no_defaults
@@ -10,6 +16,6 @@
     pull: "yes"
     restart_policy: "unless-stopped"
     volumes: 
-      - "{{ docker_volumes_directory }}/kuma:/app/data"
+      - "{{ uptime_kuma_volume }}:/app/data"
     published_ports:
-      - "{{ kuma_port }}:3001/tcp"
+      - "{{ uptime_kuma_http_port }}:3001/tcp"

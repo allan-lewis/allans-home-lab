@@ -1,3 +1,0 @@
-prometheus_docker_volume: "{{ docker_volumes_directory }}/prometheus"
-grafana_data_volume: "{{ docker_volumes_directory }}/grafana"
-uptime_kuma_volume: "{{ docker_volumes_directory }}/kuma"

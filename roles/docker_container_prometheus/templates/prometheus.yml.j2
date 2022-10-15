@@ -3,7 +3,7 @@ scrape_configs:
     static_configs:
     - targets:
 {% for node in groups['prometheus_nodes'] %}
-        - '{{hostvars[node]['ansible_ssh_host']}}:{{ prometheus_http_port }}'
+        - '{{hostvars[node]['ansible_host']}}:{{ prometheus_http_port }}'
 {% endfor %}
       labels:
         alias: 'prometheus'
@@ -11,7 +11,7 @@ scrape_configs:
     static_configs:
     - targets:
 {% for node in groups['docker_nodes'] %}
-        - '{{hostvars[node]['ansible_ssh_host']}}:{{ cadvisor_port }}'
+        - '{{hostvars[node]['ansible_host']}}:{{ cadvisor_port }}'
 {% endfor %}
       labels:
         alias: 'cadvisor'
@@ -19,7 +19,7 @@ scrape_configs:
     static_configs:
     - targets:
 {% for node in groups['docker_nodes'] %}
-        - '{{hostvars[node]['ansible_ssh_host']}}:{{ node_exporter_port }}'
+        - '{{hostvars[node]['ansible_host']}}:{{ prometheus_node_exporter_port }}'
 {% endfor %}
       labels:
         alias: 'node-exporter'
