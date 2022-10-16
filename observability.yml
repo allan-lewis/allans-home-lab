@@ -5,7 +5,7 @@
   gather_facts: false
 
   roles:    
-    - role: docker_container_prometheus
+    - role: prometheus
 
 - name: Setup Grafana
   hosts: grafana_nodes
@@ -13,7 +13,7 @@
   gather_facts: false
 
   roles:
-    - role: docker_container_grafana
+    - role: grafana
 
 - name: Setup Uptime Kuma
   hosts: uptime_kuma_nodes
@@ -21,4 +21,4 @@
   gather_facts: false
 
   roles:
-    - role: docker_container_uptime_kuma
+    - role: uptime_kuma

@@ -1,0 +1,55 @@
+---
+- import_role:
+    name: util_getent
+
+- import_role:
+    name: util_directory
+  vars:
+    util_dirs:
+      - path: "{{ homeassistant_volume }}"
+
+- name: Run Homeassistant Docker volume
+  community.docker.docker_container:
+    container_default_behavior: no_defaults
+    detach: yes
+    name: "homeassistant"
+    image: "lscr.io/linuxserver/homeassistant"
+    state: "started"
+    recreate: "yes"
+    pull: "yes"
+    restart_policy: "unless-stopped"
+    network_mode: host
+    volumes: 
+      - "{{ homeassistant_volume }}:/config"
+    env: 
+      TZ: America/New_York
+      PUID: "{{ ahl_user_uid }}"
+      PGID: "{{ ahl_user_gid }}"
+
+- name: Write HTTP reverse proxy YAML
+  ansible.builtin.template:
+    src: http.yaml.j2
+    dest: "{{ homeassistant_volume }}/http.yaml"
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+    mode: 0644
+  register: homeass_http
+
+- name: Wait for main configuration YAML
+  ansible.builtin.wait_for:
+    path: "{{ homeassistant_volume }}/configuration.yaml"
+    timeout: 60
+
+- name: Update main configuration YAML
+  ansible.builtin.lineinfile:
+    dest: "{{ homeassistant_volume }}/configuration.yaml"
+    line: 'http: !include http.yaml'
+  register: homeass_conf
+
+- name: Restart Docker to pickup config changes
+  community.docker.docker_container:
+    container_default_behavior: no_defaults
+    name: homeassistant
+    state: started
+    restart: yes
+  when: (homeass_http is changed) or (homeass_conf is changed)

@@ -4,7 +4,7 @@
   gather_facts: false
 
   roles:
-    - role: docker_container_pihole
+    - role: pihole
 
 - name: Setup Authelia and Redis
   hosts: authelia_nodes
@@ -12,4 +12,4 @@
   gather_facts: false
 
   roles:
-    - role: docker_container_authelia
+    - role: authelia

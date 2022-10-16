@@ -1,0 +1,22 @@
+---
+- import_role:
+    name: util_directory
+  vars:
+    util_dirs:
+      - path: "{{ homebridge_volume }}"
+
+- name: Run Homebridge Docker container
+  community.docker.docker_container:
+    container_default_behavior: no_defaults
+    detach: yes
+    name: "homebridge"
+    image: "oznu/homebridge:latest"
+    state: "started"
+    recreate: "yes"
+    pull: "yes"
+    restart_policy: "unless-stopped"
+    network_mode: host
+    volumes: 
+      - "{{ homebridge_volume }}:/homebridge"
+    env: 
+      TZ: America/New_York

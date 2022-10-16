@@ -6,7 +6,7 @@
 
   roles:
     - docker
-    - docker_container_portainer
-    - docker_container_syncthing
-    - docker_container_prometheus_node_exporter
-    - docker_container_cadvisor
+    - portainer
+    - syncthing
+    - prometheus_node_exporter
+    - cadvisor
