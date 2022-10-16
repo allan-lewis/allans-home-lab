@@ -1,6 +1,6 @@
 location /authelia {
     internal;
-    set $upstream_authelia http://{{ authelia_host }}:{{ authelia_port }}/api/verify; #ADD YOUR IP AND PORT OF AUTHELIA
+    set $upstream_authelia http://{{ ansible_host }}:{{ authelia_port }}/api/verify; #ADD YOUR IP AND PORT OF AUTHELIA
     proxy_pass_request_body off;
     proxy_pass $upstream_authelia;    
     proxy_set_header Content-Length "";

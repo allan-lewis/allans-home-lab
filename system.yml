@@ -1,0 +1,8 @@
+---
+- name: Setup Authelia and Redis
+  hosts: authelia_nodes
+  become: yes
+  gather_facts: false
+
+  roles:
+    - role: docker_container_authelia
