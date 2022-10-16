@@ -1,0 +1,16 @@
+---
+- name: Setup VPN gateways
+  hosts: vpn_nodes
+  become: yes
+  gather_facts: false
+
+  roles:
+    - vpn
+
+- name: Setup torrent containers and networking
+  hosts: torrent_nodes
+  become: yes
+  gather_facts: false
+
+  roles:    
+    - role: torrents

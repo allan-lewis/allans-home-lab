@@ -40,7 +40,7 @@
 - name: Apply netplan
   ansible.builtin.command: sudo netplan apply
 
-- name: Setup Jackett
+- name: Run Jackett Docker container
   community.docker.docker_container:
     container_default_behavior: no_defaults
     detach: yes
@@ -51,16 +51,16 @@
     pull: "yes"
     restart_policy: "unless-stopped"
     published_ports: 
-      - "{{ jackett_http_port }}:9117/tcp"
+      - "{{ jackett.port }}:9117/tcp"
     volumes: 
       - "{{ jackett.config }}:/config"
       - "{{ jackett.downloads }}:/downloads"
     env: 
       TZ: America/New_York
-      PUID: "{{ control_uid }}"
-      PGID: "{{ control_gid }}"
+      PUID: "{{ ahl_user_uid }}"
+      PGID: "{{ ahl_user_gid }}"
 
-- name: Setup Sonarr
+- name: Run Sonarr Docker container
   community.docker.docker_container:
     container_default_behavior: no_defaults
     detach: yes
@@ -71,17 +71,17 @@
     pull: "yes"
     restart_policy: "unless-stopped"
     published_ports: 
-      - "{{ sonarr_http_port }}:8989/tcp"
+      - "{{ sonarr.port }}:8989/tcp"
     volumes: 
       - "{{ sonarr.config }}:/config"
       - "{{ shows_volume }}:/tv"
       - "{{ torrent_downloads }}:/downloads"
     env: 
       TZ: America/New_York
-      PUID: "{{ control_uid }}"
-      PGID: "{{ control_gid }}"
+      PUID: "{{ ahl_user_uid }}"
+      PGID: "{{ ahl_user_gid }}"
 
-- name: Setup Radarr
+- name: Run Radarr Docker container
   community.docker.docker_container:
     container_default_behavior: no_defaults
     detach: yes
@@ -92,17 +92,17 @@
     pull: "yes"
     restart_policy: "unless-stopped"
     published_ports: 
-      - "{{ radarr_http_port }}:7878/tcp"
+      - "{{ radarr.port }}:7878/tcp"
     volumes: 
       - "{{ radarr.config }}:/config"
       - "{{ movies_volume }}:/movies"
       - "{{ torrent_downloads }}:/downloads"
     env: 
       TZ: America/New_York
-      PUID: "{{ control_uid }}"
-      PGID: "{{ control_gid }}"
+      PUID: "{{ ahl_user_uid }}"
+      PGID: "{{ ahl_user_gid }}"
 
-- name: Setup Transmission
+- name: Run Transmission Docker container
   community.docker.docker_container:
     container_default_behavior: no_defaults
     detach: yes
@@ -113,7 +113,7 @@
     pull: "yes"
     restart_policy: "unless-stopped"
     published_ports: 
-      - "{{ transmission_port }}:9091/tcp"
+      - "{{ transmission.port }}:9091/tcp"
       - 51413:51413/tcp
       - 51413:51413/udp
     volumes: 
@@ -122,5 +122,5 @@
         - "{{ torrent_watch }}:/watch"
     env: 
       TZ: America/New_York
-      PUID: "{{ control_uid }}"
-      PGID: "{{ control_gid }}"
+      PUID: "{{ ahl_user_uid }}"
+      PGID: "{{ ahl_user_gid }}"

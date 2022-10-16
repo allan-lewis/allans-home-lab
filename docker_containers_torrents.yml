@@ -1,8 +1,0 @@
----
-- name: Setup containers for torrents
-  hosts: torrent_nodes
-  become: yes
-  gather_facts: false
-
-  roles:    
-    - role: docker_containers_torrents
