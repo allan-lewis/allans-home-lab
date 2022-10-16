@@ -1,0 +1,3 @@
+pihole_data_volume: "{{ ahl_docker_volume_root }}/pihole/data"
+pihole_dns_volume: "{{ ahl_docker_volume_root }}/pihole/dns"
+pihole_http_port: 30200
