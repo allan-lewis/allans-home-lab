@@ -1,0 +1,23 @@
+- import_role:
+    name: util_directory
+  vars:
+    util_dirs:
+      - path: "{{ homepage_volume }}"
+      - path: "{{ homepage_icons_volume }}"
+
+- name: Setup Homepage
+  community.docker.docker_container:
+    container_default_behavior: no_defaults
+    detach: yes
+    name: "homepage"
+    image: "ghcr.io/benphelps/homepage:latest"
+    state: "started"
+    recreate: "yes"
+    pull: "yes"
+    restart_policy: "unless-stopped"
+    published_ports: 
+      - "{{ homepage_http_port }}:3000/tcp"
+    volumes: 
+      - "{{ homepage_volume }}:/app/config"
+      - "{{ homepage_icons_volume }}:/app/public/icons"
+      - /var/run/docker.sock:/var/run/docker.sock
