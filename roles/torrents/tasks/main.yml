@@ -8,13 +8,13 @@
       util_mounts: 
         - path: "{{ shows_volume }}"
           src: "{{ nfs_share_shows }}"
-          owner: "{{ control_user }}" 
-          group: "{{ control_user }}" 
+          owner: "{{ ansible_ssh_user }}" 
+          group: "{{ ansible_ssh_user }}" 
           access: "rw"
         - path: "{{ movies_volume }}"
           src: "{{ nfs_share_movies }}"
-          owner: "{{ control_user }}" 
-          group: "{{ control_user }}" 
+          owner: "{{ ansible_ssh_user }}" 
+          group: "{{ ansible_ssh_user }}" 
           access: "rw"  
 
 - import_role: 

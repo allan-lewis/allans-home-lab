@@ -33,8 +33,8 @@
   ansible.builtin.copy:
     src: "{{ item.cert }}"
     dest: "/etc/cloudflared/{{ item.name }}.pem"
-    owner: "{{ control_uid }}"
-    group: "{{ control_gid }}"
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
     mode: '0600'
   with_items: "{{ cloudflare_tunnels }}"
 
@@ -42,8 +42,8 @@
   ansible.builtin.copy:
     src: "{{ item.tunnel }}"
     dest: /etc/cloudflared/{{ item.name }}.json
-    owner: "{{ control_uid }}"
-    group: "{{ control_gid }}"
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
     mode: '0600'
   with_items: "{{ cloudflare_tunnels }}"
 
@@ -51,8 +51,8 @@
   ansible.builtin.template:
     src: tunnel_config.j2
     dest: /etc/cloudflared/{{ item.name }}.yml
-    owner: "{{ control_uid }}"
-    group: "{{ control_gid }}"
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
     mode: 0644
   with_items: "{{ cloudflare_tunnels }}"
 
