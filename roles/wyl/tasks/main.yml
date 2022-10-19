@@ -1,0 +1,25 @@
+---
+- import_role:
+    name: util_directory
+  vars:
+    util_dirs:
+      - path: "{{ wyl_data_volume }}"
+
+- name: Run WatchYourLAN Docker container
+  community.docker.docker_container:
+    container_default_behavior: no_defaults
+    detach: yes
+    name: "wyl"
+    image: "aceberg/watchyourlan"
+    state: "started"
+    recreate: "yes"
+    pull: "yes"
+    restart_policy: "unless-stopped"
+    network_mode: host
+    volumes: 
+      - "{{ wyl_data_volume }}:/data"
+    env: 
+      IFACE: "{{ wyl_iface }}"
+      GUIIP: "0.0.0.0"
+      GUIPORT: "{{ wyl_http_port | int }}"
+      TZ: America/New_York 

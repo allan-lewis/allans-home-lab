@@ -1,0 +1,2 @@
+speedtest_config_volume: "{{ ahl_docker_volume_root }}/speedtest"
+speedtest_http_port: 31700

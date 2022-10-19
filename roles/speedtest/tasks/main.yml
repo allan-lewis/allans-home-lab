@@ -1,0 +1,29 @@
+---
+- import_role:
+    name: util_getent
+
+- import_role:
+    name: util_directory
+  vars:
+    util_dirs: 
+      - path: "{{ speedtest_config_volume }}"
+
+- name: Run Speedtest Tracker Docker container
+  community.docker.docker_container:
+    container_default_behavior: no_defaults
+    detach: yes
+    name: "speedtest"
+    image: "henrywhitaker3/speedtest-tracker"
+    state: "started"
+    recreate: "yes"
+    pull: "yes"
+    restart_policy: "unless-stopped"
+    published_ports: 
+      - "{{ speedtest_http_port }}:80/tcp"
+    volumes: 
+      - "{{ speedtest_config_volume }}:/config"
+    env: 
+      TZ: America/New_York
+      PUID: "{{ ahl_user_uid }}"
+      PGID: "{{ ahl_user_gid }}"
+      OOKLA_EULA_GDPR: "true"
