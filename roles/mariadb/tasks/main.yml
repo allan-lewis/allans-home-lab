@@ -1,0 +1,28 @@
+- import_role: 
+    name: util_getent
+
+- import_role:
+    name: util_directory
+  vars:
+    util_dirs:
+      - path: "{{ mariadb_config_volume }}"
+
+- name: Run MariaDB Docker container
+  community.docker.docker_container:
+    container_default_behavior: no_defaults
+    detach: yes
+    name: "mariadb"
+    image: "lscr.io/linuxserver/mariadb"
+    state: "started"
+    recreate: "yes"
+    pull: "yes"
+    restart_policy: "unless-stopped"
+    published_ports: 
+      - "{{ mariadb_port}}:3306/tcp"
+    volumes: 
+      - "{{ mariadb_config_volume }}:/config"
+    env: 
+      TZ: America/New_York
+      PUID: "{{ ahl_user_uid }}"
+      PGID: "{{ ahl_user_gid }}"
+      MYSQL_ROOT_PASSWORD:  "{{ mariadb_root_password }}"

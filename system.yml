@@ -1,11 +1,4 @@
 ---
-- hosts: pihole_nodes
-  become: yes
-  gather_facts: false
-
-  roles:
-    - role: pihole
-
 - name: Setup Authelia and Redis
   hosts: authelia_nodes
   become: yes
@@ -13,3 +6,36 @@
 
   roles:
     - role: authelia
+
+- name: Setup Guacamole
+  hosts: guacamole_nodes
+  become: yes
+  gather_facts: false
+
+  roles:
+    - role: guacamole
+
+- name: Setup MariaDB
+  hosts: mariadb_nodes
+  become: yes
+  gather_facts: false
+
+  roles:
+    - role: mariadb
+
+- name: Setup Nginx Proxy Manager
+  hosts: npm_nodes
+  become: yes
+  gather_facts: false
+
+  roles:
+    - role: npm
+
+- name: Setup Pi-Hole
+  hosts: pihole_nodes
+  become: yes
+  gather_facts: false
+
+  roles:
+    - role: pihole
+

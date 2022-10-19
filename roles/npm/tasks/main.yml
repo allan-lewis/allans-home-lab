@@ -1,0 +1,21 @@
+- import_role:
+    name: util_directory
+  vars:
+    util_dirs:
+      - path: "{{ npm_data_volume }}"
+      - path: "{{ npm_letsencrypt_volume }}"
+
+- name: Run Nginx Proxy Manager Docker container
+  community.docker.docker_container:
+    container_default_behavior: no_defaults
+    detach: yes
+    name: "npm"
+    image: "jc21/nginx-proxy-manager"
+    state: "started"
+    recreate: "yes"
+    pull: "yes"
+    network_mode: "host"
+    restart_policy: "unless-stopped"
+    volumes:
+      - "{{ npm_data_volume }}:/data"
+      - "{{ npm_letsencrypt_volume }}:/etc/letsencrypt"

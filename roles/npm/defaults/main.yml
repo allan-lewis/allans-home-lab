@@ -1,0 +1,2 @@
+npm_data_volume: "{{ ahl_docker_volume_root }}/npm/data"
+npm_letsencrypt_volume: "{{ ahl_docker_volume_root }}/npm/letsencrypt"
