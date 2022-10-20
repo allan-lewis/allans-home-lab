@@ -19,8 +19,11 @@
 # RUN OBSERVABILITY SERVICES
 - import_playbook: observability.yml
 
-# RUN TORRENTING SERVICES
-- import_playbook: torrents.yml
+# RUN MEDIA SERVICES
+- import_playbook: media.yml
+
+# RUN NO GEEKS BREWING SERVICES
+- import_playbook: no_geeks_brewing.yml
 
 # RUN HOMEPAGE
 - hosts: homepage_nodes

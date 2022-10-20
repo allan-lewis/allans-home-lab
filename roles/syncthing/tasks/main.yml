@@ -9,9 +9,9 @@
       - path: "{{ syncthing_config_volume }}"
 
 - import_role:
-    name: util_mount
+    name: ahl_mount
   vars: 
-    util_mounts: "{{ syncthing_nfs_mounts }}"
+    mount_items: "{{ syncthing_nfs_mounts }}"
 
 - name: Run Syncthing Docker container
   community.docker.docker_container:

@@ -3,9 +3,9 @@
     name: util_getent
 
 - import_role: 
-    name: util_mount      
+    name: ahl_mount      
   vars: 
-      util_mounts: 
+      mount_items: 
         - path: "{{ shows_volume }}"
           src: "{{ nfs_share_shows }}"
           owner: "{{ ansible_ssh_user }}" 

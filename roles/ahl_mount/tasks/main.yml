@@ -2,7 +2,7 @@
 - import_role:
     name: util_directory
   vars:
-    util_dirs: "{{ util_mounts }}"
+    util_dirs: "{{ mount_items }}"
 
 - name: Mount NFS volume(s)
   ansible.posix.mount:
@@ -11,4 +11,4 @@
     fstype: nfs
     opts: "resvport,{{ item.access }}"
     state: mounted
-  with_items: "{{ util_mounts }}"
+  with_items: "{{ mount_items }}"

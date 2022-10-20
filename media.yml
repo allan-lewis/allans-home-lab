@@ -7,6 +7,14 @@
   roles:
     - vpn
 
+- name: Setup Plex and Tautulli
+  hosts: plex_nodes
+  become: yes
+  gather_facts: false
+
+  roles:    
+    - role: plex
+
 - name: Setup torrent containers and networking
   hosts: torrent_nodes
   become: yes
