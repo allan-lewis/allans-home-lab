@@ -5,5 +5,5 @@
   gather_facts: false
 
   roles:
-    - role: util_getent
+    - role: ahl_getent
     - role: cloudflare

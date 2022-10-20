@@ -1,5 +1,5 @@
 - import_role: 
-    name: util_getent
+    name: ahl_getent
 
 - import_role:
     name: util_directory
