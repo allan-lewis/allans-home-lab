@@ -22,6 +22,9 @@
 # RUN MEDIA SERVICES
 - import_playbook: media.yml
 
+# RUN PRODUCTIVITY SERVICES
+- import_playbook: productivity.yml
+
 # RUN NO GEEKS BREWING SERVICES
 - import_playbook: no_geeks_brewing.yml
 

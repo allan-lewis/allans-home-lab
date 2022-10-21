@@ -1,0 +1,2 @@
+jenkins_http_port: 30800
+jenkins_volume: "{{ ahl_docker_volume_root }}/jenkins"

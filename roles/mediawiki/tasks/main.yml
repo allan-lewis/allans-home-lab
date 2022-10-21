@@ -1,0 +1,21 @@
+- import_role:
+    name: ahl_mkdir
+  vars:
+    dir_items:
+      - path: "{{ mediawiki_volume }}"
+
+- name: Run Mediawiki Docker container
+  community.docker.docker_container:
+    container_default_behavior: no_defaults
+    detach: yes
+    name: "mediawiki"
+    image: "mediawiki"
+    state: "started"
+    recreate: "yes"
+    pull: "yes"
+    restart_policy: "unless-stopped"
+    published_ports: 
+      - "{{ mediawiki_http_port}}:80/tcp"
+    volumes: 
+      - "{{ mediawiki_volume }}/images:/var/www/html/images"
+      - "{{ mediawiki_volume }}/LocalSettings.php:/var/www/html/LocalSettings.php" 

@@ -1,0 +1,25 @@
+- import_role:
+    name: ahl_getent
+
+- import_role:
+    name: ahl_mkdir
+  vars:
+    dir_items:
+      - path: "{{ jenkins_volume }}"
+
+- name: Run Jenkins Docker container
+  community.docker.docker_container:
+    container_default_behavior: no_defaults
+    detach: yes
+    name: "jenkins"
+    image: "jenkins/jenkins:lts-jdk11"
+    state: "started"
+    recreate: "yes"
+    pull: "yes"
+    restart_policy: "unless-stopped"
+    published_ports: 
+      - "{{ jenkins_http_port }}:8080"
+      - 50000:50000
+    volumes: 
+      - "{{ jenkins_volume }}:/var/jenkins_home"
+    user: "{{ ahl_user_uid }}:{{ ahl_user_uid }}"

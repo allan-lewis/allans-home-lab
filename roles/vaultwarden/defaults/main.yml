@@ -1,0 +1,2 @@
+vaultwarden_http_port: 30900
+vaultwarden_volume: "{{ ahl_docker_volume_root }}/vaultwarden"

@@ -1,0 +1,2 @@
+mediawiki_http_port: 31000
+mediawiki_volume: "{{ ahl_docker_volume_root }}/mediawiki"

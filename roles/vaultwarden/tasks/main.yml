@@ -1,0 +1,22 @@
+- import_role:
+    name: ahl_mkdir
+  vars:
+    dir_items:
+      - path: "{{ ahl_docker_volume_root }}"
+
+- name: Run Vaultwarden Docker container
+  community.docker.docker_container:
+    container_default_behavior: no_defaults
+    detach: yes
+    name: "vaultwarden"
+    image: "vaultwarden/server"
+    state: "started"
+    recreate: "yes"
+    pull: "yes"
+    restart_policy: "unless-stopped"
+    published_ports: 
+      - "{{ vaultwarden_http_port}}:80/tcp"
+    volumes: 
+      - "{{ vaultwarden_volume }}:/data" 
+    env: 
+      ADMIN_TOKEN: "{{ vaultwarden_admin_token }}"
