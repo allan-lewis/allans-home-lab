@@ -1,7 +1,7 @@
 - import_role:
-    name: util_directory
+    name: ahl_mkdir
   vars:
-    util_dirs:
+    dir_items:
       - path: "{{ npm_data_volume }}"
       - path: "{{ npm_letsencrypt_volume }}"
 

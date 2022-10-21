@@ -7,9 +7,9 @@
     vaultwarden_volume: "{{ docker_volumes_directory }}/vaultwarden"
 
   roles:
-    - role: util_directory
+    - role: ahl_mkdir
       vars:
-        util_dirs: 
+        dir_items:
           - path: "{{ vaultwarden_volume }}"
 
   tasks:

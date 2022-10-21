@@ -3,9 +3,9 @@
     name: ahl_getent
 
 - import_role:
-    name: util_directory
+    name: ahl_mkdir
   vars:
-    util_dirs: 
+    dir_items: 
       - path: "{{ speedtest_config_volume }}"
 
 - name: Run Speedtest Tracker Docker container

@@ -48,9 +48,9 @@
     append: yes
 
 - import_role:
-    name: util_directory
+    name: ahl_mkdir
   vars:
-    util_dirs:
+    dir_items:
       - path: "{{ ahl_docker_volume_root }}"
         owner: "{{ ansible_ssh_user }}"
         group: "{{ ansible_ssh_user }}"
@@ -63,9 +63,9 @@
   become: true
 
 - import_role:
-    name: util_directory
+    name: ahl_mkdir
   vars:
-    util_dirs:
+    dir_items:
       - path: "/etc/systemd/system/docker.service.d"
         owner: "root"
         group: "root"

@@ -1,8 +1,8 @@
 ---
 - import_role:
-    name: util_directory
+    name: ahl_mkdir
   vars:
-    util_dirs: "{{ mount_items }}"
+    dir_items: "{{ mount_items }}"
 
 - name: Mount NFS volume(s)
   ansible.posix.mount:

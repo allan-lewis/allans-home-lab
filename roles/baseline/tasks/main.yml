@@ -15,9 +15,9 @@
   register: control_user_data
 
 - import_role:
-    name: util_directory
+    name: ahl_mkdir
   vars:
-    util_dirs:
+    dir_items:
       - path: "{{ control_user_data.home }}/.ssh"
         owner: "{{ ahl_control_user }}"
         group: "{{ ahl_control_user }}"

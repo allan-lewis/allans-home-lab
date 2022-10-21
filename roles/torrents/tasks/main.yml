@@ -18,9 +18,9 @@
           access: "rw"  
 
 - import_role: 
-    name: util_directory
+    name: ahl_mkdir
   vars:
-    util_dirs: 
+    dir_items: 
       - path: "{{ jackett.config }}"
       - path: "{{ radarr.config }}"
       - path: "{{ sonarr.config }}"

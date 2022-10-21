@@ -3,9 +3,9 @@
     name: ahl_getent
 
 - import_role:
-    name: util_directory
+    name: ahl_mkdir
   vars:
-    util_dirs:
+    dir_items:
       - path: "{{ prometheus_config_volume }}"
       - path: "{{ prometheus_data_volume }}"
 

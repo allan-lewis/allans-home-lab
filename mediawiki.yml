@@ -7,9 +7,9 @@
     mediawiki_volume: "{{ docker_volumes_directory }}/mediawiki"
 
   roles:    
-    - role: util_directory
+    - role: ahl_mkdir
       vars:
-        util_dirs: 
+        dir_items:
           - path: "{{ mediawiki_volume }}"
           - path: "{{ mediawiki_volume }}/images"
 

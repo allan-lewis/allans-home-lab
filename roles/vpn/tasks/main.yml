@@ -8,9 +8,9 @@
     update_cache: true
 
 - import_role:
-    name: util_directory
+    name: ahl_mkdir
   vars:
-    util_dirs:
+    dir_items:
       - path: "/etc/openvpn"
         owner: "root"
         group: "root"

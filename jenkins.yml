@@ -8,9 +8,9 @@
   
   roles:
     - role: ahl_getent
-    - role: util_directory
+    - role: ahl_mkdir
       vars:
-        util_dirs:        
+        dir_items:        
           - path: "{{ jenkins_data_volume }}"
 
   tasks:

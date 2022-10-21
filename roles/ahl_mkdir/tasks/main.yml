@@ -6,4 +6,4 @@
     recurse: "{{ item.recurse | default('no') }}"
     owner: "{{ item.owner | default(ansible_ssh_user) }}"
     group: "{{ item.group | default(ansible_ssh_user) }}"
-  with_items: "{{ util_dirs }}"
+  with_items: "{{ dir_items }}"

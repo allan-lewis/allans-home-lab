@@ -1,7 +1,7 @@
 - import_role:
-    name: util_directory
+    name: ahl_mkdir
   vars:
-    util_dirs:
+    dir_items:
       - path: "{{ portainer_data_directory }}"
 
 - name: Run Portainer Docker container

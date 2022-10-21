@@ -1,8 +1,8 @@
 ---
 - import_role:
-    name: util_directory
+    name: ahl_mkdir
   vars:
-    util_dirs:
+    dir_items:
       - path: "{{ wyl_data_volume }}"
 
 - name: Run WatchYourLAN Docker container

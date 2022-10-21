@@ -3,9 +3,9 @@
     name: ahl_getent
 
 - import_role:
-    name: util_directory
+    name: ahl_mkdir
   vars:
-    util_dirs: "{{ directories }}"
+    dir_items: "{{ directories }}"
 
 - name: Run Redis Docker container
   community.docker.docker_container:
@@ -65,6 +65,6 @@
 
 - name: Fix permissions
   import_role:
-    name: util_directory
+    name: ahl_mkdir
   vars:
-    util_dirs: "{{ directories }}"
+    dir_items: "{{ directories }}"
