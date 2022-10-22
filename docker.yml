@@ -2,7 +2,7 @@
 - name: Run Docker and commmon containers 
   hosts: docker_nodes
   become: yes
-  gather_facts: false
+  gather_facts: true
 
   roles:
     - docker
