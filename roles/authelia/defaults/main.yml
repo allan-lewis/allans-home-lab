@@ -4,6 +4,4 @@ redis_volume: "{{ ahl_docker_volume_root }}/redis"
 authelia_volume: "{{ ahl_docker_volume_root }}/authelia"
 directories:
   - path: "{{ redis_volume }}"
-    recurse: "yes"
   - path: "{{ authelia_volume }}"
-    recurse: "yes"

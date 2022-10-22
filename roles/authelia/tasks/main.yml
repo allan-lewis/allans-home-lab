@@ -23,6 +23,7 @@
       - "{{ redis_volume }}:/data"
     env: 
       TZ: America/New_York 
+    user: "{{ ahl_user_uid }}:{{ ahl_user_uid }}"
 
 - name: Write Authelia config files
   ansible.builtin.template:
@@ -62,9 +63,4 @@
       - "{{ authelia_volume }}:/config"
     env:
       TZ: America/New_York  
-
-- name: Fix permissions
-  import_role:
-    name: ahl_mkdir
-  vars:
-    dir_items: "{{ directories }}"
+    user: "{{ ahl_user_uid }}:{{ ahl_user_uid }}"
