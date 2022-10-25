@@ -1,7 +1,2 @@
 authelia_port: 31600
-redis_port: 31601
-redis_volume: "{{ ahl_docker_volume_root }}/redis"
 authelia_volume: "{{ ahl_docker_volume_root }}/authelia"
-directories:
-  - path: "{{ redis_volume }}"
-  - path: "{{ authelia_volume }}"

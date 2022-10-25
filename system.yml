@@ -1,5 +1,13 @@
 ---
-- name: Setup Authelia and Redis
+- name: Setup Redis
+  hosts: redis_nodes
+  become: yes
+  gather_facts: false
+
+  roles:
+    - role: redis
+    
+- name: Setup Authelia
   hosts: authelia_nodes
   become: yes
   gather_facts: false

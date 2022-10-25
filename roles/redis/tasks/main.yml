@@ -1,0 +1,27 @@
+---
+- import_role:
+    name: ahl_getent
+
+- import_role:
+    name: ahl_mkdir
+  vars:
+    dir_items:
+      - path: "{{ redis_volume }}"
+
+- name: Run Redis Docker container
+  community.docker.docker_container:
+    container_default_behavior: no_defaults
+    detach: yes
+    name: "redis"
+    image: "redis:alpine"
+    state: "started"
+    recreate: "yes"
+    pull: "yes"
+    restart_policy: "unless-stopped"
+    published_ports: 
+      - "{{ redis_port }}:6379/tcp"
+    volumes: 
+      - "{{ redis_volume }}:/data"
+    env: 
+      TZ: America/New_York 
+    user: "{{ ahl_user_uid }}:{{ ahl_user_uid }}"
