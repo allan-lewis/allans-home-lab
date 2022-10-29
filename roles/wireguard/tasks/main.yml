@@ -1,0 +1,31 @@
+---
+- import_role:
+    name: ahl_getent
+
+- name: Run Wireguard Docker container
+  community.docker.docker_container:
+    container_default_behavior: no_defaults
+    detach: yes
+    name: "wireguard"
+    image: "lscr.io/linuxserver/wireguard:latest"
+    state: "started"
+    recreate: "yes"
+    pull: "yes"
+    restart_policy: "unless-stopped"
+    published_ports: 
+      - "{{ wireguard_udp_port }}:51820/udp"
+    volumes: 
+      - "{{ wireguard_config_volume }}:/config"
+      - /lib/modules:/lib/modules
+    env: 
+      TZ: America/New_York
+      PUID: "{{ ahl_user_uid }}"
+      PGID: "{{ ahl_user_gid }}"
+      PEERS: "{{ wireguard_peers }}"
+      SERVERURL: "{{ wireguard_url }}"
+      SERVERPORT: "{{ wireguard_udp_port | int }}"
+    sysctls:
+      net.ipv4.conf.all.src_valid_mark: 1
+    capabilities:
+      - NET_ADMIN
+      - SYS_MODULE
