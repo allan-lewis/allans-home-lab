@@ -7,7 +7,15 @@
   roles:    
     - role: plex
 
-- name: Setup torrent containers and networking
+- name: Setup PhotoPrism
+  hosts: photoprism_nodes
+  become: yes
+  gather_facts: false
+
+  roles:    
+    - role: photoprism
+
+- name: Setup torrenting services
   hosts: torrent_nodes
   become: yes
   gather_facts: false

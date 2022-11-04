@@ -1,0 +1,4 @@
+photoprism_http_port: 32900
+photoprism_storage_volume: "{{ ahl_docker_volume_root }}/storage"
+photoprism_originals_volume: "{{ ahl_docker_volume_root }}/originals"
+photoprism_import_volume: "{{ ahl_docker_volume_root }}/import"
