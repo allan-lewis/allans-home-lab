@@ -1,4 +1,2 @@
-plex_config_volume: "{{ ahl_docker_volume_root }}/plex"
-plex_http_port: 32400
 tautulli_config_volume: "{{ ahl_docker_volume_root }}/tautulli"
 tautulli_http_port: 32481

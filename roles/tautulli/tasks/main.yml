@@ -1,0 +1,27 @@
+- import_role:
+    name: ahl_getent
+
+- import_role:
+    name: ahl_mkdir
+  vars:
+    dir_items:
+      - path: "{{ tautulli_config_volume }}"
+
+- name: Run Tautulli Docker container
+  community.docker.docker_container:
+    container_default_behavior: no_defaults
+    detach: yes
+    name: "tautulli"
+    image: "lscr.io/linuxserver/tautulli:latest"
+    state: "started"
+    recreate: "yes"
+    pull: "yes"
+    restart_policy: "unless-stopped"
+    published_ports: 
+      - "{{ tautulli_http_port }}:8181"
+    volumes: 
+      - "{{ tautulli_config_volume }}:/config"
+    env: 
+      TZ: America/New_York
+      PUID: "{{ ahl_user_uid }}"
+      PGID: "{{ ahl_user_gid }}"
