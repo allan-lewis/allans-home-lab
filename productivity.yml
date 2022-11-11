@@ -1,24 +1,32 @@
 ---
-- name: Setup Jenkins
-  hosts: jenkins_nodes
+- name: Setup NextCloud
+  hosts: nextcloud_nodes
   become: yes
   gather_facts: false
 
   roles:
-    - role: jenkins
+    - role: nextcloud
 
-- name: Setup MediaWiki
-  hosts: mediawiki_nodes
-  become: yes
-  gather_facts: false
+# - name: Setup Jenkins
+#   hosts: jenkins_nodes
+#   become: yes
+#   gather_facts: false
 
-  roles:
-    - role: mediawiki
+#   roles:
+#     - role: jenkins
 
-- name: Setup Vaultwarden
-  hosts: vaultwarden_nodes
-  become: yes
-  gather_facts: false
+# - name: Setup MediaWiki
+#   hosts: mediawiki_nodes
+#   become: yes
+#   gather_facts: false
 
-  roles:
-    - role: vaultwarden
+#   roles:
+#     - role: mediawiki
+
+# - name: Setup Vaultwarden
+#   hosts: vaultwarden_nodes
+#   become: yes
+#   gather_facts: false
+
+#   roles:
+#     - role: vaultwarden

@@ -1,0 +1,2 @@
+nextcloud_http_port: 33000
+nextcloud_volume: "{{ ahl_docker_volume_root }}/nextcloud"
