@@ -1,8 +1,11 @@
+---
+# Recursively set ownership to ensure proper ownership
 - import_role:
     name: ahl_mkdir
   vars:
     dir_items:
       - path: "{{ portainer_data_directory }}"
+        recurse: yes
 
 - name: Run Portainer Docker container
   community.docker.docker_container:
