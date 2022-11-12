@@ -1,0 +1,56 @@
+---
+- import_role:
+    name: ahl_getent
+
+- import_role:
+    name: ahl_mkdir
+  vars:
+    dir_items:
+      - path: "{{ plex_config_volume }}"
+
+- import_role: 
+    name: ahl_mount      
+  vars: 
+      mount_items: 
+        - path: "/television"
+          src: "{{ nfs_share_shows }}"
+          owner: "{{ ansible_ssh_user }}" 
+          group: "{{ ansible_ssh_user }}" 
+          access: "ro"
+        - path: "/movies"
+          src: "{{ nfs_share_movies }}"
+          owner: "{{ ansible_ssh_user }}" 
+          group: "{{ ansible_ssh_user }}" 
+          access: "ro"
+
+- name: Run Plex Docker container
+  community.docker.docker_container:
+    container_default_behavior: no_defaults
+    detach: yes
+    name: "plex"
+    image: "lscr.io/linuxserver/plex:latest"
+    state: "started"
+    recreate: "yes"
+    pull: "yes"
+    restart_policy: "unless-stopped"
+    published_ports: 
+      - "{{ plex_http_port }}:32400"
+      - 1900:1900/udp
+      - 3005:3005
+      - 5353:5353/udp
+      - 8324:8324
+      - 32410:32410/udp
+      - 32412:32412/udp
+      - 32413:32413/udp
+      - 32414:32414/udp
+      - 32469:32469
+    volumes: 
+      - "{{ plex_config_volume }}:/config"
+      - /television:/shows
+      - /movies:/movies
+    env: 
+      TZ: America/New_York
+      VERSION: docker
+      # PLEX_CLAIM: "{{ plex_claim }}"
+      PUID: "{{ ahl_user_uid }}"
+      PGID: "{{ ahl_user_gid }}"
