@@ -7,6 +7,13 @@ scrape_configs:
 {% endfor %}
       labels:
         alias: 'prometheus'
+    relabel_configs:
+{% for node in groups['docker_nodes'] %}
+      - source_labels: [__address__]
+        target_label: instance
+        regex: '{{hostvars[node]['ansible_host']}}:{{ prometheus_http_port }}'
+        replacement: '{{ node }}'
+{% endfor %}
   - job_name: 'cadvisor'
     static_configs:
     - targets:
@@ -15,6 +22,13 @@ scrape_configs:
 {% endfor %}
       labels:
         alias: 'cadvisor'
+    relabel_configs:
+{% for node in groups['docker_nodes'] %}
+      - source_labels: [__address__]
+        target_label: instance
+        regex: '{{hostvars[node]['ansible_host']}}:{{ cadvisor_port }}'
+        replacement: '{{ node }}'
+{% endfor %}
   - job_name: 'node-exporter'
     static_configs:
     - targets:
@@ -23,3 +37,28 @@ scrape_configs:
 {% endfor %}
       labels:
         alias: 'node-exporter'
+    relabel_configs:
+{% for node in groups['docker_nodes'] %}
+      - source_labels: [__address__]
+        target_label: instance
+        regex: '{{hostvars[node]['ansible_host']}}:{{ prometheus_node_exporter_port }}'
+        replacement: '{{ node }}'
+{% endfor %}
+  - job_name: 'uptime-kuma'
+    static_configs:
+    - targets:
+{% for node in groups['docker_nodes'] %}
+        - '{{hostvars[node]['ansible_host']}}:{{ uptime_kuma_http_port }}'
+{% endfor %}
+      labels:
+        alias: 'uptime-kuma'
+    basic_auth:
+      username: '{{ uptime_kuma_username }}'
+      password: '{{ uptime_kuma_password }}'
+    relabel_configs:
+{% for node in groups['docker_nodes'] %}
+      - source_labels: [__address__]
+        target_label: instance
+        regex: '{{hostvars[node]['ansible_host']}}:{{ uptime_kuma_http_port }}'
+        replacement: '{{ node }}'
+{% endfor %}
