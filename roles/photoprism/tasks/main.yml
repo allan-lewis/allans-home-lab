@@ -1,5 +1,18 @@
 ---
 - import_role:
+    name: ahl_getent
+
+- import_role: 
+    name: ahl_mount      
+  vars: 
+      mount_items: 
+        - path: "{{ photoprism_volume }}"
+          src: "{{ nfs_share_photoprism }}"
+          owner: "{{ ansible_ssh_user }}" 
+          group: "{{ ansible_ssh_user }}" 
+          access: "rw"
+
+- import_role:
     name: ahl_mkdir
   vars:
     dir_items:
@@ -27,3 +40,4 @@
     env:
       PHOTOPRISM_UPLOAD_NSFW: "true"
       PHOTOPRISM_ADMIN_PASSWORD: "{{ photoprism_admin_password }}"
+    user: "{{ ahl_user_uid }}:{{ ahl_user_uid }}"
