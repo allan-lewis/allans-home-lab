@@ -19,3 +19,5 @@
       - "{{ uptime_kuma_volume }}:/app/data"
     published_ports:
       - "{{ uptime_kuma_http_port }}:3001/tcp"
+    dns_servers:
+      - "{{ uptime_kuma_dns_server }}"
