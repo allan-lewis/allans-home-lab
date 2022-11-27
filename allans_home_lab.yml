@@ -35,3 +35,6 @@
 
   roles:
     - role: homepage
+
+# SETUP K3S CLUSTER
+- import_playbook: k3s.yml
