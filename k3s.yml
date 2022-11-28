@@ -12,6 +12,16 @@
   roles:
     - role: k3s_master
 
+- hosts: k3s_node
+  become: yes
+  roles:
+    - role: k3s_node
+
+- hosts: k3s_master
+  become: yes
+  roles:
+    - role: k3s_post
+
 # TEAR DOWN CLUSTER
 # - hosts: k3s_nodes
 #   gather_facts: yes
