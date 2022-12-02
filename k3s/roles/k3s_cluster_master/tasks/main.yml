@@ -1,0 +1,4 @@
+---
+- include_role:
+    name: k3s_master
+  when: ahl_k3s_mode is undefined or ahl_k3s_mode == 'setup'

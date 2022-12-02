@@ -1,0 +1,19 @@
+---
+- ansible.builtin.pause:
+    echo: false
+    prompt: "!!!! DANGER !!!! LAST CHANCE TO ABORT"
+  when: ahl_k3s_mode is defined and ahl_k3s_mode == 'teardown' 
+
+- include_role:
+    name: k3s_reset
+  when: ahl_k3s_mode is defined and ahl_k3s_mode == 'teardown'    
+    
+- include_role:
+    name: k3s_raspberrypi
+  vars: 
+    state: absent
+  when: ahl_k3s_mode is defined and ahl_k3s_mode == 'teardown'
+
+- ansible.builtin.reboot:
+    reboot_timeout: 3600
+  when: ahl_k3s_mode is defined and ahl_k3s_mode == 'teardown'

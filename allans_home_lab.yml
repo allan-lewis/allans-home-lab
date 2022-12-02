@@ -37,4 +37,4 @@
     - role: homepage
 
 # SETUP K3S CLUSTER
-- import_playbook: k3s.yml
+- import_playbook: k3s/all.yml

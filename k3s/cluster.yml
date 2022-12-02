@@ -1,0 +1,41 @@
+---
+- hosts: k3s_nodes
+  gather_facts: yes
+  become: yes
+  roles:
+    - role: k3s_cluster_prereq
+
+# - hosts: k3s_master
+#   become: yes
+#   roles:
+#     - role: k3s_cluster_master
+
+# - hosts: k3s_node
+#   become: yes
+#   roles:
+#     - role: k3s_cluster_node
+
+# - hosts: k3s_master
+#   become: yes
+#   roles:
+#     - role: k3s_cluster_post
+
+# - hosts: k3s_nodes
+#   become: yes
+#   roles:
+#     - role: k3s_cluster_reset
+
+# - hosts: k3s_nodes
+#   gather_facts: yes
+#   become: yes
+#   roles:
+#     - role: ../k3s_reset
+#       when: k3s_mode == 'teardown'
+#     - role: ../k3s_raspberrypi
+#       vars: {state: absent}
+#       when: k3s_mode == 'teardown'
+#   post_tasks:
+#     - name: Reboot and wait for node to come back up
+#       reboot:
+#         reboot_timeout: 3600
+#       when: k3s_mode == 'teardown'
