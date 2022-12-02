@@ -49,7 +49,6 @@
     namespace: cattle-system
     name: rancher
     update_repo_cache: true
-    force: true
     release_state: "{{ 'absent' if ahl_k3s_mode|default('setup') == 'teardown' else 'present' }}"
     release_values:
       hostname: "{{ rancher_host }}"
