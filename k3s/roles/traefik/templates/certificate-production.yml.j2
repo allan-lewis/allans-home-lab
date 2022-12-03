@@ -1,0 +1,15 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: certificate-production
+  namespace: default
+spec:
+  secretName: production-tls
+  issuerRef:
+    name: letsencrypt-production
+    kind: ClusterIssuer
+  commonName: "*.local.allanshomelab.com"
+  dnsNames:
+  - "local.allanshomelab.com"
+  - "*.local.allanshomelab.com"
