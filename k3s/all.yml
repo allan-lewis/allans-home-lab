@@ -1,5 +1,9 @@
 - import_playbook: cluster.yml
 
+- import_playbook: traefik.yml
+
+- import_playbook: cert_manager.yml
+
 # - import_playbook: rancher.yml
 
 # - import_playbook: longhorn.yml

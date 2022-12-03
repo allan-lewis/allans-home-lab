@@ -1,0 +1,61 @@
+---
+- name: Add the Traefik Helm respository
+  kubernetes.core.helm_repository:
+    name: traefik 
+    repo_url: https://helm.traefik.io/traefik
+
+- name: Write values file
+  ansible.builtin.template:
+    src: values.yml.j2
+    dest: /tmp/traefik.values.yml
+
+- name: Apply Traefik chart
+  kubernetes.core.helm:
+    chart_ref: traefik/traefik
+    namespace: traefik
+    name: traefik
+    update_repo_cache: true
+    create_namespace: true
+    release_state: "{{ 'absent' if ahl_k3s_mode|default('setup') == 'teardown' else 'present' }}"
+    values_files:
+      - /tmp/traefik.values.yml
+
+- name: Write default headers middleware file
+  ansible.builtin.template:
+    src: default-headers.yml.j2
+    dest: /tmp/default-headers.yml
+
+- name: Apply default headers middleware
+  kubernetes.core.k8s:
+    state: present
+    src: /tmp/default-headers.yml
+
+- name: Write dashboard secret file
+  ansible.builtin.template:
+    src: secret-dashboard.yml.j2
+    dest: /tmp/secret-dashboard.yml
+
+- name: Apply dashboard secret
+  kubernetes.core.k8s:
+    state: present
+    src: /tmp/secret-dashboard.yml
+
+- name: Write middleware file
+  ansible.builtin.template:
+    src: middleware.yml.j2
+    dest: /tmp/middleware.yml
+
+- name: Apply middleware
+  kubernetes.core.k8s:
+    state: present
+    src: /tmp/middleware.yml
+
+- name: Write ingress route file
+  ansible.builtin.template:
+    src: ingress.yml.j2
+    dest: /tmp/ingress.yml
+
+- name: Apply ingress route
+  kubernetes.core.k8s:
+    state: present
+    src: /tmp/ingress.yml
