@@ -1,6 +1,5 @@
----
 - import_playbook: cluster.yml
 
-- import_playbook: rancher.yml
+# - import_playbook: rancher.yml
 
-- import_playbook: longhorn.yml
+# - import_playbook: longhorn.yml

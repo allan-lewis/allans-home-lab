@@ -1,0 +1,12 @@
+---
+- hosts: k3s_nodes
+  gather_facts: yes
+  become: yes
+  roles:
+    - role: cluster_reset
+    - role: cluster_raspberrypi
+      vars: {state: absent}
+  post_tasks:
+    - name: Reboot and wait for node to come back up
+      reboot:
+        reboot_timeout: 3600
