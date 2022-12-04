@@ -1,0 +1,40 @@
+---
+- name: Write namespace file
+  ansible.builtin.template:
+    src: namespace.yml.j2
+    dest: /tmp/namespace.yml
+
+- name: Apply namespace file
+  kubernetes.core.k8s:
+    state: "{{ 'absent' if ahl_k3s_mode|default('setup') == 'teardown' else 'present' }}"
+    src: /tmp/namespace.yml
+
+- name: Write deployment file
+  ansible.builtin.template:
+    src: deployment.yml.j2
+    dest: /tmp/deployment.yml
+
+- name: Apply deployment file
+  kubernetes.core.k8s:
+    state: "{{ 'absent' if ahl_k3s_mode|default('setup') == 'teardown' else 'present' }}"
+    src: /tmp/deployment.yml
+
+- name: Write service file
+  ansible.builtin.template:
+    src: service.yml.j2
+    dest: /tmp/service.yml
+
+- name: Apply service file
+  kubernetes.core.k8s:
+    state: "{{ 'absent' if ahl_k3s_mode|default('setup') == 'teardown' else 'present' }}"
+    src: /tmp/service.yml
+
+- name: Write ingress file
+  ansible.builtin.template:
+    src: ingress.yml.j2
+    dest: /tmp/ingress.yml
+
+- name: Apply ingress file
+  kubernetes.core.k8s:
+    state: "{{ 'absent' if ahl_k3s_mode|default('setup') == 'teardown' else 'present' }}"
+    src: /tmp/ingress.yml
