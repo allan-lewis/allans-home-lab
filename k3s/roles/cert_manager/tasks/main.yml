@@ -12,7 +12,7 @@
 
 - name: Apply cert-manager CRDs
   kubernetes.core.k8s:
-    state: present
+    state: "{{ 'absent' if ahl_k3s_mode|default('setup') == 'teardown' else 'present' }}"
     src: /tmp/cert-manager.crds.yaml
 
 - name: Write values file
@@ -31,3 +31,62 @@
     chart_version: "{{ cert_manager_version }}"
     values_files:
       - /tmp/cert-manager.values.yml
+
+- name: Write LetsEncrypt issuer (staging) file
+  ansible.builtin.template:
+    src: letsencrypt-staging.yml.j2
+    dest: /tmp/letsencrypt-staging.yml
+
+- name: Apply LetsEncrypt issuer (staging) file
+  kubernetes.core.k8s:
+    state: "{{ 'absent' if ahl_k3s_mode|default('setup') == 'teardown' else 'present' }}"
+    src: /tmp/letsencrypt-staging.yml
+
+- name: Write LetsEncrypt issuer (production) file
+  ansible.builtin.template:
+    src: letsencrypt-production.yml.j2
+    dest: /tmp/letsencrypt-production.yml
+
+- name: Apply LetsEncrypt issuer (production) file
+  kubernetes.core.k8s:
+    state: "{{ 'absent' if ahl_k3s_mode|default('setup') == 'teardown' else 'present' }}"
+    src: /tmp/letsencrypt-production.yml
+
+- name: Write Cloudflare token secret file
+  ansible.builtin.template:
+    src: secret-cf-token.yml.j2
+    dest: /tmp/secret-cf-token.yml
+
+- name: Apply Cloudflare token secret file
+  kubernetes.core.k8s:
+    state: "{{ 'absent' if ahl_k3s_mode|default('setup') == 'teardown' else 'present' }}"
+    src: /tmp/secret-cf-token.yml
+
+- name: Write certificate (staging) file
+  ansible.builtin.template:
+    src: certificate-staging.yml.j2
+    dest: /tmp/certificate-staging.yml
+  when: (ahl_certificate_request is defined) and (ahl_certificate_request == 'staging')
+
+- name: Apply certificate (staging) file
+  kubernetes.core.k8s:
+    state: "{{ 'absent' if ahl_k3s_mode|default('setup') == 'teardown' else 'present' }}"
+    src: /tmp/certificate-staging.yml
+  when: (ahl_certificate_request is defined) and (ahl_certificate_request == 'staging')
+
+- name: Write certificate (production) file
+  ansible.builtin.template:
+    src: certificate-production.yml.j2
+    dest: /tmp/certificate-production.yml
+  when: (ahl_certificate_request is defined) and (ahl_certificate_request == 'production')
+
+- name: Apply certificate (production) file
+  kubernetes.core.k8s:
+    state: "{{ 'absent' if ahl_k3s_mode|default('setup') == 'teardown' else 'present' }}"
+    src: /tmp/certificate-production.yml
+  when: (ahl_certificate_request is defined) and (ahl_certificate_request == 'production')
+
+- name: Check if certificates were requested
+  ansible.builtin.fail:
+    msg: Halting to wait for certificate challenges to complete
+  when: ahl_certificate_request is defined

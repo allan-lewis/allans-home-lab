@@ -1,8 +1,10 @@
 - import_playbook: cluster.yml
 
+- import_playbook: cert_manager.yml
+
 - import_playbook: traefik.yml
 
-- import_playbook: cert_manager.yml
+- import playbook: no_geeks_brewing.yml
 
 # - import_playbook: rancher.yml
 
