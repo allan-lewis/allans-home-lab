@@ -16,14 +16,14 @@ spec:
         - name: no-geeks-brewing
           namespace:  {{ no_geeks_brewing_namespace }}
           port: 80
-      middlewares:
-        - name: default-headers
+      # middlewares:
+      #   - name: default-headers
     - match: Host(`www.nogeeksbrewing.com`)
       kind: Rule
       services:
         - name: no-geeks-brewing
           namespace:  {{ no_geeks_brewing_namespace }}
           port: 80
-      middlewares:
-        - name: default-headers
+      # middlewares:
+      #   - name: default-headers
  
