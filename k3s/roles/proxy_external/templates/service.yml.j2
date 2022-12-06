@@ -1,0 +1,10 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ item.service_name }}
+  namespace: {{ service_namespace }}
+spec:
+  ports:
+    - protocol: TCP
+      port: {{ item.service_port }}
+      targetPort: {{ item.service_port }}

@@ -1,5 +1,5 @@
 ---
-- name: Apply namespace manifet
+- name: Apply namespace manifest
   kubernetes.core.k8s:
     state: "{{ 'absent' if ahl_k3s_mode|default('setup') == 'teardown' else 'present' }}"
     template: namespace.yml.j2

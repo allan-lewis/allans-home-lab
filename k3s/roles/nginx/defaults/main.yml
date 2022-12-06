@@ -1,0 +1,8 @@
+container_name: nginx
+container_image: nginx:latest
+namespace_name: nginx
+service_name: nginx
+service_port: 80
+routes: 
+  - host: 129monroe.com
+  - host: www.129monroe.com

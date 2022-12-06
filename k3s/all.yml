@@ -4,7 +4,11 @@
 
 - import_playbook: traefik.yml
 
+- import_playbook: nginx.yml
+
 - import playbook: no_geeks_brewing.yml
+
+- import playbook: proxy_external.yml
 
 # - import_playbook: rancher.yml
 

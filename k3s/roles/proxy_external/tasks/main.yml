@@ -1,20 +1,23 @@
 ---
-- name: Apply namespace manifet
+- name: Apply namespace manifest
   kubernetes.core.k8s:
     state: "{{ 'absent' if ahl_k3s_mode|default('setup') == 'teardown' else 'present' }}"
     template: namespace.yml.j2
 
-- name: Apply deployment manifest
-  kubernetes.core.k8s:
-    state: "{{ 'absent' if ahl_k3s_mode|default('setup') == 'teardown' else 'present' }}"
-    template: deployment.yml.j2
-
-- name: Apply service manifest
+- name: Apply service manifest(s)
   kubernetes.core.k8s:
     state: "{{ 'absent' if ahl_k3s_mode|default('setup') == 'teardown' else 'present' }}"
     template: service.yml.j2
+  with_items: "{{ external_proxy_services }}"
 
-- name: Apply ingress manifest
+- name: Apply endpoint manifest(s)
   kubernetes.core.k8s:
     state: "{{ 'absent' if ahl_k3s_mode|default('setup') == 'teardown' else 'present' }}"
-    template: traefik_ingress_route.yml.j2
+    template: endpoints.yml.j2
+  with_items: "{{ external_proxy_services }}"
+
+- name: Apply ingress manifest(s)
+  kubernetes.core.k8s:
+    state: "{{ 'absent' if ahl_k3s_mode|default('setup') == 'teardown' else 'present' }}"
+    template: ingress.yml.j2
+  with_items: "{{ external_proxy_services }}"

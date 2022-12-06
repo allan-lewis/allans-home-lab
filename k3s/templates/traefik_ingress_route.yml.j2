@@ -1,0 +1,20 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ ingress_name | default(service_name) }}
+  namespace: {{ namespace_name }}
+  annotations: 
+    kubernetes.io/ingress.class: traefik-external
+spec:
+  entryPoints:
+    - websecure
+  routes:
+{% for route in routes %}
+    - match: Host(`{{ route.host }}`)
+      kind: Rule
+      services:
+        - name: {{ service_name }}
+          namespace:  {{ namespace_name }}
+          port: {{ service_port }}
+{% endfor %}

@@ -1,0 +1,10 @@
+kind: Endpoints
+apiVersion: v1
+metadata:
+  name: {{ item.service_name }}
+  namespace: {{ service_namespace }}
+subsets:
+  - addresses:
+      - ip: {{ item.service_endpoint }}
+    ports:
+      - port: {{ item.service_port }}

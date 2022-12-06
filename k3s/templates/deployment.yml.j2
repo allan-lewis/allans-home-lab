@@ -1,0 +1,25 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: {{ deployment_name | default(service_name) }}
+  namespace: {{ namespace_name }}
+  labels:
+    app: {{ app_name | default(service_name) }}
+spec:
+  replicas: 1
+  progressDeadlineSeconds: 600
+  revisionHistoryLimit: 2
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: {{ app_name | default(service_name) }}
+  template:
+    metadata:
+      labels:
+        app: {{ app_name | default(service_name) }}
+    spec:
+      containers:
+      - name: {{ container_name }} 
+        image: {{ container_image }} 
