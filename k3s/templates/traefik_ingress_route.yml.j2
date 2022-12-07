@@ -14,7 +14,7 @@ spec:
     - match: Host(`{{ route.host }}`)
       kind: Rule
       services:
-        - name: {{ service_name }}
+        - name: {{ route.service_name | default(service_name) }}
           namespace:  {{ namespace_name }}
-          port: {{ service_port }}
+          port: {{ route.service_port | default(service_port) }}
 {% endfor %}

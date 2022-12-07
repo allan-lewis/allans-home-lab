@@ -9,6 +9,9 @@
     state: "{{ 'absent' if ahl_k3s_mode|default('setup') == 'teardown' else 'present' }}"
     template: service.yml.j2
   with_items: "{{ external_proxy_services }}"
+  vars:
+    service_name: "{{ item.service_name }}"
+    service_port: "{{ item.service_port }}"
 
 - name: Apply endpoint manifest(s)
   kubernetes.core.k8s:
@@ -19,5 +22,5 @@
 - name: Apply ingress manifest(s)
   kubernetes.core.k8s:
     state: "{{ 'absent' if ahl_k3s_mode|default('setup') == 'teardown' else 'present' }}"
-    template: ingress.yml.j2
-  with_items: "{{ external_proxy_services }}"
+    template: traefik_ingress_route.yml.j2
+  with_items:  "{{ external_proxy_services }}"

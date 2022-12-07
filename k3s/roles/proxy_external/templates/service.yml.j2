@@ -2,7 +2,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: {{ item.service_name }}
-  namespace: {{ service_namespace }}
+  namespace: {{ namespace_name }}
 spec:
   ports:
     - protocol: TCP
