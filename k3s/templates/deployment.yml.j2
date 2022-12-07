@@ -7,7 +7,7 @@ metadata:
   labels:
     app: {{ app_name | default(service_name) }}
 spec:
-  replicas: 1
+  replicas: {{ service_replicas | default(2) }}
   progressDeadlineSeconds: 600
   revisionHistoryLimit: 2
   strategy:

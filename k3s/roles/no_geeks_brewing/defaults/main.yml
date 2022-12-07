@@ -3,6 +3,7 @@ container_image: nogeeksbrewing/site:latest
 namespace_name: no-geeks-brewing
 service_name: no-geeks-brewing
 service_port: 80
+service_replicas: 2
 routes:
   - host: nogeeksbrewing.com
   - host: www.nogeeksbrewing.com
