@@ -23,4 +23,3 @@
   kubernetes.core.k8s:
     state: "{{ ahl_k3s_state }}"
     template: traefik_ingress_route.yml.j2
-  with_items:  "{{ external_proxy_services }}"
