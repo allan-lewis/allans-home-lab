@@ -12,7 +12,7 @@
 
 - name: Apply cert-manager CRDs
   kubernetes.core.k8s:
-    state: "{{ 'absent' if ahl_k3s_mode|default('setup') == 'teardown' else 'present' }}"
+    state: "{{ ahl_k3s_state }}"
     src: /tmp/cert-manager.crds.yaml
 
 - name: Write values file
@@ -27,7 +27,7 @@
     name: cert-manager
     update_repo_cache: true
     create_namespace: true
-    release_state: "{{ 'absent' if ahl_k3s_mode|default('setup') == 'teardown' else 'present' }}"
+    release_state:  "{{ ahl_k3s_state }}"
     chart_version: "{{ cert_manager_version }}"
     values_files:
       - /tmp/cert-manager.values.yml
@@ -39,7 +39,7 @@
 
 - name: Apply LetsEncrypt issuer (staging) file
   kubernetes.core.k8s:
-    state: "{{ 'absent' if ahl_k3s_mode|default('setup') == 'teardown' else 'present' }}"
+    state: "{{ ahl_k3s_state }}"
     src: /tmp/letsencrypt-staging.yml
 
 - name: Write LetsEncrypt issuer (production) file
@@ -49,7 +49,7 @@
 
 - name: Apply LetsEncrypt issuer (production) file
   kubernetes.core.k8s:
-    state: "{{ 'absent' if ahl_k3s_mode|default('setup') == 'teardown' else 'present' }}"
+    state:  "{{ ahl_k3s_state }}"
     src: /tmp/letsencrypt-production.yml
 
 - name: Write Cloudflare token secret file
@@ -59,7 +59,7 @@
 
 - name: Apply Cloudflare token secret file
   kubernetes.core.k8s:
-    state: "{{ 'absent' if ahl_k3s_mode|default('setup') == 'teardown' else 'present' }}"
+    state:  "{{ ahl_k3s_state }}"
     src: /tmp/secret-cf-token.yml
 
 - name: Write certificate (staging) file
@@ -70,7 +70,7 @@
 
 - name: Apply certificate (staging) file
   kubernetes.core.k8s:
-    state: "{{ 'absent' if ahl_k3s_mode|default('setup') == 'teardown' else 'present' }}"
+    state:  "{{ ahl_k3s_state }}"
     src: /tmp/certificate-staging.yml
   when: (ahl_certificate_request is defined) and (ahl_certificate_request == 'staging')
 
@@ -82,7 +82,7 @@
 
 - name: Apply certificate (production) file
   kubernetes.core.k8s:
-    state: "{{ 'absent' if ahl_k3s_mode|default('setup') == 'teardown' else 'present' }}"
+    state:  "{{ ahl_k3s_state }}"
     src: /tmp/certificate-production.yml
   when: (ahl_certificate_request is defined) and (ahl_certificate_request == 'production')
 

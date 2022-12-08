@@ -21,15 +21,6 @@
     - src: configuration.yml.j2
       dest: "{{ authelia_volume }}/configuration.yml"
 
-- name: Write NPM advanced configurations
-  ansible.builtin.template:
-    src: npm_advanced.j2
-    dest: "{{ item.dest }}"
-    owner: "{{ ansible_ssh_user }}"
-    group: "{{ ansible_ssh_user }}"
-    mode: 0644
-  with_items: "{{ npm_proxies }}"
-
 - name: Run Authelia Docker container
   community.docker.docker_container:
     container_default_behavior: no_defaults

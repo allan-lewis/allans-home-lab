@@ -16,7 +16,7 @@
     name: traefik
     update_repo_cache: true
     create_namespace: true
-    release_state: "{{ 'absent' if ahl_k3s_mode|default('setup') == 'teardown' else 'present' }}"
+    release_state: "{{ ahl_k3s_state }}"
     values_files:
       - /tmp/traefik.values.yml
 
@@ -27,7 +27,7 @@
 
 - name: Apply default headers middleware
   kubernetes.core.k8s:
-    state: "{{ 'absent' if ahl_k3s_mode|default('setup') == 'teardown' else 'present' }}"
+    state: "{{ ahl_k3s_state }}"
     src: /tmp/default-headers.yml
 
 - name: Write dashboard secret file
@@ -37,7 +37,7 @@
 
 - name: Apply dashboard secret
   kubernetes.core.k8s:
-    state: "{{ 'absent' if ahl_k3s_mode|default('setup') == 'teardown' else 'present' }}"
+    state: "{{ ahl_k3s_state }}"
     src: /tmp/secret-dashboard.yml
 
 - name: Write basic auth middleware file
@@ -47,7 +47,7 @@
 
 - name: Apply basic auth middleware file
   kubernetes.core.k8s:
-    state: "{{ 'absent' if ahl_k3s_mode|default('setup') == 'teardown' else 'present' }}"
+    state: "{{ ahl_k3s_state }}"
     src: /tmp/middleware.yml
 
 - name: Write ingress route file
@@ -57,5 +57,5 @@
 
 - name: Apply ingress route
   kubernetes.core.k8s:
-    state: "{{ 'absent' if ahl_k3s_mode|default('setup') == 'teardown' else 'present' }}"
+    state: "{{ ahl_k3s_state }}"
     src: /tmp/ingress.yml
