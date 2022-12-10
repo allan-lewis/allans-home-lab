@@ -7,3 +7,5 @@ service_replicas: 1
 routes: 
   - host: 129monroe.com
   - host: www.129monroe.com
+  - host: allanshomelab.com
+  - host: www.allanshomelab.com

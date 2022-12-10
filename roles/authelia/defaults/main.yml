@@ -1,2 +1,1 @@
-authelia_port: 31600
 authelia_volume: "{{ ahl_docker_volume_root }}/authelia"

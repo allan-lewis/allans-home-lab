@@ -1,3 +1,5 @@
 use_x_forwarded_for: true
 trusted_proxies:
-  - {{ homeassistant_trusted_proxy }}
+{% for node in groups['k3s_node'] %}
+  - {{ hostvars[node]['ansible_host'] }}
+{% endfor %}
