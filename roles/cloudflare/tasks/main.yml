@@ -67,6 +67,6 @@
 - name: Enable Cloudflare services
   ansible.builtin.systemd:
     name: "cloudflared@{{ item.name }}"
-    state: started
+    state: restarted
     enabled: yes
   with_items: "{{ cloudflare_tunnels }}"
