@@ -2,6 +2,15 @@
 - hosts: k3s_nodes
   gather_facts: yes
   become: yes
+
+  vars_prompt:
+
+    - name: "reset_password"
+      prompt: "Password"
+      private: true  
+      confirm: true  
+      unsafe: true 
+
   roles:
     - role: cluster_reset
     - role: cluster_raspberrypi

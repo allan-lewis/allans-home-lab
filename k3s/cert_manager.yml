@@ -2,5 +2,12 @@
 - hosts: k3s_master[0]
   become: yes
   gather_facts: false
+
+  vars_prompt:
+
+    - name: "ahl_certificate_request"
+      prompt: "Certificate to request (staging|production, enter for none)"
+      private: false  
+
   roles:
     - role: cert_manager

@@ -89,4 +89,4 @@
 - name: Check if certificates were requested
   ansible.builtin.fail:
     msg: Halting to wait for certificate challenges to complete
-  when: ahl_certificate_request is defined
+  when: ahl_certificate_request is defined and ahl_certificate_request != ''

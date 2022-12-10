@@ -1,4 +1,9 @@
 ---
+- name: Fail on invalid password
+  ansible.builtin.fail:
+    msg: Incorrect password for cluster reset
+  when: reset_password != ahl_cluster_reset_password
+
 - name: Disable services
   systemd:
     name: "{{ item }}"
