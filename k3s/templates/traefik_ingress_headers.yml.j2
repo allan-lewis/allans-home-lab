@@ -1,0 +1,9 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: traefik-ingress-headers
+  namespace: {{ namespace_name }}
+spec:
+  headers:
+    customRequestHeaders:
+      X-Forwarded-Proto: "https"

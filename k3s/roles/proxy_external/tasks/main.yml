@@ -19,6 +19,11 @@
     template: endpoints.yml.j2
   with_items: "{{ external_proxy_services }}"
 
+- name: Apply middleware manifest(s)
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: traefik_ingress_headers.yml.j2
+
 - name: Apply ingress manifest(s)
   kubernetes.core.k8s:
     state: "{{ ahl_k3s_state }}"

@@ -13,6 +13,9 @@ spec:
 {% for route in routes %}
     - match: Host(`{{ route.host }}`)
       kind: Rule
+      middlewares:
+        - name: traefik-ingress-headers
+          namespace: {{ namespace_name }}
       services:
         - name: {{ route.service_name | default(service_name) }}
           namespace:  {{ namespace_name }}
