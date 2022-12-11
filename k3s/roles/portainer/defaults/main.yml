@@ -1,0 +1,5 @@
+service_name: portainer
+namespace_name: portainer
+routes:
+  - host: portainer.local.allanshomelab.com
+    service_port: 9000

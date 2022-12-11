@@ -1,0 +1,5 @@
+service:
+  type: ClusterIP
+
+nodeSelector: 
+  kubernetes.io/hostname: {{ k3s_portainer_node }}
