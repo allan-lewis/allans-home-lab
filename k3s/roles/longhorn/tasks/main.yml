@@ -14,12 +14,12 @@
     create_namespace: true
     release_state:  "{{ ahl_k3s_state }}"
 
-- name: Write load balancer manifest
-  ansible.builtin.template:
-    src: service.yml.j2
-    dest: /tmp/longhorn.yml
-
-- name: Apply load balancer manifest
+- name: Apply middleware manifest(s)
   kubernetes.core.k8s:
-    state:  "{{ ahl_k3s_state }}"
-    src: /tmp/longhorn.yml
+    state: "{{ ahl_k3s_state }}"
+    template: traefik_ingress_headers.yml.j2
+
+- name: Apply ingress manifest
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: traefik_ingress_route.yml.j2

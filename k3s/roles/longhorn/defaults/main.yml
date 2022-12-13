@@ -1,0 +1,5 @@
+namespace_name: longhorn-system
+service_name: longhorn-frontend
+service_port: 80
+routes:
+  - host: longhorn.local.allanshomelab.com
