@@ -1,3 +1,0 @@
-[Service]
-ExecStart=
-ExecStart={{ ahl_docker_command }} -H tcp://{{ ansible_host }}:2375 -H fd:// --containerd=/run/containerd/containerd.sock  $DOCKER_OPTS
