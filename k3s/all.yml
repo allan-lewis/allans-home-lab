@@ -10,8 +10,8 @@
 
 - import_playbook: proxy_external.yml
 
+- import_playbook: longhorn.yml
+
 - import_playbook: portainer.yml
 
 # - import_playbook: rancher.yml
-
-- import_playbook: longhorn.yml

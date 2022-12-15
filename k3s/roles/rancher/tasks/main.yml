@@ -18,19 +18,8 @@
     namespace: cattle-system
     name: rancher
     update_repo_cache: true
+    create_namespace: true
     release_state: "{{ ahl_k3s_state }}"
     release_values:
       hostname: "{{ rancher_host }}"
       bootstrapPassword: "{{ rancher_password }}"
-      ingress.enabled: false
-      tls: external
-
-- name: Write load balancer manifest
-  ansible.builtin.template:
-    src: service.yml.j2
-    dest: /tmp/service.yml
-
-- name: Apply load balancer manifest
-  kubernetes.core.k8s:
-    state: "{{ ahl_k3s_state }}"
-    src: /tmp/service.yml

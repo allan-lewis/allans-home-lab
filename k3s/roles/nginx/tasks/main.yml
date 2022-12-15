@@ -1,7 +1,7 @@
 ---
 - name: Apply namespace manifest
   kubernetes.core.k8s:
-    state: "{{ ahl_k3s_state }}"
+    state: present
     template: namespace.yml.j2
 
 - name: Apply deployment manifest
