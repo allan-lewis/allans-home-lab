@@ -9,7 +9,7 @@
   community.docker.docker_container:
     container_default_behavior: no_defaults
     detach: yes
-    name: "kuma"
+    name: "uptime-kuma"
     image: "louislam/uptime-kuma:1"
     state: "started"
     recreate: "yes"
@@ -20,4 +20,4 @@
     published_ports:
       - "{{ uptime_kuma_http_port }}:3001/tcp"
     dns_servers:
-      - "{{ uptime_kuma_dns_server }}"
+      - "{{ ahl_name_server }}"

@@ -2,6 +2,12 @@
 - import_role:
     name: ahl_getent
 
+- import_role: 
+    name: ahl_mkdir
+  vars:
+    dir_items: 
+      - path: "{{ wireguard_config_volume }}"
+
 - name: Run Wireguard Docker container
   community.docker.docker_container:
     container_default_behavior: no_defaults

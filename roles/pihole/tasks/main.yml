@@ -1,4 +1,11 @@
 ---
+- import_role: 
+    name: ahl_mkdir
+  vars:
+    dir_items: 
+      - path: "{{ pihole_data_volume }}"
+      - path: "{{ pihole_dns_volume }}"
+
 - name: Disabling the default DNS service
   ansible.builtin.service:
     name: systemd-resolved
