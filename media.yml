@@ -22,11 +22,3 @@
 
   roles:    
     - role: photoprism
-
-- name: Setup torrenting services
-  hosts: torrent_nodes
-  become: yes
-  gather_facts: false
-
-  roles:    
-    - role: torrents

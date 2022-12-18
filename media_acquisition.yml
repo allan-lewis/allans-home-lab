@@ -1,0 +1,16 @@
+---
+- name: Setting up OpenVPN server
+  hosts: vpn_nodes
+  become: yes
+  gather_facts: false
+
+  roles:  
+    - role: vpn  
+
+- name: Setting up media acquisition
+  hosts: torrent_nodes
+  become: yes
+  gather_facts: false
+
+  roles:  
+    - role: torrents

@@ -1,12 +1,4 @@
 ---
-- name: Setup outbound VPN
-  hosts: vpn_nodes
-  become: yes
-  gather_facts: false
-
-  roles:
-    - vpn
-
 - name: Setup inbound VPN
   hosts: wireguard_nodes
   become: yes
