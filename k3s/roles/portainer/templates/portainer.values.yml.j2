@@ -1,5 +1,6 @@
 service:
   type: ClusterIP
 
-nodeSelector: 
-  kubernetes.io/hostname: {{ k3s_portainer_node }}
+persistence:
+  size: 4Gi
+  storageClass: {{ k3s_storage_class }}
