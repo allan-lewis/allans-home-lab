@@ -1,3 +1,7 @@
+---
+- import_role:
+    name: ahl_getent
+
 - name: Add Cloudflare's GPG key
   ansible.builtin.apt_key:
     url: "https://pkg.cloudflare.com/cloudflare-main.gpg"
@@ -29,7 +33,7 @@
         owner: "root"
         group: "root"
 
-- name: Copy authentication certificates
+- name: Copy certificates
   ansible.builtin.copy:
     src: "{{ item.cert }}"
     dest: "/etc/cloudflared/{{ item.name }}.pem"
@@ -38,7 +42,7 @@
     mode: '0600'
   with_items: "{{ cloudflare_tunnels }}"
 
-- name: Copying tunnel authentication JSON
+- name: Copy authentication JSON
   ansible.builtin.copy:
     src: "{{ item.tunnel }}"
     dest: /etc/cloudflared/{{ item.name }}.json
@@ -64,7 +68,7 @@
     group: "root"
     mode: 0644
 
-- name: Enable Cloudflare services
+- name: Restart Cloudflare services
   ansible.builtin.systemd:
     name: "cloudflared@{{ item.name }}"
     state: restarted

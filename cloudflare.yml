@@ -2,8 +2,7 @@
 - name: Setup Cloudflare DNS tunneling
   hosts: cloudflare_nodes
   become: yes
-  gather_facts: false
+  gather_facts: yes
 
   roles:
-    - role: ahl_getent
     - role: cloudflare

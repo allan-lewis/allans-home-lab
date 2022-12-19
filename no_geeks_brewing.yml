@@ -1,8 +1,0 @@
----
-- name: Setup No Geeks Brewing
-  hosts: nogeeksbrewing_nodes
-  become: yes
-  gather_facts: false
-
-  roles:
-    - no_geeks_brewing

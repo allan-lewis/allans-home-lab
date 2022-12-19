@@ -4,8 +4,8 @@
 - name: Apply baseline settings to all nodes
   import_playbook: baseline.yml
 
-# # SETUP CLOUDFLARE NETWORK TUNNELING
-# - import_playbook: cloudflare.yml
+- name: Setup Cloudflare network tunneling
+  import_playbook: cloudflare.yml
 
 # # RUN DOCKER AND COMMON SERVICES
 # - import_playbook: docker.yml
