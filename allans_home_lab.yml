@@ -1,40 +1,40 @@
-# GET CONTROL NODE READY TO MANAGE REMOTE NODES
-- import_playbook: control.yml
+- name: Setup control node
+  import_playbook: control.yml
 
-# APPLY BASELINE SETTINGS TO ALL REMOTE NODES
-- import_playbook: baseline.yml
+- name: Apply baseline settings to all nodes
+  import_playbook: baseline.yml
 
-# SETUP CLOUDFLARE NETWORK TUNNELING
-- import_playbook: cloudflare.yml
+# # SETUP CLOUDFLARE NETWORK TUNNELING
+# - import_playbook: cloudflare.yml
 
-# RUN DOCKER AND COMMON SERVICES
-- import_playbook: docker.yml
+# # RUN DOCKER AND COMMON SERVICES
+# - import_playbook: docker.yml
 
-# RUN SYSTEM SERVICES
-- import_playbook: system.yml
+# # RUN SYSTEM SERVICES
+# - import_playbook: system.yml
 
-# RUN HOME AUTOMATION SERVICES
-- import_playbook: home_automation.yml
+# # RUN HOME AUTOMATION SERVICES
+# - import_playbook: home_automation.yml
 
-# RUN OBSERVABILITY SERVICES
-- import_playbook: observability.yml
+# # RUN OBSERVABILITY SERVICES
+# - import_playbook: observability.yml
 
-# RUN MEDIA SERVICES
-- import_playbook: media.yml
+# # RUN MEDIA SERVICES
+# - import_playbook: media.yml
 
-# RUN MEDIA ACQUISITION SERVICES
-- import_playbook: media_acquisition.yml
+# # RUN MEDIA ACQUISITION SERVICES
+# - import_playbook: media_acquisition.yml
 
-# RUN PRODUCTIVITY SERVICES
-- import_playbook: productivity.yml
+# # RUN PRODUCTIVITY SERVICES
+# - import_playbook: productivity.yml
 
-# RUN HOMEPAGE
-- hosts: homepage_nodes
-  become: yes
-  gather_facts: false
+# # RUN HOMEPAGE
+# - hosts: homepage_nodes
+#   become: yes
+#   gather_facts: false
 
-  roles:
-    - role: homepage
+#   roles:
+#     - role: homepage
 
-# SETUP K3S CLUSTER
-- import_playbook: k3s/all.yml
+# # SETUP K3S CLUSTER
+# - import_playbook: k3s/all.yml

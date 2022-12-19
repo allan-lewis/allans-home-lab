@@ -1,7 +1,8 @@
 ---
-- name: Ensure that this node is ready to manage other nodes
+- name: Setup control node
   hosts: localhost
-  gather_facts: false
+  gather_facts: no
+  become: no
   
   roles:
     - control
