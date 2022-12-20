@@ -7,21 +7,13 @@
   roles:
     - wireguard
 
-- name: Setup Redis
-  hosts: redis_nodes
+- name: Setup MariaDB
+  hosts: mariadb_nodes
   become: yes
   gather_facts: false
 
   roles:
-    - role: redis
-    
-- name: Setup Authelia
-  hosts: authelia_nodes
-  become: yes
-  gather_facts: false
-
-  roles:
-    - role: authelia
+    - role: mariadb
 
 - name: Setup Guacamole
   hosts: guacamole_nodes
@@ -30,14 +22,6 @@
 
   roles:
     - role: guacamole
-
-- name: Setup MariaDB
-  hosts: mariadb_nodes
-  become: yes
-  gather_facts: false
-
-  roles:
-    - role: mariadb
 
 - name: Setup Pi-Hole
   hosts: pihole_nodes

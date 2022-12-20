@@ -9,7 +9,7 @@
     container_default_behavior: no_defaults
     detach: yes
     name: "mediawiki"
-    image: "mediawiki"
+    image: "mediawiki:1.38.4"
     state: "started"
     recreate: "yes"
     pull: "yes"

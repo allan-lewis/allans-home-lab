@@ -24,7 +24,7 @@
     published_ports: 
       - "{{ guacamole_port }}:8080/tcp"
     env: 
-      GUACD_HOSTNAME: "{{ ansible_host }}"
+      GUACD_HOSTNAME: "{{ guacd_host }}"
       MYSQL_HOSTNAME: "{{ mysql_host }}"
       MYSQL_DATABASE: "{{ mysql_database }}"
       MYSQL_USER: "{{ mysql_user }}"
