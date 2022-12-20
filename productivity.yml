@@ -1,12 +1,4 @@
 ---
-- name: Setup NextCloud
-  hosts: nextcloud_nodes
-  become: yes
-  gather_facts: false
-
-  roles:
-    - role: nextcloud
-
 - name: Setup Jenkins
   hosts: jenkins_nodes
   become: yes

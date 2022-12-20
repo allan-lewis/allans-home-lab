@@ -1,1 +1,0 @@
-nextcloud_volume: "{{ ahl_docker_volume_root }}/nextcloud"
