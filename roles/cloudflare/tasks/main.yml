@@ -1,6 +1,6 @@
 ---
 - import_role:
-    name: ahl_getent
+    name: getent
 
 - name: Add Cloudflare's GPG key
   ansible.builtin.apt_key:
