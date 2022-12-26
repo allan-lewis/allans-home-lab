@@ -3,24 +3,11 @@
     name: ahl_getent
 
 - import_role: 
-    name: ahl_mount      
-  vars: 
-      mount_items: 
-        - path: "{{ shows_volume }}"
-          src: "{{ nfs_share_shows }}"
-          owner: "{{ ansible_ssh_user }}" 
-          group: "{{ ansible_ssh_user }}" 
-          access: "rw"
-        - path: "{{ movies_volume }}"
-          src: "{{ nfs_share_movies }}"
-          owner: "{{ ansible_ssh_user }}" 
-          group: "{{ ansible_ssh_user }}" 
-          access: "rw"  
-
-- import_role: 
     name: ahl_mkdir
   vars:
     dir_items: 
+      - path: "{{ movies_volume }}"
+      - path: "{{ shows_volume }}"
       - path: "{{ jackett.config }}"
       - path: "{{ radarr.config }}"
       - path: "{{ sonarr.config }}"
