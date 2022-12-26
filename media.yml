@@ -1,12 +1,4 @@
 ---
-- name: Setup Plex
-  hosts: plex_nodes
-  become: yes
-  gather_facts: false
-
-  roles:
-    - role: plex
-
 - name: Setup Tautulli
   hosts: tautulli_nodes
   become: yes

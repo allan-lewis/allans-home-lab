@@ -1,1 +1,0 @@
-plex_config_volume: "{{ ahl_docker_volume_root }}/plex"
