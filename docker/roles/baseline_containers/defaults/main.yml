@@ -1,5 +1,6 @@
+docker_proxy_port: 2375
+portainer_agent_port: 9001
 syncthing_config_volume: "{{ ahl_docker_volume_root }}/syncthing"
-syncthing_nfs_mounts: []
 syncthing_volumes: 
   - "{{ syncthing_config_volume }}:/config"
   - "{{ ahl_docker_volume_root }}:/docker-volumes"

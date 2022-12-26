@@ -1,18 +1,21 @@
 ---
-- import_role: 
-    name: ahl_mkdir
-  vars:
-    dir_items: 
+- name: Create Docker volume(s)
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: directory
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+  with_items:
       - path: "{{ pihole_data_volume }}"
       - path: "{{ pihole_dns_volume }}"
 
-- name: Disabling the default DNS service
+- name: Disable the default DNS service
   ansible.builtin.service:
     name: systemd-resolved
     state: stopped
     enabled: no
 
-- name: Ensuring that resolv.conf has the correct contents
+- name: Update resolv.conf
   ansible.builtin.template:
     src: resolv.conf.j2
     dest: /etc/resolv.conf
@@ -20,7 +23,7 @@
     group: root
     mode: 0644
     
-- name: Run Pi-hole Docker container
+- name: Deploy Pi-hole container
   community.docker.docker_container:
     container_default_behavior: no_defaults
     detach: yes

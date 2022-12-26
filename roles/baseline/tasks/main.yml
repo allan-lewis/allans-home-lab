@@ -14,13 +14,12 @@
     state: present
   register: control_user_data
 
-- import_role:
-    name: ahl_mkdir
-  vars:
-    dir_items:
-      - path: "{{ control_user_data.home }}/.ssh"
-        owner: "{{ ahl_control_user }}"
-        group: "{{ ahl_control_user }}"
+- name: Create a .ssh folder for {{ ahl_control_user }}
+  ansible.builtin.file:
+    path: "{{ control_user_data.home }}/.ssh"
+    state: directory
+    owner: "{{ ahl_control_user }}"
+    group: "{{ ahl_control_user }}"
 
 - name: Create SSH key for {{ ahl_control_user }} user
   community.crypto.openssh_keypair:

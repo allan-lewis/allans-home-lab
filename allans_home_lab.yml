@@ -7,11 +7,8 @@
 - name: Setup Cloudflare network tunneling
   import_playbook: cloudflare.yml
 
-# # RUN DOCKER AND COMMON SERVICES
-# - import_playbook: docker.yml
-
-# # RUN SYSTEM SERVICES
-# - import_playbook: system.yml
+- name: Setup Docker and run containers
+  import_playbook: docker/all.yml
 
 # # RUN HOME AUTOMATION SERVICES
 # - import_playbook: home_automation.yml

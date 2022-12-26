@@ -25,13 +25,12 @@
     name: cloudflared
     state: latest
 
-- import_role:
-    name: ahl_mkdir
-  vars:
-    dir_items:
-      - path: "/etc/cloudflared"
-        owner: "root"
-        group: "root"
+- name: Create the /etc/cloudflared folder
+  ansible.builtin.file:
+    path: "/etc/cloudflared"
+    state: directory
+    owner: "root"
+    group: "root"
 
 - name: Copy certificates
   ansible.builtin.copy:

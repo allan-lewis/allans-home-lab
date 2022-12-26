@@ -1,4 +1,4 @@
-- name: Run guacd Docker container
+- name: Deploy guacd container
   community.docker.docker_container:
     container_default_behavior: no_defaults
     detach: yes
@@ -11,7 +11,7 @@
     published_ports: 
       - "{{ guacd_port }}:4822/tcp"
 
-- name: Run Guacamole Docker container
+- name: Deploy Guacamole container
   community.docker.docker_container:
     container_default_behavior: no_defaults
     detach: yes

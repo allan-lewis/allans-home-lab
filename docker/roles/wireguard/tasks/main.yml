@@ -1,14 +1,15 @@
 ---
 - import_role:
-    name: ahl_getent
+    name: docker_getent
 
-- import_role: 
-    name: ahl_mkdir
-  vars:
-    dir_items: 
-      - path: "{{ wireguard_config_volume }}"
+- name: Create Docker volume(s)
+  ansible.builtin.file:
+    path: "{{ wireguard_config_volume }}"
+    state: directory
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
 
-- name: Run Wireguard Docker container
+- name: Deploy Wireguard container
   community.docker.docker_container:
     container_default_behavior: no_defaults
     detach: yes
