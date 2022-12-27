@@ -1,1 +1,0 @@
-redis_volume: "{{ ahl_docker_volume_root }}/redis"

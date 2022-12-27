@@ -1,6 +1,6 @@
 ---
-- name: Shutdown all managed nodes
-  hosts: managed_nodes
+- name: Shut down a set of nodes
+  hosts: shutdown_nodes
   become: yes
   gather_facts: false
   

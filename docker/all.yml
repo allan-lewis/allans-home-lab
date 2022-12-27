@@ -103,3 +103,27 @@
 
   roles:
     - role: watch_your_lan
+
+- name: Setup Jenkins
+  hosts: jenkins_nodes
+  become: yes
+  gather_facts: false
+
+  roles:
+    - role: jenkins
+
+- name: Setup MediaWiki
+  hosts: mediawiki_nodes
+  become: yes
+  gather_facts: false
+
+  roles:
+    - role: mediawiki
+
+- name: Setup Vaultwarden
+  hosts: vaultwarden_nodes
+  become: yes
+  gather_facts: false
+
+  roles:
+    - role: vaultwarden

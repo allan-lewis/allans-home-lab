@@ -26,17 +26,11 @@
 - name: Setup Docker and run containers
   import_playbook: docker/all.yml
 
-# # RUN OBSERVABILITY SERVICES
-# - import_playbook: observability.yml
-
 # # RUN MEDIA SERVICES
 # - import_playbook: media.yml
 
 # # RUN MEDIA ACQUISITION SERVICES
 # - import_playbook: media_acquisition.yml
-
-# # RUN PRODUCTIVITY SERVICES
-# - import_playbook: productivity.yml
 
 # # SETUP K3S CLUSTER
 # - import_playbook: k3s/all.yml
