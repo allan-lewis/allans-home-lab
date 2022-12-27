@@ -1,8 +1,0 @@
----
-- name: Setup control node
-  hosts: localhost
-  gather_facts: no
-  become: no
-  
-  roles:
-    - control

@@ -1,14 +1,15 @@
 ---
 - import_role:
-    name: ahl_getent
+    name: docker_getent
 
-- import_role:
-    name: ahl_mkdir
-  vars:
-    dir_items:
-      - path: "{{ homeassistant_volume }}"
+- name: Create Docker volume(s)
+  ansible.builtin.file:
+    path: "{{ homeassistant_volume }}"
+    state: directory
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
 
-- name: Run Homeassistant Docker volume
+- name: Deploy Homeassistant container
   community.docker.docker_container:
     container_default_behavior: no_defaults
     detach: yes
@@ -46,7 +47,7 @@
     line: 'http: !include http.yaml'
   register: homeass_conf
 
-- name: Restart Docker to pickup config changes
+- name: Restart to pick up changes
   community.docker.docker_container:
     container_default_behavior: no_defaults
     name: homeassistant

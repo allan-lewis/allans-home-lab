@@ -1,8 +1,0 @@
----
-- name: Apply baseline settings to all nodes
-  hosts: all
-  become: yes
-  gather_facts: yes
-  
-  roles:
-    - baseline

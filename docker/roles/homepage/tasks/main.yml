@@ -1,11 +1,15 @@
-- import_role:
-    name: ahl_mkdir
-  vars:
-    dir_items:
+---
+- name: Create Docker volume(s)
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: directory
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+  with_items:
       - path: "{{ homepage_volume }}"
       - path: "{{ homepage_icons_volume }}"
 
-- name: Setup Homepage
+- name: Deploy Homepage container
   community.docker.docker_container:
     container_default_behavior: no_defaults
     detach: yes

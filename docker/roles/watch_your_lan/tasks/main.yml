@@ -1,11 +1,12 @@
 ---
-- import_role:
-    name: ahl_mkdir
-  vars:
-    dir_items:
-      - path: "{{ wyl_data_volume }}"
+- name: Create Docker volume(s)
+  ansible.builtin.file:
+    path: "{{ wyl_data_volume }}"
+    state: directory
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
 
-- name: Run WatchYourLAN Docker container
+- name: Deploy WatchYourLAN container
   community.docker.docker_container:
     container_default_behavior: no_defaults
     detach: yes

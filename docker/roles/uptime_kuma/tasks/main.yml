@@ -1,11 +1,12 @@
 ---
-- import_role: 
-    name: ahl_mkdir
-  vars:
-    dir_items: 
-      - path: "{{ uptime_kuma_volume }}"
+- name: Create Docker volume(s)
+  ansible.builtin.file:
+    path: "{{ uptime_kuma_volume }}"
+    state: directory
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
 
-- name: Run Uptime Kuma Docker container
+- name: Deploy Uptime Kuma container
   community.docker.docker_container:
     container_default_behavior: no_defaults
     detach: yes

@@ -1,5 +1,5 @@
 ---
-- name: Setup Docker runtime and run baseline containers 
+- name: Setup Docker runtime and baseline containers 
   hosts: docker_nodes
   become: yes
   gather_facts: true
@@ -39,3 +39,67 @@
 
   roles:
     - role: guacamole
+
+- name: Setup Homeassistant   
+  hosts: homeassistant_nodes
+  become: yes
+  gather_facts: false
+
+  roles:
+    - role: homeassistant
+
+- name: Setup Homebridge   
+  hosts: homebridge_nodes
+  become: yes
+  gather_facts: false
+
+  roles:
+    - role: homebridge
+
+- name: Setup Homepage
+  hosts: homepage_nodes
+  become: yes
+  gather_facts: false
+
+  roles:
+    - role: homepage
+
+- name: Setup Prometheus
+  hosts: prometheus_nodes
+  become: yes
+  gather_facts: false
+
+  roles:    
+    - role: prometheus
+
+- name: Setup Grafana
+  hosts: grafana_nodes
+  become: yes
+  gather_facts: false
+
+  roles:
+    - role: grafana
+
+- name: Setup Uptime Kuma
+  hosts: uptime_kuma_nodes
+  become: yes
+  gather_facts: false
+
+  roles:
+    - role: uptime_kuma
+
+- name: Setup Speedtest Tracker
+  hosts: speedtest_nodes
+  become: yes
+  gather_facts: false
+
+  roles:
+    - role: speedtest
+
+- name: Setup WatchYourLAN
+  hosts: wyl_nodes
+  become: yes
+  gather_facts: false
+
+  roles:
+    - role: watch_your_lan

@@ -1,11 +1,14 @@
 ---
 - import_role:
-    name: ahl_getent
+    name: docker_getent
 
-- import_role:
-    name: ahl_mkdir
-  vars:
-    dir_items:
+- name: Create Docker volume(s)
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: directory
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+  with_items:
       - path: "{{ prometheus_config_volume }}"
       - path: "{{ prometheus_data_volume }}"
 
@@ -16,7 +19,7 @@
     owner: "{{ ahl_user_uid }}"
     group: "{{ ahl_user_gid }}"
 
-- name: Run Prometheus Docker container
+- name: Deploy Prometheus container
   community.docker.docker_container:
     container_default_behavior: no_defaults
     detach: yes

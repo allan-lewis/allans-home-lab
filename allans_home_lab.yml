@@ -1,17 +1,30 @@
+---
 - name: Setup control node
-  import_playbook: control.yml
+  hosts: localhost
+  gather_facts: no
+  become: no
+  
+  roles:
+    - control
 
 - name: Apply baseline settings to all nodes
-  import_playbook: baseline.yml
+  hosts: all
+  become: yes
+  gather_facts: yes
+  
+  roles:
+    - baseline
 
-- name: Setup Cloudflare network tunneling
-  import_playbook: cloudflare.yml
+- name: Setup Cloudflare DNS tunneling
+  hosts: cloudflare_nodes
+  become: yes
+  gather_facts: yes
+
+  roles:
+    - role: cloudflare
 
 - name: Setup Docker and run containers
   import_playbook: docker/all.yml
-
-# # RUN HOME AUTOMATION SERVICES
-# - import_playbook: home_automation.yml
 
 # # RUN OBSERVABILITY SERVICES
 # - import_playbook: observability.yml
@@ -24,14 +37,6 @@
 
 # # RUN PRODUCTIVITY SERVICES
 # - import_playbook: productivity.yml
-
-# # RUN HOMEPAGE
-# - hosts: homepage_nodes
-#   become: yes
-#   gather_facts: false
-
-#   roles:
-#     - role: homepage
 
 # # SETUP K3S CLUSTER
 # - import_playbook: k3s/all.yml
