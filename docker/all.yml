@@ -127,3 +127,11 @@
 
   roles:
     - role: vaultwarden
+
+- name: Setup Tautulli
+  hosts: tautulli_nodes
+  become: yes
+  gather_facts: false
+
+  roles:    
+    - role: tautulli

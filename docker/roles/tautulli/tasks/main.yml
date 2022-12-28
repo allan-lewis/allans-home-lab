@@ -1,13 +1,14 @@
 - import_role:
-    name: ahl_getent
+    name: docker_getent
 
-- import_role:
-    name: ahl_mkdir
-  vars:
-    dir_items:
-      - path: "{{ tautulli_config_volume }}"
+- name: Create Docker volume(s)
+  ansible.builtin.file:
+    path: "{{ tautulli_config_volume }}"
+    state: directory
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
 
-- name: Run Tautulli Docker container
+- name: Deploy Tautulli container
   community.docker.docker_container:
     container_default_behavior: no_defaults
     detach: yes
