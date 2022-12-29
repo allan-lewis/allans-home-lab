@@ -1,3 +1,4 @@
+---
 - name: Install required dependencies
   ansible.builtin.apt:
     pkg:
@@ -7,15 +8,14 @@
     state: latest
     update_cache: true
 
-- import_role:
-    name: ahl_mkdir
-  vars:
-    dir_items:
-      - path: "/etc/openvpn"
-        owner: "root"
-        group: "root"
+- name: Create the /etc/openvpn folder
+  ansible.builtin.file:
+    path: "/etc/openvpn"
+    state: directory
+    owner: "root"
+    group: "root"
 
-- name: Copy OpenVPN config
+- name: Copy OpenVPN config(s)
   ansible.builtin.copy:
     src: "{{ item.src }}"
     dest: "/etc/openvpn/{{ item.dest }}"
@@ -67,7 +67,7 @@
     group: "root"
     mode: 0744
 
-- name: Enable VPN gateway
+- name: Enable VPN service
   ansible.builtin.systemd:
     name: "rc-local"
     state: started

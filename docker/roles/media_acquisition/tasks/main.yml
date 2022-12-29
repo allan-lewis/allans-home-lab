@@ -1,11 +1,14 @@
 ---
 - import_role: 
-    name: ahl_getent
+    name: docker_getent
 
-- import_role: 
-    name: ahl_mkdir
-  vars:
-    dir_items: 
+- name: Create Docker volume(s)
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: directory
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+  with_items:
       - path: "{{ movies_volume }}"
       - path: "{{ shows_volume }}"
       - path: "{{ jackett.config }}"
@@ -16,18 +19,7 @@
       - path: "{{ torrent_downloads }}"
       - path: "{{ torrent_watch }}"
 
-- name: Update netplan
-  ansible.builtin.template:
-    src: netplan.j2
-    dest: "{{ netplan_dest }}"
-    owner: "root"
-    group: "root"
-    mode: 0644
-
-- name: Apply netplan
-  ansible.builtin.command: sudo netplan apply
-
-- name: Run Jackett Docker container
+- name: Deploy Jackett container
   community.docker.docker_container:
     container_default_behavior: no_defaults
     detach: yes
@@ -47,7 +39,7 @@
       PUID: "{{ ahl_user_uid }}"
       PGID: "{{ ahl_user_gid }}"
 
-- name: Run Sonarr Docker container
+- name: Deploy Sonarr container
   community.docker.docker_container:
     container_default_behavior: no_defaults
     detach: yes
@@ -68,7 +60,7 @@
       PUID: "{{ ahl_user_uid }}"
       PGID: "{{ ahl_user_gid }}"
 
-- name: Run Radarr Docker container
+- name: Deploy Radarr container
   community.docker.docker_container:
     container_default_behavior: no_defaults
     detach: yes
@@ -89,7 +81,7 @@
       PUID: "{{ ahl_user_uid }}"
       PGID: "{{ ahl_user_gid }}"
 
-- name: Run Transmission Docker container
+- name: Deploy Transmission container
   community.docker.docker_container:
     container_default_behavior: no_defaults
     detach: yes

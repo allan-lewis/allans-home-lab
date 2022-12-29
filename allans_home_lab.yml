@@ -23,14 +23,24 @@
   roles:
     - role: cloudflare
 
+- name: Setup OpenVPN server
+  hosts: openvpn_nodes
+  become: yes
+  gather_facts: false
+
+  roles:  
+    - role: openvpn  
+
+- name: Update netplan
+  hosts: netplan_nodes
+  become: yes
+  gather_facts: false
+
+  roles:  
+    - role: netplan 
+
 - name: Setup Docker and run containers
   import_playbook: docker/all.yml
-
-# # RUN MEDIA SERVICES
-# - import_playbook: media.yml
-
-# # RUN MEDIA ACQUISITION SERVICES
-# - import_playbook: media_acquisition.yml
 
 # # SETUP K3S CLUSTER
 # - import_playbook: k3s/all.yml
