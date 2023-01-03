@@ -2,5 +2,6 @@ service:
   type: ClusterIP
 
 persistence:
-  size: 8Gi
+  existingClaim: portainer
+  size: 4Gi
   storageClass: {{ k3s_storage_class }}
