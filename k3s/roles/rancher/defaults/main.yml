@@ -1,0 +1,5 @@
+service_name: rancher
+namespace_name: cattle-system
+routes:
+  - host: rancher.local.allanshomelab.com
+    service_port: 80

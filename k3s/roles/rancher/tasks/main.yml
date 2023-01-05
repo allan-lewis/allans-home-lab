@@ -12,6 +12,11 @@
     kind: Namespace
     state: present 
 
+- name: Write values file
+  ansible.builtin.template:
+    src: rancher-values.yml.j2
+    dest: /tmp/rancher-values.yml
+
 - name: Deploy Rancher chart
   kubernetes.core.helm:
     chart_ref: rancher-stable/rancher
@@ -20,6 +25,15 @@
     update_repo_cache: true
     create_namespace: true
     release_state: "{{ ahl_k3s_state }}"
-    release_values:
-      hostname: "{{ rancher_host }}"
-      bootstrapPassword: "{{ rancher_password }}"
+    values_files:
+      - /tmp/rancher-values.yml
+
+- name: Apply middleware manifest(s)
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: traefik_ingress_headers.yml.j2
+
+- name: Apply ingress manifest
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: traefik_ingress_route.yml.j2
