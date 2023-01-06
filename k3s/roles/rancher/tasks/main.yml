@@ -20,6 +20,7 @@
 - name: Deploy Rancher chart
   kubernetes.core.helm:
     chart_ref: rancher-stable/rancher
+    chart_version: "{{ k3s_rancher.rancher_version }}"
     namespace: cattle-system
     name: rancher
     update_repo_cache: true
