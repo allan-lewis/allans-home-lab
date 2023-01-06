@@ -20,6 +20,13 @@ ports:
   websecure:
     tls:
       enabled: true
+{% for port in extra_ports | default([]) %}
+  {{ port.name }}:
+    port: {{ port.port }}
+    expose: {{ port.expose }}
+    exposedPort: {{ port.exposedPort }}
+    protocol: {{ port.protocol }}
+{% endfor %}
       
 ingressRoute:
   dashboard:

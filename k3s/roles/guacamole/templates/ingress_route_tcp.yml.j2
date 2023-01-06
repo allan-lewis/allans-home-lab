@@ -1,0 +1,19 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRouteTCP
+metadata:
+  name: {{ service_name }}
+  namespace: {{ namespace_name }}
+  annotations: 
+    kubernetes.io/ingress.class: traefik-external
+
+spec:
+  entryPoints:
+    - {{ service_name }}
+
+  routes:
+  - match: HostSNI(`*`)
+    services:
+    - name: {{ service_name }}
+      namespace: {{ namespace_name }}
+      port: {{  service_port }}

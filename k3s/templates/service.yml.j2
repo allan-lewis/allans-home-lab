@@ -9,5 +9,5 @@ spec:
     app: {{ app_name | default(service_name) }}
   ports:
   - name: http
-    targetPort: {{ service_port }}
+    targetPort: {{ target_port | default(service_port) }}
     port: {{ service_port }}

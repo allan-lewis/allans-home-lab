@@ -32,14 +32,6 @@
   roles:
     - wireguard
 
-- name: Setup Guacamole
-  hosts: guacamole_nodes
-  become: yes
-  gather_facts: false
-
-  roles:
-    - role: guacamole
-
 - name: Setup Homeassistant   
   hosts: homeassistant_nodes
   become: yes

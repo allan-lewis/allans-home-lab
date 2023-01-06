@@ -8,6 +8,8 @@
   ansible.builtin.template:
     src: values.yml.j2
     dest: /tmp/traefik.values.yml
+  vars:
+    extra_ports: "{{ traefik_extra_ports }}"
 
 - name: Apply Traefik chart
   kubernetes.core.helm:

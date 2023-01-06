@@ -1,0 +1,77 @@
+---
+- name: Apply namespace manifest
+  kubernetes.core.k8s:
+    state: present
+    template: namespace.yml.j2
+
+- name: Apply guacamole deployment manifest
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: deployment.yml.j2
+  vars:
+    - service_name: guacamole
+      container_name: guacamole
+      container_image: guacamole/guacamole:latest
+      service_replicas: 1
+      environment_vars:
+        - name: GUACD_HOSTNAME
+          value: "{{ guacd_host }}"
+        - name: MYSQL_HOSTNAME
+          value: "{{ mysql_host }}"
+        - name: MYSQL_DATABASE
+          value: "{{ mysql_database }}"
+        - name: MYSQL_USER
+          value: "{{ mysql_user }}"
+        - name: MYSQL_PASSWORD
+          value: "{{ mysql_password }}"
+
+- name: Apply guacd deployment manifest
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: deployment.yml.j2
+  vars:
+    - service_name: guacd
+      container_name: guacd
+      container_image: guacamole/guacd:latest
+      service_replicas: 1
+
+- name: Apply guacamole service manifest
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: service.yml.j2
+  vars:
+    - service_name: guacamole
+      service_port: "{{ guacamole_port }}"
+      target_port: 8080
+
+- name: Apply guacd service manifest
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: service.yml.j2
+  vars:
+    - service_name: guacd
+      service_port: "{{ guacd_port }}"
+      target_port: 4822
+
+- name: Apply middleware manifest(s)
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: traefik_ingress_headers.yml.j2
+
+- name: Apply guacamole ingress manifest
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: traefik_ingress_route.yml.j2
+  vars:
+    service_name: guacamole
+    service_port: "{{ guacamole_port }}"
+    routes:
+      - host: guacamole.allanshomelab.com
+
+- name: Apply guacd ingress manifest
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: ingress_route_tcp.yml.j2
+  vars:
+    service_name: guacd
+    service_port: "{{ guacd_port }}"
