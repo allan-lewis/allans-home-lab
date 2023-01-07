@@ -31,7 +31,8 @@
   ansible.posix.authorized_key:
     user: "{{ ahl_control_user }}"
     state: present
-    key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+    key: "{{ lookup('file', '{{ item.path }}') }}"
+  with_items: "{{ authorized_ssh_keys }}"
 
 - name: Add {{ ahl_control_user }} user to the sudoers file
   ansible.builtin.lineinfile:

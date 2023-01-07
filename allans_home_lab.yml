@@ -42,5 +42,5 @@
 - name: Setup Docker and run containers
   import_playbook: docker/all.yml
 
-# # SETUP K3S CLUSTER
-# - import_playbook: k3s/all.yml
+- name: Setup Kubernetes cluster and services
+  import_playbook: k3s/all.yml
