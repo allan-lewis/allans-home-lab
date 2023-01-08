@@ -120,14 +120,6 @@
   roles:
     - role: vaultwarden
 
-- name: Setup Tautulli
-  hosts: tautulli_nodes
-  become: yes
-  gather_facts: false
-
-  roles:    
-    - role: tautulli
-
 - name: Setup media acquisition
   hosts: media_acquisition_nodes
   become: yes

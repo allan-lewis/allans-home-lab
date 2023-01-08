@@ -28,3 +28,15 @@ spec:
         - name: {{ env.name }}
           value: {{ env.value }}
 {% endfor %}
+        volumeMounts:
+{% for mount in volume_mounts | default([]) %}
+        - name: {{  mount.name }}
+          mountPath: {{ mount.path }}  
+{% endfor %}
+      volumes:
+{% for volume in volumes | default([]) %}
+      - name: {{ volume.name }}
+        persistentVolumeClaim:
+          claimName: {{ volume.claim }}
+{% endfor %}
+ 
