@@ -19,3 +19,5 @@
 - import_playbook: guacamole.yml
 
 - import_playbook: tautulli.yml
+
+- import_playbook: speedtest-tracker.yml

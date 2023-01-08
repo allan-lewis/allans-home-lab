@@ -1,0 +1,54 @@
+---
+- name: Apply namespace manifest
+  kubernetes.core.k8s:
+    state: present
+    template: namespace.yml.j2
+
+- name: Apply deployment manifest
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: deployment.yml.j2
+  vars:
+    - service_name: speedtest-tracker
+      container_name: speedtest-tracker
+      container_image: henrywhitaker3/speedtest-tracker:latest
+      service_replicas: 1
+      environment_vars:
+        - name: TZ
+          value: "America/New_York"
+        - name: PUID
+          value: "\"{{ k3s_apps_uid }}\""
+        - name: PGID
+          value: "\"{{ k3s_apps_gid }}\""
+        - name: OOKLA_EULA_GDPR
+          value: "\"true\""
+      volume_mounts:
+        - name: speedtest-tracker-config
+          path: /config  
+      volumes:
+        - name: speedtest-tracker-config
+          claim: container-docker-speedtest-tracker
+
+- name: Apply service manifest
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: service.yml.j2
+  vars:
+    - service_name: speedtest-tracker
+      service_port: "{{ k3s_speedtest.tracker_port }}"
+      target_port: 80
+
+- name: Apply middleware manifest(s)
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: traefik_ingress_headers.yml.j2
+
+- name: Apply ingress manifest
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: traefik_ingress_route.yml.j2
+  vars:
+    service_name: speedtest-tracker
+    service_port: "{{ k3s_speedtest.tracker_port }}"
+    routes:
+      - host: speedtest.local.allanshomelab.com

@@ -80,14 +80,6 @@
   roles:
     - role: uptime_kuma
 
-- name: Setup Speedtest Tracker
-  hosts: speedtest_nodes
-  become: yes
-  gather_facts: false
-
-  roles:
-    - role: speedtest
-
 - name: Setup WatchYourLAN
   hosts: wyl_nodes
   become: yes
