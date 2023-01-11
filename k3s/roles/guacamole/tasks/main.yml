@@ -69,11 +69,3 @@
     service_port: "{{ k3s_guacamole.guacamole_port }}"
     routes:
       - host: guacamole.allanshomelab.com
-
-- name: Apply guacd ingress manifest
-  kubernetes.core.k8s:
-    state: "{{ ahl_k3s_state }}"
-    template: ingress_route_tcp.yml.j2
-  vars:
-    service_name: guacd
-    service_port: "{{ k3s_guacamole.guacd_port }}"
