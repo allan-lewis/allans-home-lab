@@ -1,0 +1,40 @@
+---
+- name: Create namespace
+  kubernetes.core.k8s:
+    state: present
+    template: namespace.yml.j2
+
+- name: Deploy Homepage container
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: deployment.yml.j2
+  vars:
+    - service_name: "homepage"
+      container_name: "homepage"
+      container_image: ghcr.io/benphelps/homepage:latest
+      service_replicas: 1
+      volume_mounts:
+        - name: homepage-config-volume
+          path: /app/config 
+        # - name: homepage-icons-volume
+        #   path: /app/public/icons 
+      volumes:
+        - name: homepage-config-volume
+          claim: container-docker-homepage
+        # - name: homepage-icons-volume
+        #   claim: container-docker-homepage
+
+- name: Apply service manifest
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: service.yml.j2
+
+- name: Apply middleware manifest(s)
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: traefik_ingress_headers.yml.j2
+
+- name: Apply ingress manifest
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: traefik_ingress_route.yml.j2

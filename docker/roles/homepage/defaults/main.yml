@@ -1,2 +1,0 @@
-homepage_volume: "{{ ahl_docker_volume_root }}/homepage"
-homepage_icons_volume: "{{ ahl_docker_volume_root }}/homepage/icons"

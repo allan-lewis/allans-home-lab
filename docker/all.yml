@@ -48,14 +48,6 @@
   roles:
     - role: homebridge
 
-- name: Setup Homepage
-  hosts: homepage_nodes
-  become: yes
-  gather_facts: false
-
-  roles:
-    - role: homepage
-
 - name: Setup Uptime Kuma
   hosts: uptime_kuma_nodes
   become: yes
