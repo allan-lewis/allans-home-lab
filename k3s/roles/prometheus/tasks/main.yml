@@ -10,11 +10,44 @@
     state: present
     template: namespace.yml.j2
 
+- name: Write values file
+  ansible.builtin.template:
+    src: prometheus.values.yml.j2
+    dest: /tmp/prometheus.values.yml
+
 - name: Install Prometheus stack
   kubernetes.core.helm:
     chart_ref: prometheus-community/kube-prometheus-stack
+    chart_version: 42.3.0
     namespace: "{{ namespace_name }}"
     name: prometheus
     update_repo_cache: true
     create_namespace: true
     release_state: "{{ ahl_k3s_state }}"
+    values_files:
+      - /tmp/prometheus.values.yml
+
+- name: Apply middleware manifest(s)
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: traefik_ingress_headers.yml.j2
+
+- name: Create Prometheus ingress
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: traefik_ingress_route.yml.j2
+  vars:
+    service_name: prometheus-kube-prometheus-prometheus
+    service_port: 9090
+    routes:
+      - host: prometheus.local.allanshomelab.com
+
+- name: Create Grafana ingress
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: traefik_ingress_route.yml.j2
+  vars:
+    service_name: prometheus-grafana
+    service_port: 80
+    routes:
+      - host: grafana.allanshomelab.com

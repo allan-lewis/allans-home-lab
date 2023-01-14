@@ -1,0 +1,15 @@
+# prometheus:    
+#     prometheusSpec:
+#       storageSpec:
+#         volumeClaimTemplate:
+#           spec:
+#             storageClassName: longhorn
+#             resources:
+#               requests:
+#                 storage: 64Gi
+
+grafana:
+  persistence:
+    enabled: true
+    type: pvc
+    existingClaim: grafana

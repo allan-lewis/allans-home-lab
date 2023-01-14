@@ -3,7 +3,7 @@ container_image: nginx:latest
 namespace_name: nginx
 service_name: nginx
 service_port: 80
-service_replicas: 1
+service_replicas: 3
 routes: 
   - host: 129monroe.com
   - host: www.129monroe.com

@@ -56,22 +56,6 @@
   roles:
     - role: homepage
 
-- name: Setup Prometheus
-  hosts: prometheus_nodes
-  become: yes
-  gather_facts: false
-
-  roles:    
-    - role: prometheus
-
-- name: Setup Grafana
-  hosts: grafana_nodes
-  become: yes
-  gather_facts: false
-
-  roles:
-    - role: grafana
-
 - name: Setup Uptime Kuma
   hosts: uptime_kuma_nodes
   become: yes
