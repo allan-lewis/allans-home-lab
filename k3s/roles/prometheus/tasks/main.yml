@@ -51,3 +51,13 @@
     service_port: 80
     routes:
       - host: grafana.allanshomelab.com
+
+- name: Create Alertmanager ingress
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: traefik_ingress_route.yml.j2
+  vars:
+    service_name: prometheus-kube-prometheus-alertmanager
+    service_port: 9093
+    routes:
+      - host: alerts.local.allanshomelab.com
