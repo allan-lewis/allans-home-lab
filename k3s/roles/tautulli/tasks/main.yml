@@ -36,11 +36,6 @@
       service_port: "{{ k3s_tautulli.tautulli_port }}"
       target_port: 8181
 
-- name: Apply middleware manifest(s)
-  kubernetes.core.k8s:
-    state: "{{ ahl_k3s_state }}"
-    template: traefik_ingress_headers.yml.j2
-
 - name: Apply ingress manifest
   kubernetes.core.k8s:
     state: "{{ ahl_k3s_state }}"

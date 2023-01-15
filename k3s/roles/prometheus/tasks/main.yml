@@ -27,11 +27,6 @@
     values_files:
       - /tmp/prometheus.values.yml
 
-- name: Apply middleware manifest(s)
-  kubernetes.core.k8s:
-    state: "{{ ahl_k3s_state }}"
-    template: traefik_ingress_headers.yml.j2
-
 - name: Create Prometheus ingress
   kubernetes.core.k8s:
     state: "{{ ahl_k3s_state }}"

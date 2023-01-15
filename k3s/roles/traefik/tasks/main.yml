@@ -42,15 +42,15 @@
     state: "{{ ahl_k3s_state }}"
     src: /tmp/secret-dashboard.yml
 
-- name: Write basic auth middleware file
-  ansible.builtin.template:
-    src: middleware.yml.j2
-    dest: /tmp/middleware.yml
+# - name: Write basic auth middleware file
+#   ansible.builtin.template:
+#     src: middleware.yml.j2
+#     dest: /tmp/middleware.yml
 
-- name: Apply basic auth middleware file
-  kubernetes.core.k8s:
-    state: "{{ ahl_k3s_state }}"
-    src: /tmp/middleware.yml
+# - name: Apply basic auth middleware file
+#   kubernetes.core.k8s:
+#     state: "{{ ahl_k3s_state }}"
+#     src: /tmp/middleware.yml
 
 - name: Write ingress route file
   ansible.builtin.template:

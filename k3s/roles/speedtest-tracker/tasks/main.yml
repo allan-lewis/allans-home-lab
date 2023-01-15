@@ -38,11 +38,6 @@
       service_port: "{{ k3s_speedtest.tracker_port }}"
       target_port: 80
 
-- name: Apply middleware manifest(s)
-  kubernetes.core.k8s:
-    state: "{{ ahl_k3s_state }}"
-    template: traefik_ingress_headers.yml.j2
-
 - name: Apply ingress manifest
   kubernetes.core.k8s:
     state: "{{ ahl_k3s_state }}"

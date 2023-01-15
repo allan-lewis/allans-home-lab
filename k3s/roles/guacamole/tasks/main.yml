@@ -55,11 +55,6 @@
       service_port: "{{ k3s_guacamole.guacd_port }}"
       target_port: 4822
 
-- name: Apply middleware manifest(s)
-  kubernetes.core.k8s:
-    state: "{{ ahl_k3s_state }}"
-    template: traefik_ingress_headers.yml.j2
-
 - name: Apply guacamole ingress manifest
   kubernetes.core.k8s:
     state: "{{ ahl_k3s_state }}"
