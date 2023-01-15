@@ -2,5 +2,4 @@ namespace_name: homepage
 service_name: homepage
 service_port: "{{ k3s_homepage.http_port }}"
 target_port: 3000
-routes:
-  - host: homepage.local.allanshomelab.com
+routes: "{{ k3s_homepage.routes }}"

@@ -15,14 +15,10 @@
       service_replicas: 1
       volume_mounts:
         - name: homepage-config-volume
-          path: /app/config 
-        # - name: homepage-icons-volume
-        #   path: /app/public/icons 
+          path: /app/config  
       volumes:
         - name: homepage-config-volume
           claim: container-docker-homepage
-        # - name: homepage-icons-volume
-        #   claim: container-docker-homepage
 
 - name: Apply service manifest
   kubernetes.core.k8s:
