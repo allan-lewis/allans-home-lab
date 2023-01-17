@@ -1,5 +1,5 @@
 container_name: nogeeksbrewing
-container_image: nogeeksbrewing/site:latest
+container_image: allanelewis/ngb-site:latest
 namespace_name: no-geeks-brewing
 service_name: no-geeks-brewing
 service_port: 80

@@ -10,6 +10,11 @@
     state: present
     template: namespace.yml.j2
 
+- name: Create Dockerhub credentials secret
+  kubernetes.core.k8s:
+    state: present
+    template: dockerhub_secret.yml.j2
+
 - name: Write values file
   ansible.builtin.template:
     src: jenkins.values.yml.j2
