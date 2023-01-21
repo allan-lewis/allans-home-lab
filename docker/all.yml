@@ -72,14 +72,6 @@
   roles:
     - role: mediawiki
 
-- name: Setup Vaultwarden
-  hosts: vaultwarden_nodes
-  become: yes
-  gather_facts: false
-
-  roles:
-    - role: vaultwarden
-
 - name: Setup media acquisition
   hosts: media_acquisition_nodes
   become: yes

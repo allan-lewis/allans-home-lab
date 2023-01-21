@@ -1,0 +1,34 @@
+---
+- name: Create Vaultwarden namespace
+  kubernetes.core.k8s:
+    state: present
+    template: namespace.yml.j2
+
+- name: Deploy Vaultwarden container
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: deployment.yml.j2
+  vars:
+    - service_name: vaultwarden
+      container_name: vaultwarden
+      container_image: vaultwarden/server
+      service_replicas: 1
+      environment_vars:
+        - name: ADMIN_TOKEN
+          value: "{{ k3s_vaultwarden.admin_token }}"
+      volume_mounts:
+        - name: vaultwarden-data
+          path: /data  
+      volumes:
+        - name: vaultwarden-data
+          claim: vaultwarden
+
+- name: Create the Vaultwarden service
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: service.yml.j2
+
+- name: Create an ingress for Vaultwarden
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: traefik_ingress_route.yml.j2

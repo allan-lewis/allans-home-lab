@@ -27,3 +27,5 @@
 - import_playbook: prometheus.yml
 
 - import_playbook: homepage.yml
+
+- import_playbook: vaultwarden.yml
