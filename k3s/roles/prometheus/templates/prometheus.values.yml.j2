@@ -1,15 +1,26 @@
-# prometheus:    
-#     prometheusSpec:
-#       storageSpec:
-#         volumeClaimTemplate:
-#           spec:
-#             storageClassName: longhorn
-#             resources:
-#               requests:
-#                 storage: 64Gi
+prometheus:    
+    prometheusSpec:
+      storageSpec:
+        volumeClaimTemplate:
+          spec:
+            storageClassName: longhorn
+            resources:
+              requests:
+                storage: 128Gi
 
 grafana:
   persistence:
     enabled: true
     type: pvc
     existingClaim: grafana
+
+alertmanager:
+  alertmanagerSpec:
+    storage: 
+      volumeClaimTemplate:
+        spec:
+          storageClassName: longhorn
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 4Gi
