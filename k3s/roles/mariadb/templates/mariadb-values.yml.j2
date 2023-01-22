@@ -1,0 +1,9 @@
+auth:
+  rootPassword: {{ k3s_mariadb.root_password }}
+
+primary:
+  service:
+    type: LoadBalancer
+    loadBalancerIP: 192.168.86.71
+  persistence:
+    existingClaim: mariadb

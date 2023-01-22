@@ -10,9 +10,11 @@
 
 - import_playbook: proxy_external.yml
 
-- import_playbook: guacamole.yml
-
 - import_playbook: longhorn.yml
+
+- import_playbook: mariadb.yml
+
+- import_playbook: guacamole.yml
 
 - import_playbook: portainer.yml
 
