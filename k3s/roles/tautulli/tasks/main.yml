@@ -44,4 +44,4 @@
     service_name: tautulli
     service_port: "{{ k3s_tautulli.tautulli_port }}"
     routes:
-      - host: tautulli.local.allanshomelab.com
+      - host: "{{ k3s_tautulli.host }}"

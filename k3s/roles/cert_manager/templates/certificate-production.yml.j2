@@ -9,7 +9,5 @@ spec:
   issuerRef:
     name: letsencrypt-production
     kind: ClusterIssuer
-  commonName: "*.local.allanshomelab.com"
-  dnsNames:
-  - "local.allanshomelab.com"
-  - "*.local.allanshomelab.com"
+  commonName: "{{ k3s_certmanager.common_name }}"
+  dnsNames: "{{ k3s_certmanager.dns_names }}"

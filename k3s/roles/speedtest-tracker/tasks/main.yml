@@ -46,4 +46,4 @@
     service_name: speedtest-tracker
     service_port: "{{ k3s_speedtest.tracker_port }}"
     routes:
-      - host: speedtest.local.allanshomelab.com
+      - host: "{{ k3s_speedtest.host }}"

@@ -4,8 +4,4 @@ namespace_name: nginx
 service_name: nginx
 service_port: 80
 service_replicas: 3
-routes: 
-  - host: 129monroe.com
-  - host: www.129monroe.com
-  - host: allanshomelab.com
-  - host: www.allanshomelab.com
+routes: "{{ k3s_nginx.routes }}"

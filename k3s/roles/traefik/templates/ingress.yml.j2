@@ -9,7 +9,7 @@ spec:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`traefik.local.allanshomelab.com`)
+    - match: Host(`{{ k3s_traefik.dashboard_host }}`)
       kind: Rule
       services:
         - name: api@internal

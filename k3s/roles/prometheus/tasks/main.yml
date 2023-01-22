@@ -35,7 +35,7 @@
     service_name: prometheus-kube-prometheus-prometheus
     service_port: 9090
     routes:
-      - host: prometheus.local.allanshomelab.com
+      - host: "k3s_prometheus.prometheus_host"
 
 - name: Create Grafana ingress
   kubernetes.core.k8s:
@@ -45,7 +45,7 @@
     service_name: prometheus-grafana
     service_port: 80
     routes:
-      - host: grafana.allanshomelab.com
+      - host: "{{ k3s_prometheus.grafana_host }}"
 
 - name: Create Alertmanager ingress
   kubernetes.core.k8s:
@@ -55,4 +55,4 @@
     service_name: prometheus-kube-prometheus-alertmanager
     service_port: 9093
     routes:
-      - host: alerts.local.allanshomelab.com
+      - host: "{{ k3s_prometheus.alertmanager_host }}"

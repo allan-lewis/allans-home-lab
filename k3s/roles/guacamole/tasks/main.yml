@@ -63,4 +63,4 @@
     service_name: guacamole
     service_port: "{{ k3s_guacamole.guacamole_port }}"
     routes:
-      - host: guacamole.allanshomelab.com
+      - host: "{{ k3s_guacamole.guacamole_host }}"
