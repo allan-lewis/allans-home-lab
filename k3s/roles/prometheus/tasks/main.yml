@@ -35,7 +35,7 @@
     service_name: prometheus-kube-prometheus-prometheus
     service_port: 9090
     routes:
-      - host: "k3s_prometheus.prometheus_host"
+      - host: "{{ k3s_prometheus.prometheus_host }}"
 
 - name: Create Grafana ingress
   kubernetes.core.k8s:

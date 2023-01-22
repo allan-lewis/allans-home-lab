@@ -1,0 +1,11 @@
+---
+- name: Setup control node
+  hosts: localhost
+  gather_facts: no
+  become: no
+  
+  roles:
+    - control
+
+- name: Setup k3s cluster and deploy services
+  import_playbook: k3s/all.yml

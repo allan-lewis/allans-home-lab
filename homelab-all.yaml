@@ -38,9 +38,3 @@
 
   roles:  
     - role: netplan 
-
-- name: Setup Docker and run containers
-  import_playbook: docker/all.yml
-
-# - name: Setup Kubernetes cluster and services
-#   import_playbook: k3s/all.yml

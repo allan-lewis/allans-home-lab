@@ -1,0 +1,11 @@
+---
+- name: Setup control node
+  hosts: localhost
+  gather_facts: no
+  become: no
+  
+  roles:
+    - control
+
+- name: Setup Docker and run containers
+  import_playbook: docker/all.yml
