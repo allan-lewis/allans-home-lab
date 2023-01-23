@@ -1,0 +1,20 @@
+mediawikiUser: {{ k3s_mediawiki.user }}
+mediawikiPassword: {{ k3s_mediawiki.password }}
+allowEmptyPassword: no
+mediawikiHost: {{ k3s_mediawiki.host }}
+mediawikiName: "{{ k3s_mediawiki.name }}"
+
+service:
+  type: ClusterIP
+
+externalDatabase:
+    host: {{ k3s_mediawiki.mariadb_host }}
+    user: {{ k3s_mediawiki.mariadb_user }}
+    password: {{ k3s_mediawiki.mariadb_password }}
+    database: {{ k3s_mediawiki.mariadb_database }}
+
+mariadb:
+  enabled: false
+
+persistence:
+  existingClaim: mediawiki

@@ -16,14 +16,6 @@
   roles:
     - role: pihole
 
-- name: Setup MariaDB
-  hosts: mariadb_nodes
-  become: yes
-  gather_facts: false
-
-  roles:
-    - role: mariadb
-
 - name: Setup WireGuard
   hosts: wireguard_nodes
   become: yes
@@ -63,14 +55,6 @@
 
   roles:
     - role: watch_your_lan
-
-- name: Setup MediaWiki
-  hosts: mediawiki_nodes
-  become: yes
-  gather_facts: false
-
-  roles:
-    - role: mediawiki
 
 - name: Setup media acquisition
   hosts: media_acquisition_nodes
