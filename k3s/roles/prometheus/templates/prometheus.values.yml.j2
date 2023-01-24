@@ -8,6 +8,20 @@ prometheus:
               requests:
                 storage: 128Gi
 
+      additionalScrapeConfigs:
+        - job_name: 'node-exporter'
+          static_configs:
+            - targets:
+{% for node in groups['docker_nodes'] %}
+              - '{{hostvars[node]['ansible_host']}}:{{ prometheus_node_exporter_port }}'
+{% endfor %}
+        - job_name: 'cadvisor'
+          static_configs:
+            - targets:
+{% for node in groups['docker_nodes'] %}
+              - '{{hostvars[node]['ansible_host']}}:{{ cadvisor_port }}'
+{% endfor %}
+
 grafana:
   persistence:
     enabled: true
