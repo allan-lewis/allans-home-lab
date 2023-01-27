@@ -21,6 +21,15 @@ prometheus:
 {% for node in groups['docker_nodes'] %}
               - '{{hostvars[node]['ansible_host']}}:{{ cadvisor_port }}'
 {% endfor %}
+        - job_name: 'uptime-kuma'
+          basic_auth:
+            username: {{ uptime_kuma_username }}
+            password: {{ uptime_kuma_password }}
+          static_configs:
+            - targets:
+{% for node in groups['uptime_kuma_nodes'] %}
+              - '{{hostvars[node]['ansible_host']}}:{{ uptime_kuma_http_port }}'
+{% endfor %}
 
 grafana:
   persistence:
