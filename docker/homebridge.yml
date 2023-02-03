@@ -1,0 +1,8 @@
+---
+- name: Deploy Homebridge   
+  hosts: homebridge_nodes
+  become: yes
+  gather_facts: false
+
+  roles:
+    - role: homebridge

@@ -1,0 +1,8 @@
+---
+- name: Deploy media acquisition Docker containers
+  hosts: media_acquisition_nodes
+  become: yes
+  gather_facts: false
+
+  roles:  
+    - role: media_acquisition

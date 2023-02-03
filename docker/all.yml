@@ -1,65 +1,18 @@
 ---
-- name: Setup Docker runtime and baseline containers 
-  hosts: docker_nodes
-  become: yes
-  gather_facts: true
+- import_playbook: docker.yml
 
-  roles:
-    - docker
-    - baseline_containers
+- import_playbook: baseline.yml
 
-- name: Run Pi-Hole
-  hosts: pihole_nodes
-  become: yes
-  gather_facts: false
+- import_playbook: pihole.yml
 
-  roles:
-    - role: pihole
+- import_playbook: wireguard.yml
 
-- name: Setup WireGuard
-  hosts: wireguard_nodes
-  become: yes
-  gather_facts: false
+- import_playbook: homeassistant.yml
 
-  roles:
-    - wireguard
+- import_playbook: homebridge.yml
 
-- name: Setup Homeassistant   
-  hosts: homeassistant_nodes
-  become: yes
-  gather_facts: false
+- import_playbook: uptime_kuma.yml
 
-  roles:
-    - role: homeassistant
+- import_playbook: watch_your_lan.yml
 
-- name: Setup Homebridge   
-  hosts: homebridge_nodes
-  become: yes
-  gather_facts: false
-
-  roles:
-    - role: homebridge
-
-- name: Setup Uptime Kuma
-  hosts: uptime_kuma_nodes
-  become: yes
-  gather_facts: false
-
-  roles:
-    - role: uptime_kuma
-
-- name: Setup WatchYourLAN
-  hosts: wyl_nodes
-  become: yes
-  gather_facts: false
-
-  roles:
-    - role: watch_your_lan
-
-- name: Setup media acquisition
-  hosts: media_acquisition_nodes
-  become: yes
-  gather_facts: false
-
-  roles:  
-    - role: media_acquisition
+- import_playbook: media_acquisition.yml

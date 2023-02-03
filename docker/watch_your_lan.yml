@@ -1,0 +1,8 @@
+---
+- name: Deploy WatchYourLAN
+  hosts: wyl_nodes
+  become: yes
+  gather_facts: false
+
+  roles:
+    - role: watch_your_lan

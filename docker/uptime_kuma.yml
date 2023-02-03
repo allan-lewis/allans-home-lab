@@ -1,0 +1,8 @@
+---
+- name: Deploy Uptime Kuma
+  hosts: uptime_kuma_nodes
+  become: yes
+  gather_facts: false
+
+  roles:
+    - role: uptime_kuma
