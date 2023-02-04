@@ -1,1 +1,2 @@
 namespace_name: monitoring
+windows_nodes: "{{ k3s_prometheus.windows_nodes }}"

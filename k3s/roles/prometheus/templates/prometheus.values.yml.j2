@@ -30,6 +30,12 @@ prometheus:
 {% for node in groups['uptime_kuma_nodes'] %}
               - '{{hostvars[node]['ansible_host']}}:{{ uptime_kuma_http_port }}'
 {% endfor %}
+        - job_name: 'windows-exporter'
+          static_configs:
+            - targets:
+{% for node in windows_nodes %}
+              - '{{ node.host }}:{{ node.port }}'
+{% endfor %}
 
 grafana:
   persistence:
