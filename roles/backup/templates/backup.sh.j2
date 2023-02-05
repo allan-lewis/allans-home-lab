@@ -1,0 +1,20 @@
+#!/bin/bash
+
+set -e
+
+echo "Starting backups"
+
+{% for item in backups %}
+echo "Backing up {{ item.src }} to {{ item.dest }}"
+rsync -av -e "ssh -i {{ ssh_key }}" {{ item.src }} {{ item.dest }}
+
+{% endfor %}
+echo "Backups complete"
+
+echo "Sending health check"
+
+curl -s https://hc-ping.com/{{ healthcheck }}
+
+echo ""
+echo "That's all, folks"
+echo ""

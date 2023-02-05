@@ -1,0 +1,48 @@
+---
+- name: Add remote keys to known hosts
+  ansible.builtin.known_hosts:
+    name: "{{ item.host }}"
+    key: "{{ lookup('pipe', 'ssh-keyscan {{ item.host }}') }}"
+  with_items: "{{ remote_hosts }}"
+
+- name: Create log file directory
+  ansible.builtin.file:
+    path: /var/log/ahl_backup
+    state: directory
+
+- name: Find old log files
+  find:
+    paths: /var/log/ahl_backup
+    age: 7d
+    recurse: yes
+  register: oldStuff
+
+- name: Remove old log files
+  file:
+    path: "{{ item.path }}" 
+    state: absent
+  with_items: "{{ oldStuff.files }}"
+
+- name: Create script directory
+  ansible.builtin.file:
+    path: /etc/ahl_backup
+    state: directory
+
+- name: Create backup wrapper script
+  ansible.builtin.template:
+    src: "backupWrapper.sh.j2"
+    dest: /etc/ahl_backup/backupWrapper.sh
+    mode: 0755
+
+- name: Create backup script
+  ansible.builtin.template:
+    src: "backup.sh.j2"
+    dest: /etc/ahl_backup/backup.sh
+    mode: 0755
+
+- name: Schedule CRON job
+  ansible.builtin.cron:
+    name: ahl_backup
+    minute: "{{ backup_minute }}"
+    hour: "{{ backup_hour }}"
+    job: "/bin/sh /etc/ahl_backup/backupWrapper.sh"

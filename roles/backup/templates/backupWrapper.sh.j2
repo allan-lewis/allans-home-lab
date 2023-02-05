@@ -1,0 +1,9 @@
+#!/bin/bash
+
+SECONDS=$(date +%s)
+
+LOGFILE=/var/log/ahl_backup/backup.log.$SECONDS
+
+echo "Wrapper script triggering backup" >> $LOGFILE
+
+/bin/sh /etc/ahl_backup/backup.sh >> $LOGFILE 2>&1
