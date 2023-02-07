@@ -92,3 +92,8 @@
   file:
     path: /tmp/k3s
     state: absent
+
+- name: Proactively create namespace(s)
+  kubernetes.core.k8s:
+    state: present
+    template: namespace.yml.j2
