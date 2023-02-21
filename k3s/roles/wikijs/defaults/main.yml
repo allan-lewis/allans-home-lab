@@ -2,4 +2,4 @@ namespace_name: wikijs
 service_name: wikijs
 service_port: 80
 routes:
-  - host: wiki.local.allanshomelab.com
+  - host: "{{ k3s_wikijs.host }}"
