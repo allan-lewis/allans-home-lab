@@ -7,8 +7,5 @@
   roles:
     - control
 
-- name: Setup automated backups
-  import_playbook: backup.yaml
-
 - name: Setup k3s cluster and deploy services
   import_playbook: k3s/all.yml

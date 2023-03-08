@@ -38,3 +38,6 @@
 
   roles:  
     - role: netplan 
+
+- name: Setup automated backups
+  import_playbook: backup.yaml
