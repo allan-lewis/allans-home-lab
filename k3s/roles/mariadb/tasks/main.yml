@@ -15,10 +15,9 @@
     src: mariadb-values.yml.j2
     dest: /tmp/mariadb-values.yml
 
-- name: Deploy the Bitnami MaraiDB chart
+- name: Deploy the Bitnami MariaDB chart
   kubernetes.core.helm:
     chart_ref: bitnami/mariadb
-    chart_version: "11.4.5"
     namespace: "{{ namespace_name }}"
     name: mariadb
     update_repo_cache: true

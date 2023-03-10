@@ -1,5 +1,7 @@
 auth:
   rootPassword: {{ k3s_mariadb.root_password }}
+  password: {{ k3s_mariadb.root_password }}
+  replicationPassword: {{ k3s_mariadb.root_password }}
 
 primary:
   service:
