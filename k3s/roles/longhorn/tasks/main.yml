@@ -17,7 +17,6 @@
 - name: Deploy Longhorn chart
   kubernetes.core.helm:
     chart_ref: longhorn/longhorn
-    chart_version: "{{ longhorn_version }}"
     namespace: longhorn-system
     name: longhorn
     update_repo_cache: true

@@ -28,7 +28,6 @@
     update_repo_cache: true
     create_namespace: true
     release_state:  "{{ ahl_k3s_state }}"
-    chart_version: "{{ cert_manager_version }}"
     values_files:
       - /tmp/cert-manager.values.yml
 

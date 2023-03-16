@@ -13,7 +13,6 @@
 - name: Deploy Portainer Helm chart
   kubernetes.core.helm:
     chart_ref: portainer/portainer
-    chart_version: "{{ portainer_version }}"
     namespace: portainer
     name: portainer
     update_repo_cache: true
