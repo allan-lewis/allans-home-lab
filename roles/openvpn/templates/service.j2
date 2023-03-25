@@ -1,4 +1,8 @@
+{% if ansible_architecture == 'armv7l' %}
+#!/bin/bash -e
+{% else %}
 #!/bin/sh -e
+{% endif %}
 sudo bash /etc/openvpn/iptables.sh &
 sleep 10
 sudo sh -c "echo 1 > /proc/sys/net/ipv4/ip_forward"
