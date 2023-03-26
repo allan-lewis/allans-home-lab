@@ -21,7 +21,7 @@
 
 - import_playbook: tautulli.yml
 
-- import_playbook: speedtest-tracker.yml
+# - import_playbook: speedtest-tracker.yml
 
 - import_playbook: rancher.yml
 
