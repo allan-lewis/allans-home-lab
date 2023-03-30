@@ -23,6 +23,7 @@
 - name: Deploy cert-manager chart
   kubernetes.core.helm:
     chart_ref: jetstack/cert-manager
+    chart_version: "{{ k3s_certmanager.version }}"
     namespace: cert-manager
     name: cert-manager
     update_repo_cache: true
