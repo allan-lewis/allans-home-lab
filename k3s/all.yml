@@ -29,6 +29,4 @@
 
 - import_playbook: vaultwarden.yml
 
-- import_playbook: mediawiki.yml
-
 - import_playbook: wikijs.yml
