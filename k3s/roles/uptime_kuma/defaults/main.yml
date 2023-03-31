@@ -1,0 +1,4 @@
+namespace_name: uptime-kuma
+routes: "{{ k3s_uptime_kuma.hosts }}"
+service_name: uptime-kuma
+service_port: 3001

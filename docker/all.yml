@@ -9,10 +9,4 @@
 
 - import_playbook: homeassistant.yml
 
-# - import_playbook: homebridge.yml
-
-- import_playbook: uptime_kuma.yml
-
-# - import_playbook: watch_your_lan.yml
-
 - import_playbook: media_acquisition.yml
