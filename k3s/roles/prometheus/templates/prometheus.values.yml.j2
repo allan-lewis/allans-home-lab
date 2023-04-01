@@ -22,13 +22,14 @@ prometheus:
               - '{{hostvars[node]['ansible_host']}}:{{ cadvisor_port }}'
 {% endfor %}
         - job_name: 'uptime-kuma'
+          scheme: https
           basic_auth:
             username: {{ uptime_kuma_username }}
             password: {{ uptime_kuma_password }}
           static_configs:
             - targets:
-{% for node in groups['uptime_kuma_nodes'] %}
-              - '{{hostvars[node]['ansible_host']}}:{{ uptime_kuma_http_port }}'
+{% for node in k3s_prometheus.uptime_kuma_nodes %}
+              - '{{ node.host }}:{{ node.port }}'
 {% endfor %}
         - job_name: 'windows-exporter'
           static_configs:
