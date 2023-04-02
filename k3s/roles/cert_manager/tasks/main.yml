@@ -64,8 +64,12 @@
 
 - name: Write certificate (staging) file
   ansible.builtin.template:
-    src: certificate-staging.yml.j2
+    src: certificate.yml.j2
     dest: /tmp/certificate-staging.yml
+  vars:
+    certificate_name: certificate-staging
+    secret_name: staging-tls
+    issuer_name: letsencrypt-staging
   when: (ahl_certificate_request is defined) and (ahl_certificate_request == 'staging')
 
 - name: Apply certificate (staging) file
@@ -76,8 +80,12 @@
 
 - name: Write certificate (production) file
   ansible.builtin.template:
-    src: certificate-production.yml.j2
+    src: certificate.yml.j2
     dest: /tmp/certificate-production.yml
+  vars:
+    certificate_name: certificate-production
+    secret_name: production-tls
+    issuer_name: letsencrypt-production
   when: (ahl_certificate_request is defined) and (ahl_certificate_request == 'production')
 
 - name: Apply certificate (production) file

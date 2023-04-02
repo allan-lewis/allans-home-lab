@@ -5,15 +5,17 @@
 
 - import_playbook: traefik.yml
 
-- import_playbook: nginx.yml
-
-- import_playbook: no_geeks_brewing.yml
-
 - import_playbook: proxy_external.yml
 
 - import_playbook: longhorn.yml
 
 - import_playbook: uptime_kuma.yml
+
+- import_playbook: nginx.yml
+
+- import_playbook: no_geeks_brewing.yml
+
+- import_playbook: rancher.yml
 
 - import_playbook: mariadb.yml
 
@@ -23,12 +25,10 @@
 
 - import_playbook: tautulli.yml
 
-- import_playbook: rancher.yml
-
-- import_playbook: prometheus.yml
-
 - import_playbook: homepage.yml
 
 - import_playbook: vaultwarden.yml
 
 - import_playbook: wikijs.yml
+
+- import_playbook: prometheus.yml
