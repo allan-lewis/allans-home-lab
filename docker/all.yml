@@ -3,8 +3,6 @@
 
 - import_playbook: baseline_containers.yml
 
-- import_playbook: wireguard.yml
-
 - import_playbook: homeassistant.yml
 
 - import_playbook: media_acquisition.yml
