@@ -5,9 +5,13 @@
 
 - import_playbook: traefik.yml
 
+- import_playbook: cloudflare.yml
+
 - import_playbook: proxy_external.yml
 
 - import_playbook: longhorn.yml
+
+# TODO: Add a pause/confirm here
 
 - import_playbook: uptime_kuma.yml
 

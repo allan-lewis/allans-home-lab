@@ -15,14 +15,6 @@
   roles:
     - baseline
 
-- name: Setup Cloudflare DNS tunneling
-  hosts: cloudflare_nodes
-  become: yes
-  gather_facts: yes
-
-  roles:
-    - role: cloudflare
-
 - name: Setup OpenVPN server
   hosts: openvpn_nodes
   become: yes
