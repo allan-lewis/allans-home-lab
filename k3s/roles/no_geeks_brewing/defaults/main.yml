@@ -1,8 +1,1 @@
-# container_name: nogeeksbrewing
-# # container_image: allanelewis/ngb-site:latest
-# container_image: nogeeksbrewing/site:latest
 namespace_name: no-geeks-brewing
-# service_name: no-geeks-brewing
-# service_port: 80
-# service_replicas: 2
-# routes: "{{ k3s_ngb.routes }}"

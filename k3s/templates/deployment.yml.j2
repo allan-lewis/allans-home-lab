@@ -23,6 +23,7 @@ spec:
       containers:
       - name: {{ container_name }} 
         image: {{ container_image }} 
+        imagePullPolicy: "Always"
         env:
 {% for env in environment_vars | default([]) %}
         - name: {{ env.name }}
