@@ -4,17 +4,33 @@
     state: present
     template: namespace.yml.j2
 
-- name: Apply deployment manifest
+- name: Deploy No Geeks Brewing API
   kubernetes.core.k8s:
     state: "{{ ahl_k3s_state }}"
     template: deployment.yml.j2
+  vars:
+    - service_name: ngb-api
+      container_name: ngb-api
+      container_image: allanelewis/no-geeks-brewing-api:latest
+      service_replicas: 1
+      environment_vars:
+        - name: NGB_BREWFATHER_AUTH_TOKEN
+          value: "{{ k3s_nogeeksbrewing.auth_token }}"
 
-- name: Apply service manifest
+- name: Deploy a service for the API
   kubernetes.core.k8s:
     state: "{{ ahl_k3s_state }}"
     template: service.yml.j2
+  vars:
+    service_name: ngb-api
+    service_port: 8080
 
-- name: Apply ingress manifest
+- name: Create an ingress for the API
   kubernetes.core.k8s:
     state: "{{ ahl_k3s_state }}"
     template: traefik_ingress_route.yml.j2
+  vars:
+    service_name: ngb-api
+    service_port: 8080
+    routes:
+      - host: api.nogeeksbrewing.com
