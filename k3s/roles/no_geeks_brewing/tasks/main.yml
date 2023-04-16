@@ -17,6 +17,16 @@
         - name: NGB_BREWFATHER_AUTH_TOKEN
           value: "{{ k3s_nogeeksbrewing.auth_token }}"
 
+- name: Deploy No Geeks Brewing Site
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: deployment.yml.j2
+  vars:
+    - service_name: ngb-site
+      container_name: ngb-site
+      container_image: allanelewis/no-geeks-brewing-site:latest
+      service_replicas: 1
+
 - name: Deploy a service for the API
   kubernetes.core.k8s:
     state: "{{ ahl_k3s_state }}"
@@ -24,6 +34,14 @@
   vars:
     service_name: ngb-api
     service_port: 8080
+
+- name: Deploy a service for the site
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: service.yml.j2
+  vars:
+    service_name: ngb-site
+    service_port: 3000
 
 - name: Create an ingress for the API
   kubernetes.core.k8s:
@@ -34,3 +52,14 @@
     service_port: 8080
     routes:
       - host: api.nogeeksbrewing.com
+
+- name: Create an ingress for the site
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: traefik_ingress_route.yml.j2
+  vars:
+    service_name: ngb-site
+    service_port: 3000
+    routes:
+      - host: nogeeksbrewing.com
+      - host: www.nogeeksbrewing.com
