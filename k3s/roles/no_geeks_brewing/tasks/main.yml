@@ -25,7 +25,7 @@
     - service_name: ngb-site
       container_name: ngb-site
       container_image: allanelewis/no-geeks-brewing-site:latest
-      service_replicas: 1
+      service_replicas: 2
 
 - name: Deploy a service for the API
   kubernetes.core.k8s:
