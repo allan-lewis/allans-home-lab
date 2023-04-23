@@ -1,2 +1,2 @@
 wireguard_config_volume: "{{ ahl_docker_volume_root }}/wireguard"
-wireguard_udp_port: 51820
+wgeasy_config_volume: "{{ ahl_docker_volume_root }}/wg-easy"

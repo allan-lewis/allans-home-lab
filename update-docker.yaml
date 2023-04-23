@@ -1,0 +1,12 @@
+---
+- name: Update baseline Docker containers
+  import_playbook: docker/baseline_containers.yml
+
+- name: Update Homeassistant Docker container
+  import_playbook: docker/homeassistant.yml
+
+- name: Update media acquisition Docker containers
+  import_playbook: docker/media_acquisition.yml
+
+- name: Update Wireguard Docker container
+  import_playbook: docker/wireguard.yml

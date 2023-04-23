@@ -1,0 +1,16 @@
+---
+- name: Setup OpenVPN server
+  hosts: openvpn_nodes
+  become: yes
+  gather_facts: yes
+
+  roles:  
+    - role: openvpn  
+
+- name: Update netplan
+  hosts: netplan_nodes
+  become: yes
+  gather_facts: false
+
+  roles:  
+    - role: netplan 
