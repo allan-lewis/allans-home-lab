@@ -1,8 +1,0 @@
----
-- import_playbook: docker.yml
-
-- import_playbook: baseline_containers.yml
-
-- import_playbook: homeassistant.yml
-
-- import_playbook: media_acquisition.yml
