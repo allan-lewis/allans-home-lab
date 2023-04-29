@@ -1,6 +1,8 @@
 ---
 - import_playbook: traefik.yml
 
+- import_playbook: twingate.yml
+
 - import_playbook: cloudflare.yml
 
 - import_playbook: nginx.yml
