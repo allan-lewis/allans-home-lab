@@ -18,6 +18,7 @@
 - name: Deploy the Bitnami MariaDB chart
   kubernetes.core.helm:
     chart_ref: bitnami/mariadb
+    chart_version: "{{ k3s_mariadb.version }}"
     namespace: "{{ namespace_name }}"
     name: mariadb
     update_repo_cache: true
