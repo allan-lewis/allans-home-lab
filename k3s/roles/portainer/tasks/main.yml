@@ -1,27 +1,11 @@
 ---
-- name: Add Portainer Helm respository
-  kubernetes.core.helm_repository:
-    name: portainer
-    repo_url: https://portainer.github.io/k8s/
-    repo_state: present 
+- name: Download the Portainer Agent manifest.
+  ansible.builtin.get_url:
+    url: "https://downloads.portainer.io/{{ k3s.portainer.manifestVersion }}/portainer-agent-k8s-lb.yaml"
+    dest: /tmp/portainer-manifest.yaml
+    mode: '0664'
 
-- name: Write values file
-  ansible.builtin.template:
-    src: portainer.values.yml.j2
-    dest: /tmp/portainer.values.yml
-
-- name: Deploy Portainer Helm chart
-  kubernetes.core.helm:
-    chart_ref: portainer/portainer
-    namespace: portainer
-    name: portainer
-    update_repo_cache: true
-    create_namespace: true
-    release_state:  "{{ ahl_k3s_state }}"
-    values_files:
-      - /tmp/portainer.values.yml
-
-- name: Apply ingress manifest
+- name: Apply the Portainer Agent manifest to the cluster.
   kubernetes.core.k8s:
-    state: "{{ ahl_k3s_state }}"
-    template: traefik_ingress_route.yml.j2
+    state: present
+    src: /tmp/portainer-manifest.yaml
