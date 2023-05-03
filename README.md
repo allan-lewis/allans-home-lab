@@ -28,6 +28,10 @@ ansible-playbook backups.yaml
 
 Update k3s services.  This will run through most of the k3s playbooks, skipping only the setup of the cluster itself, as well as some of the more critical services whose versions are fixed (Cert Manager, Longhorn).
 
+~~~
+ansible-playbook k3s.yaml
+~~~
+
 ## Setup a new node
 
 Setup the basics of the control (ansible) user using root or another admin user.  
