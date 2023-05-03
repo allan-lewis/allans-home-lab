@@ -32,6 +32,28 @@ Update k3s services.  This will run through most of the k3s playbooks, skipping 
 ansible-playbook k3s.yaml
 ~~~
 
+## Kubernetes (k3s)
+
+Create or update a k3s cluster, including installing critial services with fixed versions (Cert Manager, Longhorn).
+
+~~~
+ansible-playbook k3s/cluster.yml
+~~~
+
+Install or update (nearly) all k3s services.
+
+~~~
+ansible-playbook k3s.yaml
+~~~
+
+Destroy a k3s cluster.  This will remove all nodes from the cluster, destroy all associated resources, and reboot all nodes.  Confirmation in the form of a user-defined reset token is required.
+
+~~~
+ansible-playbook k3s/reset.yml
+~~~
+
+## DiRT
+
 ## Setup a new node
 
 Setup the basics of the control (ansible) user using root or another admin user.  
