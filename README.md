@@ -40,7 +40,7 @@ Create or update a k3s cluster, including installing critial services with fixed
 ansible-playbook k3s/cluster.yml
 ~~~
 
-Install or update (nearly) all k3s services.
+Install or update (nearly) all k3s services.  
 
 ~~~
 ansible-playbook k3s.yaml
@@ -54,9 +54,54 @@ ansible-playbook k3s/reset.yml
 
 ## DiRT
 
+### Precondition(s)
+
+1. All Longhorn backups are confirmed to be up-to-date
+1. Any especially critical data has been manually backed up
+
+### Disaster simulation
+
+Destroy the k3s cluster.
+
+~~~
+ansible-playbook k3s/reset.yml
+~~~
+
+### Recovery
+
+Re-create the k3 cluster
+
+~~~
+ansible-playbook k3s/cluster.yml
+~~~
+
+Ensure that Cert Manager certs have been requested successfully.
+
+~~~
+kubectl get challenges -A
+~~~
+
+~~~
+kubectl get certificates -A -o wide
+~~~
+
+Manually restore all Longhorn volumes.  Create a volume/PVC for anything not backed up (Prometheus).
+
+Install remaining k3s services.
+
+~~~
+ansible-playbook k3s.yaml
+~~~
+
+### Success criteria
+
+1. Uptime Kuma shows no errors
+1. Grafana shows all hosts operating at reasonable load
+1. All volumes are online in Longhorn
+
 ## Setup a new node
 
-Setup the basics of the control (ansible) user using root or another admin user.  
+Setup the basics of the control user using root or another admin user.  
 
 ~~~
 ansible-playbook nodes.yaml --limit "host1" --ask-password --ask-become-password -e "ansible_ssh_user=root"
