@@ -25,8 +25,6 @@
 
 - import_playbook: guacamole.yml
 
-- import_playbook: portainer.yml
-
 - import_playbook: tautulli.yml
 
 - import_playbook: homepage.yml

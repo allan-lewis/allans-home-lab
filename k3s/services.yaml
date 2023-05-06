@@ -17,8 +17,6 @@
 
 - import_playbook: rancher.yml
 
-- import_playbook: portainer.yml
-
 - import_playbook: tautulli.yml
 
 - import_playbook: homepage.yml
