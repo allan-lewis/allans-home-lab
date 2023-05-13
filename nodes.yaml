@@ -1,27 +1,29 @@
+### AHL
 ---
-- name: Ensure playbook is limited to individual hosts
+- name: Stop the playbook if not limited to a subset of hosts.
   hosts: localhost
   gather_facts: no
 
   tasks:
-    - fail:
+    - name: Stop the playbook if not limited to a subset of hosts.
+      fail:
         msg: "You must use -l or --limit"
       when: ansible_limit is not defined
 
-- name: Cordon and drain k3s node(s)
+- name: Cordon and drain k3s nodes.
   hosts: k3s_nodes
   become: no
   gather_facts: no
 
   tasks:
-    - name: Drain node(s) but abort if there are pods not managed by a ReplicationController, Job, or DaemonSet, and use a grace period of 15 minutes.
+    - name: Cordon and drain k3s nodes.
       delegate_to: localhost
       run_once: yes
       shell: kubectl drain {{ item }} --ignore-daemonsets --delete-emptydir-data #--force --pod-selector='app!=csi-attacher,app!=csi-provisioner'
       when: "'k3s_nodes' in group_names"
       with_items: "{{ ansible_play_batch }}"
 
-- name: Do baseline updates for node(s) in scope
+- name: Perform basline updates.
   hosts: all
   become: yes
   gather_facts: yes
@@ -32,13 +34,13 @@
 - name: Do Docker updates for node(s) in scope
   import_playbook: docker/docker.yml
 
-- name: Uncordon k3s node(s)
+- name: Uncordon k3s nodes.
   hosts: k3s_nodes
   become: no
   gather_facts: no
 
   tasks:
-    - name: Uncordon any node(s) in scope
+    - name: Uncordon k3s nodes.
       delegate_to: localhost
       run_once: yes
       shell: kubectl uncordon {{ item }}

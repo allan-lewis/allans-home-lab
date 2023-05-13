@@ -13,19 +13,19 @@ prometheus:
           static_configs:
             - targets:
 {% for node in groups['docker_nodes'] %}
-              - '{{hostvars[node]['ansible_host']}}:{{ prometheus_node_exporter_port }}'
+              - '{{hostvars[node]['ansible_host']}}:{{ ports.prometheusNodeExporterPort }}'
 {% endfor %}
         - job_name: 'cadvisor'
           static_configs:
             - targets:
 {% for node in groups['docker_nodes'] %}
-              - '{{hostvars[node]['ansible_host']}}:{{ cadvisor_port }}'
+              - '{{hostvars[node]['ansible_host']}}:{{ ports.cadvisorPort }}'
 {% endfor %}
         - job_name: 'uptime-kuma'
           scheme: https
           basic_auth:
-            username: {{ uptime_kuma_username }}
-            password: {{ uptime_kuma_password }}
+            username: {{ credentials.uptimeKuma.username }}
+            password: {{ credentials.uptimeKuma.password }}
           static_configs:
             - targets:
 {% for node in k3s_prometheus.uptime_kuma_nodes %}

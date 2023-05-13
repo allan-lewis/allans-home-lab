@@ -1,1 +1,0 @@
-uptime_kuma_volume: "{{ ahl_docker_volume_root }}/uptime-kuma"

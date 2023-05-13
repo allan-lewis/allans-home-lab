@@ -1,6 +1,0 @@
-namespace_name: jenkins
-service_name: jenkins
-service_port: 8080
-routes:
-  - host: "{{ k3s_jenkins.url }}"
-    service_port: 8080

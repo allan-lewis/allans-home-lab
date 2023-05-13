@@ -1,11 +1,13 @@
-- name: Set time zone to New York
+### AHL
+---
+- name: Set the time zone to New York.
   community.general.timezone:
     name: America/New_York
 
-- name: Create the {{ ahl_control_user }} user
+- name: Create the control user.
   ansible.builtin.user:
-    name: "{{ ahl_control_user }}"
-    password: "{{ ahl_control_password }}"
+    name: "{{ controlUser }}"
+    password: "!"
     password_lock: no
     shell: /bin/bash
     groups:
@@ -14,48 +16,48 @@
     state: present
   register: control_user_data
 
-- name: Create a .ssh folder for {{ ahl_control_user }}
+- name: Create the control user's SSH folder.
   ansible.builtin.file:
     path: "{{ control_user_data.home }}/.ssh"
     state: directory
-    owner: "{{ ahl_control_user }}"
-    group: "{{ ahl_control_user }}"
+    owner: "{{ controlUser }}"
+    group: "{{ controlUser }}"
 
-- name: Create SSH key for {{ ahl_control_user }} user
+- name: Create the control user's SSH key.
   community.crypto.openssh_keypair:
     path: "{{ control_user_data.home }}/.ssh/id_rsa"
-    owner: "{{ ahl_control_user }}"
-    group: "{{ ahl_control_user }}"
+    owner: "{{ controlUser }}"
+    group: "{{ controlUser }}"
 
-- name: Add control node SSH key to authorized keys
+- name: Add SSH key(s) to authorized keys.
   ansible.posix.authorized_key:
-    user: "{{ ahl_control_user }}"
+    user: "{{ controlUser }}"
     state: present
     key: "{{ lookup('file', '{{ item.path }}') }}"
-  with_items: "{{ authorized_ssh_keys }}"
+  with_items: "{{ authorizedSshKeys }}"
 
-- name: Add {{ ahl_control_user }} user to the sudoers file
+- name: Add the control user to the sudoers list.
   ansible.builtin.lineinfile:
     path: /etc/sudoers
-    regexp: '^{{ ahl_control_user }}'
-    line: '{{ ahl_control_user }} ALL=(ALL) NOPASSWD: ALL'
+    regexp: '^{{ controlUser }}'
+    line: '{{ controlUser }} ALL=(ALL) NOPASSWD: ALL'
     validate: 'visudo -cf %s'
 
-- name: Make sure we're running as user {{ ahl_control_user }}
+- name: Stop the playbook if not running as the control user.
   ansible.builtin.assert:
-    that: "ansible_ssh_user == '{{ ahl_control_user }}'"
-    fail_msg: "Not proceeding further since we're using user {{ ansible_ssh_user }} instead of {{ ahl_control_user }}"
+    that: "ansible_ssh_user == '{{ controlUser }}'"
+    fail_msg: "Not proceeding further since we're using user {{ ansible_ssh_user }} instead of {{ controlUser }}"
     success_msg: "Proceeding because we're using user {{ ansible_ssh_user }}"
 
-- name: Restrict logins to only the {{ ansible_ssh_user }} user
+- name: Allow only the control user to login.
   ansible.builtin.lineinfile:
     dest: /etc/ssh/sshd_config
     regexp: '^AllowUsers'
-    line: 'AllowUsers {{ ansible_ssh_user }}'
+    line: 'AllowUsers {{ controlUser }}'
     state: present
   register: ssh_allow_users
 
-- name: Disable root login access
+- name: Disable root login access.
   ansible.builtin.lineinfile:
     dest: /etc/ssh/sshd_config
     regexp: '^(#)?PermitRootLogin \w*$'
@@ -63,7 +65,7 @@
     state: present
   register: ssh_disable_root
 
-- name: Disable SSH password authentication
+- name: Disable SSH password authentication.
   ansible.builtin.lineinfile:
     dest: /etc/ssh/sshd_config
     regexp: '^#?\s*PasswordAuthentication\s'
@@ -71,7 +73,7 @@
     state: present
   register: ssh_disable_password
 
-- name: Update host key algorithms
+- name: Update SSH host key algorithms.
   ansible.builtin.lineinfile:
     dest: /etc/ssh/sshd_config
     search_string: 'HostKeyAlgorithms'
@@ -80,7 +82,7 @@
   when: ansible_facts['distribution'] == 'Ubuntu'
   register: ssh_host_key
 
-- name: Update public key accepted algorithms
+- name: Update SSH public key accepted algorithms.
   ansible.builtin.lineinfile:
     dest: /etc/ssh/sshd_config
     search_string: 'PubkeyAcceptedAlgorithms'
@@ -89,25 +91,34 @@
   when: ansible_facts['distribution'] == 'Ubuntu'
   register: ssh_pub_key
 
-- name: Restart the SSH service
+- name: Restart the SSH service.
   ansible.builtin.service:
     name: sshd
     state: restarted
   when: (ssh_allow_users is changed) or (ssh_disable_root is changed) or (ssh_disable_password is changed) or (ssh_host_key is changed) or (ssh_pub_key is changed)
 
-- name: Do an apt update
+- name: Perform an apt update.
   ansible.builtin.apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
 
-- name: Do an apt upgrade
+- name: Perform an apt upgrade.
   ansible.builtin.apt: upgrade=dist force_apt_get=yes
 
-- name: Check to see if a reboot is required
+- name: Install required dependencies.
+  ansible.builtin.apt:
+    pkg:
+      - net-tools
+      - nfs-common
+      - python3-pip
+    state: latest
+    update_cache: true
+
+- name: Check to see if a reboot is required.
   ansible.builtin.stat: 
     path: /var/run/reboot-required
     get_md5: no
   register: reboot_required_file
 
-- name: Perform a reboot
+- name: Perform a reboot.
   ansible.builtin.reboot:
     msg: "Reboot initiated by Ansible for kernel updates"
     connect_timeout: 5
@@ -116,12 +127,3 @@
     post_reboot_delay: 30
     test_command: uptime
   when: reboot_required_file.stat.exists
-
-- name: Install required dependencies
-  ansible.builtin.apt:
-    pkg:
-      - net-tools
-      - nfs-common
-      - python3-pip
-    state: latest
-    update_cache: true

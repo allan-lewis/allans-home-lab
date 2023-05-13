@@ -1,6 +1,7 @@
+## AHL
 ---
-- name: Update baseline Docker containers
+- name: Deploy common containers to all Docker nodes. 
   import_playbook: docker/baseline_containers.yml
 
-- name: Update media acquisition Docker containers
+- name: Deploy Docker containers related to media acquisition.
   import_playbook: docker/media_acquisition.yml

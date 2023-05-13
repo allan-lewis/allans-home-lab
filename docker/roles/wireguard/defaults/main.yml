@@ -1,2 +1,0 @@
-wireguard_config_volume: "{{ ahl_docker_volume_root }}/wireguard"
-wgeasy_config_volume: "{{ ahl_docker_volume_root }}/wg-easy"

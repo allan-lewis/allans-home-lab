@@ -1,5 +1,0 @@
-use_x_forwarded_for: true
-trusted_proxies:
-{% for node in groups['k3s_node'] %}
-  - {{ hostvars[node]['ansible_host'] }}
-{% endfor %}

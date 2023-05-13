@@ -71,7 +71,7 @@
     pull: "yes"
     restart_policy: "unless-stopped"
     published_ports: 
-      - "{{ cadvisor_port }}:8080/tcp"
+      - "{{ ports.cadvisorPort }}:8080/tcp"
     volumes: 
       - /:/rootfs:ro
       - /var/run:/var/run:rw
@@ -90,7 +90,7 @@
     pull: "yes"
     restart_policy: "unless-stopped"
     published_ports: 
-      - "{{ cadvisor_port }}:8080/tcp"
+      - "{{ ports.cadvisorPort }}:8080/tcp"
     volumes: 
       - /:/rootfs:ro
       - /var/run:/var/run:rw
@@ -110,7 +110,7 @@
     pull: "yes"
     restart_policy: "unless-stopped"
     published_ports: 
-      - "{{ prometheus_node_exporter_port }}:9100/tcp"
+      - "{{ ports.prometheusNodeExporterPort }}:9100/tcp"
     volumes: 
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro

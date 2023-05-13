@@ -1,5 +1,6 @@
+### AHL
 ---
-- name: Setup OpenVPN server
+- name: Configure outbound OpenVPN service(s).
   hosts: openvpn_nodes
   become: yes
   gather_facts: yes
@@ -7,7 +8,7 @@
   roles:  
     - role: openvpn  
 
-- name: Update netplan
+- name: Update networking config for node(s) using the VPN.
   hosts: netplan_nodes
   become: yes
   gather_facts: false

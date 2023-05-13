@@ -2,6 +2,12 @@
 
 ## Regular maintenance
 
+Ensure that localhost is preparted to run playbooks.
+
+~~~
+ansible-playbook control.yaml
+~~~
+
 Perform basic updates on all nodes.  This will update any dependencies and reboot them, if necessary.  Any k3s nodes will be cordoned during the updates and uncordoned when maintenance is complete.
 
 ~~~
@@ -104,7 +110,7 @@ ansible-playbook k3s.yaml
 Setup the basics of the control user using root or another admin user.  
 
 ~~~
-ansible-playbook nodes.yaml --limit "host1" --ask-password --ask-become-password -e "ansible_ssh_user=root"
+ansible-playbook nodes.yaml --limit "host1" --ask-pass --ask-become-pass -e "ansible_ssh_user=root"
 ~~~
 
 Re-run to let the control user finish node setup, including all baseline host setups.  Any nodes designated as Docker nodes will have Docker and its dependencies installed, but no containers will be installed.

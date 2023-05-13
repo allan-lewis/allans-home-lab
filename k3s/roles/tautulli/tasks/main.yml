@@ -17,9 +17,9 @@
         - name: TZ
           value: "America/New_York"
         - name: PUID
-          value: "\"{{ k3s_apps_uid }}\""
+          value: "\"{{ k3s.appsUserId }}\""
         - name: PGID
-          value: "\"{{ k3s_apps_gid }}\""
+          value: "\"{{ k3s.appsGroupId }}\""
       volume_mounts:
         - name: tautulli-config
           path: /config  

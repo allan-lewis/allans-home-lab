@@ -1,0 +1,7 @@
+## AHL
+---
+- name: Ensure that localhost is setup to manage Ansible playbooks.
+  hosts: localhost
+  
+  roles:
+    - control

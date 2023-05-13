@@ -1,1 +1,0 @@
-homeassistant_volume: "{{ ahl_docker_volume_root }}/homeassistant"
