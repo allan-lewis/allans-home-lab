@@ -15,17 +15,17 @@
       service_replicas: 1
       environment_vars:
         - name: GUACD_HOSTNAME
-          value: "{{ k3s_guacamole.guacd_host }}"
+          value: "{{ k3s.guacamole.guacdHost }}"
         - name: GUACD_PORT
-          value: "\"{{ k3s_guacamole.guacd_port }}\""
+          value: "\"{{ k3s.guacamole.guacdPort }}\""
         - name: MYSQL_HOSTNAME
-          value: "{{ k3s_guacamole.mysql_host }}"
+          value: "{{ k3s.guacamole.mysqlHost }}"
         - name: MYSQL_DATABASE
-          value: "{{ k3s_guacamole.mysql_database }}"
+          value: "{{ k3s.guacamole.mysqlDatabase }}"
         - name: MYSQL_USER
-          value: "{{ k3s_guacamole.mysql_user }}"
+          value: "{{ k3s.guacamole.mysqlUser }}"
         - name: MYSQL_PASSWORD
-          value: "{{ k3s_guacamole.mysql_password }}"
+          value: "{{ k3s.guacamole.mysqlPassword }}"
 
 - name: Apply guacd deployment manifest
   kubernetes.core.k8s:
@@ -43,7 +43,7 @@
     template: service.yml.j2
   vars:
     - service_name: guacamole
-      service_port: "{{ k3s_guacamole.guacamole_port }}"
+      service_port: "{{ k3s.guacamole.guacamolePort }}"
       target_port: 8080
 
 - name: Apply guacd service manifest
@@ -52,7 +52,7 @@
     template: load_balancer_service.yml.j2
   vars:
     - service_name: guacd
-      service_port: "{{ k3s_guacamole.guacd_port }}"
+      service_port: "{{ k3s.guacamole.guacdPort }}"
       target_port: 4822
 
 - name: Apply guacamole ingress manifest
@@ -61,6 +61,6 @@
     template: traefik_ingress_route.yml.j2
   vars:
     service_name: guacamole
-    service_port: "{{ k3s_guacamole.guacamole_port }}"
+    service_port: "{{ k3s.guacamole.guacamolePort }}"
     routes:
-      - host: "{{ k3s_guacamole.guacamole_host }}"
+      - host: "{{ k3s.guacamole.guacamoleHost }}"

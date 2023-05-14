@@ -4,4 +4,4 @@ namespace_name: nginx
 service_name: nginx
 service_port: 80
 service_replicas: 3
-routes: "{{ k3s_nginx.routes }}"
+routes: "{{ k3s.nginx.routes }}"

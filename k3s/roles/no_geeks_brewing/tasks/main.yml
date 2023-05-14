@@ -15,7 +15,7 @@
       service_replicas: 1
       environment_vars:
         - name: NGB_BREWFATHER_AUTH_TOKEN
-          value: "{{ k3s_nogeeksbrewing.auth_token }}"
+          value: "{{ k3s.noGeeksBrewing.authToken }}"
 
 - name: Deploy No Geeks Brewing Site
   kubernetes.core.k8s:
