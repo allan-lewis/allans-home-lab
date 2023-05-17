@@ -33,7 +33,7 @@
     template: service.yml.j2
   vars:
     - service_name: tautulli
-      service_port: "{{ k3s_tautulli.tautulli_port }}"
+      service_port: "{{ k3s.tautulli.httpPort }}"
       target_port: 8181
 
 - name: Apply ingress manifest
@@ -42,6 +42,6 @@
     template: traefik_ingress_route.yml.j2
   vars:
     service_name: tautulli
-    service_port: "{{ k3s_tautulli.tautulli_port }}"
+    service_port: "{{ k3s.tautulli.httpPort }}"
     routes:
-      - host: "{{ k3s_tautulli.host }}"
+      - host: "{{ k3s.tautulli.host }}"

@@ -53,6 +53,6 @@ service:
   annotations: {}
   labels: {}
   spec:
-    loadBalancerIP: {{ traefik_load_balancer_ip }} # this should be an IP in the MetalLB range
+    loadBalancerIP: {{ k3s.traefik.loadBalancerIp }} # this should be an IP in the MetalLB range
   loadBalancerSourceRanges: []
   externalIPs: []

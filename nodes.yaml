@@ -24,7 +24,7 @@
       with_items: "{{ ansible_play_batch }}"
 
 - name: Perform basline updates.
-  hosts: all
+  hosts: managed_nodes
   become: yes
   gather_facts: yes
   
