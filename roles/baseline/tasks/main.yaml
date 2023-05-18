@@ -1,4 +1,3 @@
-### AHL
 ---
 - name: Set the time zone to New York.
   community.general.timezone:
@@ -6,7 +5,7 @@
 
 - name: Create the control user.
   ansible.builtin.user:
-    name: "{{ controlUser }}"
+    name: "{{ control_user }}"
     password: "!"
     password_lock: no
     shell: /bin/bash
@@ -20,40 +19,40 @@
   ansible.builtin.file:
     path: "{{ control_user_data.home }}/.ssh"
     state: directory
-    owner: "{{ controlUser }}"
-    group: "{{ controlUser }}"
+    owner: "{{ control_user }}"
+    group: "{{ control_user }}"
 
 - name: Create the control user's SSH key.
   community.crypto.openssh_keypair:
     path: "{{ control_user_data.home }}/.ssh/id_rsa"
-    owner: "{{ controlUser }}"
-    group: "{{ controlUser }}"
+    owner: "{{ control_user }}"
+    group: "{{ control_user }}"
 
 - name: Add SSH key(s) to authorized keys.
   ansible.posix.authorized_key:
-    user: "{{ controlUser }}"
+    user: "{{ control_user }}"
     state: present
     key: "{{ lookup('file', '{{ item.path }}') }}"
-  with_items: "{{ authorizedSshKeys }}"
+  with_items: "{{ authorized_ssh_keys }}"
 
 - name: Add the control user to the sudoers list.
   ansible.builtin.lineinfile:
     path: /etc/sudoers
-    regexp: '^{{ controlUser }}'
-    line: '{{ controlUser }} ALL=(ALL) NOPASSWD: ALL'
+    regexp: '^{{ control_user }}'
+    line: '{{ control_user }} ALL=(ALL) NOPASSWD: ALL'
     validate: 'visudo -cf %s'
 
 - name: Stop the playbook if not running as the control user.
   ansible.builtin.assert:
-    that: "ansible_ssh_user == '{{ controlUser }}'"
-    fail_msg: "Not proceeding further since we're using user {{ ansible_ssh_user }} instead of {{ controlUser }}"
+    that: "ansible_ssh_user == '{{ control_user }}'"
+    fail_msg: "Not proceeding further since we're using user {{ ansible_ssh_user }} instead of {{ control_user }}"
     success_msg: "Proceeding because we're using user {{ ansible_ssh_user }}"
 
 - name: Allow only the control user to login.
   ansible.builtin.lineinfile:
     dest: /etc/ssh/sshd_config
     regexp: '^AllowUsers'
-    line: 'AllowUsers {{ controlUser }}'
+    line: 'AllowUsers {{ control_user }}'
     state: present
   register: ssh_allow_users
 

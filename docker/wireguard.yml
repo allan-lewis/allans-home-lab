@@ -1,8 +1,0 @@
----
-- name: Deploy WireGuard
-  hosts: wireguard_nodes
-  become: yes
-  gather_facts: false
-
-  roles:
-    - wireguard

@@ -1,4 +1,3 @@
-## AHL
 ---
 - name: Configure remote backup job(s).
   hosts: backup_nodes

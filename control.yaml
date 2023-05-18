@@ -1,6 +1,8 @@
-## AHL
 ---
 - name: Ensure that localhost is setup to manage Ansible playbooks.
+  become: no
+  gather_facts: no
+
   hosts: localhost
   
   roles:

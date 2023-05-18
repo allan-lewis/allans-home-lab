@@ -1,8 +1,0 @@
----
-- name: Deploy Pi-Hole
-  hosts: pihole_nodes
-  become: yes
-  gather_facts: false
-
-  roles:
-    - role: pihole

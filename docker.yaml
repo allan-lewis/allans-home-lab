@@ -1,7 +1,8 @@
-## AHL
 ---
+- import_playbook: docker/docker.yaml
+
 - name: Deploy common containers to all Docker nodes. 
-  import_playbook: docker/baseline_containers.yml
+  import_playbook: docker/baseline_containers.yaml
 
 - name: Deploy Docker containers related to media acquisition.
-  import_playbook: docker/media_acquisition.yml
+  import_playbook: docker/media_acquisition.yaml
