@@ -1,16 +1,84 @@
+## AHL
 ---
-- name: Configure outbound OpenVPN service(s).
+- name: Setup outbound OpenVPN services.
   hosts: openvpn_nodes
   become: yes
   gather_facts: yes
 
-  roles:  
-    - role: openvpn  
+  tasks:
+    - name: Install required dependencies.
+      ansible.builtin.apt:
+        pkg:
+          - openvpn
+          - openssh-server
+          - unzip
+        state: latest
+        update_cache: true
 
-- name: Update networking config for node(s) using the VPN.
+    - name: Create the /etc/openvpn folder for OpenVPN config scripts.
+      ansible.builtin.file:
+        path: "/etc/openvpn"
+        state: directory
+        owner: "root"
+        group: "root"
+
+    - name: Upload OpenVPN config scripts.
+      ansible.builtin.copy:
+        src: "{{ item.src }}"
+        dest: "/etc/openvpn/{{ item.dest }}"
+        owner: "root"
+        group: "root"
+        mode: '0600'
+      with_items: "{{ openvpn_configs }}"
+
+    - name: Create scripts and service files.
+      ansible.builtin.template:
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+        owner: "root"
+        group: "root"
+        mode: "{{ item.mode | default('0600') }}"
+      with_items:
+        - src: "openvpn_authn.j2"
+          dest: "/etc/openvpn/authn"
+        - src: "openvpn_script_connect.j2"
+          dest: "/etc/openvpn/connect.sh"
+        - src: "openvpn_script_iptables.j2"
+          dest: "/etc/openvpn/iptables.sh"
+        - src: "openvpn_service_unit.j2"
+          dest: "/etc/systemd/system/rc-local.service"
+          mode: "0644"
+        - src: "openvpn_service.j2"
+          dest: "/etc/rc.local"
+          mode: "0744"
+
+    - name: Enable port forwarding.
+      ansible.posix.sysctl:
+        name: net.ipv4.ip_forward
+        value: '1'
+        sysctl_set: true
+
+    - name: Enable the VPN service.
+      ansible.builtin.systemd:
+        name: "rc-local"
+        state: started
+        enabled: yes
+
+- name: Update outbound networking routes.
   hosts: netplan_nodes
   become: yes
   gather_facts: false
 
-  roles:  
-    - role: netplan 
+  tasks:  
+    - name: Update netplan
+      ansible.builtin.template:
+        src: network_netplan.j2
+        dest: "{{ netplan_dest }}"
+        owner: "root"
+        group: "root"
+        mode: 0644
+      register: netplan_update
+
+    - name: Apply netplan
+      ansible.builtin.command: sudo netplan apply
+      when: (netplan_update is changed)
