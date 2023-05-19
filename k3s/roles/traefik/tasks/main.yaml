@@ -1,0 +1,29 @@
+## AHL
+---
+- name: Add the Traefik Helm respository.
+  kubernetes.core.helm_repository:
+    name: traefik 
+    repo_url: https://helm.traefik.io/traefik
+
+- name: Write the values file for the Helm chart.
+  ansible.builtin.template:
+    src: values.yml.j2
+    dest: /tmp/traefik.values.yml
+  vars:
+    extra_ports: "{{ traefik_extra_ports | default([]) }}"
+
+- name: Install the Traefik Helm chart.
+  kubernetes.core.helm:
+    chart_ref: traefik/traefik
+    namespace: traefik
+    name: traefik
+    update_repo_cache: true
+    create_namespace: true
+    release_state: "{{ ahl_k3s_state }}"
+    values_files:
+      - /tmp/traefik.values.yml
+
+- name: Create custom headers middleware.
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: default-headers.yml.j2

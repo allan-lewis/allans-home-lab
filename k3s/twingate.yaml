@@ -1,0 +1,8 @@
+## AHL
+---
+- name: Install Twingate.
+  hosts: k3s_twingate
+  become: yes
+  gather_facts: false
+  roles:
+    - role: twingate

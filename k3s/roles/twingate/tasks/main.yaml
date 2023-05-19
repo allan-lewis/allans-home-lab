@@ -1,16 +1,17 @@
+## AHL
 ---
-- name: Add the Twingate Helm repository.
+- name: Add the Twingate Helm respository.
   kubernetes.core.helm_repository:
     name: twingate
     repo_url: https://twingate.github.io/helm-charts
     repo_state: present 
 
-- name: Create a Twingate namespace in the cluster.
+- name: Create a namespace for Twingate.
   kubernetes.core.k8s:
     state: present
     template: namespace.yml.j2
 
-- name: Deploy Twingate connector(s) to the cluster.
+- name: Install the Twingate Helm chart.
   kubernetes.core.helm:
     chart_ref: twingate/connector
     namespace: "{{ namespace_name }}"
@@ -19,8 +20,8 @@
     release_state: "{{ ahl_k3s_state }}"
     values:
       connector:
-        network: "{{ k3s.twingate.networkName }}"
-        accessToken: "{{ item.accessToken }}"
-        refreshToken: "{{ item.refreshToken }}"
-  with_items: "{{ k3s.twingate.connectors }}"
+        network: "{{ network_name }}"
+        accessToken: "{{ item.access_token }}"
+        refreshToken: "{{ item.refresh_token }}"
+  with_items: "{{ twingate_connectors }}"
   no_log: true

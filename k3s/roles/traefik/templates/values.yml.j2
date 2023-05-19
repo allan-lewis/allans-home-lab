@@ -20,7 +20,7 @@ ports:
   websecure:
     tls:
       enabled: true
-{% for port in extra_ports | default([]) %}
+{% for port in extra_ports %}
   {{ port.name }}:
     port: {{ port.port }}
     expose: {{ port.expose }}
@@ -53,6 +53,6 @@ service:
   annotations: {}
   labels: {}
   spec:
-    loadBalancerIP: {{ k3s.traefik.loadBalancerIp }} # this should be an IP in the MetalLB range
+    loadBalancerIP: {{ load_balancer_ip }} # this should be an IP in the MetalLB range
   loadBalancerSourceRanges: []
   externalIPs: []
