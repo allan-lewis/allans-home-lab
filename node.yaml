@@ -28,7 +28,7 @@
   gather_facts: yes
   
   roles:
-    - baseline
+    - node
 
 - name: Uncordon k3s nodes.
   hosts: k3s_nodes

@@ -11,7 +11,7 @@ ansible-playbook control.yaml
 Perform basic updates on all nodes.  This will update any dependencies and reboot them, if necessary.  Any k3s nodes will be cordoned during the updates and uncordoned when maintenance is complete.
 
 ~~~
-ansible-playbook nodes.yaml --limit "host1,host2"
+ansible-playbook node.yaml --limit "host1,host2"
 ~~~
 
 Update any Docker containers.
@@ -29,7 +29,7 @@ ansible-playbook network.yaml
 Schedule any backup tasks.
 
 ~~~
-ansible-playbook backups.yaml
+ansible-playbook backup.yaml
 ~~~
 
 Update k3s services.  This will run through most of the k3s playbooks, skipping only the setup of the cluster itself, as well as some of the more critical services whose versions are fixed (Cert Manager, Longhorn).
