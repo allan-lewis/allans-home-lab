@@ -1,5 +1,7 @@
+## AHL
 ---
-- hosts: k3s_master[0]
+- name: Install Uptime Kuma.
+  hosts: k3s_uptime_kuma
   become: yes
   gather_facts: false
   roles:

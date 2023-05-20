@@ -13,7 +13,7 @@
 
 - import_playbook: guacamole.yaml
 
-- import_playbook: uptime_kuma.yml
+- import_playbook: uptime_kuma.yaml
 
 - import_playbook: rancher.yml
 

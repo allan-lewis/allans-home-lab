@@ -1,16 +1,17 @@
+## AHL
 ---
-- name: Apply namespace manifest
+- name: Create a namespace for Uptime Kuma.
   kubernetes.core.k8s:
     state: present
     template: namespace.yml.j2
 
-- name: Deploy Uptime Kuma container
+- name: Create the k8s Uptime Kuma deployment.
   kubernetes.core.k8s:
     state: "{{ ahl_k3s_state }}"
     template: deployment.yml.j2
   vars:
-    - service_name: uptime-kuma
-      container_name: uptime-kuma
+    - service_name: "{{ uptime_kuma_service_name }}"
+      container_name: "{{ uptime_kuma_service_name }}"
       container_image: louislam/uptime-kuma:1
       service_replicas: 1
       volume_mounts:
@@ -20,12 +21,20 @@
         - name: uptime-kuma-data
           claim: uptime-kuma
 
-- name: Create the Uptime Kuma service
+- name: Create the k8s Uptime Kums service.
   kubernetes.core.k8s:
     state: "{{ ahl_k3s_state }}"
     template: service.yml.j2
+  vars:
+    - service_name: "{{ uptime_kuma_service_name }}"
+      service_port: "{{ uptime_kuma_service_port }}"
 
-- name: Create an ingress for Vaultwarden
+- name: Create Traefik ingresses for Uptime Kuma.
   kubernetes.core.k8s:
     state: "{{ ahl_k3s_state }}"
     template: traefik_ingress_route.yml.j2
+  vars:
+    routes:
+      - host: "{{ uptime_kuma_host }}"
+    service_name: "{{ uptime_kuma_service_name }}"
+    service_port: "{{ uptime_kuma_service_port }}"

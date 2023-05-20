@@ -1,0 +1,5 @@
+## AHL
+---
+namespace_name: uptime-kuma
+uptime_kuma_service_name: uptime-kuma
+uptime_kuma_service_port: 3001
