@@ -1,11 +1,11 @@
 auth:
-  rootPassword: {{ k3s_mariadb.root_password }}
-  password: {{ k3s_mariadb.root_password }}
-  replicationPassword: {{ k3s_mariadb.root_password }}
+  rootPassword: {{ mariadb_root_password }}
+  password: {{ mariadb_root_password }}
+  replicationPassword: {{ mariadb_root_password }}
 
 primary:
   service:
     type: LoadBalancer
-    loadBalancerIP: {{ k3s_mariadb.loadBalancerIp }}
+    loadBalancerIP: {{ mariadb_lb_ip }}
   persistence:
     existingClaim: mariadb

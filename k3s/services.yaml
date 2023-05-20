@@ -9,7 +9,7 @@
 
 - import_playbook: no_geeks_brewing.yaml
 
-- import_playbook: mariadb.yml
+- import_playbook: mariadb.yaml
 
 - import_playbook: guacamole.yml
 

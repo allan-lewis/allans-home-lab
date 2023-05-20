@@ -1,0 +1,9 @@
+## AHL
+---
+- name: Intall MariaDB.
+  hosts: k3s_mariadb
+  become: yes
+  gather_facts: false
+  roles:
+    - role: mariadb
+  
