@@ -11,7 +11,7 @@
 
 - import_playbook: mariadb.yaml
 
-- import_playbook: guacamole.yml
+- import_playbook: guacamole.yaml
 
 - import_playbook: uptime_kuma.yml
 

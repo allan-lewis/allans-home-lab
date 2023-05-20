@@ -1,0 +1,67 @@
+## AHL
+---
+- name: Create a namespace for Guacamole and guacd.
+  kubernetes.core.k8s:
+    state: present
+    template: namespace.yml.j2
+
+- name: Create the k8s Guacamole deployment.
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: deployment.yml.j2
+  vars:
+    - service_name: "{{ guacamole_service_name }}"
+      container_name: "{{ guacamole_service_name }}"
+      container_image: guacamole/guacamole:latest
+      service_replicas: 1
+      environment_vars:
+        - name: GUACD_HOSTNAME
+          value: "{{ guacd_host }}"
+        - name: GUACD_PORT
+          value: "\"{{ guacd_port }}\""
+        - name: MYSQL_HOSTNAME
+          value: "{{ mysql_host }}"
+        - name: MYSQL_DATABASE
+          value: "{{ mysql_db }}"
+        - name: MYSQL_USER
+          value: "{{ mysql_user }}"
+        - name: MYSQL_PASSWORD
+          value: "{{ mysql_password }}"
+
+- name: Create the k8s Guacamole service.
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: service.yml.j2
+  vars:
+    - service_name: "{{ guacamole_service_name }}"
+      service_port: "{{ guacamole_port }}"
+      target_port: 8080
+
+- name: Create Traefik ingresses for Guacamole.
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: traefik_ingress_route.yml.j2
+  vars:
+    service_name: "{{ guacamole_service_name }}"
+    service_port: "{{ guacamole_port }}"
+    routes:
+      - host: "{{ guacamole_host }}"
+
+- name: Create the k8s gucd deployment.
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: deployment.yml.j2
+  vars:
+    - service_name: "{{ guacd_service_name }}"
+      container_name: "{{ guacd_service_name }}"
+      container_image: guacamole/guacd:latest
+      service_replicas: 1
+
+- name: Create the k8s guacd service.
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: load_balancer_service.yml.j2
+  vars:
+    - service_name: "{{ guacd_service_name }}"
+      service_port: "{{ guacd_port }}"
+      target_port: 4822
