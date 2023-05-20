@@ -1,7 +1,9 @@
+## AHL
+---
 container_name: nginx
 container_image: nginx:latest
 namespace_name: nginx
 service_name: nginx
 service_port: 80
 service_replicas: 3
-routes: "{{ k3s.nginx.routes }}"
+routes: "{{ nginx_routes }}"

@@ -1,20 +1,21 @@
+## AHL
 ---
-- name: Apply namespace manifest
+- name: Create a namespace for nginx.
   kubernetes.core.k8s:
     state: present
     template: namespace.yml.j2
 
-- name: Apply deployment manifest
+- name: Create the k8s nginx deployment.
   kubernetes.core.k8s:
     state: "{{ ahl_k3s_state }}"
     template: deployment.yml.j2
 
-- name: Apply service manifest
+- name: Create the k8s nginx service.
   kubernetes.core.k8s:
     state: "{{ ahl_k3s_state }}"
     template: service.yml.j2
 
-- name: Apply ingress manifest
+- name: Create Traefik ingresses for nginx.
   kubernetes.core.k8s:
     state: "{{ ahl_k3s_state }}"
     template: traefik_ingress_route.yml.j2

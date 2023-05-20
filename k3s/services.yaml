@@ -3,11 +3,11 @@
 
 - import_playbook: twingate.yaml
 
-- import_playbook: cloudflare.yml
+- import_playbook: cloudflare.yaml
 
-- import_playbook: nginx.yml
+- import_playbook: nginx.yaml
 
-- import_playbook: no_geeks_brewing.yml
+- import_playbook: no_geeks_brewing.yaml
 
 - import_playbook: mariadb.yml
 

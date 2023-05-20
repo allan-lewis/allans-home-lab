@@ -1,0 +1,8 @@
+## AHL
+---
+- name: Install No Geeks Brewing services.
+  hosts: k3s_no_geeks_brewing
+  become: yes
+  gather_facts: false
+  roles:
+    - role: no_geeks_brewing

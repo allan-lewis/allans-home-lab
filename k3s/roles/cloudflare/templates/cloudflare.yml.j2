@@ -4,7 +4,7 @@ metadata:
   labels:
     app: cloudflared-{{ item.tunnel_name }}
   name: cf-tunnel-{{ item.tunnel_name }}
-  namespace: {{ k3s_cloudflare.namespace }}
+  namespace: {{ namespace_name }}
 spec:
   replicas: 2
   selector:

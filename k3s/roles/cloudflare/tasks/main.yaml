@@ -1,11 +1,12 @@
 ---
-- name: Create namespace
+- name: Create a namespace for Cloudflare.
   kubernetes.core.k8s:
     state: present
     template: namespace.yml.j2
     
-- name: Deploy Cloudflare tunnels
+- name: Install Cloudflare tunnels. 
   kubernetes.core.k8s:
     state: "{{ ahl_k3s_state }}"
     template: cloudflare.yml.j2
-  with_items: "{{ k3s_cloudflare.tunnels }}"
+  with_items: "{{ cloudflare_tunnels }}"
+  no_log: true

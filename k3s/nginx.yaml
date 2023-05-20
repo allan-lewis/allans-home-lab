@@ -1,5 +1,7 @@
+## AHL
 ---
-- hosts: k3s_master[0]
+- name: Install nginx.
+  hosts: k3s_nginx
   become: yes
   gather_facts: false
   roles:

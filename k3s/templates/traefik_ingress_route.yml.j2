@@ -14,8 +14,8 @@ spec:
     - match: Host(`{{ route.host }}`)
       kind: Rule
       middlewares:
-        - name: {{ k3s_traefik.ingress_route_middleware_name }}
-          namespace: {{ k3s_traefik.ingress_route_middleware_namespace }}
+        - name: {{ ingress_route_middleware_name }}
+          namespace: {{ ingress_route_middleware_namespace }}
       services:
         - name: {{ route.service_name | default(service_name) }}
           namespace:  {{ namespace_name }}
