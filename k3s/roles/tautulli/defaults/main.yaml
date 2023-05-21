@@ -1,0 +1,5 @@
+## AHL
+---
+namespace_name: tautulli
+tautulli_service_name: tautulli
+tautulli_service_port: 35200

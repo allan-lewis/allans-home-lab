@@ -21,7 +21,7 @@
         - name: uptime-kuma-data
           claim: uptime-kuma
 
-- name: Create the k8s Uptime Kums service.
+- name: Create the k8s Uptime Kuma service.
   kubernetes.core.k8s:
     state: "{{ ahl_k3s_state }}"
     template: service.yml.j2
