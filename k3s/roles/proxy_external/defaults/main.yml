@@ -1,3 +1,0 @@
-namespace_name: proxy-external
-service_name: proxy-external
-routes: "{{ external_proxy_services }}"

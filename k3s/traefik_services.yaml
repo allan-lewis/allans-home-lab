@@ -1,0 +1,8 @@
+## AHL
+---
+- name: Install Traefik services and ingresses.
+  hosts: k3s_traefik
+  become: yes
+  gather_facts: false
+  roles:
+    - role: traefik_services

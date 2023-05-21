@@ -15,19 +15,19 @@
 
 - import_playbook: uptime_kuma.yaml
 
-- import_playbook: rancher.yml
+- import_playbook: tautulli.yaml
 
-- import_playbook: tautulli.yml
+- import_playbook: homepage.yaml
 
-- import_playbook: homepage.yml
+- import_playbook: vaultwarden.yaml
 
-- import_playbook: vaultwarden.yml
+- import_playbook: wikijs.yaml
 
-- import_playbook: wikijs.yml
+- import_playbook: monitoring.yaml
 
-- import_playbook: prometheus.yml
+- import_playbook: rancher.yaml
 
-- import_playbook: proxy_external.yml
+- import_playbook: traefik_services.yaml
 
 # - import_playbook: cluster.yml
 

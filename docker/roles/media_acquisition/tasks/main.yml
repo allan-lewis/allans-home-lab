@@ -25,7 +25,7 @@
     detach: yes
     name: "jackett"
     image: "lscr.io/linuxserver/jackett:latest"
-    state: "started"
+    state: "{{ jackett_state }}"
     recreate: "yes"
     pull: "yes"
     restart_policy: "unless-stopped"
@@ -45,7 +45,7 @@
     detach: yes
     name: "sonarr"
     image: "lscr.io/linuxserver/sonarr:latest"
-    state: "started"
+    state: "{{ sonarr_state }}"
     recreate: "yes"
     pull: "yes"
     restart_policy: "unless-stopped"
@@ -66,7 +66,7 @@
     detach: yes
     name: "radarr"
     image: "lscr.io/linuxserver/radarr:latest"
-    state: "started"
+    state: "{{ radarr_state }}"
     recreate: "yes"
     pull: "yes"
     restart_policy: "unless-stopped"
@@ -87,7 +87,7 @@
     detach: yes
     name: "transmission"
     image: "lscr.io/linuxserver/transmission:latest"
-    state: "started"
+    state: "{{ transmission_state }}"
     recreate: "yes"
     pull: "yes"
     restart_policy: "unless-stopped"

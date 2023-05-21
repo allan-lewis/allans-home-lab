@@ -1,5 +1,12 @@
 ## AHL
 ---
+- name: Create a namespace for Traefik.
+  kubernetes.core.k8s:
+    state: present
+    template: namespace.yml.j2
+  vars:
+    - namespace_name: traefik
+
 - name: Add the Traefik Helm respository.
   kubernetes.core.helm_repository:
     name: traefik 
