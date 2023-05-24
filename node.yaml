@@ -10,7 +10,7 @@
       when: ansible_limit is not defined
 
 - name: Cordon and drain k3s nodes.
-  hosts: k3s_nodes
+  hosts: k3s_nodes_all
   become: no
   gather_facts: no
 
@@ -19,8 +19,9 @@
       delegate_to: localhost
       run_once: yes
       shell: kubectl drain {{ item }} --ignore-daemonsets --delete-emptydir-data #--force --pod-selector='app!=csi-attacher,app!=csi-provisioner'
-      when: "'k3s_nodes' in group_names"
+      when: "'k3s_nodes_all' in group_names"
       with_items: "{{ ansible_play_batch }}"
+      ignore_errors: "{{ ignore_k3s_errors | detault(false) }}"
 
 - name: Perform basline updates.
   hosts: managed_nodes
@@ -31,7 +32,7 @@
     - node
 
 - name: Uncordon k3s nodes.
-  hosts: k3s_nodes
+  hosts: k3s_nodes_all
   become: no
   gather_facts: no
 
@@ -40,5 +41,6 @@
       delegate_to: localhost
       run_once: yes
       shell: kubectl uncordon {{ item }}
-      when: "'k3s_nodes' in group_names"
+      when: "'k3s_nodes_all' in group_names"
       with_items: "{{ ansible_play_batch }}"
+      ignore_errors: "{{ ignore_k3s_errors | detault(false) }}"

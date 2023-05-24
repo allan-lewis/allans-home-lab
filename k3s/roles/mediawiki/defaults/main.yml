@@ -1,5 +1,0 @@
-namespace_name: mediawiki
-service_name: mediawiki
-service_port: 80
-routes:
-  - host: "{{ k3s_mediawiki.host }}"

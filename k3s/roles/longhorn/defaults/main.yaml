@@ -2,4 +2,4 @@ namespace_name: longhorn-system
 service_name: longhorn-frontend
 service_port: 80
 routes:
-  - host: "{{ k3s_longhorn.host }}"
+  - host: "{{ longhorn_host }}"

@@ -1,0 +1,7 @@
+---
+- hosts: k3s_cert_manager
+  become: yes
+  gather_facts: false
+
+  roles:
+    - role: cert_manager

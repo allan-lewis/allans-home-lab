@@ -37,7 +37,7 @@
       service_port: "{{ tautulli_service_port }}"
       target_port: 8181
 
-- name: Create Traefik ingresses for Tautulli.
+- name: Create a Traefik ingress for Tautulli.
   kubernetes.core.k8s:
     state: "{{ ahl_k3s_state }}"
     template: traefik_ingress_route.yml.j2

@@ -29,7 +29,7 @@
     - service_name: "{{ uptime_kuma_service_name }}"
       service_port: "{{ uptime_kuma_service_port }}"
 
-- name: Create Traefik ingresses for Uptime Kuma.
+- name: Create a Traefik ingress for Uptime Kuma.
   kubernetes.core.k8s:
     state: "{{ ahl_k3s_state }}"
     template: traefik_ingress_route.yml.j2
