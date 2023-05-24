@@ -1,29 +1,30 @@
+## AHL
 ---
-- name: Add the Jetstack Helm respository
+- name: Add the cert-manager Helm respository.
   kubernetes.core.helm_repository:
     name: jetstack
     repo_url: https://charts.jetstack.io
 
-- name: Download cert-manager CRDs
+- name: Download cert-manager CRDs.
   ansible.builtin.get_url:
     url: "https://github.com/cert-manager/cert-manager/releases/download/{{ cert_manager_version }}/cert-manager.crds.yaml"
     dest: /tmp/cert-manager.crds.yaml
     mode: '0664'
 
-- name: Apply cert-manager CRDs
+- name: Install cert-manager CRDs.
   kubernetes.core.k8s:
     state: "{{ ahl_k3s_state }}"
     src: /tmp/cert-manager.crds.yaml
 
-- name: Write values file
+- name:  Write the values file for the Helm chart.
   ansible.builtin.template:
     src: values.yml.j2
     dest: /tmp/cert-manager.values.yml
 
-- name: Deploy cert-manager chart
+- name: Install the cert-manager Helm chart.
   kubernetes.core.helm:
     chart_ref: jetstack/cert-manager
-    chart_version: "{{ k3s_certmanager.version }}"
+    chart_version: "{{ cert_manager_version }}"
     namespace: cert-manager
     name: cert-manager
     update_repo_cache: true
@@ -32,69 +33,30 @@
     values_files:
       - /tmp/cert-manager.values.yml
 
-- name: Write LetsEncrypt issuer (staging) file
-  ansible.builtin.template:
-    src: letsencrypt-staging.yml.j2
-    dest: /tmp/letsencrypt-staging.yml
-
-- name: Apply LetsEncrypt issuer (staging) file
+- name: Install LetsEncrypt certificate issuers.
   kubernetes.core.k8s:
     state: "{{ ahl_k3s_state }}"
-    src: /tmp/letsencrypt-staging.yml
+    template: "{{ item }}"
+  with_items:
+    - letsencrypt-staging.yml.j2
+    - letsencrypt-production.yml.j2
 
-- name: Write LetsEncrypt issuer (production) file
-  ansible.builtin.template:
-    src: letsencrypt-production.yml.j2
-    dest: /tmp/letsencrypt-production.yml
-
-- name: Apply LetsEncrypt issuer (production) file
+- name: Install Cloudflare token secret.
   kubernetes.core.k8s:
     state:  "{{ ahl_k3s_state }}"
-    src: /tmp/letsencrypt-production.yml
+    template: secret-cf-token.yml.j2
 
-- name: Write Cloudflare token secret file
-  ansible.builtin.template:
-    src: secret-cf-token.yml.j2
-    dest: /tmp/secret-cf-token.yml
-
-- name: Apply Cloudflare token secret file
+- name: Request certificates.
   kubernetes.core.k8s:
-    state:  "{{ ahl_k3s_state }}"
-    src: /tmp/secret-cf-token.yml
-
-- name: Write certificate (staging) file
-  ansible.builtin.template:
-    src: certificate.yml.j2
-    dest: /tmp/certificate-staging.yml
+    template: certificate.yml.j2
   vars:
-    certificate_name: certificate-staging
-    secret_name: staging-tls
-    issuer_name: letsencrypt-staging
-  when: (ahl_certificate_request is defined) and (ahl_certificate_request == 'staging')
-
-- name: Apply certificate (staging) file
-  kubernetes.core.k8s:
-    state:  "{{ ahl_k3s_state }}"
-    src: /tmp/certificate-staging.yml
-  when: (ahl_certificate_request is defined) and (ahl_certificate_request == 'staging')
-
-- name: Write certificate (production) file
-  ansible.builtin.template:
-    src: certificate.yml.j2
-    dest: /tmp/certificate-production.yml
-  vars:
-    certificate_name: certificate-production
-    secret_name: production-tls
-    issuer_name: letsencrypt-production
-  when: (ahl_certificate_request is defined) and (ahl_certificate_request == 'production')
-
-- name: Apply certificate (production) file
-  kubernetes.core.k8s:
-    state:  "{{ ahl_k3s_state }}"
-    src: /tmp/certificate-production.yml
-  when: (ahl_certificate_request is defined) and (ahl_certificate_request == 'production')
-
-- name: Check if certificates were requested
-  ansible.builtin.fail:
-    msg: Halting to wait for certificate challenges to complete
-  when: ahl_certificate_request is defined and ahl_certificate_request != ''
+    certificate_name: "{{ item.certificate_name }}"
+    secret_name: "{{ item.secret_name }}"
+    issuer_name: "{{ item.issuer_name }}"
+  with_items:
+    - certificate_name: certificate-staging
+      secret_name: staging-tls
+      issuer_name: letsencrypt-staging
+    - certificate_name: certificate-production
+      secret_name: production-tls
+      issuer_name: letsencrypt-production

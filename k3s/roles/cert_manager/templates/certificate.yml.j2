@@ -9,5 +9,5 @@ spec:
   issuerRef:
     name: {{ issuer_name }}
     kind: ClusterIssuer
-  commonName: '{{ k3s_certmanager.common_name }}'
-  dnsNames: {{ k3s_certmanager.dns_names }}
+  commonName: '{{ cert_manager_common_name }}'
+  dnsNames: {{ cert_manager_dns_names }}
