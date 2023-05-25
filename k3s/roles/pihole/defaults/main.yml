@@ -1,1 +1,5 @@
+## AHL
+---
 namespace_name: pihole
+routes:
+  - host: "{{ pihole_host }}"

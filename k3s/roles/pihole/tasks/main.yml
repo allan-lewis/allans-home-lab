@@ -1,21 +1,22 @@
+## AHL
 ---
-- name: Add the Pi-hole Helm repository
+- name: Add the Pi-hole Helm respository.
   kubernetes.core.helm_repository:
     name: mojo2600
     repo_url: https://mojo2600.github.io/pihole-kubernetes/
     repo_state: present 
 
-- name: Create the {{ namespace_name }} namespace
+- name: Create a namespace for Pi-hole.
   kubernetes.core.k8s:
     state: present
     template: namespace.yml.j2
 
-- name: Write a values file
+- name: Write the values file for the Helm chart.
   ansible.builtin.template:
     src: pihole-values.yml.j2
     dest: /tmp/pihole-values.yml
 
-- name: Install Pi-hole
+- name: Install the Pi-hole Helm chart.
   kubernetes.core.helm:
     chart_ref: mojo2600/pihole
     namespace: "{{ namespace_name }}"

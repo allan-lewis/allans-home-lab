@@ -11,26 +11,26 @@ persistentVolumeClaim:
   existingClaim: pihole
 
 serviceWeb:
-  loadBalancerIP: {{ k3s_pihole.address }}
+  loadBalancerIP: {{ pihole_address }}
   annotations:
     metallb.universe.tf/allow-shared-ip: pihole-svc
   type: LoadBalancer
 
 serviceDns:
-  loadBalancerIP: {{ k3s_pihole.address }}
+  loadBalancerIP: {{ pihole_address }}
   annotations:
     metallb.universe.tf/allow-shared-ip: pihole-svc
   type: LoadBalancer
 
 serviceDhcp:
-  loadBalancerIP: {{ k3s_pihole.address }}
+  loadBalancerIP: {{ pihole_address }}
   annotations:
     metallb.universe.tf/allow-shared-ip: pihole-svc
   type: LoadBalancer
 
 dnsmasq:
   customDnsEntries:
-{% for entry in k3s_pihole.dns_entries %}
+{% for entry in pihole_dns_entries %}
     - address=/{{ entry.name }}/{{ entry.address }}
 {% endfor %}
 
@@ -38,7 +38,7 @@ dnsmasq:
   # Here we specify custom cname entries that should point to `A` records or
   # elements in customDnsEntries array.
   # The format should be:
-{% for entry in k3s_pihole.dns_cnames %}
+{% for entry in pihole_dns_cnames %}
     - cname={{ entry.name }},{{ entry.target }}
 {% endfor %}
 
@@ -50,7 +50,7 @@ podDnsConfig:
   - 1.1.1.1
 
 #! use an existing secret in a prod env
-adminPassword: "{{ k3s_pihole.admin_password }}"
+adminPassword: "{{ pihole_admin_password }}"
 
 resources:
   limits:

@@ -2,6 +2,8 @@
 ---
 - import_playbook: traefik.yaml
 
+- import_playbook: pihole.yaml
+
 - import_playbook: twingate.yaml
 
 - import_playbook: cloudflare.yaml
