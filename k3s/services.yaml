@@ -1,3 +1,4 @@
+## AHL
 ---
 - import_playbook: traefik.yaml
 
@@ -21,10 +22,10 @@
 
 - import_playbook: vaultwarden.yaml
 
-# - import_playbook: wikijs.yaml
+- import_playbook: wikijs.yaml
 
-# - import_playbook: monitoring.yaml
+- import_playbook: monitoring.yaml
 
-# - import_playbook: rancher.yaml
+- import_playbook: rancher.yaml
 
-# - import_playbook: traefik_services.yaml
+- import_playbook: traefik_services.yaml

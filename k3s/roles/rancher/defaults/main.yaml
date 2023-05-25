@@ -1,0 +1,8 @@
+## AHL
+---
+rancher_name: "rancher"
+service_name: "{{ rancher_name }}"
+namespace_name: cattle-system
+routes:
+  - host: "{{ rancher_host }}"
+    service_port: "{{ rancher_service_port }}"

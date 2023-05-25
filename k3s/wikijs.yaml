@@ -1,0 +1,9 @@
+## AHL
+---
+- name: Install Wiki.js
+  hosts: k3s_wikijs
+  become: yes
+  gather_facts: false
+
+  roles:
+    - role: wikijs

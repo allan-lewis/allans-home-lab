@@ -1,5 +1,0 @@
-service_name: rancher
-namespace_name: cattle-system
-routes:
-  - host: "{{ k3s_rancher.rancher_host }}"
-    service_port: "{{ k3s_rancher.rancher_service_port }}"

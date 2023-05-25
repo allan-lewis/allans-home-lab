@@ -1,0 +1,13 @@
+## AHL
+---
+namespace_name: monitoring
+monitoring_ingresses:
+  - service_name: prometheus-kube-prometheus-prometheus
+    service_port: 9090
+    host: "{{ monitoring_prometheus_host }}"
+  - service_name: prometheus-grafana
+    service_port: 80
+    host: "{{ monitoring_grafana_host }}"
+  - service_name: prometheus-kube-prometheus-alertmanager
+    service_port: 9093
+    host: "{{ monitoring_alertmanager_host }}"

@@ -1,34 +1,33 @@
+## AHL
 ---
-- name: Rancher Helm respository
+- name: Add Rancher Helm respository.
   kubernetes.core.helm_repository:
     name: rancher-stable
     repo_url: https://releases.rancher.com/server-charts/stable
     repo_state: present 
 
-- name: Rancher namespace
+- name: Create a namespace for Rancher.
   kubernetes.core.k8s:
-    name: cattle-system
-    api_version: v1
-    kind: Namespace
-    state: present 
+    state: present
+    template: namespace.yml.j2
 
-- name: Write values file
+- name: Write the values file for the Helm chart.
   ansible.builtin.template:
     src: rancher-values.yml.j2
     dest: /tmp/rancher-values.yml
 
-- name: Deploy Rancher chart
+- name: Install the Rancher Helm chart.
   kubernetes.core.helm:
     chart_ref: rancher-stable/rancher
-    namespace: cattle-system
-    name: rancher
+    namespace: "{{ namespace_name }}"
+    name: "{{ rancher_name }}"
     update_repo_cache: true
     create_namespace: true
     release_state: "{{ ahl_k3s_state }}"
     values_files:
       - /tmp/rancher-values.yml
 
-- name: Apply ingress manifest
+- name: Create a Traefik ingress for Rancher.
   kubernetes.core.k8s:
     state: "{{ ahl_k3s_state }}"
     template: traefik_ingress_route.yml.j2

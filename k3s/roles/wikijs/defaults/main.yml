@@ -1,5 +1,7 @@
-namespace_name: wikijs
-service_name: wikijs
+## AHL
+wikijs_name: wikijs
+namespace_name: "{{ wikijs_name }}"
+service_name: "{{ wikijs_name }}"
 service_port: 80
 routes:
-  - host: "{{ k3s_wikijs.host }}"
+  - host: "{{ wikijs_host }}"

@@ -13,30 +13,24 @@ prometheus:
           static_configs:
             - targets:
 {% for node in groups['docker_nodes'] %}
-              - '{{hostvars[node]['ansible_host']}}:{{ ports.prometheusNodeExporterPort }}'
+              - '{{hostvars[node]['ansible_host']}}:{{ known_ports.node_exporter_http_port }}'
 {% endfor %}
         - job_name: 'cadvisor'
           static_configs:
             - targets:
 {% for node in groups['docker_nodes'] %}
-              - '{{hostvars[node]['ansible_host']}}:{{ ports.cadvisorPort }}'
+              - '{{hostvars[node]['ansible_host']}}:{{ known_ports.cadvisor_http_port }}'
 {% endfor %}
+{% if uptime_kuma_monitoring is defined %}
         - job_name: 'uptime-kuma'
-          scheme: https
+          scheme: {{ uptime_kuma_monitoring.scheme | default ('https') }}
           basic_auth:
-            username: {{ credentials.uptimeKuma.username }}
-            password: {{ credentials.uptimeKuma.password }}
+            username: {{ uptime_kuma_monitoring.username }}
+            password: {{ uptime_kuma_monitoring.password }}
           static_configs:
             - targets:
-{% for node in k3s_prometheus.uptime_kuma_nodes %}
-              - '{{ node.host }}:{{ node.port }}'
-{% endfor %}
-        - job_name: 'windows-exporter'
-          static_configs:
-            - targets:
-{% for node in windows_nodes %}
-              - '{{ node.host }}:{{ node.port }}'
-{% endfor %}
+              - '{{ uptime_kuma_monitoring.host }}:{{ uptime_kuma_monitoring.port }}'
+{% endif %}
 
 grafana:
   persistence:

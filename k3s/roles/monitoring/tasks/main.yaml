@@ -1,0 +1,40 @@
+## AHL
+---
+- name: Add the monitoring Helm respository.
+  kubernetes.core.helm_repository:
+    name: prometheus-community
+    repo_url: https://prometheus-community.github.io/helm-charts
+    repo_state: present
+
+- name:  Create a namespace for monitoring.
+  kubernetes.core.k8s:
+    state: present
+    template: namespace.yml.j2
+
+- name: Write the values file for the Helm chart.
+  ansible.builtin.template:
+    src: prometheus.values.yml.j2
+    dest: /tmp/prometheus.values.yml
+
+- name: Install the monitoring Helm chart.
+  kubernetes.core.helm:
+    chart_ref: prometheus-community/kube-prometheus-stack
+    chart_version: 42.3.0
+    namespace: "{{ namespace_name }}"
+    name: prometheus
+    update_repo_cache: true
+    create_namespace: true
+    release_state: "{{ ahl_k3s_state }}"
+    values_files:
+      - /tmp/prometheus.values.yml
+
+- name: Create Traefik ingresses for monitoring.
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: traefik_ingress_route.yml.j2
+  vars:
+    service_name:  "{{ item.service_name }}"
+    service_port: "{{ item.service_port }}"
+    routes:
+      - host: "{{ item.host }}"
+  with_items: "{{ monitoring_ingresses }}"
