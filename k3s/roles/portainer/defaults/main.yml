@@ -1,5 +1,0 @@
-service_name: portainer
-namespace_name: portainer
-routes:
-  - host: "{{ k3s_portainer.host }}"
-    service_port: 9000
