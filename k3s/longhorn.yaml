@@ -1,6 +1,7 @@
 ## AHL
 ---
-- hosts: k3s_longhorn
+- name: Install Longhorn.
+  hosts: k3s_longhorn
   become: yes
   gather_facts: false
   

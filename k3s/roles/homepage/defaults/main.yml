@@ -1,5 +1,0 @@
-namespace_name: homepage
-service_name: homepage
-service_port: 35400
-target_port: 3000
-routes: "{{ k3s.homepage.routes }}"

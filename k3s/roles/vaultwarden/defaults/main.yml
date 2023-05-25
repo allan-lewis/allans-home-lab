@@ -1,5 +1,0 @@
-namespace_name: vaultwarden
-service_name: vaultwarden
-service_port: "{{ k3s_vaultwarden.http_port }}"
-target_port: 80
-routes: "{{ k3s_vaultwarden.hosts }}"

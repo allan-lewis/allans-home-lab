@@ -1,16 +1,17 @@
+## AHL
 ---
-- name: Create namespace
+- name: Create a namespace for Homepage.
   kubernetes.core.k8s:
     state: present
     template: namespace.yml.j2
 
-- name: Deploy Homepage container
+- name: Create the k8s Homepage deployment.
   kubernetes.core.k8s:
     state: "{{ ahl_k3s_state }}"
     template: deployment.yml.j2
   vars:
-    - service_name: "homepage"
-      container_name: "homepage"
+    - service_name: "{{ homepage_name }}"
+      container_name: "{{ homepage_name }}"
       container_image: ghcr.io/benphelps/homepage:latest
       service_replicas: 1
       volume_mounts:
@@ -20,12 +21,12 @@
         - name: homepage-config-volume
           claim: container-docker-homepage
 
-- name: Apply service manifest
+- name: Create the k8s Homepage service.
   kubernetes.core.k8s:
     state: "{{ ahl_k3s_state }}"
     template: service.yml.j2
 
-- name: Apply ingress manifest
+- name: Create a Traefik ingress for Homepage.
   kubernetes.core.k8s:
     state: "{{ ahl_k3s_state }}"
     template: traefik_ingress_route.yml.j2
