@@ -1,0 +1,9 @@
+## AHL
+---
+- name: Install common containers that run on all Docker nodes. 
+  hosts: docker_nodes
+  become: yes
+  gather_facts: true
+
+  roles:
+    - common_containers

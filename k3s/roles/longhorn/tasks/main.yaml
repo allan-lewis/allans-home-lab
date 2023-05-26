@@ -1,4 +1,4 @@
-##  AHL
+## AHL
 ---
 - name: Add the Longhorn Helm respository.
   kubernetes.core.helm_repository:

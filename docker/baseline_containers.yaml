@@ -1,8 +1,0 @@
----
-- name: Deploy baseline Docker containers 
-  hosts: docker_nodes
-  become: yes
-  gather_facts: true
-
-  roles:
-    - baseline_containers

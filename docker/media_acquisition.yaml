@@ -1,5 +1,6 @@
+## AHL
 ---
-- name: Deploy media acquisition Docker containers
+- name: Install the "r-stack" used for media acquisition.
   hosts: media_acquisition_nodes
   become: yes
   gather_facts: false
