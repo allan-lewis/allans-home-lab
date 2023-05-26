@@ -1,20 +1,22 @@
-- name: Get Docker's GPG key
+## AHL
+---
+- name: Get Docker's apt GPG key.
   ansible.builtin.apt_key:
     url: https://download.docker.com/linux/ubuntu/gpg
     state: present
   register: docker_key
 
-- name: Get Docker's repository
+- name: Get Docker's apt repository.
   ansible.builtin.apt_repository:
     repo: deb https://download.docker.com/linux/ubuntu focal stable
     state: present
   register: docker_repo
 
-- name: Do an apt update
+- name: Do an apt update.
   ansible.builtin.apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
   when: (docker_key is changed) or (docker_repo is changed)
 
-- name: Install required dependencies
+- name: Install required dependencies.
   ansible.builtin.apt:
     pkg:
       - apt-transport-https
@@ -30,7 +32,7 @@
     state: latest
     update_cache: true
 
-- name: Install Docker
+- name: Install Docker.
   ansible.builtin.apt:
     name:
       - docker
@@ -40,21 +42,21 @@
     state: latest
     update_cache: true
 
-- name: Add the {{ ansible_ssh_user }} user to the Docker group
+- name: Add the control user to the Docker group.
   ansible.builtin.user:
     name: "{{ ansible_ssh_user }}"
     groups: 
       - docker
     append: yes
 
-- name: Create the Docker volumes root directory
+- name: Create the Docker volumes root directory.
   ansible.builtin.file:
     path: "{{ ahl_docker_volume_root }}"
     state: directory
     owner: "{{ ansible_ssh_user }}"
     group: "{{ ansible_ssh_user }}"
 
-- name: Run the Docker service
+- name: Start the Docker service.
   ansible.builtin.service:
     name: docker
     enabled: yes
