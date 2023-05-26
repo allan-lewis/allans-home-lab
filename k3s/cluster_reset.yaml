@@ -4,7 +4,6 @@
   become: yes
 
   vars_prompt:
-
     - name: "reset_password"
       prompt: "Password"
       private: true  
@@ -13,8 +12,7 @@
 
   roles:
     - role: cluster_reset
-    - role: cluster_raspberrypi
-      vars: {state: absent}
+
   post_tasks:
     - name: Reboot and wait for node to come back up
       reboot:

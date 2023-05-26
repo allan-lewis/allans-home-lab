@@ -7,7 +7,6 @@
   roles:
     - role: cluster_prereq
     - role: cluster_download
-    - role: cluster_raspberrypi
 
 - name: Setup k3s master nodes and control plane.
   hosts: k3s_nodes_master
