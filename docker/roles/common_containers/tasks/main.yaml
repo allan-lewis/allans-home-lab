@@ -1,15 +1,33 @@
+## AHL
 ---
 - import_role:
     name: docker_getent
 
-- name: Create Docker volume(s)
+- name: Create Syncthing Docker volumes.
   ansible.builtin.file:
     path: "{{ syncthing_config_volume }}"
     state: directory
     owner: "{{ ansible_ssh_user }}"
     group: "{{ ansible_ssh_user }}"
 
-- name: Deploy Portainer Agent container
+- name: Install the Syncthing Docker container.
+  community.docker.docker_container:
+    container_default_behavior: no_defaults
+    detach: yes
+    name: "syncthing"
+    image: "lscr.io/linuxserver/syncthing:latest"
+    state: "started"
+    recreate: "yes"
+    pull: "yes"
+    restart_policy: "unless-stopped"
+    network_mode: "host"
+    volumes: "{{ syncthing_volumes }}"
+    env: 
+      TZ: America/New_York
+      PUID: "{{ ahl_user_uid }}"
+      PGID: "{{ ahl_user_gid }}"
+
+- name: Install the Portainer Agent Docker container.
   community.docker.docker_container:
     container_default_behavior: no_defaults
     detach: yes
@@ -25,7 +43,7 @@
       - /var/run/docker.sock:/var/run/docker.sock
       - /var/lib/docker/volumes:/var/lib/docker/volumes
 
-- name: Deploy Docker Socket Proxy container
+- name: Install the Docker Socket Proxy Docker container.
   community.docker.docker_container:
     container_default_behavior: no_defaults
     detach: yes
@@ -43,24 +61,7 @@
       CONTAINERS: "1 | int"
       POST: "0 | int" 
 
-- name: Deploy Syncthing container
-  community.docker.docker_container:
-    container_default_behavior: no_defaults
-    detach: yes
-    name: "syncthing"
-    image: "lscr.io/linuxserver/syncthing:latest"
-    state: "started"
-    recreate: "yes"
-    pull: "yes"
-    restart_policy: "unless-stopped"
-    network_mode: "host"
-    volumes: "{{ syncthing_volumes }}"
-    env: 
-      TZ: America/New_York
-      PUID: "{{ ahl_user_uid }}"
-      PGID: "{{ ahl_user_gid }}"
-
-- name: Deploy cAdvisor container (x64)
+- name: Install the cAdvisor Docker container (x64).
   community.docker.docker_container:
     container_default_behavior: no_defaults
     detach: yes
@@ -79,7 +80,7 @@
       - /var/lib/docker/:/var/lib/docker:ro
   when: ansible_architecture == 'x86_64'
 
-- name: Deploy cAdvisor container (ARM)
+- name: Install the cAdvisor Docker container (ARM).
   community.docker.docker_container:
     container_default_behavior: no_defaults
     detach: yes
@@ -99,7 +100,7 @@
       - /dev/disk/:/dev/disk:ro
   when: ansible_architecture == 'armv7l'
 
-- name: Deploy Prometheus Node Exporter container
+- name: Install the Prometheus Node Exporter Docker container.
   community.docker.docker_container:
     container_default_behavior: no_defaults
     detach: yes

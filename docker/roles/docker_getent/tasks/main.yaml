@@ -1,6 +1,6 @@
 ## AHL
 ---
-- name: Get entries from passwd database.
+- name: Get entries from the passwd database.
   ansible.builtin.getent:
     database: passwd
   when: ahl_getent_passwd is undefined

@@ -1,8 +1,9 @@
+## AHL
 ---
 - import_role: 
     name: docker_getent
 
-- name: Create Docker volume(s)
+- name: Create Docker volumes.
   ansible.builtin.file:
     path: "{{ item.path }}"
     state: directory
@@ -19,7 +20,7 @@
       - path: "{{ torrent_downloads }}"
       - path: "{{ torrent_watch }}"
 
-- name: Deploy Jackett container
+- name: Install the Jackett Docker container.
   community.docker.docker_container:
     container_default_behavior: no_defaults
     detach: yes
@@ -39,7 +40,7 @@
       PUID: "{{ ahl_user_uid }}"
       PGID: "{{ ahl_user_gid }}"
 
-- name: Deploy Sonarr container
+- name: Install the Sonarr Docker container.
   community.docker.docker_container:
     container_default_behavior: no_defaults
     detach: yes
@@ -60,7 +61,7 @@
       PUID: "{{ ahl_user_uid }}"
       PGID: "{{ ahl_user_gid }}"
 
-- name: Deploy Radarr container
+- name: Install the Radarr Docker container.
   community.docker.docker_container:
     container_default_behavior: no_defaults
     detach: yes
@@ -81,7 +82,7 @@
       PUID: "{{ ahl_user_uid }}"
       PGID: "{{ ahl_user_gid }}"
 
-- name: Deploy Transmission container
+- name: Install the Transmission Docker container.
   community.docker.docker_container:
     container_default_behavior: no_defaults
     detach: yes
