@@ -1,49 +1,49 @@
+## AHL
 ---
-- name: Set same timezone on every Server
+- name: Set the same timezone on every node.
   timezone:
-    name: "{{ system_timezone }}"
-  when: (system_timezone is defined) and (system_timezone != "Your/Timezone")
+    name: "America/New_York"
 
-- name: Set SELinux to disabled state
+- name: Disable SELinux.
   selinux:
     state: disabled
   when: ansible_os_family == "RedHat"
 
-- name: Enable IPv4 forwarding
+- name: Enable IPv4 forwarding.
   sysctl:
     name: net.ipv4.ip_forward
     value: "1"
     state: present
     reload: yes
 
-- name: Enable IPv6 forwarding
+- name: Enable IPv6 forwarding.
   sysctl:
     name: net.ipv6.conf.all.forwarding
     value: "1"
     state: present
     reload: yes
 
-- name: Enable IPv6 router advertisements
+- name: Enable IPv6 router advertisements.
   sysctl:
     name: net.ipv6.conf.all.accept_ra
     value: "2"
     state: present
     reload: yes
 
-- name: Add br_netfilter to /etc/modules-load.d/
+- name: Add br_netfilter to /etc/modules-load.d/.
   copy:
     content: "br_netfilter"
     dest: /etc/modules-load.d/br_netfilter.conf
     mode: "u=rw,g=,o="
   when: ansible_os_family == "RedHat"
 
-- name: Load br_netfilter
+- name: Load br_netfilter.
   modprobe:
     name: br_netfilter
     state: present
   when: ansible_os_family == "RedHat"
 
-- name: Set bridge-nf-call-iptables (just to be sure)
+- name: Set bridge-nf-call-iptables (just to be sure).
   sysctl:
     name: "{{ item }}"
     value: "1"
@@ -54,7 +54,7 @@
     - net.bridge.bridge-nf-call-iptables
     - net.bridge.bridge-nf-call-ip6tables
 
-- name: Add /usr/local/bin to sudo secure_path
+- name: Add /usr/local/bin to sudo secure_path.
   lineinfile:
     line: 'Defaults    secure_path = /sbin:/bin:/usr/sbin:/usr/bin:/usr/local/bin'
     regexp: "Defaults(\\s)*secure_path(\\s)*="
@@ -64,11 +64,11 @@
     validate: 'visudo -cf %s'
   when: ansible_os_family == "RedHat"
 
-- name: Kubernetes Python module
+- name: Install Kubernetes Python module.
   ansible.builtin.pip:
     name: kubernetes
 
-- name: Download Helm
+- name: Download Helm.
   get_url:
     url: https://get.helm.sh/helm-{{ helm_version }}-linux-amd64.tar.gz
     checksum: sha256:https://get.helm.sh/helm-{{ helm_version }}-linux-amd64.tar.gz.sha256sum
@@ -78,13 +78,13 @@
     mode: 0755
   when: ansible_facts.architecture == "x86_64"
 
-- name: Extract Helm binary
+- name: Extract Helm binary.
   ansible.builtin.unarchive:
     remote_src: true
     src: /tmp/helm-{{ helm_version }}-linux-amd64.tar.gz
     dest: /tmp
 
-- name: Copy Helm to path
+- name: Copy Helm to path.
   copy: 
     remote_src: true 
     src: /tmp/linux-amd64/helm 
@@ -93,7 +93,7 @@
     group: root
     mode: 0755
 
-- name: Install Helm diff plugin
+- name: Install the Helm diff plugin.
   kubernetes.core.helm_plugin:
     plugin_path: https://github.com/databus23/helm-diff
     state: present
