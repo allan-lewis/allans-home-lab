@@ -1,5 +1,6 @@
+## AHL
 ---
-- name: Create manifests directory for temp configuration
+- name: Create temporary directory for k3s manifests.
   file:
     path: /tmp/k3s
     state: directory
@@ -8,7 +9,7 @@
   with_items: "{{ groups['k3s_nodes_master'] }}"
   run_once: true
 
-- name: Copy metallb CRs manifest to first master
+- name: Copy metallb CRs manifest to first master.
   template:
     src: "metallb.crs.j2"
     dest: "/tmp/k3s/metallb-crs.yaml"
@@ -17,14 +18,14 @@
   with_items: "{{ groups['k3s_nodes_master'] }}"
   run_once: true
 
-- name: Test metallb-system namespace
+- name: Test metallb-system namespace.
   command: >-
     k3s kubectl -n metallb-system
   changed_when: false
   with_items: "{{ groups['k3s_nodes_master'] }}"
   run_once: true
 
-- name: Wait for MetalLB resources
+- name: Wait for MetalLB resources.
   command: >-
     k3s kubectl wait {{ item.resource }}
     --namespace='metallb-system'
@@ -62,14 +63,14 @@
   loop_control:
     label: "{{ item.description }}"
 
-- name: Test metallb-system webhook-service endpoint
+- name: Test metallb-system webhook-service endpoint.
   command: >-
     k3s kubectl -n metallb-system get endpoints webhook-service
   changed_when: false
   with_items: "{{ groups['k3s_nodes_master'] }}"
   run_once: true
 
-- name: Apply metallb CRs
+- name: Apply metallb CRs.
   command: >-
     k3s kubectl apply -f /tmp/k3s/metallb-crs.yaml
     --timeout='{{ metal_lb_available_timeout }}'
@@ -79,7 +80,7 @@
   until: this.rc == 0
   retries: 5
 
-- name: Test metallb-system resources
+- name: Test metallb-system resources.
   command: >-
     k3s kubectl -n metallb-system get {{ item }}
   changed_when: false
@@ -88,7 +89,7 @@
     - IPAddressPool
     - L2Advertisement
 
-- name: Remove tmp directory used for manifests
+- name: Remove the temporary directory used for manifests.
   file:
     path: /tmp/k3s
     state: absent

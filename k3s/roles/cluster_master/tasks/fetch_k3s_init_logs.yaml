@@ -1,14 +1,15 @@
+## AHL
 ---
 # Download logs of k3s-init.service from the nodes to localhost.
 # Note that log_destination must be set.
 
-- name: Fetch k3s-init.service logs
+- name: Fetch k3s-init.service logs.
   ansible.builtin.command:
     cmd: journalctl --all --unit=k3s-init.service
   changed_when: false
   register: k3s_init_log
 
-- name: Create {{ log_destination }}
+- name: Create {{ log_destination }}.
   delegate_to: localhost
   run_once: true
   become: false
@@ -17,7 +18,7 @@
     state: directory
     mode: "0755"
 
-- name: Store logs to {{ log_destination }}
+- name: Store logs to {{ log_destination }}.
   delegate_to: localhost
   become: false
   ansible.builtin.template:

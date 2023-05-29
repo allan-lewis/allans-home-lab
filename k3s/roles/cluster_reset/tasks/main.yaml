@@ -1,10 +1,11 @@
+## AHL
 ---
-- name: Fail on invalid password
+- name: Fail if the operator has not provided the correct reset password.
   ansible.builtin.fail:
     msg: Incorrect password for cluster reset
   when: reset_password != cluster_reset_password
 
-- name: Disable services
+- name: Disable k3 services.
   systemd:
     name: "{{ item }}"
     state: stopped
@@ -15,13 +16,13 @@
     - k3s-node
     - k3s-init
 
-- name: RUN pkill -9 -f "k3s/data/[^/]+/bin/containerd-shim-runc"
+- name: RUN pkill -9 -f "k3s/data/[^/]+/bin/containerd-shim-runc".
   register: pkill_containerd_shim_runc
   command: pkill -9 -f "k3s/data/[^/]+/bin/containerd-shim-runc"
   changed_when: "pkill_containerd_shim_runc.rc == 0"
   failed_when: false
 
-- name: Umount k3s filesystems
+- name: Umount k3s filesystems.
   include_tasks: umount_with_children.yml
   with_items:
     - /run/k3s
@@ -34,7 +35,7 @@
   loop_control:
     loop_var: mounted_fs
 
-- name: Remove service files, binaries and data
+- name: Remove service files, binaries and data.
   file:
     name: "{{ item }}"
     state: absent
@@ -50,12 +51,13 @@
     - /var/lib/rancher/k3s
     - /var/lib/rancher/
     - /var/lib/cni/
+    ## TODO - Remove Longhorn storage files/directories
 
-- name: Reload daemon_reload
+- name: Reload systemd manager configuration.
   systemd:
     daemon_reload: yes
 
-- name: Remove tmp directory used for manifests
+- name: Remove temporary directory used for manifests.
   file:
     path: /tmp/k3s
     state: absent
