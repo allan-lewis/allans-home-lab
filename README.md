@@ -26,12 +26,6 @@ Update outbound OpenVPN server(s) and update network settings for any node(s) th
 ansible-playbook network.yaml
 ~~~
 
-Schedule any backup tasks.
-
-~~~
-ansible-playbook backup.yaml
-~~~
-
 Update k3s services.  This will run through most of the k3s playbooks, skipping only the setup of the cluster itself, as well as some of the more critical services whose versions are fixed (Cert Manager, Longhorn).
 
 ~~~

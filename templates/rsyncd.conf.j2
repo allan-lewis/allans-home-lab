@@ -1,0 +1,12 @@
+pid file = /var/run/rsyncd.pid
+lock file = /var/run/rsync.lock
+log file = /var/log/rsync.log
+
+{% for module in rsync_modules %}
+[{{ module.name }}]
+path = {{ module.path }}
+comment =  {{ module.comment | default('') }}
+read only = {{ module.read_only | default(true) }}
+timeout = {{ module.timeout | default(300) }}
+
+{% endfor %}

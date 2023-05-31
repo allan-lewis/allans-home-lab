@@ -112,6 +112,21 @@
     state: latest
     update_cache: true
 
+- name: Create a configuration file for rsync.
+  ansible.builtin.template:
+    src: rsyncd.conf.j2
+    dest: /etc/rsyncd.conf
+  when: "rsync_modules is defined"
+  with_items: "{{ rsync_modules }}"
+  register: wrote_rsync_config
+
+- name: Restart the rsync service.
+  ansible.builtin.systemd:
+    state: restarted
+    daemon_reload: true
+    name: rsync
+  when: wrote_rsync_config is changed
+
 - name: Check to see if a reboot is required.
   ansible.builtin.stat: 
     path: /var/run/reboot-required
