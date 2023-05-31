@@ -70,7 +70,7 @@ ansible-playbook k3s/cluster_reset.yml
 Destroy the k3s cluster.
 
 ~~~
-ansible-playbook k3s/reset.yml
+ansible-playbook k3s/cluster_reset.yml
 ~~~
 
 ### Recovery
@@ -78,7 +78,7 @@ ansible-playbook k3s/reset.yml
 Re-create the k3 cluster
 
 ~~~
-ansible-playbook k3s/cluster.yml
+ansible-playbook k3s/cluster_setup.yml
 ~~~
 
 Ensure that Cert Manager certs have been requested successfully.
