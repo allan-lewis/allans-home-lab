@@ -3,7 +3,7 @@ apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
   name: {{ ingress_name | default(service_name) }}
-  namespace: {{ namespace_name }}
+  namespace:  default
   annotations: 
     kubernetes.io/ingress.class: traefik-external
 spec:
@@ -22,3 +22,5 @@ spec:
           port: {{ route.service_port | default(service_port) }}
           scheme: {{ route.scheme | default('http') }}
 {% endfor %}
+  tls:
+    secretName: certificate-production

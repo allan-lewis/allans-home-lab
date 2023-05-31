@@ -1,7 +1,7 @@
 ## AHL
 ---
 - name: Reset all k3s cluster nodes.
-  hosts: k3s_nodes
+  hosts: k3s_nodes_all
   gather_facts: yes
   become: yes
 

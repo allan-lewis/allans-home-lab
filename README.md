@@ -70,7 +70,7 @@ ansible-playbook k3s/cluster_reset.yml
 Destroy the k3s cluster.
 
 ~~~
-ansible-playbook k3s/cluster_reset.yml
+ansible-playbook k3s/cluster_reset.yaml
 ~~~
 
 ### Recovery
@@ -78,10 +78,14 @@ ansible-playbook k3s/cluster_reset.yml
 Re-create the k3 cluster
 
 ~~~
-ansible-playbook k3s/cluster_setup.yml
+ansible-playbook k3s/cluster_setup.yaml
 ~~~
 
-Ensure that Cert Manager certs have been requested successfully.
+Install Cert Manager and ensure that Cert Manager certs have been requested successfully.
+
+~~~
+ansible-playbook k3s/cluster_setup.yaml
+~~~
 
 ~~~
 kubectl get challenges -A
@@ -89,6 +93,18 @@ kubectl get challenges -A
 
 ~~~
 kubectl get certificates -A -o wide
+~~~
+
+Install Traefik
+
+~~~
+ansible-playbook k3s/traefik.yaml
+~~~
+
+Install Longhorn
+
+~~~
+ansible-playbook k3s/longhorn.yaml
 ~~~
 
 Manually restore all Longhorn volumes.  Create a volume/PVC for anything not backed up (Prometheus).

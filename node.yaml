@@ -20,9 +20,8 @@
       delegate_to: localhost
       run_once: yes
       shell: kubectl drain {{ item }} --ignore-daemonsets --delete-emptydir-data #--force --pod-selector='app!=csi-attacher,app!=csi-provisioner'
-      when: "'k3s_nodes_all' in group_names"
+      when: "'k3s_nodes_all' in group_names and (k3s_cordon | default('true')) == 'true'"
       with_items: "{{ ansible_play_batch }}"
-      ignore_errors: "{{ ignore_k3s_errors | detault(false) }}"
 
 - name: Perform basline host setup.
   hosts: managed_nodes
@@ -42,6 +41,5 @@
       delegate_to: localhost
       run_once: yes
       shell: kubectl uncordon {{ item }}
-      when: "'k3s_nodes_all' in group_names"
+      when: "'k3s_nodes_all' in group_names and (k3s_cordon | default('true')) == 'true'"
       with_items: "{{ ansible_play_batch }}"
-      ignore_errors: "{{ ignore_k3s_errors | detault(false) }}"

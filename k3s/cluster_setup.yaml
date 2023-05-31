@@ -53,9 +53,3 @@
       vars:
         namespace_name: "{{ item.namespace_name }}"
       with_items: "{{ k3s_namespaces }}"
-
-- name: Install cert-manager.
-  import_playbook: cert_manager.yaml
-
-- name: Install Longhorn.
-  import_playbook: longhorn.yaml

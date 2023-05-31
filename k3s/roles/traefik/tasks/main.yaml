@@ -34,3 +34,13 @@
   kubernetes.core.k8s:
     state: "{{ ahl_k3s_state }}"
     template: default-headers.yml.j2
+
+- name: Create a dashboard authentication secret.
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: secret-dashboard.yml.j2
+
+- name: Create an ingress for the Traefik dashboard.
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: ingress.yml.j2
