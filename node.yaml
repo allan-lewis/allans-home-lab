@@ -22,7 +22,6 @@
       shell: kubectl drain {{ item }} --ignore-daemonsets --delete-emptydir-data #--force --pod-selector='app!=csi-attacher,app!=csi-provisioner'
       when: "'k3s_nodes_all' in group_names"
       with_items: "{{ ansible_play_batch }}"
-      ##TODO: Improve this to add a flag to conditionally skip k3s nodes
       ignore_errors: "{{ ignore_k3s_errors | detault(false) }}"
 
 - name: Perform basline host setup.
@@ -45,5 +44,4 @@
       shell: kubectl uncordon {{ item }}
       when: "'k3s_nodes_all' in group_names"
       with_items: "{{ ansible_play_batch }}"
-      ##TODO: Improve this to add a flag to conditionally skip k3s nodes
       ignore_errors: "{{ ignore_k3s_errors | detault(false) }}"
