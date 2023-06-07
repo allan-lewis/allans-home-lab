@@ -1,0 +1,42 @@
+## AHL
+---
+- name: Download Node Exporter (ARM).
+  get_url:
+    url: https://github.com/prometheus/node_exporter/releases/download/v1.6.0/node_exporter-1.6.0.linux-armv6.tar.gz
+    checksum: "sha256:6dbf0eaaefb9d865bcfa9b5dcf831f8659c71d8db87c7c489e1279c106c9c01a"
+    dest: /tmp
+    owner: root
+    group: root
+    mode: 0755
+  when: ansible_architecture == 'armv7l'
+
+- name: Extract the Node Exporter archive (ARM).
+  ansible.builtin.unarchive:
+    src: /tmp/node_exporter-1.6.0.linux-armv6.tar.gz
+    remote_src: true
+    dest: /tmp
+  when: ansible_architecture == 'armv7l'
+
+- name: Copy the Node Exporter binary onto the path.
+  copy: 
+    remote_src: true 
+    src: /tmp/node_exporter-1.6.0.linux-armv6/node_exporter 
+    dest: /usr/local/bin
+    owner: "ansible"
+    group: "ansible"
+    mode: 0755
+
+- name: Create sthe Node Exporter service.
+  ansible.builtin.template:
+    src: "node_exporter.service.j2"
+    dest: "/etc/systemd/system/node_exporter.service"
+    owner: "root"
+    group: "root"
+    mode: 0644
+
+- name: Start the Node Exporter service.
+  systemd:
+    name: node_exporter.service
+    daemon_reload: yes
+    state: started
+    enabled: yes

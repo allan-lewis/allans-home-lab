@@ -9,28 +9,20 @@ prometheus:
                 storage: 128Gi
 
       additionalScrapeConfigs:
-        - job_name: 'node-exporter'
-          static_configs:
-            - targets:
-{% for node in groups['docker_nodes'] %}
-              - '{{hostvars[node]['ansible_host']}}:{{ known_ports.node_exporter_http_port }}'
-{% endfor %}
-        - job_name: 'cadvisor'
-          static_configs:
-            - targets:
-{% for node in groups['docker_nodes'] %}
-              - '{{hostvars[node]['ansible_host']}}:{{ known_ports.cadvisor_http_port }}'
-{% endfor %}
-{% if uptime_kuma_monitoring is defined %}
-        - job_name: 'uptime-kuma'
-          scheme: {{ uptime_kuma_monitoring.scheme | default ('https') }}
+{% for config in scrape_configs | default([]) %}
+        - job_name: '{{ config.name }}'
+          scheme: {{ config.scheme | default ('http') }}
+{% if config.basic_auth is defined %}
           basic_auth:
-            username: {{ uptime_kuma_monitoring.username }}
-            password: {{ uptime_kuma_monitoring.password }}
+            username: {{ config.basic_auth.username }}
+            password: {{ config.basic_auth.password }}
+{% endif %}
           static_configs:
             - targets:
-              - '{{ uptime_kuma_monitoring.host }}:{{ uptime_kuma_monitoring.port }}'
-{% endif %}
+{% for target in config.targets %}
+              - {{target.host}}:{{ target.port }}
+{% endfor %}
+{% endfor %}
 
 grafana:
   persistence:
