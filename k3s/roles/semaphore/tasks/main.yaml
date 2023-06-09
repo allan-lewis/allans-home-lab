@@ -1,0 +1,51 @@
+## AHL
+---
+- name: Create a namespace for Semaphore.
+  kubernetes.core.k8s:
+    state: present
+    template: namespace.yml.j2
+
+- name: Create the k8s Semaphore deployment.
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: semaphore-deployment.yaml.j2
+  vars:
+    - service_name: "{{ semaphore_name }}"
+      container_name: "{{ semaphore_name }}"
+      container_image: ansiblesemaphore/semaphore
+      service_replicas: 1
+      environment_vars:
+        - name: SEMAPHORE_DB_USER
+          value: "{{ semaphore_db_user }}"
+        - name: SEMAPHORE_DB_PASS
+          value: "{{ semaphore_db_pass }}"
+        - name: SEMAPHORE_DB_HOST
+          value: "{{ semaphore_db_host }}"
+        - name: SEMAPHORE_DB_PORT
+          value: "\"{{ semaphore_db_port }}\""
+        - name: SEMAPHORE_DB_DIALECT
+          value: "{{ semaphore_db_dialect }}"
+        - name: SEMAPHORE_DB
+          value: "{{ semaphore_db_name }}"
+        - name: SEMAPHORE_PLAYBOOK_PATH
+          value: "{{ semaphore_playbook_path }}"
+        - name: SEMAPHORE_ADMIN_PASSWORD
+          value: "{{ semaphore_admin_password }}"
+        - name: SEMAPHORE_ADMIN_NAME
+          value: "{{ semaphore_admin_name }}"
+        - name: SEMAPHORE_ADMIN_EMAIL
+          value: "{{ semaphore_admin_email }}"
+        - name: SEMAPHORE_ADMIN
+          value: "{{ semaphore_admin_name }}"
+        - name: SEMAPHORE_ACCESS_KEY_ENCRYPTION
+          value: "{{ semaphore_access_key }}"
+
+- name: Create the k8s Semaphore service.
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: service.yml.j2
+
+- name: Create Traefik ingress for Semaphore.
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: traefik_ingress_route.yml.j2

@@ -30,4 +30,6 @@
 
 - import_playbook: rancher.yaml
 
+- import_playbook: semaphore.yaml
+
 - import_playbook: traefik_services.yaml

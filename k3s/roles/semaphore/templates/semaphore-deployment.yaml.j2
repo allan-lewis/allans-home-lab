@@ -1,0 +1,39 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: {{ deployment_name | default(service_name) }}
+  namespace: {{ namespace_name }}
+  labels:
+    app: {{ app_name | default(service_name) }}
+spec:
+  replicas: {{ service_replicas | default(2) }}
+  progressDeadlineSeconds: 600
+  revisionHistoryLimit: 2
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: {{ app_name | default(service_name) }}
+  template:
+    metadata:
+      labels:
+        app: {{ app_name | default(service_name) }}
+    spec:
+      containers:
+      - name: {{ container_name }} 
+        image: {{ container_image }} 
+        imagePullPolicy: "Always"
+        env:
+{% for env in environment_vars | default([]) %}
+        - name: {{ env.name }}
+          value: {{ env.value }}
+{% endfor %}
+        volumeMounts:
+        - name: semaphore-temp
+          mountPath: /k3s-semaphore
+      volumes:
+      - name: semaphore-temp
+        hostPath:
+          path: {{ semaphore_playbook_path }}
+          type: DirectoryOrCreate

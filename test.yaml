@@ -1,0 +1,9 @@
+## AHL
+---
+- name: Install Node Exporter.
+  hosts: node_exporter_nodes
+  become: yes
+  gather_facts: yes
+  
+  roles:
+    - node_exporter
