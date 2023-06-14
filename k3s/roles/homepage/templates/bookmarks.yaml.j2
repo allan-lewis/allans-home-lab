@@ -1,0 +1,13 @@
+---
+# For configuration options and examples, please see:
+# https://github.com/benphelps/homepage/wiki/Bookmarks
+
+{% for group in homepage_bookmark_groups | default([]) %}
+- {{ group.name }}:
+{% for bookmark in group.bookmarks | default([]) %}
+    - {{ bookmark.name }}:
+        - abbr: {{ bookmark.abbr }}
+          href: "{{ bookmark.href }}"
+{% endfor %}
+
+{% endfor %}
