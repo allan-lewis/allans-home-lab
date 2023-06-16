@@ -39,6 +39,8 @@
           value: "{{ semaphore_admin_name }}"
         - name: SEMAPHORE_ACCESS_KEY_ENCRYPTION
           value: "{{ semaphore_access_key }}"
+        - name: ANSIBLE_HOST_KEY_CHECKING
+          value: "false | bool"
 
 - name: Create the k8s Semaphore service.
   kubernetes.core.k8s:
