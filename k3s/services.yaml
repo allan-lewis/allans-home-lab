@@ -32,4 +32,6 @@
 
 - import_playbook: semaphore.yaml
 
+- import_playbook: portainer.yaml
+
 - import_playbook: traefik_services.yaml
