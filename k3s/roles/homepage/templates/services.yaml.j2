@@ -29,6 +29,9 @@
 {% if service.widget.slug is defined %}
             slug: {{ service.widget.slug }}
 {% endif %}
+{% if service.widget.env is defined %}
+            env: {{ service.widget.env }}
+{% endif %}
 {% endif %}
 {% endfor %}
 
