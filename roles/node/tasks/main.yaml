@@ -123,6 +123,7 @@
 - name: Restart the rsync service.
   ansible.builtin.systemd:
     state: restarted
+    enabled: true
     daemon_reload: true
     name: rsync
   when: wrote_rsync_config is changed
