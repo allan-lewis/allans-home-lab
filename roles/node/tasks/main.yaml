@@ -128,6 +128,15 @@
     name: rsync
   when: wrote_rsync_config is changed
 
+- name: Control active and configured mount points.
+  ansible.posix.mount:
+    src: "{{  item.host }}:{{ item.src }}"
+    path: "{{ item.path }}"
+    opts: "{{ item.options }}"
+    state: "{{ item.state | default('mounted') }}"
+    fstype: "{{ item.type | default('nfs') }}"
+  with_items: "{{ node_mount_points | default([]) }}"
+
 - name: Check to see if a reboot is required.
   ansible.builtin.stat: 
     path: /var/run/reboot-required
