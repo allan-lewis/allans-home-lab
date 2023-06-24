@@ -23,12 +23,6 @@
     owner: "{{ control_user }}"
     group: "{{ control_user }}"
 
-- name: Create the control user's SSH key.
-  community.crypto.openssh_keypair:
-    path: "{{ control_user_data.home }}/.ssh/id_rsa"
-    owner: "{{ control_user }}"
-    group: "{{ control_user }}"
-
 - name: Add SSH key(s) to authorized keys.
   ansible.posix.authorized_key:
     user: "{{ control_user }}"
@@ -127,15 +121,6 @@
     daemon_reload: true
     name: rsync
   when: wrote_rsync_config is changed
-
-- name: Control active and configured mount points.
-  ansible.posix.mount:
-    src: "{{  item.host }}:{{ item.src }}"
-    path: "{{ item.path }}"
-    opts: "{{ item.options }}"
-    state: "{{ item.state | default('mounted') }}"
-    fstype: "{{ item.type | default('nfs') }}"
-  with_items: "{{ node_mount_points | default([]) }}"
 
 - name: Check to see if a reboot is required.
   ansible.builtin.stat: 

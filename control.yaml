@@ -1,19 +1,48 @@
 ## AHL
 ---
-- name: Ensure that control nodes are setup to run Ansible playbooks.
+- name: Attach an NFS mount for inventory and key files.
+  become: yes
+  gather_facts: yes
+
+  hosts: control_nodes
+
+  tasks:
+    - name: Mount Ansible inventory and keys.
+      ansible.posix.mount:
+        src: "{{ ahl_control_mount.src }}"
+        path: "{{ ahl_control_mount.path }}"
+        opts: "{{ ahl_control_mount.options | default('ro') }}"
+        state: "{{ ahl_control_mount.state | default('mounted') }}"
+        fstype: "{{ ahl_control_mount.type | default('nfs') }}"
+
+    - name: Install private key for the control user.
+      ansible.builtin.copy:
+        src: "{{ ahl_control_private_key.src }}"
+        dest: "{{ ahl_control_private_key.dest }}"
+        remote_src: yes
+        owner: "{{ control_user }}"
+        group: "{{ control_user }}"
+        mode: '0600'
+
+- name: Setup control nodes to run Ansible playbooks.
   become: no
-  gather_facts: no
+  gather_facts: yes
 
   hosts: control_nodes
   
   tasks:
-    - name: Add host keys to known hosts.
-      ansible.builtin.known_hosts:
-        name: "{{ hostvars[item].ansible_host }}"
-        key: "{{ lookup('pipe', 'ssh-keyscan {{ hostvars[item].ansible_host }},`dig +short {{ hostvars[item].ansible_host }}`') }}"
-      with_items: "{{ groups['managed_nodes'] }}"
+    - name: Create an Ansibile config file.
+      ansible.builtin.template:
+        src: ansible.cfg.j2
+        dest: "{{ ansible_env.HOME }}/.ansible.cfg"
 
     - name: Install Ansible.
       ansible.builtin.pip:
         name: ansible
         extra_args: --user
+
+    - name: Add host keys for all managed nodes to known hosts.
+      ansible.builtin.known_hosts:
+        name: "{{ hostvars[item].ansible_host }}"
+        key: "{{ lookup('pipe', 'ssh-keyscan {{ hostvars[item].ansible_host }},`dig +short {{ hostvars[item].ansible_host }}`') }}"
+      with_items: "{{ groups['managed_nodes'] }}"
