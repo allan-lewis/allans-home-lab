@@ -32,7 +32,13 @@ spec:
         volumeMounts:
         - name: semaphore-temp
           mountPath: /k3s-semaphore
+        - name: nfs-vol
+          mountPath: /etc/ahl
       volumes:
+      - name: nfs-vol
+        nfs:
+          server: {{ semaphore_nfs_host }}
+          path: {{ semaphore_nfs_path }}
       - name: semaphore-temp
         hostPath:
           path: {{ semaphore_playbook_path }}
