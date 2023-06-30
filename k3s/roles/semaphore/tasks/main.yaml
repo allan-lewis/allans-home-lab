@@ -10,7 +10,7 @@
     state: "{{ ahl_k3s_state }}"
     template: semaphore-deployment.yaml.j2
   vars:
-    - service_name: "{{ semaphore_name }}"
+      service_name: "{{ semaphore_name }}"
       container_name: "{{ semaphore_name }}"
       container_image: ansiblesemaphore/semaphore
       service_replicas: 1
