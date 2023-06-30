@@ -1,14 +1,14 @@
 ## AHL
 ---
-- name: Stop the playbook if not limited to a subset of hosts.
-  hosts: localhost
-  gather_facts: no
+# - name: Stop the playbook if not limited to a subset of hosts.
+#   hosts: localhost
+#   gather_facts: no
 
-  tasks:
-    - name: Stop the playbook if not limited to a subset of hosts.
-      fail:
-        msg: "You must use -l or --limit"
-      when: ansible_limit is not defined
+#   tasks:
+#     - name: Stop the playbook if not limited to a subset of hosts.
+#       fail:
+#         msg: "You must use -l or --limit"
+#       when: ansible_limit is not defined
 
 - name: Cordon and drain k3s nodes.
   hosts: k3s_nodes_all
