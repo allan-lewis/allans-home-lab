@@ -1,12 +1,16 @@
 ## AHL
 ---
-- name: Attach an NFS mount for inventory and key files.
+- name: Setup control nodes to run Ansible playbooks (as root).
   become: yes
   gather_facts: yes
 
   hosts: control_nodes
 
   tasks:
+    - name: Install kubernetes Python module.
+      ansible.builtin.pip:
+        name: kubernetes
+
     - name: Mount Ansible inventory and keys.
       ansible.posix.mount:
         src: "{{ ahl_control_mount.src }}"
@@ -24,7 +28,7 @@
         group: "{{ control_user }}"
         mode: '0600'
 
-- name: Setup control nodes to run Ansible playbooks.
+- name: Setup control nodes to run Ansible playbooks (as control user).
   become: no
   gather_facts: yes
 
@@ -46,3 +50,9 @@
         name: "{{ hostvars[item].ansible_host }}"
         key: "{{ lookup('pipe', 'ssh-keyscan {{ hostvars[item].ansible_host }},`dig +short {{ hostvars[item].ansible_host }}`') }}"
       with_items: "{{ groups['managed_nodes'] }}"
+
+    - name: Create a local directoty for kube config.
+      ansible.builtin.file:
+        path: ~/.kube
+        state: directory
+      register: control_user_kube_dir
