@@ -70,7 +70,7 @@
 - name: Update SSH host key algorithms.
   ansible.builtin.lineinfile:
     dest: /etc/ssh/sshd_config
-    search_string: 'HostKeyAlgorithms'
+    regexp: 'HostKeyAlgorithms'
     line: 'HostKeyAlgorithms +ssh-rsa'
     state: present
   when: ansible_facts['distribution'] == 'Ubuntu'
@@ -79,7 +79,7 @@
 - name: Update SSH public key accepted algorithms.
   ansible.builtin.lineinfile:
     dest: /etc/ssh/sshd_config
-    search_string: 'PubkeyAcceptedAlgorithms'
+    regexp: 'PubkeyAcceptedAlgorithms'
     line: 'PubkeyAcceptedAlgorithms +ssh-rsa'
     state: present
   when: ansible_facts['distribution'] == 'Ubuntu'
