@@ -4,3 +4,9 @@
 
 - import_playbook: cordon.yaml
 
+- hosts: managed_nodes
+  become: yes
+  gather_facts: yes
+
+- name: Unconditionally shut down the node with all defaults.
+  community.general.shutdown:
