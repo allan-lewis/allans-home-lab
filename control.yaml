@@ -7,9 +7,28 @@
   hosts: control_nodes
 
   tasks:
-    - name: Install kubernetes Python module.
+    - name: Get the Kubernetes apt GPG key.
+      ansible.builtin.apt_key:
+        url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+        state: present
+
+    - name: Get the Kubernetes apt repository.
+      ansible.builtin.apt_repository:
+        repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
+        state: present
+
+    - name: Install kubectl.
+      ansible.builtin.apt:
+        pkg:
+          - kubectl
+        state: latest
+        update_cache: true
+
+    - name: Install required Python modules.
       ansible.builtin.pip:
-        name: kubernetes
+        name: 
+          - kubernetes
+          - jmespath
 
     - name: Mount Ansible inventory and keys.
       ansible.posix.mount:
@@ -35,6 +54,21 @@
   hosts: control_nodes
   
   tasks:
+    - name: Create a local directoty for kube config.
+      ansible.builtin.file:
+        path: "{{ ansible_env.HOME }}/.kube"
+        state: directory
+
+    - name: Fetch kube config from master node.
+      ansible.builtin.fetch:
+        src: /root/.kube/config
+        dest: "{{ ansible_env.HOME }}/.kube/config"
+        flat: yes
+        owner: "{{ control_user }}"
+        group: "{{ control_user }}"
+      become: yes
+      delegate_to: "{{ groups['k3s_nodes_master'][0] }}"
+
     - name: Create an Ansibile config file.
       ansible.builtin.template:
         src: ansible.cfg.j2
@@ -50,9 +84,3 @@
         name: "{{ hostvars[item].ansible_host }}"
         key: "{{ lookup('pipe', 'ssh-keyscan {{ hostvars[item].ansible_host }},`dig +short {{ hostvars[item].ansible_host }}`') }}"
       with_items: "{{ groups['managed_nodes'] }}"
-
-    - name: Create a local directoty for kube config.
-      ansible.builtin.file:
-        path: ~/.kube
-        state: directory
-      register: control_user_kube_dir
