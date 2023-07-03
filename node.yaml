@@ -1,26 +1,8 @@
 ## AHL
 ---
-- name: Stop the playbook if not limited to a subset of hosts.
-  hosts: localhost
-  gather_facts: no
+- import_playbook: test-limit.yaml
 
-  tasks:
-    - name: Stop the playbook if not limited to a subset of hosts.
-      fail:
-        msg: "You must use -l or --limit"
-      when: ansible_limit is not defined
-
-- name: Cordon and drain k3s nodes.
-  hosts: k3s_nodes_all
-  become: yes
-  gather_facts: yes
-
-  tasks:
-    - name: Cordon and drain k3s nodes.
-      delegate_to: "{{ groups['k3s_nodes_master'][0] }}"
-      shell: kubectl drain {{ item }} --ignore-daemonsets --delete-emptydir-data #--force --pod-selector='app!=csi-attacher,app!=csi-provisioner'
-      when: "'k3s_nodes_all' in group_names and (k3s_cordon | default('true')) == 'true'"
-      with_items: "{{ ansible_play_batch }}"
+- import_playbook: cordon.yaml
 
 - name: Perform basline host setup.
   hosts: managed_nodes
