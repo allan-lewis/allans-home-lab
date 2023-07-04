@@ -48,10 +48,10 @@
 #     state: "{{ ahl_k3s_state }}"
 #     template: service.yml.j2
 
-# - name: Create a Traefik ingress for Homepage.
-#   kubernetes.core.k8s:
-#     state: "{{ ahl_k3s_state }}"
-#     template: traefik_ingress_route.yml.j2
+- name: Create a Traefik ingress for Homepage.
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: traefik_ingress_route.yml.j2
 
 # - name: Identify the Homepage pod.
 #   kubernetes.core.k8s_info:
