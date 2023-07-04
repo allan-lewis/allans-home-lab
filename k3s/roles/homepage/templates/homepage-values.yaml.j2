@@ -32,7 +32,7 @@ config:
           showLabel: true
           label: "k3s"
         nodes:
-          show: true
+          show: false
           cpu: true
           memory: true
           showLabel: true
@@ -44,10 +44,10 @@ config:
         # Shows the node names as labels
         labels: true
         # Show the nodes
-        nodes: true
-        include:
-          - castor
-          - deneb
+        nodes: false
+        # include:
+        #   - castor
+        #   - deneb
   kubernetes:
     mode: cluster
   settings:
