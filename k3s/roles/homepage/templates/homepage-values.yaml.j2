@@ -21,6 +21,12 @@ config:
             server: {{ service.docker.server }}
             container: {{ service.docker.container }}
 {% endif %}
+{% if service.namespace is defined %}
+            namespace: {{ service.namespace }}
+{% endif %}
+{% if service.app is defined %}
+            app: {{ service.app }}
+{% endif %}
 {% if service.widget is defined %}
             widget:
                 type: {{ service.widget.type }}
@@ -39,12 +45,6 @@ config:
 {% endif %}
 {% if service.widget.env is defined %}
                 env: {{ service.widget.env }}
-{% endif %}
-{% if service.widget.namespace is defined %}
-                namespace: {{ service.widget.namespace }}
-{% endif %}
-{% if service.widget.app is defined %}
-                app: {{ service.widget.app }}
 {% endif %}
 {% endif %}
 {% endfor %}
