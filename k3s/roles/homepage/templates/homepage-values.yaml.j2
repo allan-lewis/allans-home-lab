@@ -20,15 +20,6 @@ config:
             href: http://localhost/
             description: Homepage is 😎
   widgets:
-    - greeting:
-      text_size: xl
-      text: {{ homepage_title }}
-    - datetime:
-      text_size: xl
-      format:
-        dateStyle: full
-        timeStyle: short
-        hour12: false
     - search:
         provider: google
         target: _blank
@@ -57,6 +48,15 @@ config:
         # include:
         #   - castor
         #   - deneb
+    - greeting:
+      text_size: xl
+      text: {{ homepage_title }}
+    - datetime:
+      text_size: xl
+      format:
+        dateStyle: full
+        timeStyle: short
+        hour12: false
   kubernetes:
     mode: cluster
   settings:
