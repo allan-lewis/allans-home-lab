@@ -20,6 +20,9 @@ config:
             href: http://localhost/
             description: Homepage is 😎
   widgets:
+    - greeting:
+        text_size: xl
+        text: {{ homepage_title }}
     # show the kubernetes widget, with the cluster summary and individual nodes
     - kubernetes:
         cluster:
@@ -45,18 +48,15 @@ config:
         # include:
         #   - castor
         #   - deneb
-    - greeting:
-        text_size: xl
-        text: {{ homepage_title }}
+    - search:
+        provider: google
+        target: _blank
     - datetime:
         text_size: xl
         format:
           dateStyle: full
           timeStyle: short
           hour12: false
-    - search:
-        provider: google
-        target: _blank
   kubernetes:
     mode: cluster
   settings:
