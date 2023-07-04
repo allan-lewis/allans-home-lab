@@ -20,6 +20,9 @@ config:
             href: http://localhost/
             description: Homepage is 😎
   widgets:
+    - search:
+        provider: google
+        target: _blank
     # show the kubernetes widget, with the cluster summary and individual nodes
     - kubernetes:
         cluster:
@@ -42,9 +45,6 @@ config:
         labels: true
         # Show the nodes
         nodes: true
-    - search:
-        provider: google
-        target: _blank
   kubernetes:
     mode: cluster
   settings:
