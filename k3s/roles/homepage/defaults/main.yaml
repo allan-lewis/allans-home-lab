@@ -4,7 +4,7 @@ homepage_name: homepage
 homepage_title: "Allan's Home Lab"
 namespace_name: "{{ homepage_name }}"
 service_name: "{{ homepage_name }}"
-service_port: 35400
+service_port: 3000
 target_port: 3000
 routes: 
   - host: "{{ homepage_host }}"
