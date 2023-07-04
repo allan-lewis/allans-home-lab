@@ -43,6 +43,12 @@
     fail_msg: "Not proceeding further since we're using user {{ ansible_ssh_user }} instead of {{ control_user }}"
     success_msg: "Proceeding because we're using user {{ ansible_ssh_user }}"
 
+- name: Increase swap space.
+  shell: "{{ item }}"
+  when: ansible_architecture == 'armv7l'
+  with_items:
+    - "dphys-swapfile swapoff"
+
 - name: Allow only the control user to login.
   ansible.builtin.lineinfile:
     dest: /etc/ssh/sshd_config
