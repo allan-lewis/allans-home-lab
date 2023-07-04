@@ -10,20 +10,41 @@ config:
 {% endfor %}
 
   services:
-    - My First Group:
-        - My First Service:
-            href: http://localhost/
-            description: Homepage is awesome
+{% for group in homepage_service_groups | default([]) %}
+    - {{group.name}}:
+{% for service in group.services | default([]) %}
+        - {{ service.name }}:
+            icon: {{ service.icon | default('') }}
+            description: {{ service.description | default('') }}
+            href: {{ service.href | default('') }}
+{% if service.docker is defined %}
+            server: {{ service.docker.server }}
+            container: {{ service.docker.container }}
+{% endif %}
+{% if service.widget is defined %}
+            widget:
+                type: {{ service.widget.type }}
+                url: {{ service.widget.url }}
+{% if service.widget.key is defined %}
+                key: {{ service.widget.key }}
+{% endif %}
+{% if service.widget.username is defined %}
+                username: {{ service.widget.username }}
+{% endif %}
+{% if service.widget.password is defined %}
+                password: {{ service.widget.password }}
+{% endif %}
+{% if service.widget.slug is defined %}
+                slug: {{ service.widget.slug }}
+{% endif %}
+{% if service.widget.env is defined %}
+                env: {{ service.widget.env }}
+{% endif %}
+{% endif %}
+{% endfor %}
 
-    - My Second Group:
-        - My Second Service:
-            href: http://localhost/
-            description: Homepage is the best
+{% endfor %}
 
-    - My Third Group:
-        - My Third Service:
-            href: http://localhost/
-            description: Homepage is 😎
   widgets:
     - greeting:
         text_size: xl
