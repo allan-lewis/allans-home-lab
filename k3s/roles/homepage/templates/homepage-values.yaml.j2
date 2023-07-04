@@ -3,9 +3,9 @@ config:
 {% for group in homepage_bookmark_groups | default([]) %}
     - {{ group.name }}:
 {% for bookmark in group.bookmarks | default([]) %}
-    - {{ bookmark.name }}:
-        - abbr: {{ bookmark.abbr }}
-          href: "{{ bookmark.href }}"
+        - {{ bookmark.name }}:
+            - abbr: {{ bookmark.abbr }}
+              href: "{{ bookmark.href }}"
 {% endfor %}
 {% endfor %}
 
