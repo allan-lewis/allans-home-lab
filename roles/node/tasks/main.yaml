@@ -49,6 +49,14 @@
   with_items:
     - "dphys-swapfile swapoff"
 
+- name: Update swap file size.
+  ansible.builtin.lineinfile:
+    dest: /etc/dphys-swapfile
+    regexp: 'CONF_SWAPSIZE'
+    line: 'CONF_SWAPSIZE=1024'
+    state: present
+  when: ansible_architecture == 'armv7l'
+
 - name: Re-enable swap file usage.
   shell: "{{ item }}"
   when: ansible_architecture == 'armv7l'
