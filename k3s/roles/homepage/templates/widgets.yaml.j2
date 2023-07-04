@@ -12,8 +12,16 @@
 
 - kubernetes:
     cluster:
-      # Shows cluster-wide statistics
       show: true
+      cpu: true
+      memory: true
+      showLabel: true
+      label: "cluster"
+    nodes:
+      show: true
+      cpu: true
+      memory: true
+      showLabel: true
 
 - datetime:
     text_size: xl
