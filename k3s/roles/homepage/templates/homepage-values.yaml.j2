@@ -40,6 +40,12 @@ config:
 {% if service.widget.env is defined %}
                 env: {{ service.widget.env }}
 {% endif %}
+{% if service.widget.namespace is defined %}
+                namespace: {{ service.widget.namespace }}
+{% endif %}
+{% if service.widget.app is defined %}
+                app: {{ service.widget.app }}
+{% endif %}
 {% endif %}
 {% endfor %}
 
