@@ -1,9 +1,14 @@
 config:
   bookmarks:
-    - Developer:
-        - Github:
-            - abbr: GH
-              href: https://github.com/
+{% for group in homepage_bookmark_groups | default([]) %}
+    - {{ group.name }}:
+{% for bookmark in group.bookmarks | default([]) %}
+    - {{ bookmark.name }}:
+        - abbr: {{ bookmark.abbr }}
+          href: "{{ bookmark.href }}"
+{% endfor %}
+{% endfor %}
+
   services:
     - My First Group:
         - My First Service:
@@ -60,6 +65,7 @@ config:
   kubernetes:
     mode: cluster
   settings:
+    title: "{{ homepage_title }}"
     providers:
       longhorn:
         url: https://longhorn.local.allanshomelab.com
