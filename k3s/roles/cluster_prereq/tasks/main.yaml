@@ -64,9 +64,11 @@
     validate: 'visudo -cf %s'
   when: ansible_os_family == "RedHat"
 
-- name: Install Kubernetes Python module.
+- name: Install required Python modules.
   ansible.builtin.pip:
-    name: kubernetes
+    name: 
+      - kubernetes
+      - netaddr
 
 - name: Download Helm.
   get_url:

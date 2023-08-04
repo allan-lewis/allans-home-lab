@@ -29,6 +29,7 @@
         name: 
           - kubernetes
           - jmespath
+          - netaddr
 
     - name: Mount Ansible inventory and keys.
       ansible.posix.mount:

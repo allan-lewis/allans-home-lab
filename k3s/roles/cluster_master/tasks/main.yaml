@@ -10,8 +10,8 @@
   command: systemctl reset-failed k3s-init
   failed_when: false
   changed_when: false
-  args:
-    warn: false  # The ansible systemd module does not support reset-failed
+  # args:
+  #   warn: false  # 'warn' not supported by newer versions of Ansible
 
 - name: Create manifests directory on first master.
   file:
@@ -66,8 +66,8 @@
                       --unit=k3s-init \
                       k3s server {{ server_init_args }}"
     creates: "{{ systemd_dir }}/k3s.service"
-  args:
-    warn: false  # The ansible systemd module does not support transient units
+  # args:
+  #   warn: false  # 'warn' not supported by newer versions of Ansible
 
 - name: Verify that all nodes have joined.
   block:
