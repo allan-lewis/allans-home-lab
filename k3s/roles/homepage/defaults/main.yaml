@@ -4,26 +4,28 @@ homepage_name: homepage
 homepage_title: "Allan's Home Lab"
 namespace_name: "{{ homepage_name }}"
 service_name: "{{ homepage_name }}"
+service_account_name: "{{ homepage_name }}"
+# service_account_namespace: "{{ homepage_name }}"
 service_port: 3000
 target_port: 3000
 routes: 
   - host: "{{ homepage_host }}"
-homepage_config_files:
-  - src: bookmarks.yaml.j2
-    dest: /tmp/homepage-bookmarks.yaml
-    remote: /app/config/bookmarks.yaml
-  - src: docker.yaml.j2
-    dest: /tmp/homepage-docker.yaml
-    remote: /app/config/docker.yaml
-  - src: kubernetes.yaml.j2
-    dest: /tmp/homepage-kubernetes.yaml
-    remote: /app/config/kubernetes.yaml
-  - src: services.yaml.j2
-    dest: /tmp/homepage-services.yaml
-    remote: /app/config/services.yaml
-  - src: settings.yaml.j2
-    dest: /tmp/homepage-settings.yaml
-    remote: /app/config/settings.yaml
-  - src: widgets.yaml.j2
-    dest: /tmp/homepage-widgets.yaml
-    remote: /app/config/widgets.yaml
+# homepage_config_files:
+#   - src: bookmarks.yaml.j2
+#     dest: /tmp/homepage-bookmarks.yaml
+#     remote: /app/config/bookmarks.yaml
+#   - src: docker.yaml.j2
+#     dest: /tmp/homepage-docker.yaml
+#     remote: /app/config/docker.yaml
+#   - src: kubernetes.yaml.j2
+#     dest: /tmp/homepage-kubernetes.yaml
+#     remote: /app/config/kubernetes.yaml
+#   - src: services.yaml.j2
+#     dest: /tmp/homepage-services.yaml
+#     remote: /app/config/services.yaml
+#   - src: settings.yaml.j2
+#     dest: /tmp/homepage-settings.yaml
+#     remote: /app/config/settings.yaml
+#   - src: widgets.yaml.j2
+#     dest: /tmp/homepage-widgets.yaml
+#     remote: /app/config/widgets.yaml
