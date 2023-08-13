@@ -59,6 +59,16 @@ ansible-playbook k3s/cluster_reset.yml
 1. All Longhorn backups are confirmed to be up-to-date
 1. Any especially critical data has been manually backed up
 
+### Preparation
+
+#### Backup Wiki.js
+
+Take a manual backup of the wiki via the admin console, then copy it locally.
+
+~~
+kubectl cp wikijs/wikijs-xxx:/wiki/data ~/Downloads
+~~
+
 ### Disaster simulation
 
 Destroy the k3s cluster.
