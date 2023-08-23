@@ -2,7 +2,7 @@
 
 ## Regular maintenance
 
-Ensure that localhost is preparted to run playbooks.
+Ensure that control nodes are preparted to run playbooks.
 
 ~~~
 ansible-playbook control.yaml
@@ -34,16 +34,22 @@ ansible-playbook k3s.yaml
 
 ## Kubernetes (k3s)
 
-Create or update a k3s cluster, including installing critial services with fixed versions (Cert Manager, Longhorn).
+Create or update a k3s cluster.
 
 ~~~
-ansible-playbook k3s/cluster_setup.yml
+ansible-playbook k3s/cluster_setup.yaml
 ~~~
 
-Install or update (nearly) all k3s services.  
+Create or update core cluster services.
 
 ~~~
-ansible-playbook k3s.yaml
+ansible-playbook k3s/cluster_core.yaml
+~~~
+
+Create or update cluster services.
+
+~~~
+ansible-playbook k3s/cluster_services.yaml
 ~~~
 
 Destroy a k3s cluster.  This will remove all nodes from the cluster, destroy all associated resources, and reboot all nodes.  Confirmation in the form of a user-defined reset token is required.
@@ -63,7 +69,10 @@ ansible-playbook k3s/cluster_reset.yml
 
 #### Backup Wiki.js
 
-Take a manual backup of the wiki via the admin console, then copy it locally.
+1. Manually export JSON for Grafana dashboards
+1. Export a copy of Uptime Kuma's configuration
+1. Export a backup of VaultWarden vaults
+1. Take a manual backup of the wiki via the admin console, then copy it locally.
 
 ~~
 kubectl cp wikijs/wikijs-xxx:/wiki/data ~/Downloads
@@ -85,38 +94,16 @@ Re-create the k3 cluster
 ansible-playbook k3s/cluster_setup.yaml
 ~~~
 
-Install Cert Manager and ensure that Cert Manager certs have been requested successfully.
+Install core cluster services.  This will pause as needed to wait for completion of certificates, volumes, etc.
 
 ~~~
-ansible-playbook k3s/cluster_setup.yaml
+ansible-playbook k3s/cluster_core.yaml
 ~~~
 
-~~~
-kubectl get challenges -A
-~~~
+Install everything else to the cluster.
 
 ~~~
-kubectl get certificates -A -o wide
-~~~
-
-Install Traefik
-
-~~~
-ansible-playbook k3s/traefik.yaml
-~~~
-
-Install Longhorn
-
-~~~
-ansible-playbook k3s/longhorn.yaml
-~~~
-
-Manually restore all Longhorn volumes.  Create a volume/PVC for anything not backed up (Prometheus).
-
-Install remaining k3s services.
-
-~~~
-ansible-playbook k3s.yaml
+ansible-playbook k3s/cluster_services.yaml
 ~~~
 
 ### Success criteria

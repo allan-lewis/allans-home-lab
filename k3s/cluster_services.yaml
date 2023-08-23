@@ -1,12 +1,11 @@
 ## AHL
 ---
-- import_playbook: traefik.yaml
+
+- import_playbook: monitoring.yaml
 
 - import_playbook: pihole.yaml
 
-- import_playbook: twingate.yaml
-
-- import_playbook: cloudflare.yaml
+- import_playbook: uptime_kuma.yaml
 
 - import_playbook: nginx.yaml
 
@@ -16,8 +15,6 @@
 
 - import_playbook: guacamole.yaml
 
-- import_playbook: uptime_kuma.yaml
-
 - import_playbook: tautulli.yaml
 
 - import_playbook: homepage.yaml
@@ -26,12 +23,8 @@
 
 - import_playbook: wikijs.yaml
 
-- import_playbook: monitoring.yaml
-
 - import_playbook: rancher.yaml
 
 - import_playbook: semaphore.yaml
 
 - import_playbook: portainer.yaml
-
-- import_playbook: traefik_services.yaml
