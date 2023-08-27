@@ -17,10 +17,11 @@
         repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
         state: present
 
-    - name: Install kubectl.
+    - name: Install required dependencies.
       ansible.builtin.apt:
         pkg:
           - kubectl
+          - sshpass
         state: latest
         update_cache: true
 
