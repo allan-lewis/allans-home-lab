@@ -9,6 +9,6 @@ network:
       routes:
         - to: 0.0.0.0/0
           via: {{ netplan_route }}
-      nameservers:
-        addresses: [{{ netplan_nameserver | default(netplan_route) }}]
+      #nameservers:
+        #addresses: [{{ netplan_nameserver | default(netplan_route) }}]
   version: 2
