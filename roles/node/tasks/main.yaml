@@ -143,18 +143,28 @@
     name: rsync
   when: wrote_rsync_config is changed
 
+- name: Update netplan.
+  ansible.builtin.template:
+    src: netplan.j2
+    dest: "{{ netplan_dest }}"
+    owner: "root"
+    group: "root"
+    mode: 0644
+  register: netplan_update
+
 - name: Check to see if a reboot is required.
   ansible.builtin.stat: 
     path: /var/run/reboot-required
     get_md5: no
   register: reboot_required_file
 
+## N.B. - This will timeout if the IP address changes as a result of netplan changes
 - name: Perform a reboot.
   ansible.builtin.reboot:
-    msg: "Reboot initiated by Ansible for kernel updates"
+    msg: "Reboot initiated by Ansible for kernel or netplan updates"
     connect_timeout: 5
     reboot_timeout: 300
     pre_reboot_delay: 0
     post_reboot_delay: 30
     test_command: uptime
-  when: reboot_required_file.stat.exists
+  when: reboot_required_file.stat.exists or (netplan_update is changed)

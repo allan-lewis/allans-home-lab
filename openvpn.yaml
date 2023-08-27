@@ -63,22 +63,3 @@
         name: "rc-local"
         state: started
         enabled: yes
-
-- name: Update outbound networking routes.
-  hosts: netplan_nodes
-  become: yes
-  gather_facts: false
-
-  tasks:  
-    - name: Update netplan
-      ansible.builtin.template:
-        src: network_netplan.j2
-        dest: "{{ netplan_dest }}"
-        owner: "root"
-        group: "root"
-        mode: 0644
-      register: netplan_update
-
-    - name: Apply netplan
-      ansible.builtin.command: sudo netplan apply
-      when: (netplan_update is changed)
