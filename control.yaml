@@ -48,6 +48,28 @@
         group: "{{ control_user }}"
         mode: '0600'
 
+- name: Fetch the remote kubectl config to localhost.
+  become: no
+  gather_facts: yes
+
+  hosts: localhost
+
+  tasks:
+    - name: Create a local directoty for the kubectl config.
+      ansible.builtin.file:
+        path: "{{ control_copy_kubectl_dir }}"
+        state: directory
+
+    - name: Fetch kubectl config from a master node.
+      ansible.builtin.fetch:
+        src: /root/.kube/config
+        dest: "{{ control_copy_kubectl_dir }}/config"
+        flat: yes
+        owner: "{{ control_user }}"
+        group: "{{ control_user }}"
+      become: yes
+      delegate_to: "{{ groups['k3s_nodes_master'][0] }}"
+
 - name: Setup control nodes to run Ansible playbooks (as control user).
   become: no
   gather_facts: yes
@@ -55,20 +77,17 @@
   hosts: control_nodes
   
   tasks:
-    - name: Create a local directoty for kube config.
+    - name: Create a local directoty for the kubectl config.
       ansible.builtin.file:
         path: "{{ ansible_env.HOME }}/.kube"
         state: directory
 
-    - name: Fetch kube config from master node.
-      ansible.builtin.fetch:
-        src: /root/.kube/config
+    - name: Copy the kubectl config.
+      ansible.builtin.copy:
+        src: "{{ control_copy_kubectl_dir }}/config"
         dest: "{{ ansible_env.HOME }}/.kube/config"
-        flat: yes
         owner: "{{ control_user }}"
         group: "{{ control_user }}"
-      become: yes
-      delegate_to: "{{ groups['k3s_nodes_master'][0] }}"
 
     - name: Create an Ansibile config file.
       ansible.builtin.template:
@@ -85,3 +104,8 @@
         name: "{{ hostvars[item].ansible_host }}"
         key: "{{ lookup('pipe', 'ssh-keyscan {{ hostvars[item].ansible_host }},`dig +short {{ hostvars[item].ansible_host }}`') }}"
       with_items: "{{ groups['managed_nodes'] }}"
+
+    - name: Check out Ansible playbooks from GitHub.
+      ansible.builtin.git:
+        repo: "https://github.com/allan-lewis/allans-home-lab.git"
+        dest: "{{ ansible_env.HOME }}/allans-home-lab"
