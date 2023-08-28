@@ -143,14 +143,25 @@
     name: rsync
   when: wrote_rsync_config is changed
 
-- name: Update netplan.
+- name: Update network settings (x86).
   ansible.builtin.template:
-    src: netplan.j2
+    src: netplan-x86.j2
     dest: "{{ netplan_dest }}"
     owner: "root"
     group: "root"
     mode: 0644
   register: netplan_update
+  when: ansible_architecture == 'x86_64'
+
+- name: Update network settings (ARM).
+  ansible.builtin.template:
+    src: netplan-arm.j2
+    dest: "/etc/dhcpcd.conf"
+    owner: "root"
+    group: "root"
+    mode: 0644
+  register: netplan_update
+  when: ansible_architecture == 'armv7l'
 
 - name: Check to see if a reboot is required.
   ansible.builtin.stat: 

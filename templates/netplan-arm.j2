@@ -1,0 +1,4 @@
+interface {{ netplan_interface }}
+static ip_address={{ netplan_host | default(ansible_host) }}/24
+static routers={{ netplan_route }}
+static domain_name_servers={{ netplan_nameserver | default(netplan_route) }}
