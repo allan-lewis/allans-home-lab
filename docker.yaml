@@ -1,7 +1,10 @@
 ## AHL
 ---
+
 - import_playbook: docker/docker.yaml
 
 - import_playbook: docker/common_containers.yaml
 
 - import_playbook: docker/media_acquisition.yaml
+
+- import_playbook: docker/pihole.yaml
