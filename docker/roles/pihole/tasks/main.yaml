@@ -38,7 +38,7 @@
       - "53:53/tcp"
       - "53:53/udp"
       - "67:67/udp"
-      - "{{ pihole_http_port }}:80/tcp"
+      - "{{ known_ports.pihole_http_port }}:80/tcp"
     volumes: 
       - "{{ pihole_data_volume }}:/etc/pihole"
       - "{{ pihole_dns_volume }}:/etc/dnsmasq.d"
