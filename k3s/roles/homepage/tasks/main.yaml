@@ -5,10 +5,10 @@
     state: "{{ ahl_k3s_state }}"
     template: homepage-secret.yaml.j2
 
-# - name: Create the Homepage service account.
-#   kubernetes.core.k8s:
-#     state: "{{ ahl_k3s_state }}"
-#     template: service-account.yaml.j2
+- name: Create the Homepage service account.
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: service-account.yaml.j2
 
 # - name: Create the Homepage configuration.
 #   kubernetes.core.k8s:
