@@ -1,91 +1,37 @@
 ## AHL
 ---
-- name: Create a namespace for Homepage.
-  kubernetes.core.k8s:
-    state: present
-    template: namespace.yml.j2
-
 - name: Create a secret for the Homepage service account.
   kubernetes.core.k8s:
     state: "{{ ahl_k3s_state }}"
     template: homepage-secret.yaml.j2
 
-- name: Create the Homepage service account.
-  kubernetes.core.k8s:
-    state: "{{ ahl_k3s_state }}"
-    template: service-account.yaml.j2
-
-- name: Create the Homepage configuration.
-  kubernetes.core.k8s:
-    state: "{{ ahl_k3s_state }}"
-    template: homepage-config.yaml.j2
-
-- name: Create the Homepage roles and bindings.
-  kubernetes.core.k8s:
-    state: "{{ ahl_k3s_state }}"
-    template: homepage-roles.yaml.j2
-
-- name: Create the Homepage deployment.
-  kubernetes.core.k8s:
-    state: "{{ ahl_k3s_state }}"
-    template: homepage-deployment.yaml.j2
-
-# - name: Create the k8s Homepage deployment.
+# - name: Create the Homepage service account.
 #   kubernetes.core.k8s:
 #     state: "{{ ahl_k3s_state }}"
-#     template: deployment.yml.j2
-#   vars:
-#     - service_name: "{{ homepage_name }}"
-#       container_name: "{{ homepage_name }}"
-#       container_image: ghcr.io/benphelps/homepage:latest
-#       service_replicas: 1
-#       volume_mounts:
-#         - name: homepage-config-volume
-#           path: /app/config  
-#       volumes:
-#         - name: homepage-config-volume
-#           claim: homepage
+#     template: service-account.yaml.j2
 
-- name: Create the k8s Homepage service.
-  kubernetes.core.k8s:
-    state: "{{ ahl_k3s_state }}"
-    template: homepage-service.yaml.j2
+# - name: Create the Homepage configuration.
+#   kubernetes.core.k8s:
+#     state: "{{ ahl_k3s_state }}"
+#     template: homepage-config.yaml.j2
 
-- name: Create a Traefik ingress for Homepage.
-  kubernetes.core.k8s:
-    state: "{{ ahl_k3s_state }}"
-    template: traefik_ingress_route.yml.j2
+# - name: Create the Homepage roles and bindings.
+#   kubernetes.core.k8s:
+#     state: "{{ ahl_k3s_state }}"
+#     template: homepage-roles.yaml.j2
 
-# - name: Identify the Homepage pod.
-#   kubernetes.core.k8s_info:
-#     kind: Pod
-#     label_selectors:
-#       - app = homepage
-#   register: homepage_pods
-#   become: false
-#   delegate_to: localhost
+# - name: Create the Homepage deployment.
+#   kubernetes.core.k8s:
+#     state: "{{ ahl_k3s_state }}"
+#     template: homepage-deployment.yaml.j2
 
-# - name: Wait for the Homepage pod to be up and running.
-#   shell: "kubectl wait --namespace={{ namespace_name }} --for=condition=Ready pods {{ homepage_pods.resources[0].metadata.name }} --timeout=60s"
-#   register: control_plane_pods_ready
-#   delegate_to: localhost
-#   become: false
+# - name: Create the k8s Homepage service.
+#   kubernetes.core.k8s:
+#     state: "{{ ahl_k3s_state }}"
+#     template: homepage-service.yaml.j2
 
-# - name: Write configuration files.
-#   ansible.builtin.template:
-#     src: "{{ item.src }}"
-#     dest: "{{ item.dest }}"
-#   delegate_to: localhost
-#   become: false
-#   with_items: "{{ homepage_config_files }}"
-
-# - name: Copy configuration files to the Homepage pod.
-#   kubernetes.core.k8s_cp:
-#     namespace: "{{ namespace_name }}"
-#     pod: "{{ homepage_pods.resources[0].metadata.name }}"
-#     remote_path: "{{ item.remote }}"
-#     local_path: "{{ item.dest }}"
-#   delegate_to: localhost
-#   become: false
-#   with_items: "{{ homepage_config_files }}"
+# - name: Create a Traefik ingress for Homepage.
+#   kubernetes.core.k8s:
+#     state: "{{ ahl_k3s_state }}"
+#     template: traefik_ingress_route.yml.j2
   

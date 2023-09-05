@@ -2,7 +2,7 @@
 ---
 homepage_name: homepage
 homepage_title: "Allan's Home Lab"
-namespace_name: "{{ homepage_name }}"
+namespace_name: "default"
 service_name: "{{ homepage_name }}"
 service_account_name: "{{ homepage_name }}"
 # service_account_namespace: "{{ homepage_name }}"
