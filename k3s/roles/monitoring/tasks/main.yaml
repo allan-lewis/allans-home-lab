@@ -19,7 +19,6 @@
 - name: Install the monitoring Helm chart.
   kubernetes.core.helm:
     chart_ref: prometheus-community/kube-prometheus-stack
-    chart_version: 42.3.0
     namespace: "{{ namespace_name }}"
     name: prometheus
     update_repo_cache: true
