@@ -10,15 +10,15 @@
     state: "{{ ahl_k3s_state }}"
     template: service-account.yaml.j2
 
-# - name: Create the Homepage configuration.
-#   kubernetes.core.k8s:
-#     state: "{{ ahl_k3s_state }}"
-#     template: homepage-config.yaml.j2
+- name: Create the Homepage configuration.
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: homepage-config.yaml.j2
 
-# - name: Create the Homepage roles and bindings.
-#   kubernetes.core.k8s:
-#     state: "{{ ahl_k3s_state }}"
-#     template: homepage-roles.yaml.j2
+- name: Create the Homepage roles and bindings.
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: homepage-roles.yaml.j2
 
 # - name: Create the Homepage deployment.
 #   kubernetes.core.k8s:
