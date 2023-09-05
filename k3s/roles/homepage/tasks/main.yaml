@@ -20,10 +20,10 @@
     state: "{{ ahl_k3s_state }}"
     template: homepage-roles.yaml.j2
 
-# - name: Create the Homepage deployment.
-#   kubernetes.core.k8s:
-#     state: "{{ ahl_k3s_state }}"
-#     template: homepage-deployment.yaml.j2
+- name: Create the Homepage deployment.
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: homepage-deployment.yaml.j2
 
 # - name: Create the k8s Homepage service.
 #   kubernetes.core.k8s:
