@@ -25,13 +25,13 @@
     state: "{{ ahl_k3s_state }}"
     template: homepage-deployment.yaml.j2
 
-# - name: Create the k8s Homepage service.
-#   kubernetes.core.k8s:
-#     state: "{{ ahl_k3s_state }}"
-#     template: homepage-service.yaml.j2
+- name: Create the k8s Homepage service.
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: homepage-service.yaml.j2
 
-# - name: Create a Traefik ingress for Homepage.
-#   kubernetes.core.k8s:
-#     state: "{{ ahl_k3s_state }}"
-#     template: traefik_ingress_route.yml.j2
+- name: Create a Traefik ingress for Homepage.
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: traefik_ingress_route.yml.j2
   
