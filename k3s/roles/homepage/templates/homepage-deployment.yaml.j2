@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ homepage_name }}
-  namespace: {{ homepage_name }}
+  namespace: default
   labels:
     app.kubernetes.io/name: {{ homepage_name }}
 spec:
