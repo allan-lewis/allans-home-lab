@@ -27,15 +27,15 @@ data:
     - {{group.name}}:
 {% for service in group.services | default([]) %}
       - {{ service.name }}:
-        icon: {{ service.icon | default('') }}
-        description: {{ service.description | default('') }}
-        href: {{ service.href | default('') }}
+          icon: {{ service.icon | default('') }}
+          description: {{ service.description | default('') }}
+          href: {{ service.href | default('') }}
 {% if service.docker is defined %}
-        server: {{ service.docker.server }}
-        container: {{ service.docker.container }}
+          server: {{ service.docker.server }}
+          container: {{ service.docker.container }}
 {% endif %}
 {% if service.widget is defined %}
-        widget:
+          widget:
             type: {{ service.widget.type }}
             url: {{ service.widget.url }}
 {% if service.widget.key is defined %}
