@@ -1,9 +1,0 @@
----
-# For configuration options and examples, please see:
-# https://github.com/benphelps/homepage/wiki/Docker-Integration
-
-{%for docker_node in groups['docker_nodes'] %}
-{{ docker_node }}:
-  host: {{ hostvars[docker_node].ansible_host  }}
-  port: {{ known_ports.docker_proxy_port }}
-{% endfor %}
