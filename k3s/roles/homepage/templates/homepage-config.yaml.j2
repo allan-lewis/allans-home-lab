@@ -14,10 +14,14 @@ data:
       longhorn:
         url: https://longhorn.local.allanshomelab.com
   bookmarks.yaml: |
-    - Developer:
-        - Github:
-            - abbr: GH
-              href: https://github.com/
+{% for group in homepage_bookmark_groups | default([]) %}
+    - {{ group.name }}:
+{% for bookmark in group.bookmarks | default([]) %}
+      - {{ bookmark.name }}:
+        - abbr: {{ bookmark.abbr }}
+          href: "{{ bookmark.href }}"
+{% endfor %}
+{% endfor %}
   services.yaml: |
     - My First Group:
         - My First Service:
