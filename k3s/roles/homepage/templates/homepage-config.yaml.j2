@@ -60,6 +60,15 @@ data:
     - greeting:
         text_size: xl
         text: Allan's Home Lab
+    - search:
+        provider: google
+        target: _blank
+    - datetime:
+        text_size: xl
+        format:
+          dateStyle: full
+          timeStyle: short
+          hour12: false
     - longhorn:
         # Show the expanded view
         expanded: true
@@ -90,15 +99,6 @@ data:
         expanded: true
         cpu: true
         memory: true
-    - search:
-        provider: google
-        target: _blank
-    - datetime:
-        text_size: xl
-        format:
-          dateStyle: full
-          timeStyle: short
-          hour12: false
   docker.yaml: | 
 {%for docker_node in groups['docker_nodes'] %}
     {{ docker_node }}:
