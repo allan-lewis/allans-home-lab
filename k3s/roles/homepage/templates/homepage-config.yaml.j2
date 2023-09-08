@@ -62,9 +62,11 @@ data:
   widgets.yaml: |
 {% for widget in homepage_widgets | default([]) %}
     - {{ widget.name }}:
+{% if widget.widget_attrs is defined %}
 {% for key, value in widget.widget_attrs.items() %}
         {{ key }}: {{ value }}
 {% endfor %}
+{% endif %}
 {% for child_dict in widget.child_dicts | default([]) %}
         {{ child_dict.name }}:
 {% for dictkey, dictvalue in child_dict.dict_items.items() %}
