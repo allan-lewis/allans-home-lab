@@ -68,9 +68,9 @@ data:
         {{ key }}: {{ value }}
 {% for child_list in widget.child_lists | default([]) %}
         {{ child_list.name }}:
-{% for child_item in child_list.values %}
-          - {{ child_item }}
-{% endfor %}
+# {% for child_item in child_list.values %}
+#           - {{ child_item }}
+# {% endfor %}
 {% endfor %}
 {% endfor %}
 {% endfor %}
