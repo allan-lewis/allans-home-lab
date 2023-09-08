@@ -11,7 +11,7 @@ data:
   settings.yaml: |
     providers:
 {% for provider in homepage_providers | default([]) %}
-      {{ provider.name }}
+      {{ provider.name }}:
 {% for key, value in provider.provider_attrs.items() %}
         {{ key }}: {{ value }}
 {% endfor %}
