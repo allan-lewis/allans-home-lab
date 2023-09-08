@@ -16,8 +16,6 @@ data:
         {{ key }}: {{ value }}
 {% endfor %}
 {% endfor %}
-      # longhorn:
-      #   url: https://longhorn.local.allanshomelab.com
   bookmarks.yaml: |
 {% for group in homepage_bookmark_groups | default([]) %}
     - {{ group.name }}:
@@ -67,6 +65,12 @@ data:
 {% for key, value in widget.widget_attrs.items() %}
         {{ key }}: {{ value }}
 {% endfor %}
+{% for child_dict in widget.child_dicts | default([]) %}
+        {{ child_dict.name }}:
+{% for dictkey, dictvalue in child_dict.dict_items.items() %}
+          {{ dictkey }}: {{ dictvalue }}
+{% endfor %}
+{% endfor %}
 {% for child_list in widget.child_lists | default([]) %}
         {{ child_list.name }}:
 {% for child_list_item in child_list.child_list_items | default([]) %}
@@ -74,12 +78,6 @@ data:
 {% endfor %}
 {% endfor %}
 {% endfor %}
-    # - datetime:
-    #     text_size: xl
-    #     format:
-    #       dateStyle: full
-    #       timeStyle: short
-    #       hour12: false
     # - kubernetes:
     #     cluster:
     #       show: true
