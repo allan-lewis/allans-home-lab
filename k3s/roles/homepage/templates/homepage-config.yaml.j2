@@ -69,9 +69,9 @@ data:
 {% endfor %}
 {% for child_list in widget.child_lists | default([]) %}
         {{ child_list.name }}:
-# {% for child_item in child_list.values %}
-#           - {{ child_item }}
-# {% endfor %}
+{% for child_list_item in child_list.child_list_items | default([]) %}
+          - {{ child_list_item }}
+{% endfor %}
 {% endfor %}
 {% endfor %}
     # - datetime:
@@ -80,19 +80,6 @@ data:
     #       dateStyle: full
     #       timeStyle: short
     #       hour12: false
-    # - longhorn:
-    #     # Show the expanded view
-    #     expanded: true
-    #     # Shows a node representing the aggregate values
-    #     total: true
-    #     # Shows the node names as labels
-    #     labels: true
-    #     # Show the nodes
-    #     nodes: true
-    #     # An explicit list of nodes to show. All are shown by default if "nodes" is true
-    #     # include:
-    #     #   - node1
-    #     #   - node2
     # - kubernetes:
     #     cluster:
     #       show: true
