@@ -60,14 +60,11 @@ data:
 {% endfor %}
   widgets.yaml: |
 {% for widget in homepage_widgets | default([]) %}
-    {{ widget }}
+    - {{ widget.name }}:
+{% for key, value in widget.widget_attrs.items() %}
+        {{ key }}: {{ value }}
 {% endfor %}
-    # - greeting:
-    #     text_size: xl
-    #     text: Allan's Home Lab
-    # - search:
-    #     provider: google
-    #     target: _blank
+{% endfor %}
     # - datetime:
     #     text_size: xl
     #     format:
