@@ -12,7 +12,7 @@ data:
     providers:
 {% for provider in homepage_providers | default([]) %}
       {{ provider.name }}
-{% for key, value in widget.provider_attrs.items() %}
+{% for key, value in provider.provider_attrs.items() %}
         {{ key }}: {{ value }}
 {% endfor %}
 {% endfor %}
