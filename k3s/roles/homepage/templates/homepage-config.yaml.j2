@@ -66,8 +66,11 @@ data:
     - {{ widget.name }}:
 {% for key, value in widget.widget_attrs.items() %}
         {{ key }}: {{ value }}
-{% for sub_attr in value.sub_attrs | default([]) %}
-        {{ sub_attr.name }}:
+{% for child_list in widget.child_lists | default([]) %}
+        {{ child_list.name }}:
+{% for child_item in child_list.values %}
+          - {{ child_item }}
+{% endfor %}
 {% endfor %}
 {% endfor %}
 {% endfor %}
