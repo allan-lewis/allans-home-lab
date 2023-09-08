@@ -11,7 +11,10 @@ data:
   settings.yaml: |
     providers:
 {% for provider in homepage_providers | default([]) %}
-      {{ provider }}
+      {{ provider.name }}
+{% for key, value in widget.provider_attrs.items() %}
+        {{ key }}: {{ value }}
+{% endfor %}
 {% endfor %}
       # longhorn:
       #   url: https://longhorn.local.allanshomelab.com
