@@ -33,6 +33,12 @@ data:
           icon: {{ service.icon | default('') }}
           description: {{ service.description | default('') }}
           href: {{ service.href | default('') }}
+{% if service.namespace is defined %}
+          namespace: {{ service.namespace }}
+{% endif %}
+{% if service.app is defined %}
+          app: {{ service.app }}
+{% endif %}
 {% if service.docker is defined %}
           server: {{ service.docker.server }}
           container: {{ service.docker.container }}
