@@ -52,6 +52,9 @@ data:
 {% if service.widget.deviceid is defined %}
             deviceid: {{ service.widget.deviceid }}
 {% endif %}
+{% if service.widget.fields is defined %}
+            fields: {{ service.widget.fields }}
+{% endif %}
 {% if service.widget.key is defined %}
             key: {{ service.widget.key }}
 {% endif %}
