@@ -46,7 +46,12 @@ data:
 {% if service.widget is defined %}
           widget:
             type: {{ service.widget.type }}
+{% if service.widget.url is defined %}
             url: {{ service.widget.url }}
+{% endif %}
+{% if service.widget.deviceid is defined %}
+            deviceid: {{ service.widget.deviceid }}
+{% endif %}
 {% if service.widget.key is defined %}
             key: {{ service.widget.key }}
 {% endif %}
