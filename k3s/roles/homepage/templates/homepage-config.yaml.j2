@@ -70,6 +70,12 @@ data:
 {% if service.widget.env is defined %}
             env: {{ service.widget.env }}
 {% endif %}
+{% if service.widget.accountid is defined %}
+            accountid: {{ service.widget.accountid }}
+{% endif %}
+{% if service.widget.tunnelid is defined %}
+            tunnelid: {{ service.widget.tunnelid }}
+{% endif %}
 {% endif %}
 {% endfor %}
 {% endfor %}
