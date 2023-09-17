@@ -1,0 +1,38 @@
+## AHL
+---
+- name: Create a namespace for Heimdall.
+  kubernetes.core.k8s:
+    state: present
+    template: namespace.yml.j2
+
+- name: Create the k8s Heimdall deployment.
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: deployment.yml.j2
+  vars:
+    - service_name: "{{ heimdall_name }}"
+      container_name: "{{ heimdall_name }}"
+      container_image: lscr.io/linuxserver/heimdall:latest
+      service_replicas: 1
+      environment_vars:
+        - name: TZ
+          value: "America/New_York"
+        - name: PUID
+          value: "\"{{ apps_user_id }}\""
+        - name: PGID
+          value: "\"{{ apps_group_id }}\""
+      volume_mounts:
+        - name: "{{ heimdall_name }}"
+          path: /config  
+      volumes:
+        - name: "{{ heimdall_name }}"
+          claim: "{{ heimdall_name }}"
+
+- name: Create the k8s Heimdall service.
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: service.yml.j2
+  vars:
+    - service_name: "{{ heimdall_name }}"
+      service_port: "{{ heimdall_service_port }}"
+      target_port: "{{ heimdall_service_port }}"

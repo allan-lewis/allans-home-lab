@@ -1,0 +1,3 @@
+heimdall_name: heimdall
+heimdall_service_port: 80
+namespace_name: "{{ heimdall_name }}"
