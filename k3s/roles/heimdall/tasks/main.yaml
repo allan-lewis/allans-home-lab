@@ -36,3 +36,12 @@
     - service_name: "{{ heimdall_name }}"
       service_port: "{{ heimdall_service_port }}"
       target_port: "{{ heimdall_service_port }}"
+
+- name: Create a Traefik ingress for Heimdall.
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: traefik_ingress_route.yml.j2
+  vars:
+    service_name: "{{ heimdall_name }}"
+    service_port: "{{ heimdall_service_port }}"
+    routes: "{{ heimdall_routes }}"
