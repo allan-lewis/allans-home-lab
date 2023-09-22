@@ -1,7 +1,7 @@
 ## AHL
 ---
 
-# - import_playbook: cert_manager.yaml
+- import_playbook: cert_manager.yaml
 
 - name: Wait for cert-manager certificates to be ready.
   hosts: k3s_nodes_master[0]
@@ -15,13 +15,13 @@
       delay: 10
       with_items: "{{ cert_manager_certs }}"
 
-# - import_playbook: cloudflare.yaml
+- import_playbook: cloudflare.yaml
 
-# - import_playbook: traefik.yaml
+- import_playbook: traefik.yaml
 
-# - import_playbook: traefik_services.yaml
+- import_playbook: traefik_services.yaml
 
-# - import_playbook: longhorn.yaml
+- import_playbook: longhorn.yaml
 
 - name: Wait for Longhorn PVCs to be bound.
   hosts: k3s_nodes_master[0]
@@ -35,8 +35,8 @@
       delay: 10
       with_items: "{{ longhorn_pvcs }}"
 
-# - import_playbook: pihole.yaml
+- import_playbook: pihole.yaml
 
-# - import_playbook: twingate.yaml
+- import_playbook: twingate.yaml
 
-# - import_playbook: uptime_kuma.yaml
+- import_playbook: uptime_kuma.yaml
