@@ -1,19 +1,19 @@
 ## AHL
 ---
 
-- import_playbook: cert_manager.yaml
+# - import_playbook: cert_manager.yaml
 
-- name: Wait for cert-manager certificates to be ready.
-  hosts: k3s_nodes_master[0]
-  become: yes
-  gather_facts: no
-  tasks:
-    - ansible.builtin.shell: kubectl -n default wait --for=condition=Ready certificate {{ item }} --timeout=10s
-      register: cert_ready
-      until: cert_ready.rc == 0
-      retries: 20
-      delay: 10
-      with_items: "{{ cert_manager_certs }}"
+# - name: Wait for cert-manager certificates to be ready.
+#   hosts: k3s_nodes_master[0]
+#   become: yes
+#   gather_facts: no
+#   tasks:
+#     - ansible.builtin.shell: kubectl -n default wait --for=condition=Ready certificate {{ item }} --timeout=10s
+#       register: cert_ready
+#       until: cert_ready.rc == 0
+#       retries: 20
+#       delay: 10
+#       with_items: "{{ cert_manager_certs }}"
 
 # - import_playbook: cloudflare.yaml
 
@@ -23,7 +23,19 @@
 
 # - import_playbook: longhorn.yaml
 
-## TODO - Wait for volumes to be ready (in Longhorn playbook)
+- name: Wait for Longhorn PVCs to be bound.
+  hosts: k3s_nodes_master[0]
+  become: yes
+  gather_facts: no
+  tasks:
+    - ansible.builtin.shell: kubectl -n {{item.namespace}} wait --for=condition=Ready certificate {{ item.name }} --timeout=60s
+      register: pvc_bound
+      until: pvc_bound.rc == 0
+      retries: 50
+      delay: 10
+      with_items:
+        - namespace: tautulli
+          name: tautulli
 
 # - import_playbook: pihole.yaml
 
