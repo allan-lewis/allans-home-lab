@@ -28,14 +28,14 @@
   become: yes
   gather_facts: no
   tasks:
-    - ansible.builtin.shell: kubectl -n {{item.namespace}} wait --for=condition=Ready certificate {{ item.name }} --timeout=60s
+    - ansible.builtin.shell: kubectl -n {{item.namespace}} wait --for=condition=bound pvc {{ item.name }} --timeout=60s
       register: pvc_bound
       until: pvc_bound.rc == 0
       retries: 50
       delay: 10
       with_items:
         - namespace: tautulli
-          name: tautulli
+          name: container-docker-tautulli
 
 # - import_playbook: pihole.yaml
 
