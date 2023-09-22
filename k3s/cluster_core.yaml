@@ -3,12 +3,12 @@
 
 - import_playbook: cert_manager.yaml
 
-- name: Wait until certificates are ready.
+- name: Wait for cert-manager certificates to be ready.
   hosts: k3s_nodes_master[0]
-  become: yes
+  become: no
+  gather_facts: no
   tasks:
-    - name: Wait for cert-manager certificates to be ready.
-      ansible.builtin.shell: kubectl -n default wait --for=condition=Ready certificate {{ item }} --timeout=10s
+    - ansible.builtin.shell: kubectl -n default wait --for=condition=Ready certificate {{ item }} --timeout=10s
       register: cert_ready
       until: cert_ready.rc == 0
       retries: 20
