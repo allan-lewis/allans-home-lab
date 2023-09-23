@@ -12,7 +12,7 @@
       register: cert_ready
       until: cert_ready.rc == 0
       retries: 20
-      delay: 10
+      delay: 20
       with_items: "{{ cert_manager_certs }}"
 
 - import_playbook: cloudflare.yaml
