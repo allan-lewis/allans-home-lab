@@ -15,7 +15,7 @@
     container_default_behavior: no_defaults
     detach: yes
     name: "syncthing"
-    image: "lscr.io/linuxserver/syncthing:latest"
+    image: "syncthing/syncthing:latest"
     state: "started"
     recreate: "yes"
     pull: "yes"
