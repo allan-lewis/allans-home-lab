@@ -10,3 +10,13 @@
   ansible.builtin.template:
     src: authentik_values.yaml.j2
     dest: /tmp/authentik_values.yaml
+
+- name: Install the Authentik Helm chart.
+  kubernetes.core.helm:
+    chart_ref: authentik/authentik
+    name: authentik
+    update_repo_cache: true
+    create_namespace: true
+    release_state: "{{ ahl_k3s_state }}"
+    values_files:
+      - /tmp/authentik_values.yaml
