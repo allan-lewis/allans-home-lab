@@ -13,7 +13,7 @@ ingress:
     enabled: true
     hosts:
         # Specify external host name
-        - host: 
+        - host: {{ authentik_postgres_password }}
           paths:
               - path: "/"
                 pathType: Prefix
