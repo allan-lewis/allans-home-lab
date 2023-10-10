@@ -1,5 +1,10 @@
 ## AHL
 ---
+- name:  Create a namespace for Authentik.
+  kubernetes.core.k8s:
+    state: present
+    template: namespace.yml.j2
+
 - name: Add the Authentik Helm respository.
   kubernetes.core.helm_repository:
     name: authentik
@@ -18,5 +23,6 @@
     update_repo_cache: true
     create_namespace: true
     release_state: "{{ ahl_k3s_state }}"
+    namespace: "{{ namespace_name }}"
     values_files:
       - /tmp/authentik_values.yaml
