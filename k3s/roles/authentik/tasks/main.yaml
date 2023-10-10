@@ -5,3 +5,8 @@
     name: authentik
     repo_url: https://charts.goauthentik.io
     repo_state: present 
+
+- name: Write the values file for the Helm chart.
+  ansible.builtin.template:
+    src: authentik_values.yml.j2
+    dest: /tmp/authentik_values.yml
