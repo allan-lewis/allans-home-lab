@@ -30,4 +30,4 @@
 - name: Create a Traefik middleware for Authentik.
   kubernetes.core.k8s:
     state: "{{ ahl_k3s_state }}"
-    template: authntic_middleware.yaml.j2
+    template: authentik_middleware.yaml.j2
