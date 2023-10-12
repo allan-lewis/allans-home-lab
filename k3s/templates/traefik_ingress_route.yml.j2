@@ -16,6 +16,8 @@ spec:
       middlewares:
         - name: {{ ingress_route_middleware_name }}
           namespace: {{ ingress_route_middleware_namespace }}
+        - name: authentik
+          namespace: default
       services:
         - name: {{ route.service_name | default(service_name) }}
           namespace:  {{ namespace_name }}
