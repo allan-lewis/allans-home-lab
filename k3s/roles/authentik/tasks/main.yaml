@@ -26,3 +26,8 @@
     namespace: "{{ namespace_name }}"
     values_files:
       - /tmp/authentik_values.yaml
+
+- name: Create a Traefik middleware for Authentik.
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: authntic_middleware.yaml.j2
