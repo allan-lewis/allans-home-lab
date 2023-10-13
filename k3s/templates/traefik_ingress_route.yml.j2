@@ -14,10 +14,10 @@ spec:
     - match: Host(`{{ route.host }}`)
       kind: Rule
       middlewares:
-        - name: {{ ingress_route_middleware_name }}
-          namespace: {{ ingress_route_middleware_namespace }}
         - name: authentik
           namespace: default
+        - name: {{ ingress_route_middleware_name }}
+          namespace: {{ ingress_route_middleware_namespace }}
       priority: 10
       services:
         - name: {{ route.service_name | default(service_name) }}
