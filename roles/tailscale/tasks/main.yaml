@@ -1,2 +1,6 @@
 ## AHL
 ---
+- name: Install Tailscale.
+  artis3n.tailscale:
+      vars:
+        tailscale_up_skip: true
