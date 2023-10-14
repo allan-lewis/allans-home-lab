@@ -11,6 +11,7 @@
   
   roles:
     - node
+    - tailscale
 
 - name: Install Node Exporter.
   hosts: node_exporter_nodes
