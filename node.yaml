@@ -11,7 +11,9 @@
   
   roles:
     - node
-    - tailscale
+    - role: artis3n.tailscale
+      vars:
+        tailscale_up_skip: true
 
 - name: Install Node Exporter.
   hosts: node_exporter_nodes
