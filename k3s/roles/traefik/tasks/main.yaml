@@ -10,7 +10,7 @@
 - name: Add the Traefik Helm respository.
   kubernetes.core.helm_repository:
     name: traefik 
-    repo_url: https://helm.traefik.io/traefik
+    repo_url: https://traefik.github.io/charts
 
 - name: Write the values file for the Helm chart.
   ansible.builtin.template:
