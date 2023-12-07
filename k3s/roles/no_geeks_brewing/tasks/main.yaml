@@ -42,7 +42,7 @@
   vars:
     - service_name: "{{ ngb_site_service }}"
       container_name: "{{ ngb_site_service }}"
-      container_image: allanelewis/no-geeks-brewing-site:latest
+      container_image: allanelewis/no-geeks-brewing-gui:latest
       service_replicas: "{{ ngb_site_replicas }}"
 
 - name: Create a k8s service for the NGB web site.
