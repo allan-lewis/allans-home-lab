@@ -11,8 +11,8 @@
     - ansible.builtin.shell: kubectl -n default wait --for=condition=Ready certificate {{ item }} --timeout=10s
       register: cert_ready
       until: cert_ready.rc == 0
-      retries: 20
-      delay: 20
+      retries: 60
+      delay: 30
       with_items: "{{ cert_manager_certs }}"
 
 - import_playbook: cloudflare.yaml
