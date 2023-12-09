@@ -63,3 +63,14 @@
         name: "rc-local"
         state: started
         enabled: yes
+      register: vpn_service_started
+
+    - name: Reboot if necessary.
+      ansible.builtin.reboot:
+        msg: "Reboot initiated by Ansible for VPN service change"
+        connect_timeout: 5
+        reboot_timeout: 300
+        pre_reboot_delay: 0
+        post_reboot_delay: 30
+        test_command: uptime
+      when: vpn_service_started is changed
