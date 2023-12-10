@@ -13,7 +13,6 @@
     - name: Check to see if a reboot is required.
       ansible.builtin.stat: 
         path: /var/run/reboot-required
-        get_md5: no
       register: reboot_required
 
     - name: Print whether or not a reboot is required.
