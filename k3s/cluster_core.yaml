@@ -40,5 +40,3 @@
 - import_playbook: twingate.yaml
 
 - import_playbook: uptime_kuma.yaml
-
-- import_playbook: authentik.yaml
