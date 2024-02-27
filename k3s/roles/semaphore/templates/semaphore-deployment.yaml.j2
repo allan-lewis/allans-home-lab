@@ -34,7 +34,7 @@ spec:
         - name: semaphore-temp
           mountPath: /k3s-semaphore
         - name: nfs-vol
-          mountPath: /etc/ahl
+          mountPath: {{ semaphore_temp_mount_path }}
       volumes:
       - name: nfs-vol
         nfs:

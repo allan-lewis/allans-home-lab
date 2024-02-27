@@ -25,8 +25,6 @@
 
 - import_playbook: rancher.yaml
 
-- import_playbook: semaphore.yaml
-
 - import_playbook: portainer.yaml
 
 - import_playbook: heimdall.yaml
