@@ -13,19 +13,18 @@
     - "{{ jellyfin_volumes.cache }}"
     - "{{ jellyfin_volumes.config }}"
 
-# - name: Install the Syncthing Docker container.
-#   community.docker.docker_container:
-#     container_default_behavior: no_defaults
-#     detach: yes
-#     name: "syncthing"
-#     image: "syncthing/syncthing:latest"
-#     state: "{{ syncthing_state }}"
-#     recreate: "yes"
-#     pull: "yes"
-#     restart_policy: "unless-stopped"
-#     network_mode: "host"
-#     volumes: "{{ syncthing_volumes }}"
-#     env: 
-#       TZ: America/New_York
-#       PUID: "{{ ahl_user_uid }}"
-#       PGID: "{{ ahl_user_gid }}"
+- name: Install the Jellyfin Docker container.
+  community.docker.docker_container:
+    container_default_behavior: no_defaults
+    detach: yes
+    name: "jellyfin"
+    image: "jellyfin/jellyfin"
+    state: "{{ jellyfin_state | started }}"
+    recreate: "yes"
+    pull: "yes"
+    restart_policy: "unless-stopped"
+    network_mode: "host"
+    volumes: 
+      - "{{ jellyfin_volumes.cache }}":/cache
+      - "{{ jellyfin_volumes.config }}":/config
+    user: "{{ ahl_user_uid }}:{{ ahl_user_gid }}"
