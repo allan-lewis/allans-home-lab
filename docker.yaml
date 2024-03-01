@@ -8,3 +8,5 @@
 - import_playbook: docker/media_acquisition.yaml
 
 - import_playbook: docker/pihole.yaml
+
+- import_playbook: docker/jellyfin.yaml
