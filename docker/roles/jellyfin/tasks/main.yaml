@@ -5,12 +5,13 @@
 
 - name: Create Jellyfin Docker volumes.
   ansible.builtin.file:
-    path: "{{ item.path }}"
+    path: "{{ item }}"
     state: directory
     owner: "{{ ansible_ssh_user }}"
     group: "{{ ansible_ssh_user }}"
   with_items:
-    - "{{ jellyfin_volumes[config].path }}"
+    - "{{ jellyfin_volumes.cache }}"
+    - "{{ jellyfin_volumes.config }}"
 
 # - name: Install the Syncthing Docker container.
 #   community.docker.docker_container:
