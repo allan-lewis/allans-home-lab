@@ -19,7 +19,7 @@
     detach: yes
     name: "jellyfin"
     image: "jellyfin/jellyfin"
-    state: "{{ jellyfin_state | started }}"
+    state: "{{ jellyfin_state | 'started' }}"
     recreate: "yes"
     pull: "yes"
     restart_policy: "unless-stopped"
