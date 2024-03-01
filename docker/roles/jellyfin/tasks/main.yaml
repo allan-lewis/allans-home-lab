@@ -9,7 +9,8 @@
     state: directory
     owner: "{{ ansible_ssh_user }}"
     group: "{{ ansible_ssh_user }}"
-  with_items: "{{ jellyfin_volumes }}"
+  with_items:
+    - "{{ jellyfin_volumes[config].path }}"
 
 # - name: Install the Syncthing Docker container.
 #   community.docker.docker_container:
