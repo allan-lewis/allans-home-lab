@@ -1,0 +1,29 @@
+## AHL
+---
+- import_role:
+    name: docker_getent
+
+- name: Create Jellyfin Docker volumes.
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: directory
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+  with_items: "{{ jellyfin_volumes }}"
+
+# - name: Install the Syncthing Docker container.
+#   community.docker.docker_container:
+#     container_default_behavior: no_defaults
+#     detach: yes
+#     name: "syncthing"
+#     image: "syncthing/syncthing:latest"
+#     state: "{{ syncthing_state }}"
+#     recreate: "yes"
+#     pull: "yes"
+#     restart_policy: "unless-stopped"
+#     network_mode: "host"
+#     volumes: "{{ syncthing_volumes }}"
+#     env: 
+#       TZ: America/New_York
+#       PUID: "{{ ahl_user_uid }}"
+#       PGID: "{{ ahl_user_gid }}"
