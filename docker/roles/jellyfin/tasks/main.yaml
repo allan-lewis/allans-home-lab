@@ -27,4 +27,5 @@
     volumes: 
       - "{{ jellyfin_volumes.cache }}:/cache"
       - "{{ jellyfin_volumes.config }}:/config"
+      - "{{ jellyfin_volumes.media }}:/media"
     user: "{{ ahl_user_uid }}:{{ ahl_user_gid }}"
