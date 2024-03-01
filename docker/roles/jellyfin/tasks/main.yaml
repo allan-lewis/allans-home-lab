@@ -25,6 +25,6 @@
     restart_policy: "unless-stopped"
     network_mode: "host"
     volumes: 
-      - "{{ jellyfin_volumes.cache }}":/cache
-      - "{{ jellyfin_volumes.config }}":/config
+      - "{{ jellyfin_volumes.cache }}:/cache"
+      - "{{ jellyfin_volumes.config }}:/config"
     user: "{{ ahl_user_uid }}:{{ ahl_user_gid }}"
