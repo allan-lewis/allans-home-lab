@@ -4,10 +4,10 @@ storage:
   path: /data/data.db
 
 endpoints:
-{% for host in groups['managed_nodes'] %}
-  - name: ping-{{ host }}
+{% for target in gatus_ping_targets | default([]) %}
+  - name: ping-{{ target.name }}
     group: ping
-    url: "icmp://{{ hostvars[host].ansible_host }}"
+    url: "icmp://{{ target.address }}"
     conditions:
       - "[CONNECTED] == true"
 {% endfor %}
