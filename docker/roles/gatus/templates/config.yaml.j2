@@ -1,13 +1,19 @@
+{% for host in groups['all'] %}
+#    {% host.ansible_host %}
+{% endfor %}
+
 storage:
   type: sqlite
   path: /data/data.db
 
 endpoints:
   - name: ping-chaos
+    group: ping
     url: "icmp://192.168.86.161"
     conditions:
       - "[CONNECTED] == true"
   - name: ping-erebus
+    group: ping
     url: "icmp://192.168.86.160"
     conditions:
       - "[CONNECTED] == true"
