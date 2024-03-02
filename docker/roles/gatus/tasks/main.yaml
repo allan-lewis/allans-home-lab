@@ -12,7 +12,7 @@
 
 - name: Write the Gatus config file.
   ansible.builtin.template:
-    src: config.yaml.j2
+    src: "{{ gatus_config_template }}"
     dest: "{{ gatus_volumes.config }}/config.yaml"
 
 - name: Install the Gatus Docker container.
