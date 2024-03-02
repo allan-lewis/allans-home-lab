@@ -163,15 +163,16 @@
   register: netplan_update_arm
   when: ansible_architecture == 'armv7l'
 
-- name: Update network settings (Debian).
-  ansible.builtin.template:
-    src: static-ip-debian.j2
-    dest: "/etc/network/interfaces"
-    owner: "root"
-    group: "root"
-    mode: 0644
-  register: netplan_update_arm
-  when: ansible_facts['distribution'] == 'Debian'
+# Conflicts with ARM
+# - name: Update network settings (Debian).
+#   ansible.builtin.template:
+#     src: static-ip-debian.j2
+#     dest: "/etc/network/interfaces"
+#     owner: "root"
+#     group: "root"
+#     mode: 0644
+#   register: netplan_update_arm
+#   when: ansible_facts['distribution'] == 'Debian'
 
 - name: Configure mount points.
   ansible.posix.mount:
