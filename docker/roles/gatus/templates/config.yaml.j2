@@ -1,0 +1,13 @@
+storage:
+  type: sqlite
+  path: /data/data.db
+
+endpoints:
+  - name: ping-chaos
+    url: "icmp://192.168.86.161"
+    conditions:
+      - "[CONNECTED] == true"
+  - name: ping-erebus
+    url: "icmp://192.168.86.160"
+    conditions:
+      - "[CONNECTED] == true"
