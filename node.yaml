@@ -11,6 +11,13 @@
   
   roles:
     - node
+
+- name: Install Tailscale.
+  hosts: managed_nodes:!openvpn_nodes
+  become: yes
+  gather_facts: yes
+  
+  roles:
     - role: artis3n.tailscale
       vars:
         tailscale_authkey: "{{ tailscale.authkey }}"
