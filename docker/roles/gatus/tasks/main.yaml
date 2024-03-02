@@ -10,19 +10,18 @@
     - "{{ gatus_volumes.config }}"
     - "{{ gatus_volumes.data }}"
 
-# - name: Install the Jellyfin Docker container.
-#   community.docker.docker_container:
-#     container_default_behavior: no_defaults
-#     detach: yes
-#     name: "jellyfin"
-#     image: "jellyfin/jellyfin"
-#     state: "{{ jellyfin_state | default('started') }}"
-#     recreate: "yes"
-#     pull: "yes"
-#     restart_policy: "unless-stopped"
-#     network_mode: "host"
-#     volumes: 
-#       - "{{ jellyfin_volumes.cache }}:/cache"
-#       - "{{ jellyfin_volumes.config }}:/config"
-#       - "{{ jellyfin_volumes.media }}:/media"
-#     user: "{{ ahl_user_uid }}:{{ ahl_user_gid }}"
+- name: Install the Gatus Docker container.
+  community.docker.docker_container:
+    container_default_behavior: no_defaults
+    detach: yes
+    name: "gatus"
+    image: "twinproduction/gatus:latest"
+    state: "{{ gatus_state | default('started') }}"
+    recreate: "yes"
+    pull: "yes"
+    restart_policy: "unless-stopped"
+    published_ports: 
+      - "{{ gatus_port | default(8080) }}:8080/tcp"
+    volumes: 
+      - "{{ gatus_volumes.config }}:/config"
+      - "{{ gatus_volumes.data }}:/data/"
