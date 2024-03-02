@@ -1,0 +1,9 @@
+## AHL
+---
+- name: Install Gatus 
+  hosts: gatus_nodes
+  become: yes
+  gather_facts: false
+
+  roles:  
+    - role: gatus
