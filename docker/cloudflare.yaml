@@ -1,0 +1,10 @@
+## AHL
+---
+
+- name: Install Cloudflare tunnel(s).
+  hosts: cloudflare_nodes
+  become: yes
+  gather_facts: false
+
+  roles:  
+    - role: cloudflare

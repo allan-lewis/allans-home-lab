@@ -1,0 +1,14 @@
+## AHL
+---
+- name: Install the Gatus Docker container.
+  community.docker.docker_container:
+    container_default_behavior: no_defaults
+    detach: yes
+    name: "cloudflare"
+    image: "cloudflare/cloudflared:latest"
+    state: "{{ cloudflare_state | default('started') }}"
+    recreate: "yes"
+    pull: "yes"
+    restart_policy: "unless-stopped"
+    env: 
+      TUNNEL_TOKEN: "{{ cf_tunnel_token }}"
