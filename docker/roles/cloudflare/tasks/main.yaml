@@ -1,6 +1,6 @@
 ## AHL
 ---
-- name: Install the Gatus Docker container.
+- name: Install the Cloudflare Tunnel Docker container.
   community.docker.docker_container:
     container_default_behavior: no_defaults
     detach: yes
@@ -10,5 +10,6 @@
     recreate: "yes"
     pull: "yes"
     restart_policy: "unless-stopped"
+    command: "tunnel run"
     env: 
       TUNNEL_TOKEN: "{{ cf_tunnel_token }}"
