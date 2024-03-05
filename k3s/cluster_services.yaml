@@ -5,8 +5,6 @@
 
 - import_playbook: pihole.yaml
 
-- import_playbook: uptime_kuma.yaml
-
 - import_playbook: nginx.yaml
 
 - import_playbook: no_geeks_brewing.yaml
