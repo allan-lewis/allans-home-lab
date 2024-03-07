@@ -9,6 +9,12 @@ data:
   kubernetes.yaml: |
     mode: cluster
   settings.yaml: |
+{% if homepage_theme is defined %}
+    theme: "{{homepage_theme}}"
+{% endif %}
+{% if homepage_color is defined %}
+    color: "{{homepage_color}}"
+{% endif %}
     providers:
 {% for provider in homepage_providers | default([]) %}
       {{ provider.name }}:
