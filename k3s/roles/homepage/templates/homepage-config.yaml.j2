@@ -9,12 +9,15 @@ data:
   kubernetes.yaml: |
     mode: cluster
   settings.yaml: |
+    title: "{{ homepage_title }}"
+    headerStyle: clean
 {% if homepage_theme is defined %}
     theme: "{{homepage_theme}}"
 {% endif %}
 {% if homepage_color is defined %}
     color: "{{homepage_color}}"
 {% endif %}
+{% if homepage_providers is defined }
     providers:
 {% for provider in homepage_providers | default([]) %}
       {{ provider.name }}:
@@ -22,6 +25,7 @@ data:
         {{ key }}: {{ value }}
 {% endfor %}
 {% endfor %}
+{% endif %}
   bookmarks.yaml: |
 {% for group in homepage_bookmark_groups | default([]) %}
     - {{ group.name }}:
