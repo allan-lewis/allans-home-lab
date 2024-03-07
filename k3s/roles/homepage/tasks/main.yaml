@@ -1,5 +1,10 @@
 ## AHL
 ---
+- name: Write config to the TEMP dir.
+  ansible.builtin.template:
+    src: "homepage-config.yaml.j2"
+    dest: "/tmp/homepage.yaml"
+
 - name: Create a secret for the Homepage service account.
   kubernetes.core.k8s:
     state: "{{ ahl_k3s_state }}"
