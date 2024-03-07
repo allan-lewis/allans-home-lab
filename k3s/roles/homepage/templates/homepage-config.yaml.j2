@@ -17,7 +17,7 @@ data:
 {% if homepage_color is defined %}
     color: "{{homepage_color}}"
 {% endif %}
-{% if homepage_providers is defined }
+{% if homepage_providers is defined %}
     providers:
 {% for provider in homepage_providers | default([]) %}
       {{ provider.name }}:
