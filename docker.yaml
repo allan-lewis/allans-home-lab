@@ -9,8 +9,6 @@
 
 - import_playbook: docker/pihole.yaml
 
-- import_playbook: docker/jellyfin.yaml
-
 - import_playbook: docker/gatus.yaml
 
 - import_playbook: docker/cloudflare.yaml
