@@ -23,7 +23,7 @@
     network_mode: "host"
     volumes: 
       - "{{ plex_config_volume }}:/config"
-      - "{{ plex_media_library }}:/media"
+      - "{{ plex_media_library }}:/media-library"
     env: 
       TZ: America/New_York
       PUID: "{{ ahl_user_uid }}"
