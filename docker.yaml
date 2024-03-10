@@ -12,3 +12,5 @@
 - import_playbook: docker/gatus.yaml
 
 - import_playbook: docker/cloudflare.yaml
+
+- import_playbook: docker/plex.yaml

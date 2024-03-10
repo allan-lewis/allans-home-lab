@@ -1,0 +1,28 @@
+## AHL
+---
+- import_role:
+    name: docker_getent
+
+- name: Create Plex Docker volumes.
+  ansible.builtin.file:
+    path: "{{ plex_config_volume }}"
+    state: directory
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+
+# - name: Install the Jellyfin Docker container.
+#   community.docker.docker_container:
+#     container_default_behavior: no_defaults
+#     detach: yes
+#     name: "jellyfin"
+#     image: "jellyfin/jellyfin"
+#     state: "{{ jellyfin_state | default('started') }}"
+#     recreate: "yes"
+#     pull: "yes"
+#     restart_policy: "unless-stopped"
+#     network_mode: "host"
+#     volumes: 
+#       - "{{ jellyfin_volumes.cache }}:/cache"
+#       - "{{ jellyfin_volumes.config }}:/config"
+#       - "{{ jellyfin_volumes.media }}:/media"
+#     user: "{{ ahl_user_uid }}:{{ ahl_user_gid }}"

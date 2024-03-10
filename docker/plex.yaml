@@ -1,0 +1,10 @@
+
+## AHL
+---
+- name: Install Plex
+  hosts: plex_nodes
+  become: yes
+  gather_facts: false
+
+  roles:  
+    - role: plex
