@@ -21,7 +21,7 @@
     pull: "yes"
     restart_policy: "unless-stopped"
     published_ports: 
-      - "{{ plex_port | deafault(32400) }}:32400/tcp"
+      - "{{ plex_port | default(32400) }}:32400/tcp"
     volumes: 
       - "{{ plex_config_volume }}:/config"
       # - "{{ plex_media }}:/media"
