@@ -10,19 +10,22 @@
     owner: "{{ ansible_ssh_user }}"
     group: "{{ ansible_ssh_user }}"
 
-# - name: Install the Jellyfin Docker container.
-#   community.docker.docker_container:
-#     container_default_behavior: no_defaults
-#     detach: yes
-#     name: "jellyfin"
-#     image: "jellyfin/jellyfin"
-#     state: "{{ jellyfin_state | default('started') }}"
-#     recreate: "yes"
-#     pull: "yes"
-#     restart_policy: "unless-stopped"
-#     network_mode: "host"
-#     volumes: 
-#       - "{{ jellyfin_volumes.cache }}:/cache"
-#       - "{{ jellyfin_volumes.config }}:/config"
-#       - "{{ jellyfin_volumes.media }}:/media"
-#     user: "{{ ahl_user_uid }}:{{ ahl_user_gid }}"
+- name: Install the Plex Docker container.
+  community.docker.docker_container:
+    container_default_behavior: no_defaults
+    detach: yes
+    name: "plex"
+    image: "lscr.io/linuxserver/plex:latest"
+    state: "{{ plex_state | default('started') }}"
+    recreate: "yes"
+    pull: "yes"
+    restart_policy: "unless-stopped"
+    published_ports: 
+      - "{{ plex_port | deafault(32400) }}:32400/tcp"
+    volumes: 
+      - "{{ plex_config_volume }}:/config"
+      # - "{{ plex_media }}:/media"
+    env: 
+      TZ: America/New_York
+      PUID: "{{ ahl_user_uid }}"
+      PGID: "{{ ahl_user_gid }}"
