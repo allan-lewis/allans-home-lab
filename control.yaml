@@ -22,7 +22,7 @@
       args:
         creates: "{{ k8s_gpgpath }}"
 
-    - name: Install the Kubernetes repository
+    - name: Install the Kubernetes repository.
       apt_repository:
         filename: kubernetes
         repo: "deb [signed-by={{ k8s_gpgpath }}] {{ k8s_repository }} /"
