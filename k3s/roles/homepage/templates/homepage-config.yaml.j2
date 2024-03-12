@@ -20,6 +20,12 @@ data:
           style: row
           columns: 4
 {% endfor %}
+{% for group in homepage_bookmark_groups | default([]) %}
+      - {{ group.name }}:
+          header: true
+          style: row
+          columns: 4
+{% endfor %}
 {% endif %}
 {% if homepage_theme is defined %}
     theme: "{{homepage_theme}}"
