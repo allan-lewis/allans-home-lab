@@ -7,15 +7,25 @@
   hosts: control_nodes
 
   tasks:
-    - name: Get the Kubernetes apt GPG key.
+    - name: Uninstall the legacy Kubernetes apt GPG key.
       ansible.builtin.apt_key:
         url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
-        state: present
+        state: absent
 
-    - name: Get the Kubernetes apt repository.
+    - name: Uninstall the legacy Kubernetes apt repository.
       ansible.builtin.apt_repository:
         repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
-        state: present
+        state: absent
+
+    - name: Get the Kubernetes package key.
+      shell: curl -fsSL {{ k8s_url_apt_key }} | gpg --dearmor -o {{ k8s_gpgpath }}
+      args:
+        creates: "{{ k8s_gpgpath }}"
+
+    - name: Install the Kubernetes repository
+      apt_repository:
+        filename: kubernetes
+        repo: "deb [signed-by={{ k8s_gpgpath }}] {{ k8s_repository }} /"
 
     - name: Install required dependencies.
       ansible.builtin.apt:
