@@ -11,9 +11,10 @@
   
   roles:
     - node
+    - backup
 
 - name: Install Tailscale.
-  hosts: managed_nodes:!openvpn_nodes
+  hosts: managed_nodes:!openvpn_nodes:!media_acquisition_nodes
   become: yes
   gather_facts: yes
   
