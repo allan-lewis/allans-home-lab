@@ -4,4 +4,19 @@
   ansible.builtin.known_hosts:
     name: "{{ item.host }}"
     key: "{{ lookup('pipe', 'ssh-keyscan {{ item.host }}') }}"
-  with_items: "{{ remote_hosts | default([]) }}"
+  with_items: "{{ ahl_backup_items | default([]) }}"
+
+- name: Create a directory for log files.
+  ansible.builtin.file:
+    path: "{{ ahl_backup_logdir }}"
+    state: directory
+
+- name: Create the backup script.
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: 0755
+  with_items:
+    - src: "backup.sh.j2"
+      dest: "{{ ahl_backup_script }}"
+

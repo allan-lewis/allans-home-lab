@@ -1,0 +1,21 @@
+#!/bin/bash
+
+set -e
+
+echo "Starting backups @ $(date)"
+
+{% for item in ahl_backup_items %}
+echo "Backing up {{ item.src }}
+
+{% endfor %}
+echo "Backups complete"
+
+echo "Sending health check"
+
+{% if healthcheck is defined %}
+curl -s https://hc-ping.com/{{ healthcheck }}
+
+{% endif %}
+echo ""
+echo "That's all, folks"
+echo ""
