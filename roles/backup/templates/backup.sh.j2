@@ -10,10 +10,10 @@ echo "Backing up {{ item.src }}"
 {% endfor %}
 echo "Backups complete"
 
-{% if healthcheck is defined %}
+{% if ahl_backup_healthcheck is defined %}
 echo "Sending health check"
 
-curl -s https://hc-ping.com/{{ healthcheck }}
+curl -s https://hc-ping.com/{{ ahl_backup_healthcheck }}
 
 {% endif %}
 echo ""
