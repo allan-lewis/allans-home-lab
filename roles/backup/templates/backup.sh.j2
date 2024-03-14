@@ -4,7 +4,7 @@ set -e
 
 echo "Starting backups @ $(date)"
 
-{% for item in ahl_backup_items %}
+{% for item in ahl_backup_items | default([]) %}
 echo "Backing up {{ item.src }}
 
 {% endfor %}
