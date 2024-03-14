@@ -2,7 +2,7 @@
 ---
 - name: Add remote keys to known hosts.
   ansible.builtin.known_hosts:
-    name: "{{ item.host }}"
+    name: "{{ hostvars[item.host].ansible_host }}"
     key: "{{ lookup('pipe', 'ssh-keyscan {{ hostvars[item.host].ansible_host }},`dig +short {{ hostvars[item.host].ansible_host }}`') }}"
   with_items: "{{ ahl_backup_items | default([]) }}"
 
