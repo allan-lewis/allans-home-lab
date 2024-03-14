@@ -8,7 +8,12 @@
 
 - name: Create a directory for log files.
   ansible.builtin.file:
-    path: "{{ ahl_backup_logdir }}"
+    path: "{{ ahl_backup_log_dir }}"
+    state: directory
+
+- name: Create a directory for the backup script.
+  ansible.builtin.file:
+    path: "{{ ahl_backup_script_dir }}"
     state: directory
 
 - name: Create the backup script.
@@ -18,5 +23,4 @@
     mode: 0755
   with_items:
     - src: "backup.sh.j2"
-      dest: "{{ ahl_backup_script }}"
-
+      dest: "{{ ahl_backup_script_dir }}/backup.sh"
