@@ -123,6 +123,7 @@
     pkg:
       - net-tools
       - nfs-common
+      - sshpass
       - python3-pip
     state: latest
     update_cache: true
