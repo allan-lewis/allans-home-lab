@@ -5,14 +5,14 @@ set -e
 echo "Starting backups @ $(date)"
 
 {% for item in ahl_backup_items | default([]) %}
-echo "Backing up {{ item.src }}
+echo "Backing up {{ item.src }}"
 
 {% endfor %}
 echo "Backups complete"
 
+{% if healthcheck is defined %}
 echo "Sending health check"
 
-{% if healthcheck is defined %}
 curl -s https://hc-ping.com/{{ healthcheck }}
 
 {% endif %}
