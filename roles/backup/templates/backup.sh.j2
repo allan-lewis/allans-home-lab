@@ -7,6 +7,8 @@ echo "Starting backups @ $(date)"
 {% for backup in ahl_backup_items | default([]) %}
 echo "Backing up {{ backup.src }}"
 
+# {{ hostvars[backup.host] }}
+
 sshpass -p "{{ ahl_backup_password }}" rsync -avn --relative -e "ssh -p 22" {{  backup.src }} {{ ahl_backup_username }}@{{ hostvars[backup.host]['ansible_hostname'] }}:{{ backup.dest }}
 
 {% endfor %}
