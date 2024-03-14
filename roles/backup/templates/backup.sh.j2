@@ -10,7 +10,7 @@ echo "Backing up {{ item.src }}"
 {% endfor %}
 echo "Backups complete"
 
-sshpass -p "{{ ahl_backup_password }}" rsync -avn --relative -e "ssh -p 22" {{  item.src }} {{ ahl_backup_username }}@{{ hostvars[host]['ansible_hostname'] }}:{{  item.dest }}
+sshpass -p "{{ ahl_backup_password }}" rsync -avn --relative -e "ssh -p 22" {{  item.src }} {{ ahl_backup_username }}@{{ hostvars[item.host]['ansible_hostname'] }}:{{  item.dest }}
 
 {% if ahl_backup_healthcheck is defined %}
 echo "Sending health check"
