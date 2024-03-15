@@ -23,11 +23,11 @@
     mode: 0755
   with_items:
     - src: "backup.sh.j2"
-      dest: "{{ ahl_backup_script_dir }}/backup.sh"
+      dest: "{{ ahl_backup_script }}"
 
 - name: Schedule backups via a CRON job.
   ansible.builtin.cron:
     name: ahl_backup
     minute: "{{ ahl_backup_minute }}"
     hour: "{{ ahl_backup_hour | default('*') }}"
-    job: "/bin/sh {{ ahl_backup_script_dir }}/backup.sh  >> {{ ahl_backup_log_file }} 2>&1"
+    job: "/bin/sh {{ ahl_backup_script }}  >> {{ ahl_backup_log_file }} 2>&1"
