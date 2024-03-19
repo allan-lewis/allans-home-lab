@@ -1,0 +1,9 @@
+## AHL
+---
+- name: Mount the share containing the private key.
+  ansible.posix.mount:
+    src: "{{ ahl_private_key_src }}"
+    path: "{{ ahl_private_key_path }}"
+    opts: "ro"
+    state: "mounted"
+    fstype: "nfs"
