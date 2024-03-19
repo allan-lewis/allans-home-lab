@@ -11,4 +11,4 @@
 - name: Unmount the share containing the private key.
   ansible.posix.mount:
     path: "{{ ahl_private_key_path }}"
-    state: "absent"
+    state: "unmounted"
