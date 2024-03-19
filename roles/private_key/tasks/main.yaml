@@ -8,6 +8,15 @@
     state: "ephemeral"
     fstype: "nfs"
 
+- name: Install private key locally.
+  ansible.builtin.copy:
+    src: "{{ ahl_private_key_file_remote }}"
+    dest: "{{ ahl_private_key_file_local }}"
+    remote_src: yes
+    owner: "{{ control_user }}"
+    group: "{{ control_user }}"
+    mode: '0600'
+
 - name: Unmount the share containing the private key.
   ansible.posix.mount:
     path: "{{ ahl_private_key_path }}"
