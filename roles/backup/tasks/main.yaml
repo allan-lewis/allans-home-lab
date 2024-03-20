@@ -11,6 +11,11 @@
     path: "{{ ahl_backup_log_dir }}"
     state: directory
 
+- name: Ensure that the log file exists.
+  ansible.builtin.file:
+    path: "{{ ahl_backup_log_file }}"
+    state: touch
+
 - name: Create a directory for the backup script.
   ansible.builtin.file:
     path: "{{ ahl_backup_script_dir }}"
