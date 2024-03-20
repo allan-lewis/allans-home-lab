@@ -28,7 +28,7 @@
 - name: Schedule backups via a CRON job.
   ansible.builtin.cron:
     name: ahl_backup
-    minute: "{{ ahl_backup_minute }}"
+    minute: "{{ ahl_backup_minute | default('*') }}"
     hour: "{{ ahl_backup_hour | default('*') }}"
     job: "/bin/sh {{ ahl_backup_script }}  >> {{ ahl_backup_log_file }} 2>&1"
 
