@@ -11,11 +11,13 @@
       ansible.builtin.apt_key:
         url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
         state: absent
+      when: cleanup_k8s_apt is defined
 
     - name: Uninstall the legacy Kubernetes apt repository.
       ansible.builtin.apt_repository:
         repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
         state: absent
+      when: cleanup_k8s_apt is defined
 
     - name: Get the Kubernetes package key.
       shell: curl -fsSL {{ k8s_url_apt_key }} | gpg --dearmor -o {{ k8s_gpgpath }}
@@ -42,6 +44,9 @@
           - jmespath
           - netaddr
 
+    - import_role: 
+        name: private_key
+
 - name: Fetch the remote kubectl config to localhost.
   become: no
   gather_facts: yes
@@ -53,6 +58,7 @@
       ansible.builtin.file:
         path: "{{ control_copy_kubectl_dir }}"
         state: directory
+      when: "'k3s_nodes_master' in groups and groups['k3s_nodes_master']"
 
     - name: Fetch kubectl config from a master node.
       ansible.builtin.fetch:
@@ -63,6 +69,7 @@
         group: "{{ control_user }}"
       become: yes
       delegate_to: "{{ groups['k3s_nodes_master'][0] }}"
+      when: "'k3s_nodes_master' in groups and groups['k3s_nodes_master']"
 
 - name: Setup control nodes to run Ansible playbooks (as control user).
   become: no
@@ -75,6 +82,7 @@
       ansible.builtin.file:
         path: "{{ ansible_env.HOME }}/.kube"
         state: directory
+      when: "'k3s_nodes_master' in groups and groups['k3s_nodes_master']"
 
     - name: Copy the kubectl config.
       ansible.builtin.copy:
@@ -82,6 +90,7 @@
         dest: "{{ ansible_env.HOME }}/.kube/config"
         owner: "{{ control_user }}"
         group: "{{ control_user }}"
+      when: "'k3s_nodes_master' in groups and groups['k3s_nodes_master']"
 
     - name: Create an Ansibile config file.
       ansible.builtin.template:

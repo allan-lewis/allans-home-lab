@@ -11,10 +11,17 @@
   
   roles:
     - node
+
+- name: Setup automated backups.
+  hosts: backup_nodes
+  become: yes
+  gather_facts: yes
+  
+  roles:
     - backup
 
 - name: Install Tailscale.
-  hosts: managed_nodes:!openvpn_nodes:!media_acquisition_nodes
+  hosts: tailscale_nodes
   become: yes
   gather_facts: yes
   

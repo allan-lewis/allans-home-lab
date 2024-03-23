@@ -52,4 +52,4 @@
         template: namespace.yml.j2
       vars:
         namespace_name: "{{ item.namespace_name }}"
-      with_items: "{{ k3s_namespaces }}"
+      with_items: "{{ k3s_namespaces | default([]) }}"

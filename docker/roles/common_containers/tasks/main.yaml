@@ -16,7 +16,7 @@
     detach: yes
     name: "syncthing"
     image: "syncthing/syncthing:latest"
-    state: "{{ syncthing_state }}"
+    state: "{{ syncthing_state | default('absent') }}"
     recreate: "yes"
     pull: "yes"
     restart_policy: "unless-stopped"
