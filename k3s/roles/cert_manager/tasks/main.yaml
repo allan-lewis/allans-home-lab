@@ -37,9 +37,7 @@
   kubernetes.core.k8s:
     state: "{{ ahl_k3s_state }}"
     template: "{{ item }}"
-  with_items:
-    - letsencrypt-staging.yml.j2
-    - letsencrypt-production.yml.j2
+  with_items: "{{ cert_manager_cert_issuers }}"
 
 - name: Install Cloudflare token secret.
   kubernetes.core.k8s:
@@ -53,10 +51,4 @@
     certificate_name: "{{ item.certificate_name }}"
     secret_name: "{{ item.secret_name }}"
     issuer_name: "{{ item.issuer_name }}"
-  with_items:
-    - certificate_name: certificate-staging
-      secret_name: staging-tls
-      issuer_name: letsencrypt-staging
-    - certificate_name: certificate-production
-      secret_name: production-tls
-      issuer_name: letsencrypt-production
+  with_items: "{{ cert_manager_certificates | default([]) }}"
