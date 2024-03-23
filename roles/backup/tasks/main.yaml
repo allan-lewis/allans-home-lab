@@ -1,5 +1,8 @@
 ## AHL
 ---
+- import_role: 
+    name: private_key
+
 - name: Add remote keys to known hosts.
   ansible.builtin.known_hosts:
     name: "{{ hostvars[item.host].ansible_host }}"
