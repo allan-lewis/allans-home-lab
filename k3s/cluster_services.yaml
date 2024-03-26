@@ -1,6 +1,8 @@
 ## AHL
 ---
 
+- import_playbook: authentik.yaml
+
 - import_playbook: monitoring.yaml
 
 - import_playbook: pihole.yaml

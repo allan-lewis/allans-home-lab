@@ -7,19 +7,20 @@ authentik:
     postgresql:
         password: {{ authentik_postgres_password }}
 
-ingress:
-    # Specify kubernetes ingress controller class name
-    ingressClassName: traefik
-    enabled: true
-    hosts:
-        # Specify external host name
-        - host: {{ authentik_hostname }}
-          paths:
-              - path: "/"
-                pathType: Prefix
+server:
+    ingress:
+        # Specify kubernetes ingress controller class name
+        ingressClassName: traefik
+        enabled: true
+        hosts:
+            - {{ authentik_hostname }}
+ #           paths:
+ #               - path: "/"
+ #                   pathType: Prefix
 
 postgresql:
     enabled: true
-    postgresqlPassword: {{ authentik_postgres_password }}
+    auth:
+        password: {{ authentik_postgres_password }}
 redis:
     enabled: true
