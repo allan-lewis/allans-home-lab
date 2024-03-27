@@ -27,15 +27,15 @@ spec:
           port: {{ route.service_port | default(service_port) }}
           scheme: {{ route.scheme | default('http') }}        
 {% if route.authentik | default(false) %}
-      - kind: Rule
-        match: "Host(`{{ route.host }}`) && PathPrefix(`/outpost.goauthentik.io/`)"
-        priority: 15
-        services:
-          - kind: Service
-            # Or, to use an external Outpost, create an ExternalName service and reference that here.
-            # See https://kubernetes.io/docs/concepts/services-networking/service/#externalname
-            name: ak-outpost-authentik-embedded-outpost
-            port: 9000
+    - kind: Rule
+      match: "Host(`{{ route.host }}`) && PathPrefix(`/outpost.goauthentik.io/`)"
+      priority: 15
+      services:
+        - kind: Service
+          # Or, to use an external Outpost, create an ExternalName service and reference that here.
+          # See https://kubernetes.io/docs/concepts/services-networking/service/#externalname
+          name: ahl-outpost
+          port: 9000
 {% endif %}
 {% endfor %}
   tls:
