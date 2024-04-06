@@ -20,7 +20,6 @@
   kubernetes.core.helm:
     chart_ref: authentik/authentik
     name: authentik
-    chart_version: "2023.10.7"
     update_repo_cache: true
     create_namespace: true
     release_state: "{{ ahl_k3s_state }}"
