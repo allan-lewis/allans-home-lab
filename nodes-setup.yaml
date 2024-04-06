@@ -1,0 +1,58 @@
+## AHL
+---
+- name: Stop the playbook if not limited to a subset of hosts.
+  hosts: localhost
+  gather_facts: no
+  
+  roles:
+    - test_limit
+
+- name: Cordon and drain k3s nodes.
+  hosts: k3s_nodes_all
+  become: yes
+  gather_facts: yes
+  
+  roles:
+    - k3s_cordon
+
+- name: Perform basline host setup.
+  hosts: managed_nodes
+  become: yes
+  gather_facts: yes
+  
+  roles:
+    - node
+
+- name: Setup automated backups.
+  hosts: backup_nodes
+  become: yes
+  gather_facts: yes
+  
+  roles:
+    - backup
+
+- name: Install Tailscale.
+  hosts: tailscale_nodes
+  become: yes
+  gather_facts: yes
+  
+  roles:
+    - role: artis3n.tailscale
+      vars:
+        tailscale_authkey: "{{ tailscale.authkey }}"
+
+- name: Install Node Exporter.
+  hosts: node_exporter_nodes
+  become: yes
+  gather_facts: yes
+  
+  roles:
+    - node_exporter
+
+- name: Uncordon k3s nodes.
+  hosts: k3s_nodes_all
+  become: yes
+  gather_facts: yes
+  
+  roles:
+    - k3s_uncordon

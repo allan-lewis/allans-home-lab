@@ -1,0 +1,16 @@
+## AHL
+---
+- name: Wait for k3s nodes to be ready.
+  delegate_to: "{{ groups['k3s_nodes_master'][0] }}"
+  ansible.builtin.shell: kubectl wait --for=condition=Ready nodes {{ item }} --timeout=5s
+  register: kubelet_ready
+  until: kubelet_ready.rc == 0
+  retries: 20
+  delay: 10
+  with_items: "{{ ansible_play_batch }}"
+
+- name: Uncordon k3s nodes.
+  delegate_to: "{{ groups['k3s_nodes_master'][0] }}"
+  shell: kubectl uncordon {{ item }}
+  when: "'k3s_nodes_all' in group_names and (k3s_cordon | default('true')) == 'true'"
+  with_items: "{{ ansible_play_batch }}"
