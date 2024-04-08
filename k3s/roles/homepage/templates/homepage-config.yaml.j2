@@ -15,16 +15,16 @@ data:
 {% if homepage_service_groups is defined %}
     layout:
 {% for group in homepage_service_groups | default([]) %}
-      - {{ group.name }}:
-          header: true
-          style: row
-          columns: 4
+      {{ group.name }}:
+        header: true
+        style: row
+        columns: 4
 {% endfor %}
 {% for group in homepage_bookmark_groups | default([]) %}
-      - {{ group.name }}:
-          header: true
-          style: row
-          columns: 2
+      {{ group.name }}:
+        header: true
+        style: row
+        columns: 2
 {% endfor %}
 {% endif %}
 {% if homepage_theme is defined %}
