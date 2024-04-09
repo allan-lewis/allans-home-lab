@@ -1,0 +1,33 @@
+## AHL
+---
+- name:  Create a namespace for Nextcloud.
+  kubernetes.core.k8s:
+    state: present
+    template: namespace.yml.j2
+
+- name: Add the Nextcloud Helm respository.
+  kubernetes.core.helm_repository:
+    name: nextcloud
+    repo_url: https://nextcloud.github.io/helm/
+    repo_state: present 
+
+- name: Write the values file for the Helm chart.
+  ansible.builtin.template:
+    src: nextcloud_values.yaml.j2
+    dest: /tmp/nextcloud_values.yaml
+
+- name: Install the Nextcloud Helm chart.
+  kubernetes.core.helm:
+    chart_ref: nextcloud/nextcloud
+    name: nextcloud
+    update_repo_cache: true
+    create_namespace: true
+    release_state: "{{ ahl_k3s_state }}"
+    namespace: "{{ namespace_name }}"
+    values_files:
+      - /tmp/nextcloud_values.yaml
+
+- name: Create a Traefik ingress for Nextcloud.
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: traefik_ingress_route.yml.j2
