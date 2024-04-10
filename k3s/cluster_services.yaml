@@ -27,6 +27,4 @@
 
 - import_playbook: portainer.yaml
 
-- import_playbook: heimdall.yaml
-
 - import_playbook: nextcloud.yaml
