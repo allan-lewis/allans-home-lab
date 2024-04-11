@@ -8,8 +8,6 @@
     group: "{{ control_user }}"
   with_items:
       - path: "{{ photoprism_storage_volume }}"
-      - path: "{{ photoprism_originals_volume }}"
-      - path: "{{ photoprism_import_volume }}"
 
 - name: Install the Photoprism Docker container.
   community.docker.docker_container:
