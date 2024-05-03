@@ -30,6 +30,7 @@
         group: "root"
         mode: '0600'
       with_items: "{{ openvpn_configs }}"
+      register: openvpn_configs
 
     - name: Create scripts and service files.
       ansible.builtin.template:
@@ -51,6 +52,7 @@
         - src: "openvpn_service.j2"
           dest: "/etc/rc.local"
           mode: "0744"
+      register: openvpn_scripts
 
     - name: Enable port forwarding.
       ansible.posix.sysctl:
@@ -63,7 +65,7 @@
         name: "rc-local"
         state: started
         enabled: yes
-      register: vpn_service_started
+      register: openvpn_service
 
     - name: Reboot if necessary.
       ansible.builtin.reboot:
@@ -73,4 +75,4 @@
         pre_reboot_delay: 0
         post_reboot_delay: 30
         test_command: uptime
-      when: vpn_service_started is changed
+      when: (openvpn_configs is changed) or (openvpn_scripts is changed) or (openvpn_service is changed)
