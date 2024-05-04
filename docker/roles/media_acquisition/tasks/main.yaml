@@ -13,6 +13,7 @@
       - path: "{{ movies_volume }}"
       - path: "{{ shows_volume }}"
       - path: "{{ music_volume }}"
+      - path: "{{ books_volume }}"
       - path: "{{ jackett.config }}"
       - path: "{{ radarr.config }}"
       - path: "{{ readarr.config }}"
