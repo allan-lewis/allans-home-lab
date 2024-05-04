@@ -104,3 +104,24 @@
       TZ: America/New_York
       PUID: "{{ ahl_user_uid }}"
       PGID: "{{ ahl_user_gid }}"
+
+- name: Install the Lidarr Docker container.
+  community.docker.docker_container:
+    container_default_behavior: no_defaults
+    detach: yes
+    name: "lidarr"
+    image: "lscr.io/linuxserver/lidarr:latest"
+    state: "{{ lidarr_state }}"
+    recreate: "yes"
+    pull: "yes"
+    restart_policy: "unless-stopped"
+    published_ports:
+      - "{{ lidarr.port | default(8686) }}:8686/tcp"
+    volumes: 
+      - "{{ lidarr.config }}:/config"
+      - "{{ music_volume }}:/music"
+      - "{{ torrent_downloads }}:/downloads"
+    env: 
+      TZ: America/New_York
+      PUID: "{{ ahl_user_uid }}"
+      PGID: "{{ ahl_user_gid }}"
