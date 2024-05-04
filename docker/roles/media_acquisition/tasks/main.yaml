@@ -15,6 +15,7 @@
       - path: "{{ music_volume }}"
       - path: "{{ jackett.config }}"
       - path: "{{ radarr.config }}"
+      - path: "{{ readarr.config }}"
       - path: "{{ sonarr.config }}"
       - path: "{{ transmission.config }}"
       - path: "{{ lidarr.config }}"
