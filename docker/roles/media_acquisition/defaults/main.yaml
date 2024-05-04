@@ -2,6 +2,7 @@
 ---
 movies_volume: "{{ torrent_movies}}"
 shows_volume: "{{ torrent_shows }}"
+music_volume: "{{ torrent_music }}"
 torrent_downloads: "{{ transmission_downloads }}"
 torrent_watch: "{{ transmission_watch }}"
 jackett:
@@ -17,3 +18,5 @@ sonarr:
 transmission:
   port: 31800
   config: "{{ ahl_docker_volume_root }}/transmission"
+lidarr:
+  config: "{{ ahl_docker_volume_root }}/lidarr"
