@@ -40,6 +40,7 @@
     - role: artis3n.tailscale
       vars:
         tailscale_authkey: "{{ tailscale.authkey }}"
+        tailscale_args: "{{ tailscale.args | default('') }}"
 
 - name: Install Node Exporter.
   hosts: node_exporter_nodes
