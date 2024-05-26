@@ -5,7 +5,7 @@
     src: "{{ ahl_private_key_share_src }}"
     path: "{{ ahl_private_key_share_path }}"
     opts: "ro"
-    state: "ephemeral"
+    state: "mounted"
     fstype: "nfs"
   when: ahl_private_key_remote_src | bool
 
@@ -21,5 +21,5 @@
 - name: Unmount the share containing the private key.
   ansible.posix.mount:
     path: "{{ ahl_private_key_share_path }}"
-    state: "unmounted"
+    state: "absent"
   when: ahl_private_key_remote_src | bool
