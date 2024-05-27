@@ -24,7 +24,6 @@
     chart_ref: traefik/traefik
     namespace: traefik
     name: traefik
-    chart_version: "26.0.0"
     update_repo_cache: true
     create_namespace: true
     release_state: "{{ ahl_k3s_state }}"
