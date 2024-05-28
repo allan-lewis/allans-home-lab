@@ -23,7 +23,7 @@
     image: "twinproduction/gatus:latest"
     state: "{{ gatus_state | default('started') }}"
     recreate: "yes"
-    pull: "yes"
+    pull: "always"
     restart_policy: "unless-stopped"
     published_ports: 
       - "{{ gatus_port | default(8080) }}:8080/tcp"
