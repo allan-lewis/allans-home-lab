@@ -32,7 +32,7 @@
     image: "pihole/pihole"
     state: "started"
     recreate: "yes"
-    pull: "yes"
+    pull: "always"
     restart_policy: "unless-stopped"
     published_ports: 
       - "53:53/tcp"

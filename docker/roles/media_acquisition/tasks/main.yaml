@@ -32,7 +32,7 @@
     image: "lscr.io/linuxserver/readarr:develop"
     state: "{{ readarr_state }}"
     recreate: "yes"
-    pull: "yes"
+    pull: "always"
     restart_policy: "unless-stopped"
     published_ports:
       - "{{ readarr.port | default(8787) }}:8787/tcp"
@@ -53,7 +53,7 @@
     image: "lscr.io/linuxserver/lidarr:latest"
     state: "{{ lidarr_state }}"
     recreate: "yes"
-    pull: "yes"
+    pull: "always"
     restart_policy: "unless-stopped"
     published_ports:
       - "{{ lidarr.port | default(8686) }}:8686/tcp"
@@ -74,7 +74,7 @@
     image: "lscr.io/linuxserver/jackett:latest"
     state: "{{ jackett_state }}"
     recreate: "yes"
-    pull: "yes"
+    pull: "always"
     restart_policy: "unless-stopped"
     published_ports: 
       - "{{ jackett.port }}:9117/tcp"
@@ -94,7 +94,7 @@
     image: "lscr.io/linuxserver/sonarr:latest"
     state: "{{ sonarr_state }}"
     recreate: "yes"
-    pull: "yes"
+    pull: "always"
     restart_policy: "unless-stopped"
     published_ports: 
       - "{{ sonarr.port }}:8989/tcp"
@@ -115,7 +115,7 @@
     image: "lscr.io/linuxserver/radarr:latest"
     state: "{{ radarr_state }}"
     recreate: "yes"
-    pull: "yes"
+    pull: "always"
     restart_policy: "unless-stopped"
     published_ports: 
       - "{{ radarr.port }}:7878/tcp"
@@ -136,7 +136,7 @@
     image: "lscr.io/linuxserver/transmission:latest"
     state: "{{ transmission_state }}"
     recreate: "yes"
-    pull: "yes"
+    pull: "always"
     restart_policy: "unless-stopped"
     published_ports: 
       - "{{ transmission.port }}:9091/tcp"

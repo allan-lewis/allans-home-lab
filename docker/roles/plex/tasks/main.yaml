@@ -18,7 +18,7 @@
     image: "lscr.io/linuxserver/plex:latest"
     state: "{{ plex_state | default('started') }}"
     recreate: "yes"
-    pull: "yes"
+    pull: "always"
     restart_policy: "unless-stopped"
     network_mode: "host"
     volumes: 

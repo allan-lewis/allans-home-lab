@@ -18,7 +18,7 @@
     image: "syncthing/syncthing:latest"
     state: "{{ syncthing_state | default('absent') }}"
     recreate: "yes"
-    pull: "yes"
+    pull: "always"
     restart_policy: "unless-stopped"
     network_mode: "host"
     volumes: "{{ syncthing_volumes }}"
@@ -35,7 +35,7 @@
     image: "portainer/agent"
     state: "started"
     recreate: "yes"
-    pull: "yes"
+    pull: "always"
     restart_policy: "unless-stopped"
     published_ports: 
       - "{{ portainer_agent_port }}:9001/tcp"
@@ -51,7 +51,7 @@
     image: "ghcr.io/tecnativa/docker-socket-proxy:latest"
     state: "started"
     recreate: "yes"
-    pull: "yes"
+    pull: "always"
     restart_policy: "unless-stopped"
     published_ports: 
       - "{{ docker_proxy_port }}:2375/tcp"
@@ -69,7 +69,7 @@
     image: "gcr.io/cadvisor/cadvisor:latest"
     state: "started"
     recreate: "yes"
-    pull: "yes"
+    pull: "always"
     restart_policy: "unless-stopped"
     published_ports: 
       - "{{ known_ports.cadvisor_http_port }}:8080/tcp"
@@ -88,7 +88,7 @@
     image: "gcr.io/cadvisor/cadvisor-arm:v0.45.0"
     state: "started"
     recreate: "yes"
-    pull: "yes"
+    pull: "always"
     restart_policy: "unless-stopped"
     published_ports: 
       - "{{ known_ports.cadvisor_http_port }}:8080/tcp"
@@ -108,7 +108,7 @@
     image: "quay.io/prometheus/node-exporter:latest"
     state: "started"
     recreate: "yes"
-    pull: "yes"
+    pull: "always"
     restart_policy: "unless-stopped"
     published_ports: 
       - "{{ known_ports.node_exporter_http_port }}:9100/tcp"

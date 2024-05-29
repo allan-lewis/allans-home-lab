@@ -8,7 +8,7 @@
     image: "cloudflare/cloudflared:latest"
     state: "{{ cloudflare_state | default('started') }}"
     recreate: "yes"
-    pull: "yes"
+    pull: "always"
     restart_policy: "unless-stopped"
     command: "tunnel run"
     env: 

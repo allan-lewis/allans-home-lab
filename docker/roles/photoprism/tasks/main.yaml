@@ -17,7 +17,7 @@
     image: "photoprism/photoprism:latest"
     state: "{{ photoprism_state | default('started') }}"
     recreate: "yes"
-    pull: "yes"
+    pull: "always"
     restart_policy: "unless-stopped"
     volumes: 
       - "{{ photoprism_storage_volume }}:/photoprism/storage"
