@@ -1,20 +1,8 @@
 ## AHL
 ---
-- name: Get Docker's apt GPG key.
-  ansible.builtin.apt_key:
-    url: https://download.docker.com/linux/ubuntu/gpg
-    state: present
-  register: docker_key
-
-- name: Get Docker's apt repository.
-  ansible.builtin.apt_repository:
-    repo: deb https://download.docker.com/linux/ubuntu focal stable
-    state: present
-  register: docker_repo
-
 - name: Do an apt update.
   ansible.builtin.apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
-  when: (docker_key is changed) or (docker_repo is changed)
+
 
 - name: Install required dependencies.
   ansible.builtin.apt:
@@ -32,13 +20,34 @@
     state: latest
     update_cache: true
 
+- name: Get Docker's apt GPG key.
+  ansible.builtin.apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: Get Docker's apt repository.
+  ansible.builtin.apt_repository:
+    repo: deb https://download.docker.com/linux/ubuntu focal stable
+    state: present
+
+# - name: Install Docker.
+#   ansible.builtin.apt:
+#     name:
+#       - docker
+#       - docker.io
+#       - docker-compose
+#       - docker-registry
+#     state: latest
+#     update_cache: true
+
 - name: Install Docker.
   ansible.builtin.apt:
     name:
-      - docker
-      - docker.io
-      - docker-compose
-      - docker-registry
+      - docker-ce 
+      - docker-ce-cli 
+      - containerd.io 
+      - docker-buildx-plugin 
+      - docker-compose-plugin
     state: latest
     update_cache: true
 

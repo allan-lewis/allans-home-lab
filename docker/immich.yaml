@@ -1,0 +1,10 @@
+
+## AHL
+---
+- name: Install Immich
+  hosts: immich_nodes
+  become: yes
+  gather_facts: false
+
+  roles:  
+    - role: immich

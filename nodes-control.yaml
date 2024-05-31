@@ -115,3 +115,6 @@
 
     - name: Install Tailscale Ansible role.
       shell: "{{ ansible_env.HOME }}/.local/bin/ansible-galaxy role install artis3n.tailscale"
+
+    - name: Install the Docker Community Ansible collection.
+      shell: "{{ ansible_env.HOME }}/.local/bin/ansible-galaxy collection install community.docker"

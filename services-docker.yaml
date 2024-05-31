@@ -16,3 +16,5 @@
 - import_playbook: docker/plex.yaml
 
 - import_playbook: docker/photoprism.yaml
+
+- import_playbook: docker/immich.yaml
