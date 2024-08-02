@@ -19,6 +19,7 @@
 - name: Install the Authentik Helm chart.
   kubernetes.core.helm:
     chart_ref: authentik/authentik
+    chart_version: "{{ version_authentik }}"
     name: authentik
     update_repo_cache: true
     create_namespace: true
