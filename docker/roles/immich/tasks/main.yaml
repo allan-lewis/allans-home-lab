@@ -1,26 +1,21 @@
 ## AHL
 ---
-- name: Create a temporary directory for Docker Compose files.
+- name: Create a temporary directory.
   ansible.builtin.file:
     path: "{{ immich_tmp_dir }}"
     state: directory
 
-- name: Download Docker Compose YAML file.
+- name: Download the Docker Compose configuration.
   ansible.builtin.get_url:
     url: "https://github.com/immich-app/immich/releases/latest/download/docker-compose.yml"
     dest: "{{ immich_tmp_dir }}/docker-compose.yml"
 
-- name: Write Docker Compose environment file.
+- name: Write the Docker Compose environment file.
   ansible.builtin.template:
     src: env.j2
     dest: "{{ immich_tmp_dir }}/.env"
 
-- name: Tear down any existing services.
-  community.docker.docker_compose_v2:
-    project_src: "{{ immich_tmp_dir }}"
-    state: absent
-
-- name: Create and start new services.
+- name: Deploy the Docker Compose application.
   community.docker.docker_compose_v2:
     project_src: "{{ immich_tmp_dir }}"
     pull: "always"
