@@ -4,7 +4,7 @@ services:
     image: "traefik:v3.1"
     container_name: "traefik"
     command:
-      - "--log.level=DEBUG"
+      #- "--log.level=DEBUG"
       - "--api.insecure=true"
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
@@ -19,7 +19,7 @@ services:
     ports:
       - "80:80"
       - "443:443"
-      - "8080:8080"
+      - "8088:8080"
     environment:
       - CF_API_EMAIL= {{ cloudflare_email }}
       - CF_API_KEY= {{ cloudflare_api_key }}
