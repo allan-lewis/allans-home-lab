@@ -1,0 +1,6 @@
+## AHL
+---
+- name: Install Ansible.
+  ansible.builtin.pip:
+    name: ansible
+    extra_args: --user

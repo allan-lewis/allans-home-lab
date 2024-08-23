@@ -1,0 +1,6 @@
+## AHL
+---
+- name: Check out Ansible playbooks from GitHub.
+  ansible.builtin.git:
+    repo: "https://github.com/allan-lewis/allans-home-lab.git"
+    dest: "{{ ansible_env.HOME }}/allans-home-lab"
