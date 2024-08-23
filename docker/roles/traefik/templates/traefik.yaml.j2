@@ -1,4 +1,5 @@
 http:    
+{% if services is defined %}
   routers:
 {% for service in services %}
     router-{{ service.name }}-http:
@@ -25,6 +26,7 @@ http:
           - url: {{ service.url }}
         passHostHeader: true
 {% endfor %}
+{% endif %}
 
   middlewares:
     redirect-to-https:
