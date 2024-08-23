@@ -18,3 +18,5 @@
 - import_playbook: docker/photoprism.yaml
 
 - import_playbook: docker/immich.yaml
+
+- import_playbook: docker/traefik.yaml

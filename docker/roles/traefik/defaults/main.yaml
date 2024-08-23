@@ -1,0 +1,3 @@
+traefik_tmp_dir: /tmp/traefik
+traefik_volume: "{{ ahl_docker_volume_root }}/traefik"
+letsencrypt_volume: "{{ ahl_docker_volume_root }}/letsencrypt"

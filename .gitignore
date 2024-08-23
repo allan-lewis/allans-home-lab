@@ -1,2 +1,3 @@
 .inventory.yaml
 ansible.cfg
+.DS_Store

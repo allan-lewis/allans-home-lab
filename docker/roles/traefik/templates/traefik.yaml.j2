@@ -1,0 +1,33 @@
+http:    
+  routers:
+{% for service in services %}
+    router-{{ service.name }}-http:
+      entryPoints:
+        - web
+      rule: Host(`{{ service.host }}`)
+      middlewares:
+        - redirect-to-https
+      service: service-{{ service.name }}
+    router-{{ service.name }}-https:
+      entryPoints:
+        - websecure
+      service: service-{{ service.name }}
+      rule: Host(`{{ service.host }}`)
+      tls:
+        certresolver: myresolver
+{% endfor %}
+
+  services:
+{% for service in services %}
+    service-{{ service.name }}:
+      loadBalancer:
+        servers:
+          - url: {{ service.url }}
+        passHostHeader: true
+{% endfor %}
+
+  middlewares:
+    redirect-to-https:
+      redirectscheme:
+        scheme: https
+        permanent: true
