@@ -1,7 +1,7 @@
 
 ## AHL
 ---
-- name: Install PhotoPrism
+- name: Install Traefik
   hosts: traefik_nodes
   become: yes
   gather_facts: false
