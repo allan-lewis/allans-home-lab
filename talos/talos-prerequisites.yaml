@@ -1,14 +1,15 @@
 ## AHL
 ---
-- name: Install the Talos CTL tool.
+- name: Setup prerequisites (as root).
   hosts: talos_control_nodes
   become: yes
   gather_facts: true
 
   roles:
     - talos_ctl
+    - talos_k8s
 
-- name: Get control nodes ready to run Ansible.
+- name: Setup prerequisites (as control user).
   hosts: talos_control_nodes
   become: no
   gather_facts: true
@@ -16,4 +17,3 @@
   roles:
     - talos_ansible
     - talos_playbooks
-    - talos_config

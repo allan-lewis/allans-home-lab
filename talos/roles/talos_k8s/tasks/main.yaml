@@ -1,0 +1,18 @@
+## AHL
+---
+- name: Get the Kubernetes package key.
+  shell: curl -fsSL {{ k8s_url_apt_key }} | gpg --dearmor -o {{ k8s_gpgpath }}
+  args:
+    creates: "{{ k8s_gpgpath }}"
+
+- name: Install the Kubernetes repository.
+  apt_repository:
+    filename: kubernetes
+    repo: "deb [signed-by={{ k8s_gpgpath }}] {{ k8s_repository }} /"
+
+- name: Install required dependencies.
+  ansible.builtin.apt:
+    pkg:
+      - kubectl
+    state: latest
+    update_cache: true
