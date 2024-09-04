@@ -16,3 +16,8 @@
       - kubectl
     state: latest
     update_cache: true
+
+- name: Install required Python modules.
+  ansible.builtin.pip:
+    name: 
+      - kubernetes

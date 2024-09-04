@@ -1,0 +1,27 @@
+## AHL
+---
+- name: Create a temporary directory for k8s manifests.
+  ansible.builtin.file:
+    path: "{{ metallb_tmp }}"
+    state: directory
+
+- name: Download the MetalLB manifest.
+  ansible.builtin.get_url:
+    url: "https://raw.githubusercontent.com/metallb/metallb/{{ metallb_version }}/config/manifests/metallb-native.yaml"
+    dest: "{{ metallb_tmp }}/metallb.yaml"
+    mode: '0664'
+
+- name: Install MetalLB.
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ metallb_tmp }}/metallb.yaml"
+
+- name: Write config file for MetalLB.
+  ansible.builtin.template:
+    src: "config.yaml.j2"
+    dest: "{{ metallb_tmp }}/config.yaml"
+
+- name: Configure MetalLB.
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ metallb_tmp }}/config.yaml"

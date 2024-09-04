@@ -8,6 +8,7 @@
   roles:
     - talos_ctl
     - talos_k8s
+    - talos_helm
 
 - name: Setup prerequisites (as control user).
   hosts: talos_control_nodes

@@ -1,0 +1,4 @@
+## AHL
+---
+metallb_pool_name: default-pool
+metallb_tmp: /tmp/metallb
