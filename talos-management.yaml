@@ -1,0 +1,21 @@
+## AHL
+---
+- name: Setup nodes to manage Talos (as root).
+  hosts: talos_management_nodes
+  become: yes
+  gather_facts: true
+
+  roles:
+    - talos_ctl
+    - talos_k8s
+    - talos_helm
+    - private_key
+
+- name: Setup nodes to manage Talos (as control user).
+  hosts: talos_management_nodes
+  become: no
+  gather_facts: true
+
+  roles:
+    - talos_ansible
+    - talos_playbooks
