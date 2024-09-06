@@ -4,3 +4,8 @@
   ansible.builtin.pip:
     name: ansible
     extra_args: --user
+
+- name: Create an Ansibile config file.
+  ansible.builtin.template:
+    src: ansible.cfg.j2
+    dest: "{{ ansible_env.HOME }}/.ansible.cfg"
