@@ -2,6 +2,10 @@ cluster:
   allowSchedulingOnControlPlanes: true
 
 machine:
+  install:
+    disk: {{ hostvars[item].talos_disk | default('/dev/sda') }}
+    wipe: {{ hostvars[item].talos_wipe | default(false) }}
+
   network:
     hostname: {{ hostvars[item].inventory_hostname }}
     interfaces:

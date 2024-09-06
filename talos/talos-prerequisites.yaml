@@ -1,7 +1,7 @@
 ## AHL
 ---
 - name: Setup prerequisites (as root).
-  hosts: talos_control_nodes
+  hosts: talos_management_nodes
   become: yes
   gather_facts: true
 
@@ -11,7 +11,7 @@
     - talos_helm
 
 - name: Setup prerequisites (as control user).
-  hosts: talos_control_nodes
+  hosts: talos_management_nodes
   become: no
   gather_facts: true
 

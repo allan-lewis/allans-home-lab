@@ -1,9 +1,0 @@
-## AHL
----
-- name: Bootstrap Talos cluster using an ephemeral control node.
-  hosts: talos_control_nodes
-  become: no
-  gather_facts: true
-
-  roles:
-    - talos_bootstrap
