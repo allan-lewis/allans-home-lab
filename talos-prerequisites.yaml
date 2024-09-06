@@ -9,6 +9,7 @@
     - talos_ctl
     - talos_k8s
     - talos_helm
+    - private_key
 
 - name: Setup prerequisites (as control user).
   hosts: talos_management_nodes
