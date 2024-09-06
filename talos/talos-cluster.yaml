@@ -1,9 +1,0 @@
-## AHL
----
-- name: Setup a Talos cluster.
-  hosts: talos_management_nodes
-  become: no
-  gather_facts: true
-
-  roles:
-    - talos_cluster
