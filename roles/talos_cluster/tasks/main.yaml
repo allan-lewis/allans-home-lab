@@ -52,7 +52,7 @@
   with_items: "{{ groups['talos_nodes'] }}"
 
 - name: Generate cluster configs.
-  ansible.builtin.command: talosctl gen config talos-proxmox-cluster https://{{ hostvars[talos_first_node].ansible_host }}:6443 --output-dir {{ talos_config_dir }} --install-image factory.talos.dev/installer/ce4c980550dd2ab1b17bbf2b08801c7eb59418eafe8f279833297925d67c7515:{{ talos_version }}
+  ansible.builtin.command: talosctl gen config {{ talos_cluster | default('talos-cluster') }} https://{{ hostvars[talos_first_node].ansible_host }}:6443 --output-dir {{ talos_config_dir }} --install-image {{ talos_image }}
   changed_when: true
 
 - name: Apply machine configs to all nodes (including patches).
