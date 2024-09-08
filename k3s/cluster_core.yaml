@@ -37,6 +37,4 @@
 
 - import_playbook: pihole.yaml
 
-- import_playbook: twingate.yaml
-
 - import_playbook: authentik.yaml

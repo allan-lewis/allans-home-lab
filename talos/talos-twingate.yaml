@@ -4,5 +4,8 @@
   hosts: k3s_twingate
   become: yes
   gather_facts: false
+  environment:
+    K8S_AUTH_KUBECONFIG: "{{ kubeconfig_path }}"
+
   roles:
-    - role: twingate
+    - role: talos_twingate
