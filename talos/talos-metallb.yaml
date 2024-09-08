@@ -1,7 +1,7 @@
 ## AHL
 ---
 - name: Create a MetalLB load balancer.
-  hosts: talos_management_nodes
+  hosts: talos_metallb
   become: no
   gather_facts: true
   environment:
