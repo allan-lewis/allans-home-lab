@@ -6,6 +6,7 @@
   gather_facts: false
   environment:
     K8S_AUTH_KUBECONFIG: "{{ kubeconfig_path }}"
+    KUBECONFIG: "{{ kubeconfig_path }}"
 
   roles:
     - role: cert_manager
@@ -14,6 +15,10 @@
   hosts: k3s_cert_manager
   become: yes
   gather_facts: no
+  environment:
+    K8S_AUTH_KUBECONFIG: "{{ kubeconfig_path }}"
+    KUBECONFIG: "{{ kubeconfig_path }}"
+
   tasks:
     - ansible.builtin.shell: kubectl -n default wait --for=condition=Ready certificate {{ item.certificate_name }} --timeout=10s
       register: cert_ready
