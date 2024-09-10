@@ -9,3 +9,15 @@
 
   roles:
     - role: cert_manager
+
+- name: Wait for cert-manager certificates to be ready.
+  hosts: k3s_cert_manager
+  become: yes
+  gather_facts: no
+  tasks:
+    - ansible.builtin.shell: kubectl -n default wait --for=condition=Ready certificate {{ item.certificate_name }} --timeout=10s
+      register: cert_ready
+      until: cert_ready.rc == 0
+      retries: 60
+      delay: 30
+      with_items: "{{ cert_manager_certificates }}"

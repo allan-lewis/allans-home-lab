@@ -34,7 +34,3 @@ kube_vip_tag_version: "v0.5.6"
 metal_lb_speaker_tag_version: "v0.13.7"
 metal_lb_controller_tag_version: "v0.13.7"
 metal_lb_ip_range: "{{ k3s_cluster_lb_range }}"
-helm_version: v3.10.2
-cert_manager_version: v1.9.1
-
-ahl_k3s_state: present
