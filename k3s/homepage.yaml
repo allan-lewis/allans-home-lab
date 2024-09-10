@@ -1,9 +1,0 @@
-## AHL
----
-- name: Install Homepage.
-  hosts: k3s_homepage
-  become: yes
-  gather_facts: false
-
-  roles:
-    - role: homepage
