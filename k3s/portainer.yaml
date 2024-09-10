@@ -1,9 +1,0 @@
-## AHL
----
-- name: Install Portainer.
-  hosts: k3s_portainer
-  become: yes
-  gather_facts: false
-
-  roles:
-    - role: portainer

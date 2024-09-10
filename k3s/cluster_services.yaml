@@ -25,6 +25,4 @@
 
 - import_playbook: rancher.yaml
 
-- import_playbook: portainer.yaml
-
 - import_playbook: nextcloud.yaml
