@@ -1,0 +1,7 @@
+## AHL
+---
+- name: Write patch files for all nodes.
+  ansible.builtin.template:
+    src: "talos-node-patch.yaml.j2"
+    dest: "{{ talos_patch_directory }}/{{ item }}.yaml"
+  with_items: "{{ groups['talos_nodes'] }}"

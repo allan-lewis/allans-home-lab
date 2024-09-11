@@ -1,0 +1,9 @@
+## AHL
+---
+- name: Setup the Talos cluster.
+  hosts: talos_management_nodes
+  become: no
+  gather_facts: true
+
+  roles:
+    - talos_patch
