@@ -1,0 +1,48 @@
+## AHL
+---
+- name: Create a namespace for Tautulli.
+  kubernetes.core.k8s:
+    state: present
+    template: namespace.yml.j2
+
+- name: Create the k8s Tautulli deployment.
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: deployment.yml.j2
+  vars:
+    - service_name: "{{ tautulli_service_name }}"
+      container_name: "{{ tautulli_service_name }}"
+      container_image: lscr.io/linuxserver/tautulli:latest
+      service_replicas: 1
+      environment_vars:
+        - name: TZ
+          value: "America/New_York"
+        - name: PUID
+          value: "\"{{ apps_user_id }}\""
+        - name: PGID
+          value: "\"{{ apps_group_id }}\""
+      volume_mounts:
+        - name: tautulli-config
+          path: /config  
+      volumes:
+        - name: tautulli-config
+          claim: container-docker-tautulli
+
+- name: Create the k8s Tautulli service.
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: service.yml.j2
+  vars:
+    - service_name: "{{ tautulli_service_name }}"
+      service_port: "{{ tautulli_service_port }}"
+      target_port: 8181
+
+- name: Create a Traefik ingress for Tautulli.
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: traefik_ingress_route.yml.j2
+  vars:
+    service_name: "{{ tautulli_service_name }}"
+    service_port: "{{ tautulli_service_port }}"
+    routes:
+      - host: "{{ tautulli_host }}"

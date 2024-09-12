@@ -5,3 +5,5 @@
     src: "talos-node-patch.yaml.j2"
     dest: "{{ talos_patch_directory }}/{{ item }}.yaml"
   with_items: "{{ groups['talos_nodes'] }}"
+
+  # talosctl patch machineconfig --nodes 192.168.86.145 --patch @/home/ansible/.talos/patch/capella.yaml --talosconfig ~/.talos/talosconfig
