@@ -1,0 +1,11 @@
+## AHL
+---
+- name: Install Authentik.
+  hosts: talos_authentik
+  become: yes
+  gather_facts: false
+  environment:
+    K8S_AUTH_KUBECONFIG: "{{ kubeconfig_path }}"
+  
+  roles:
+    - role: talos_authentik

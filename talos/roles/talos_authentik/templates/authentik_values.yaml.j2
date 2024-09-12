@@ -1,0 +1,26 @@
+authentik:
+    secret_key: {{ authentik_secret_key }}
+    # This sends anonymous usage-data, stack traces on errors and
+    # performance data to sentry.io, and is fully opt-in
+    error_reporting:
+        enabled: true
+    postgresql:
+        password: {{ authentik_postgres_password }}
+
+server:
+    ingress:
+        # Specify kubernetes ingress controller class name
+        ingressClassName: traefik
+        enabled: true
+        hosts:
+            - {{ authentik_hostname }}
+ #           paths:
+ #               - path: "/"
+ #                   pathType: Prefix
+
+postgresql:
+    enabled: true
+    auth:
+        password: {{ authentik_postgres_password }}
+redis:
+    enabled: true
