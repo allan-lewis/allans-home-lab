@@ -1,0 +1,44 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: {{ deployment_name | default(service_name) }}
+  namespace: {{ namespace_name }}
+  labels:
+    app: {{ app_name | default(service_name) }}
+spec:
+  replicas: {{ service_replicas | default(2) }}
+  progressDeadlineSeconds: 600
+  revisionHistoryLimit: 2
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: {{ app_name | default(service_name) }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ deployment_name | default(service_name) }}
+        app: {{ app_name | default(service_name) }}
+    spec:
+      containers:
+      - name: {{ container_name }} 
+        image: {{ container_image }} 
+        imagePullPolicy: "Always"
+        env:
+{% for env in environment_vars | default([]) %}
+        - name: {{ env.name }}
+          value: {{ env.value }}
+{% endfor %}
+        volumeMounts:
+{% for mount in volume_mounts | default([]) %}
+        - name: {{  mount.name }}
+          mountPath: {{ mount.path }}  
+{% endfor %}
+      volumes:
+{% for volume in volumes | default([]) %}
+      - name: {{ volume.name }}
+        persistentVolumeClaim:
+          claimName: {{ volume.claim }}
+{% endfor %}
+ 
