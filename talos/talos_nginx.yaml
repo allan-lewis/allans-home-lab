@@ -1,8 +1,8 @@
 ## AHL
 ---
 - name: Install nginx.
-  hosts: k3s_nginx
+  hosts: talos_nginx
   become: yes
   gather_facts: false
   roles:
-    - role: nginx
+    - role: talos_nginx
