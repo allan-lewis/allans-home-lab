@@ -1,7 +1,0 @@
-## AHL
----
-- hosts: k3s_cloudflare
-  become: yes
-  gather_facts: false
-  roles:
-    - role: cloudflare
