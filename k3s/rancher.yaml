@@ -1,8 +1,0 @@
-## AHL
----
-- name: Install Rancher.
-  hosts: k3s_rancher
-  become: yes
-  gather_facts: false
-  roles:
-    - role: rancher
