@@ -1,9 +1,0 @@
-## AHL
----
-- name: Install Vaultwarden.
-  hosts: k3s_vaultwarden
-  become: yes
-  gather_facts: false
-
-  roles:
-    - role: vaultwarden
