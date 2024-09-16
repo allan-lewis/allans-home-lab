@@ -1,0 +1,11 @@
+auth:
+  rootPassword: {{ mariadb_root_password }}
+  password: {{ mariadb_root_password }}
+  replicationPassword: {{ mariadb_root_password }}
+
+primary:
+  service:
+    type: LoadBalancer
+    loadBalancerIP: {{ mariadb_lb_ip }}
+  persistence:
+    existingClaim: mariadb

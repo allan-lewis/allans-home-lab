@@ -1,0 +1,29 @@
+## AHL
+---
+- name: Add the Bitnami Helm respository.
+  kubernetes.core.helm_repository:
+    name: bitnami
+    repo_url: https://charts.bitnami.com/bitnami
+    repo_state: present 
+
+- name: Create a namespace for MariaDB.
+  kubernetes.core.k8s:
+    state: present
+    template: namespace.yml.j2
+
+- name: Write the values file for the Helm chart.
+  ansible.builtin.template:
+    src: mariadb-values.yml.j2
+    dest: /tmp/mariadb-values.yml
+
+- name: Install the Bitnami MariaDB Helm chart.
+  kubernetes.core.helm:
+    chart_ref: bitnami/mariadb
+    chart_version: "{{ mariadb_version }}"
+    namespace: "{{ namespace_name }}"
+    name: mariadb
+    update_repo_cache: true
+    create_namespace: true
+    release_state: "{{ ahl_k3s_state }}"
+    values_files:
+      - /tmp/mariadb-values.yml
