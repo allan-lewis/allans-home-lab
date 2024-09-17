@@ -1,11 +1,12 @@
 ## AHL
 ---
 - name: Install Traefik.
-  hosts: k3s_traefik
+  hosts: talos_traefik
   become: yes
   gather_facts: false
   environment:
     K8S_AUTH_KUBECONFIG: "{{ kubeconfig_path }}"
     
   roles:
-    - role: traefik
+    - role: talos_traefik
+    - role: talos_traefik_services
