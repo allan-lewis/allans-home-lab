@@ -27,6 +27,6 @@
     values_files:
       - /tmp/pihole-values.yml
 
-- name: Add additional pod labels.
-  command: >-
-    k3s kubectl -n {{ namespace_name }} label --overwrite pods -l app=pihole app.kubernetes.io/name=pihole
+#- name: Add additional pod labels.
+#  command: >-
+#    k3s kubectl -n {{ namespace_name }} label --overwrite pods -l app=pihole app.kubernetes.io/name=pihole
