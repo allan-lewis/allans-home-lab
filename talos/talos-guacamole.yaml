@@ -1,0 +1,11 @@
+## AHL
+---
+- name: Install Guacamole and guacd.
+  hosts: talos_guacamole
+  become: yes
+  gather_facts: false
+  environment:
+    K8S_AUTH_KUBECONFIG: "{{ kubeconfig_path }}"
+
+  roles:
+    - role: talos_guacamole
