@@ -17,6 +17,7 @@ services:
       - "--certificatesresolvers.myresolver.acme.email={{ letsencrypt_email }}"
       - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
       - "--providers.file.directory=/traefik/"
+      - "--serversTransport.insecureSkipVerify=true"
     ports:
       - "80:80"
       - "443:443"
