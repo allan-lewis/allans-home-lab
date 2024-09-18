@@ -24,6 +24,7 @@ http:
       loadBalancer:
         servers:
           - url: {{ service.url }}
+            scheme: {{ service.scheme | default('http') }} 
         passHostHeader: true
 {% endfor %}
 {% endif %}
