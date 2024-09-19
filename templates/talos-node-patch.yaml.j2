@@ -1,34 +1,37 @@
 cluster:
   allowSchedulingOnControlPlanes: true
-
+  proxy:
+    extraArgs:
+      metrics-bind-address: 0.0.0.0:{{ proxy_metrics_bind | default(10249) }}
+      
 machine:
   install:
     disk: {{ hostvars[item].talos_disk | default('/dev/sda') }}
     wipe: {{ hostvars[item].talos_wipe | default(false) }}
 
   kubelet:
-    extraArgs:
-      metrics-bind-address: 0.0.0.0:10249
-  #   extraMounts:
-  #     - destination: /var/lib/longhorn
-  #       type: bind
-  #       source: /var/lib/longhorn
-  #       options:
-  #         - bind
-  #         - rshared
-  #         - rw
-  #     - destination: /var/mnt/longhorn-storage
-  #       type: bind
-  #       source: /var/mnt/longhorn-storage
-  #       options:
-  #         - bind
-  #         - rshared
-  #         - rw
+    extraMounts:
+      - destination: /var/lib/longhorn
+        type: bind
+        source: /var/lib/longhorn
+        options:
+          - bind
+          - rshared
+          - rw
+{% if longhorn_disk is defined %}
+      - destination: {{ longhorn_storage | default('/var/mnt/longhorn-storage') }}
+        type: bind
+        source: {{ longhorn_storage | default('/var/mnt/longhorn-storage') }}
+        options:
+          - bind
+          - rshared
+          - rw
 
-  # disks:
-  #   - device: /dev/nvme0n1
-  #     partitions:
-  #       - mountpoint: /var/mnt/longhorn-storage
+  disks:
+    - device: {{ longhorn_disk }}
+      partitions:
+        - mountpoint: {{ longhorn_storage | default('/var/mnt/longhorn-storage') }}
+{% endif %}
 
   network:
     hostname: {{ hostvars[item].inventory_hostname }}
