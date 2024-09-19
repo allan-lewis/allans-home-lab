@@ -2,5 +2,6 @@
 ---
 namespace_name: pihole
 service_name: pihole-web
+service_port: 80
 routes:
   - host: "{{ pihole_host }}"
