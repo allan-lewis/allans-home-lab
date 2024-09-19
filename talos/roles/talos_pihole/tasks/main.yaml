@@ -26,6 +26,11 @@
     release_state: "{{ ahl_k3s_state }}"
     values_files:
       - /tmp/pihole-values.yml
+      
+- name: Create a Traefik ingress for Longhorn.
+  kubernetes.core.k8s:
+    state: "{{ ahl_k3s_state }}"
+    template: traefik_ingress_route.yml.j2
 
 #- name: Add additional pod labels.
 #  command: >-

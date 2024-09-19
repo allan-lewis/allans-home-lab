@@ -8,6 +8,7 @@ http:
       rule: Host(`{{ service.host }}`)
       middlewares:
         - redirect-to-https
+        # - authentik
       service: service-{{ service.name }}
     router-{{ service.name }}-https:
       entryPoints:
