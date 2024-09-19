@@ -1,5 +1,6 @@
 ## AHL
 ---
 namespace_name: pihole
+service_name: pihole-web
 routes:
   - host: "{{ pihole_host }}"
