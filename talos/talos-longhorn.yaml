@@ -1,7 +1,7 @@
 ## AHL
 ---
 - name: Install Longhorn.
-  hosts: k3s_longhorn
+  hosts: talos_longhorn
   become: yes
   gather_facts: false
   environment:
@@ -9,4 +9,4 @@
     KUBECONFIG: "{{ kubeconfig_path }}"
   
   roles:
-    - role: longhorn
+    - role: talos_longhorn

@@ -9,7 +9,7 @@
     KUBECONFIG: "{{ kubeconfig_path }}"
 
   roles:
-    - role: cert_manager
+    - role: talos_cert_manager
 
 - name: Wait for cert-manager certificates to be ready.
   hosts: talos_cert_manager

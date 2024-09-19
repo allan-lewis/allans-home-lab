@@ -6,7 +6,7 @@ prometheus:
             storageClassName: longhorn
             resources:
               requests:
-                storage: 128Gi
+                storage: {{ prometheus_storage | default('128Gi') }}
 
       additionalScrapeConfigs:
 {% for config in scrape_configs | default([]) %}

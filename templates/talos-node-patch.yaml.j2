@@ -7,26 +7,28 @@ machine:
     wipe: {{ hostvars[item].talos_wipe | default(false) }}
 
   kubelet:
-    extraMounts:
-      - destination: /var/lib/longhorn
-        type: bind
-        source: /var/lib/longhorn
-        options:
-          - bind
-          - rshared
-          - rw
-      - destination: /var/mnt/longhorn-storage
-        type: bind
-        source: /var/mnt/longhorn-storage
-        options:
-          - bind
-          - rshared
-          - rw
+    extraArgs:
+      metrics-bind-address: 0.0.0.0:10249
+  #   extraMounts:
+  #     - destination: /var/lib/longhorn
+  #       type: bind
+  #       source: /var/lib/longhorn
+  #       options:
+  #         - bind
+  #         - rshared
+  #         - rw
+  #     - destination: /var/mnt/longhorn-storage
+  #       type: bind
+  #       source: /var/mnt/longhorn-storage
+  #       options:
+  #         - bind
+  #         - rshared
+  #         - rw
 
-  disks:
-    - device: /dev/nvme0n1
-      partitions:
-        - mountpoint: /var/mnt/longhorn-storage
+  # disks:
+  #   - device: /dev/nvme0n1
+  #     partitions:
+  #       - mountpoint: /var/mnt/longhorn-storage
 
   network:
     hostname: {{ hostvars[item].inventory_hostname }}
