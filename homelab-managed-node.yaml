@@ -31,10 +31,11 @@
   roles:
     - node_exporter
 
-- name: Install Tailscale.
-  hosts: homelab_tailscale_nodes
-  become: yes
-  gather_facts: yes
+## TODO - Chicken/egg problem here...
+# - name: Install Tailscale.
+#   hosts: homelab_tailscale_nodes
+#   become: yes
+#   gather_facts: yes
   
-  roles:
-    - role: artis3n.tailscale
+#   roles:
+#     - role: artis3n.tailscale
