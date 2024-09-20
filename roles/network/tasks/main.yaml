@@ -1,0 +1,18 @@
+## AHL
+---
+- name: Update network settings.
+  ansible.builtin.template:
+    src: netplan.j2
+    dest: "{{ netplan_dest }}"
+    owner: "root"
+    group: "root"
+    mode: 0644
+  register: netplan_update
+
+- name: Set a fact to indicate whether a restart is required.
+  ansible.builtin.set_fact:
+    restart_netplan: "{{ netplan_update.changed }}"
+
+- name: Show the value of the fact.
+  ansible.builtin.debug:
+    var: restart_netplan

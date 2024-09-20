@@ -1,0 +1,5 @@
+## AHL
+---
+- name: Set the time zone.
+  community.general.timezone:
+    name: "{{ homelab_time_zone | default('America/New_York') }}"

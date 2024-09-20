@@ -1,0 +1,40 @@
+## AHL
+---
+- name: Perform setup tasks common to all managed nodes.
+  hosts: homelab_managed_nodes
+  become: yes
+  gather_facts: yes
+  
+  roles:
+    - tz
+    - user
+    - ssh
+    - apt
+    - dependencies
+    - network
+    - mount
+    - reboot
+
+- name: Setup automated backup jobs.
+  hosts: homelab_backup_nodes
+  become: yes
+  gather_facts: yes
+  
+  roles:
+    - backup
+
+- name: Install Node Exporter.
+  hosts: homelab_node_exporter_nodes
+  become: yes
+  gather_facts: yes
+  
+  roles:
+    - node_exporter
+
+- name: Install Tailscale.
+  hosts: homelab_tailscale_nodes
+  become: yes
+  gather_facts: yes
+  
+  roles:
+    - role: artis3n.tailscale

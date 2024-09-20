@@ -1,0 +1,10 @@
+## AHL
+---
+- name: Configure mount points.
+  ansible.posix.mount:
+    src: "{{ item.src }}"
+    path: "{{ item.path }}"
+    opts: "{{ item.options | default('ro') }}"
+    state: "{{ item.state | default('mounted') }}"
+    fstype: "{{ item.type | default('nfs') }}"
+  with_items: "{{ node_mount_points | default([]) }}"
