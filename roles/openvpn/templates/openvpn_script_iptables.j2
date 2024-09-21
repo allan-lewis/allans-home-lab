@@ -19,8 +19,8 @@ iptables -A OUTPUT -d 255.255.255.255 -j ACCEPT
 iptables -A INPUT -s 255.255.255.255 -j ACCEPT
 
 # Make sure that you can communicate within your own network
-iptables -A INPUT -s {{ openvpn_network}} -d {{ openvpn_network}} -j ACCEPT
-iptables -A OUTPUT -s {{ openvpn_network}} -d {{ openvpn_network}} -j ACCEPT
+iptables -A INPUT -s {{ homelab_openvpn_network}} -d {{ homelab_openvpn_network}} -j ACCEPT
+iptables -A OUTPUT -s {{ homelab_openvpn_network}} -d {{ homelab_openvpn_network}} -j ACCEPT
 
 # Allow established sessions to receive traffic:
 iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT

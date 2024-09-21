@@ -23,7 +23,7 @@
     owner: "root"
     group: "root"
     mode: '0600'
-  with_items: "{{ openvpn_configs }}"
+  with_items: "{{ homelab_openvpn_configs }}"
   register: openvpn_configs
 
 - name: Create scripts and service files.
