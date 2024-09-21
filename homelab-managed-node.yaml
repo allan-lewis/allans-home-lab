@@ -40,6 +40,7 @@
     - talosctl
     - kubernetes
     - helm
+    - private_key
 
 - name: Setup hosts to manage the home lab (as the control user).
   hosts: homelab_management_nodes
@@ -50,7 +51,6 @@
     - ansible
     - github
     - known_hosts
-    - private_key
 
 - name: Install Tailscale.
   hosts: homelab_tailscale_nodes
