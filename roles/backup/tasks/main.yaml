@@ -2,17 +2,17 @@
 ---
 - name: Create a directory for log files.
   ansible.builtin.file:
-    path: "{{ ahl_backup_log_dir }}"
+    path: "{{ homelab_backup_log_dir }}"
     state: directory
 
 - name: Ensure that the log file exists.
   ansible.builtin.file:
-    path: "{{ ahl_backup_log_file }}"
+    path: "{{ homelab_backup_log_file }}"
     state: touch
 
 - name: Create a directory for the backup script.
   ansible.builtin.file:
-    path: "{{ ahl_backup_script_dir }}"
+    path: "{{ homelab_backup_script_dir }}"
     state: directory
 
 - name: Create the backup script.
@@ -22,14 +22,14 @@
     mode: 0755
   with_items:
     - src: "backup.sh.j2"
-      dest: "{{ ahl_backup_script }}"
+      dest: "{{ homelab_backup_script }}"
 
 - name: Schedule backups via a CRON job.
   ansible.builtin.cron:
     name: ahl_backup
-    minute: "{{ ahl_backup_minute | default('*') }}"
-    hour: "{{ ahl_backup_hour | default('*') }}"
-    job: "/bin/sh {{ ahl_backup_script }}  >> {{ ahl_backup_log_file }} 2>&1"
+    minute: "{{ homelab_backup_minute | default('*') }}"
+    hour: "{{ homelab_backup_hour | default('*') }}"
+    job: "/bin/sh {{ homelab_backup_script }}  >> {{ homelab_backup_log_file }} 2>&1"
 
 - name: Schedule log rotation.
   ansible.builtin.template:
