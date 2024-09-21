@@ -2,8 +2,8 @@
 ---
 - name: Download Helm.
   get_url:
-    url: https://get.helm.sh/helm-{{ helm_version }}-linux-amd64.tar.gz
-    checksum: sha256:https://get.helm.sh/helm-{{ helm_version }}-linux-amd64.tar.gz.sha256sum
+    url: https://get.helm.sh/helm-{{ homelab_versions.helm }}-linux-amd64.tar.gz
+    checksum: sha256:https://get.helm.sh/helm-{{ homelab_versions.helm }}-linux-amd64.tar.gz.sha256sum
     dest: /tmp
     owner: root
     group: root
@@ -13,7 +13,7 @@
 - name: Extract Helm binary.
   ansible.builtin.unarchive:
     remote_src: true
-    src: /tmp/helm-{{ helm_version }}-linux-amd64.tar.gz
+    src: /tmp/helm-{{ homelab_versions.helm }}-linux-amd64.tar.gz
     dest: /tmp
 
 - name: Copy Helm to path.
