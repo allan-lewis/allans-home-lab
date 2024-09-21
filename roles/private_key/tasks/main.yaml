@@ -1,25 +1,10 @@
 ## AHL
 ---
-- name: Mount the share containing the private key.
-  ansible.posix.mount:
-    src: "{{ ahl_private_key_share_src }}"
-    path: "{{ ahl_private_key_share_path }}"
-    opts: "ro"
-    state: "mounted"
-    fstype: "nfs"
-  when: ahl_private_key_remote_src | bool
-
 - name: Install private key locally.
   ansible.builtin.copy:
-    src: "{{ ahl_private_key_file_src }}"
-    dest: "{{ ahl_private_key_file_dest }}"
-    remote_src: "{{ ahl_private_key_remote_src }}"
-    owner: "{{ ahl_private_key_user }}"
-    group: "{{ ahl_private_key_group }}"
+    src: "{{ homelab_private_key_src }}"
+    dest: "{{ homelab_private_key_dest }}"
+    remote_src: true
+    owner: "{{ homelab_control_user }}"
+    group: "{{ homelab_control_user }}"
     mode: '0600'
-
-- name: Unmount the share containing the private key.
-  ansible.posix.mount:
-    path: "{{ ahl_private_key_share_path }}"
-    state: "absent"
-  when: ahl_private_key_remote_src | bool

@@ -50,6 +50,7 @@
     - ansible
     - github
     - known_hosts
+    - private_key
 
 - name: Install Tailscale.
   hosts: homelab_tailscale_nodes
