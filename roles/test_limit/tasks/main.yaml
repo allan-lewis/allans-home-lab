@@ -1,6 +1,0 @@
-## AHL
----
-- name: Stop the playbook if not limited to a subset of hosts.
-  fail:
-    msg: "You must use -l or --limit"
-  when: ansible_limit is not defined

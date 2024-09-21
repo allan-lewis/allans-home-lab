@@ -15,11 +15,11 @@
     - mount
     - reboot
 
-- name: Setup automated backup jobs.
+- name: Schedule automated backup jobs.
   hosts: homelab_backup_nodes
   become: yes
   gather_facts: yes
-  
+
   roles:
     - backup
 
