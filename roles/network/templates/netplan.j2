@@ -1,14 +1,14 @@
 network:
   ethernets:
-    {{ netplan_interface }}:
+    {{ homelab_netplan_interface }}:
       dhcp4: no
       match:
-        macaddress: {{ netplan_mac_address }}
-      set-name: {{ netplan_interface }}
-      addresses: [{{ netplan_host | default(ansible_host) }}/24]
+        macaddress: {{ homelab_netplan_mac_address }}
+      set-name: {{ homelab_netplan_interface }}
+      addresses: [{{ homelab_netplan_host | default(ansible_host) }}/24]
       routes:
         - to: 0.0.0.0/0
-          via: {{ netplan_route }}
+          via: {{ homelab_netplan_route }}
       nameservers:
-        addresses: [{{ netplan_nameserver | default(netplan_route) }}]
+        addresses: [{{ homelab_netplan_nameserver | default(homelab_netplan_route) }}]
   version: 2

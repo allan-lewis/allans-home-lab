@@ -3,7 +3,7 @@
 - name: Update network settings.
   ansible.builtin.template:
     src: netplan.j2
-    dest: "{{ netplan_dest }}"
+    dest: "{{ homelab_netplan_dest }}"
     owner: "root"
     group: "root"
     mode: 0644

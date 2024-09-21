@@ -7,4 +7,4 @@
     opts: "{{ item.options | default('ro') }}"
     state: "{{ item.state | default('mounted') }}"
     fstype: "{{ item.type | default('nfs') }}"
-  with_items: "{{ node_mount_points | default([]) }}"
+  with_items: "{{ homelab_node_mount_points | default([]) }}"
