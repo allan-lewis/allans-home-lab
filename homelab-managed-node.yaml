@@ -31,7 +31,16 @@
   roles:
     - node_exporter
 
-## TODO - Chicken/egg problem here...
+- name: Setup hosts to manage the home lab (as root).
+  hosts: homelab_management_nodes
+  become: yes
+  gather_facts: yes
+
+  roles:
+    - talosctl
+    - kubernetes
+    - helm
+
 # - name: Install Tailscale.
 #   hosts: homelab_tailscale_nodes
 #   become: yes
