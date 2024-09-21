@@ -21,6 +21,8 @@
   gather_facts: yes
 
   roles:
+    - private_key
+    - known_hosts
     - backup
 
 - name: Install Node Exporter.

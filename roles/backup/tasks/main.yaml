@@ -1,14 +1,5 @@
 ## AHL
 ---
-- import_role: 
-    name: private_key
-
-- name: Add remote keys to known hosts.
-  ansible.builtin.known_hosts:
-    name: "{{ hostvars[item.host].ansible_host }}"
-    key: "{{ lookup('pipe', 'ssh-keyscan {{ hostvars[item.host].ansible_host }},`dig +short {{ hostvars[item.host].ansible_host }}`') }}"
-  with_items: "{{ ahl_backup_items | default([]) }}"
-
 - name: Create a directory for log files.
   ansible.builtin.file:
     path: "{{ ahl_backup_log_dir }}"
