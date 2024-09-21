@@ -1,0 +1,72 @@
+## AHL
+---
+- name: Install required dependencies.
+  ansible.builtin.apt:
+    pkg:
+      - openvpn
+      - openssh-server
+      - unzip
+    state: latest
+    update_cache: true
+
+- name: Create the /etc/openvpn folder for OpenVPN config scripts.
+  ansible.builtin.file:
+    path: "/etc/openvpn"
+    state: directory
+    owner: "root"
+    group: "root"
+
+- name: Upload OpenVPN config scripts.
+  ansible.builtin.copy:
+    src: "{{ item.src }}"
+    dest: "/etc/openvpn/{{ item.dest }}"
+    owner: "root"
+    group: "root"
+    mode: '0600'
+  with_items: "{{ openvpn_configs }}"
+  register: openvpn_configs
+
+- name: Create scripts and service files.
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: "root"
+    group: "root"
+    mode: "{{ item.mode | default('0600') }}"
+  with_items:
+    - src: "openvpn_authn.j2"
+      dest: "/etc/openvpn/authn"
+    - src: "openvpn_script_connect.j2"
+      dest: "/etc/openvpn/connect.sh"
+    - src: "openvpn_script_iptables.j2"
+      dest: "/etc/openvpn/iptables.sh"
+    - src: "openvpn_service_unit.j2"
+      dest: "/etc/systemd/system/rc-local.service"
+      mode: "0644"
+    - src: "openvpn_service.j2"
+      dest: "/etc/rc.local"
+      mode: "0744"
+  register: openvpn_scripts
+
+- name: Enable port forwarding.
+  ansible.posix.sysctl:
+    name: net.ipv4.ip_forward
+    value: '1'
+    sysctl_set: true
+
+- name: Enable the VPN service.
+  ansible.builtin.systemd:
+    name: "rc-local"
+    state: started
+    enabled: yes
+  register: openvpn_service
+
+- name: Reboot if necessary.
+  ansible.builtin.reboot:
+    msg: "Reboot initiated by Ansible for VPN service change"
+    connect_timeout: 5
+    reboot_timeout: 300
+    pre_reboot_delay: 0
+    post_reboot_delay: 30
+    test_command: uptime
+  when: (openvpn_configs is changed) or (openvpn_scripts is changed) or (openvpn_service is changed)

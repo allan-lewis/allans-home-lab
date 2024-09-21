@@ -52,6 +52,14 @@
     - github
     - known_hosts
 
+- name: Setup OpenVPN nodes.
+  hosts: homelab_openvpn_nodes
+  become: yes
+  gather_facts: yes
+
+  roles:
+    - openvpn
+
 - name: Install Tailscale.
   hosts: homelab_tailscale_nodes
   become: yes
