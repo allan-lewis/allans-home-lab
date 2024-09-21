@@ -1,0 +1,7 @@
+## AHL
+---
+- name: Add host keys for all managed nodes to known hosts.
+  ansible.builtin.known_hosts:
+    name: "{{ hostvars[item].ansible_host }}"
+    key: "{{ lookup('pipe', 'ssh-keyscan {{ hostvars[item].ansible_host }},`dig +short {{ hostvars[item].ansible_host }}`') }}"
+  with_items: "{{ groups['homelab_managed_nodes'] }}"

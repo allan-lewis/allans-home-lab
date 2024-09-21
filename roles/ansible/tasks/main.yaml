@@ -1,0 +1,17 @@
+## AHL
+---
+- name: Install Ansible.
+  ansible.builtin.pip:
+    name: ansible
+    extra_args: --user
+
+- name: Create an Ansibile config file.
+  ansible.builtin.template:
+    src: ansible.cfg.j2
+    dest: "{{ ansible_env.HOME }}/.ansible.cfg"
+
+- name: Install the Docker Community Ansible collection.
+  shell: "{{ ansible_env.HOME }}/.local/bin/ansible-galaxy collection install community.docker"
+
+- name: Install the Tailscale Ansible role.
+  shell: "{{ ansible_env.HOME }}/.local/bin/ansible-galaxy install artis3n.tailscale"

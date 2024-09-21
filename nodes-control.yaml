@@ -78,40 +78,40 @@
   hosts: control_nodes
   
   tasks:
-    - name: Create a local directoty for the kubectl config.
-      ansible.builtin.file:
-        path: "{{ ansible_env.HOME }}/.kube"
-        state: directory
-      when: "'k3s_nodes_master' in groups and groups['k3s_nodes_master']"
+    # - name: Create a local directoty for the kubectl config.
+    #   ansible.builtin.file:
+    #     path: "{{ ansible_env.HOME }}/.kube"
+    #     state: directory
+    #   when: "'k3s_nodes_master' in groups and groups['k3s_nodes_master']"
 
-    - name: Copy the kubectl config.
-      ansible.builtin.copy:
-        src: "{{ control_copy_kubectl_dir }}/config"
-        dest: "{{ ansible_env.HOME }}/.kube/config"
-        owner: "{{ control_user }}"
-        group: "{{ control_user }}"
-      when: "'k3s_nodes_master' in groups and groups['k3s_nodes_master']"
+    # - name: Copy the kubectl config.
+    #   ansible.builtin.copy:
+    #     src: "{{ control_copy_kubectl_dir }}/config"
+    #     dest: "{{ ansible_env.HOME }}/.kube/config"
+    #     owner: "{{ control_user }}"
+    #     group: "{{ control_user }}"
+    #   when: "'k3s_nodes_master' in groups and groups['k3s_nodes_master']"
 
-    - name: Create an Ansibile config file.
-      ansible.builtin.template:
-        src: ansible.cfg.j2
-        dest: "{{ ansible_env.HOME }}/.ansible.cfg"
+    # - name: Create an Ansibile config file.
+    #   ansible.builtin.template:
+    #     src: ansible.cfg.j2
+    #     dest: "{{ ansible_env.HOME }}/.ansible.cfg"
 
-    - name: Install Ansible.
-      ansible.builtin.pip:
-        name: ansible
-        extra_args: --user
+    # - name: Install Ansible.
+    #   ansible.builtin.pip:
+    #     name: ansible
+    #     extra_args: --user
 
-    - name: Add host keys for all managed nodes to known hosts.
-      ansible.builtin.known_hosts:
-        name: "{{ hostvars[item].ansible_host }}"
-        key: "{{ lookup('pipe', 'ssh-keyscan {{ hostvars[item].ansible_host }},`dig +short {{ hostvars[item].ansible_host }}`') }}"
-      with_items: "{{ groups['managed_nodes'] }}"
+    # - name: Add host keys for all managed nodes to known hosts.
+    #   ansible.builtin.known_hosts:
+    #     name: "{{ hostvars[item].ansible_host }}"
+    #     key: "{{ lookup('pipe', 'ssh-keyscan {{ hostvars[item].ansible_host }},`dig +short {{ hostvars[item].ansible_host }}`') }}"
+    #   with_items: "{{ groups['managed_nodes'] }}"
 
-    - name: Check out Ansible playbooks from GitHub.
-      ansible.builtin.git:
-        repo: "https://github.com/allan-lewis/allans-home-lab.git"
-        dest: "{{ ansible_env.HOME }}/allans-home-lab"
+    # - name: Check out Ansible playbooks from GitHub.
+    #   ansible.builtin.git:
+    #     repo: "https://github.com/allan-lewis/allans-home-lab.git"
+    #     dest: "{{ ansible_env.HOME }}/allans-home-lab"
 
-    - name: Install the Docker Community Ansible collection.
-      shell: "{{ ansible_env.HOME }}/.local/bin/ansible-galaxy collection install community.docker"
+    # - name: Install the Docker Community Ansible collection.
+    #   shell: "{{ ansible_env.HOME }}/.local/bin/ansible-galaxy collection install community.docker"
