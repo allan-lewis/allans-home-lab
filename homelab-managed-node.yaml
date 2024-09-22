@@ -15,6 +15,14 @@
     - mount
     - reboot
 
+- name: Setup nodes that will run Docker containers.
+  hosts: homelab_docker_nodes
+  become: yes
+  gather_facts: true
+
+  roles:
+    - docker
+
 - name: Schedule automated backup jobs.
   hosts: homelab_backup_nodes
   become: yes
