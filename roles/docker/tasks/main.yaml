@@ -15,3 +15,46 @@
       - nfs-common
     state: latest
     update_cache: true
+
+- name: Get Docker's apt GPG key.
+  ansible.builtin.apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: Get Docker's apt repository.
+  ansible.builtin.apt_repository:
+    repo: deb https://download.docker.com/linux/ubuntu focal stable
+    state: present
+
+- name: Install Docker.
+  ansible.builtin.apt:
+    name:
+      - docker-ce 
+      - docker-ce-cli 
+      - containerd.io 
+      - docker-buildx-plugin 
+      - docker-compose-plugin
+    state: latest
+    update_cache: true
+
+- name: Add the control user to the Docker group.
+  ansible.builtin.user:
+    name: "{{ ansible_ssh_user }}"
+    groups: 
+      - docker
+    append: yes
+
+
+- name: Create the root directory for Docker volumes.
+  ansible.builtin.file:
+    path: "{{ homelab_docker_volume_root }}"
+    state: directory
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+
+- name: Start the Docker service.
+  ansible.builtin.service:
+    name: docker
+    enabled: yes
+    state: started
+  become: true
