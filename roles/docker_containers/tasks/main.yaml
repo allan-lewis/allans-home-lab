@@ -1,0 +1,17 @@
+## AHL
+---
+- name: Create a temporary directoryfor the Docker Compose manifest.
+  ansible.builtin.file:
+    path: "{{ homelab_docker_containers_tmp }}"
+    state: directory
+
+- name: Write the Docker Compose manifest.
+  ansible.builtin.template:
+    src: docker-compose.yaml.j2
+    dest: "{{ homelab_docker_containers_tmp }}/docker-compose.yml"
+
+- name: Deploy the Docker Compose stack.
+  community.docker.docker_compose_v2:
+    project_src: "{{ homelab_docker_containers_tmp }}"
+    pull: "always"
+    recreate: "always"

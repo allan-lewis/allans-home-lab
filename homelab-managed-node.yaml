@@ -22,6 +22,7 @@
 
   roles:
     - docker
+    - docker_containers
 
 - name: Schedule automated backup jobs.
   hosts: homelab_backup_nodes
