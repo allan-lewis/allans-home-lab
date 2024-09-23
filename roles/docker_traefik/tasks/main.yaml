@@ -7,26 +7,26 @@
     owner: "{{ ansible_ssh_user }}"
     group: "{{ ansible_ssh_user }}"
   with_items:
-    - "{{ letsencrypt_volume }}"
-    - "{{ traefik_volume }}"
+    - "{{ homelab_docker_traefik_letsencrypt_volume }}"
+    - "{{ homelab_docker_traefik_volume }}"
 
 - name: Create a temporary directory.
   ansible.builtin.file:
-    path: "{{ traefik_tmp_dir }}"
+    path: "{{ homelab_docker_traefik_tmp_dir }}"
     state: directory
 
-- name: Write the Docker Compose configuration.
+- name: Write the Docker Compose file.
   ansible.builtin.template:
     src: docker-compose.yaml.j2
-    dest: "{{ traefik_tmp_dir }}/docker-compose.yml"
+    dest: "{{ homelab_docker_traefik_tmp_dir }}/docker-compose.yml"
 
 - name: Write the Traefik configuration.
   ansible.builtin.template:
     src: traefik.yaml.j2
-    dest: "{{ traefik_volume }}/traefik.yaml"
+    dest: "{{ homelab_docker_traefik_volume }}/traefik.yaml"
 
-- name: Deploy the Docker Compose application.
+- name: Deploy the Docker Compose stack.
   community.docker.docker_compose_v2:
-    project_src: "{{ traefik_tmp_dir }}"
+    project_src: "{{ homelab_docker_traefik_tmp_dir }}"
     pull: "always"
     recreate: "always"

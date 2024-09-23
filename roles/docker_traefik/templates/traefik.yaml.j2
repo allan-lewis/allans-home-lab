@@ -1,7 +1,7 @@
 http:    
-{% if services is defined %}
+{% if homelab_docker_traefik_services is defined %}
   routers:
-{% for service in services %}
+{% for service in homelab_docker_traefik_services %}
     router-{{ service.name }}-http:
       entryPoints:
         - web
@@ -20,7 +20,7 @@ http:
 {% endfor %}
 
   services:
-{% for service in services %}
+{% for service in homelab_docker_traefik_services %}
     service-{{ service.name }}:
       loadBalancer:
         servers:
