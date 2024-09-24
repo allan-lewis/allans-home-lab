@@ -1,0 +1,9 @@
+## AHL
+---
+- name: Install Gatus.
+  hosts: homelab_docker_gatus_nodes
+  become: yes
+  gather_facts: false
+
+  roles:  
+    - role: docker_gatus
