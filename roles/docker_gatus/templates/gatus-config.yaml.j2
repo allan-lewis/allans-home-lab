@@ -1,0 +1,48 @@
+storage:
+  type: sqlite
+  path: /data/data.db
+
+metrics: true
+
+alerting:
+  telegram:
+    token: "{{ homelab_telegram_bot_token }}"
+    id: "{{ homelab_telegram_id }}"
+
+endpoints:
+{% for host in groups['all']| default([]) %}
+  - name: {{ host  | capitalize }}
+    group: "Hosts"
+    url: "icmp://{{ hostvars[host].ansible_host }}"
+    alerts:
+      - type: telegram
+        send-on-resolved: true
+    conditions:
+      - "[CONNECTED] == true"
+{% endfor %}
+
+{% for endpoint in homelab_docker_https_endpoints | default([]) %}
+  - name: {{ endpoint.name }}
+    group: "{{ endpoint.group }}"
+    url: "{{ endpoint.url }}"
+    alerts:
+      - type: telegram
+        send-on-resolved: true
+    conditions:
+      - "[STATUS] == {{ endpoint.status | default(200) }}"
+{% if endpoint.check_cert | default(true) == true  %}
+      - "[CERTIFICATE_EXPIRATION] > 168h"
+{% endif %}
+      - "[BODY] == pat({{ endpoint.pattern | default('*') }})"
+{% endfor %}
+
+{% for endpoint in homelab_docker_tcp_endpoints | default([]) %}
+  - name: {{ endpoint.name }}
+    group: "{{ endpoint.group }}"
+    url: "{{ endpoint.url }}"
+    alerts:
+      - type: telegram
+        send-on-resolved: true
+    conditions:
+      - "[CONNECTED] == true"
+{% endfor %}

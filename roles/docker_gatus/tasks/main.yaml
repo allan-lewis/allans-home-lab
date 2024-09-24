@@ -12,7 +12,7 @@
 
 - name: Write the Gatus config file.
   ansible.builtin.template:
-    src: "{{ homelab_docker_gatus_config_template }}"
+    src: "gatus-config.yaml.j2"
     dest: "{{ homelab_docker_gatus_volumes.config }}/config.yaml"
 
 - name: Create a temporary directory.
