@@ -5,7 +5,7 @@ services:
     container_name: "gatus"
     restart: "unless-stopped"
     ports: 
-      - "{{ homelab_ports.homelab_docker_gatus | default(8080) }}:8080/tcp"
+      - "{{ homelab_ports.homelab_docker_gatus_port | default(8080) }}:8080/tcp"
     volumes: 
       - "{{ homelab_docker_gatus_volumes.config }}:/config"
       - "{{ homelab_docker_gatus_volumes.data }}:/data/"
