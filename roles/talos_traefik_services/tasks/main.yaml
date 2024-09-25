@@ -9,7 +9,7 @@
   kubernetes.core.k8s:
     state: "{{ ahl_k3s_state }}"
     template: service.yml.j2
-  with_items: "{{ traefik_services }}"
+  with_items: "{{ homelab_talos_traefik_services }}"
   vars:
     service_name: "{{ item.service_name }}"
     service_port: "{{ item.service_port }}"
@@ -18,7 +18,7 @@
   kubernetes.core.k8s:
     state: "{{ ahl_k3s_state }}"
     template: endpoints.yml.j2
-  with_items: "{{ traefik_services }}"
+  with_items: "{{ homelab_talos_traefik_services }}"
 
 - name: Create ingresses for Traefik services.
   kubernetes.core.k8s:
@@ -26,4 +26,4 @@
     template: traefik_ingress_route.yml.j2
   vars:
     service_name: traefik-services
-    routes: "{{ traefik_services }}"
+    routes: "{{ homelab_talos_traefik_services }}"

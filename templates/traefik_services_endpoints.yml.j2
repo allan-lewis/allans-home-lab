@@ -2,7 +2,7 @@ kind: Endpoints
 apiVersion: v1
 metadata:
   name: {{ item.service_name }}
-  namespace: {{ namespace_name }}
+  namespace: {{ homelab_kubernetes_namespace_name }}
 subsets:
   - addresses:
       - ip: {{ item.service_endpoint }}

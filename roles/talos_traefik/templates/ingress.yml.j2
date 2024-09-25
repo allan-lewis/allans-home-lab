@@ -9,7 +9,7 @@ spec:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`{{ traefik_host }}`)
+    - match: Host(`{{ homelab_talos_traefik_host }}`)
       kind: Rule
       services:
         - name: api@internal

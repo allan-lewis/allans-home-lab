@@ -1,0 +1,4 @@
+## AHL
+---
+homelab_kubernetes_namespace_name: traefik
+homelab_talos_traefik_services: []
