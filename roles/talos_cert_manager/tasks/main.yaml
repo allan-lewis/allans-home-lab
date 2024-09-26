@@ -7,13 +7,13 @@
 
 - name: Download cert-manager CRDs.
   ansible.builtin.get_url:
-    url: "https://github.com/cert-manager/cert-manager/releases/download/{{ cert_manager_version }}/cert-manager.crds.yaml"
+    url: "https://github.com/cert-manager/cert-manager/releases/download/{{ homelab_versions.talos_cert_manager }}/cert-manager.crds.yaml"
     dest: /tmp/cert-manager.crds.yaml
     mode: '0664'
 
 - name: Install cert-manager CRDs.
   kubernetes.core.k8s:
-    state: "{{ ahl_k3s_state }}"
+    state: "{{ homelab_kubernetes_state }}"
     src: /tmp/cert-manager.crds.yaml
 
 - name:  Write the values file for the Helm chart.
@@ -24,24 +24,24 @@
 - name: Install the cert-manager Helm chart.
   kubernetes.core.helm:
     chart_ref: jetstack/cert-manager
-    chart_version: "{{ cert_manager_version }}"
+    chart_version: "{{ homelab_versions.talos_cert_manager }}"
     namespace: cert-manager
     name: cert-manager
     update_repo_cache: true
     create_namespace: true
-    release_state:  "{{ ahl_k3s_state }}"
+    release_state:  "{{ homelab_kubernetes_state }}"
     values_files:
       - /tmp/cert-manager.values.yml
 
 - name: Install LetsEncrypt certificate issuers.
   kubernetes.core.k8s:
-    state: "{{ ahl_k3s_state }}"
+    state: "{{ homelab_kubernetes_state }}"
     template: "{{ item }}"
-  with_items: "{{ cert_manager_cert_issuers }}"
+  with_items: "{{ homelab_talos_cert_manager_cert_issuers }}"
 
 - name: Install Cloudflare token secret.
   kubernetes.core.k8s:
-    state:  "{{ ahl_k3s_state }}"
+    state:  "{{ homelab_kubernetes_state }}"
     template: secret-cf-token.yml.j2
 
 - name: Request certificates.
@@ -51,4 +51,11 @@
     certificate_name: "{{ item.certificate_name }}"
     secret_name: "{{ item.secret_name }}"
     issuer_name: "{{ item.issuer_name }}"
-  with_items: "{{ cert_manager_certificates | default([]) }}"
+  with_items: "{{ homelab_talos_cert_manager_certificates | default([]) }}"
+
+- ansible.builtin.shell: kubectl -n default wait --for=condition=Ready certificate {{ item.certificate_name }} --timeout=10s
+  register: cert_ready
+  until: cert_ready.rc == 0
+  retries: 60
+  delay: 30
+  with_items: "{{ homelab_talos_cert_manager_certificates }}"

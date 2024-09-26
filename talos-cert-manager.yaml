@@ -1,0 +1,12 @@
+## AHL
+---
+- name: Install cert-manager.
+  hosts: homelab_talos_management_nodes
+  become: yes
+  gather_facts: false
+  environment:
+    K8S_AUTH_KUBECONFIG: "{{ homelab_kubernetes_kubeconfig_path }}"
+    KUBECONFIG: "{{ homelab_kubernetes_kubeconfig_path }}"
+
+  roles:
+    - role: talos_cert_manager

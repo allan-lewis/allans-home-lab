@@ -6,16 +6,16 @@ metadata:
 spec:
   acme:
     server: https://acme-v02.api.letsencrypt.org/directory
-    email: {{ letsencrypt_email }}
+    email: {{ homelab_email }}
     privateKeySecretRef:
       name: letsencrypt-production
     solvers:
       - dns01:
           cloudflare:
-            email: {{ letsencrypt_email }}
+            email: {{ homelab_email }}
             apiTokenSecretRef:
               name: cloudflare-token-secret
               key: cloudflare-token
         selector:
           dnsZones:
-            - "{{ letsencrypt_dns_zones }}"
+            - "{{ homelab_talos_cert_manager_letsencrypt_dns_zones }}"
