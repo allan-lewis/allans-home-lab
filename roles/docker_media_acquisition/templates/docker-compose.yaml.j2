@@ -18,7 +18,7 @@ services:
     container_name: "transmission"
     image: "lscr.io/linuxserver/transmission:{{ homelab_versions.docker_transmission }}"
     restart: "unless-stopped"
-    published_ports: 
+    ports: 
       - "{{ homelab_ports.docker_transmission }}:9091/tcp"
       - 51413:51413/tcp
       - 51413:51413/udp
@@ -26,7 +26,7 @@ services:
         - "{{ homelab_docker_media_acquisition_transmission_config }}:/config"
         - "{{ homelab_docker_media_acquisition_transmission_downloads }}:/downloads"
         - "{{ homelab_docker_media_acquisition_transmission_watch }}:/watch"
-    env: 
+    environment: 
       TZ: "{{ homelab_time_zone }}"
       PUID: "{{ homelab_user_id }}"
       PGID: "{{ homelab_group_id }}"
