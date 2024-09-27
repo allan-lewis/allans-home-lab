@@ -16,11 +16,7 @@
       - path: "{{ homelab_docker_media_acquisition_jackett_downloads }}"
       - path: "{{ homelab_docker_media_acquisition_transmission_downloads }}"
       - path: "{{ homelab_docker_media_acquisition_transmission_watch }}"
-
-- name: Create a temporary directoryfor the Docker Compose manifest.
-  ansible.builtin.file:
-    path: "{{ homelab_docker_media_acquisition_tmp }}"
-    state: directory
+      - path: "{{ homelab_docker_media_acquisition_tmp }}"
 
 - name: Write the Docker Compose manifest.
   ansible.builtin.template:
