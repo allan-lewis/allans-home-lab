@@ -1,8 +1,0 @@
-## AHL
----
-docker_proxy_port: "{{ known_ports.docker_proxy_port }}"
-portainer_agent_port: 9002
-syncthing_config_volume: "{{ ahl_docker_volume_root }}/syncthing"
-syncthing_volumes: 
-  - "{{ syncthing_config_volume }}:/config"
-  - "{{ ahl_docker_volume_root }}:/docker-volumes"
