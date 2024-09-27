@@ -9,7 +9,6 @@
   with_items:
       - path: "{{ homelab_media_acquisition_movies }}"
       - path: "{{ homelab_media_acquisition_shows }}"
-      - path: "{{ homelab_media_library_music_volume }}"
       - path: "{{ homelab_docker_media_acquisition_jackett_config }}"
       - path: "{{ homelab_docker_media_acquisition_config }}"
       - path: "{{ homelab_docker_media_acquisition_config }}"
