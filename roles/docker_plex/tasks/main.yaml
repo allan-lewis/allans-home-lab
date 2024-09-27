@@ -17,17 +17,3 @@
     project_src: "{{ homelab_docker_plex_tmp }}"
     pull: "always"
     recreate: "always"
-
-# - name: Install the Plex Docker container.
-#   community.docker.docker_container:
-#     container_name: "plex"
-#     image: "lscr.io/linuxserver/plex:{{ homelab_versions.docker_plex }}"
-#     restart: "unless-stopped"
-#     network_mode: "host"
-#     volumes: 
-#       - "{{ plex_config_volume }}:/config"
-#       - "{{ plex_media_library }}:/media-library"
-#     environment: 
-#       TZ: "{{ homelab_time_zone }}"
-#       PUID: "{{ homelab_user_id }}"
-#       PGID: "{{ homelab_group_id }}"
