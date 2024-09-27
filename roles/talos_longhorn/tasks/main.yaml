@@ -11,24 +11,24 @@
     template: namespace.yml.j2
 
 - name: Label namespace with appropriate privileges.
-  ansible.builtin.shell: kubectl label namespace {{ namespace_name }} pod-security.kubernetes.io/enforce=privileged
+  ansible.builtin.shell: kubectl label namespace {{ homelab_kubernetes_namespace_name }} pod-security.kubernetes.io/enforce=privileged
   changed_when: true
 
 - name: Create a secret for AWS credentials.
   kubernetes.core.k8s:
-    state: "{{ ahl_k3s_state }}"
+    state: "{{ homelab_kubernetes_state }}"
     template: secret.yml.j2
 
 - name: Install the Longhorn Helm chart.
   kubernetes.core.helm:
     chart_ref: longhorn/longhorn
-    chart_version: "{{ longhorn_version }}"
-    namespace: "{{ namespace_name }}"
+    chart_version: "{{ homelab_versions.talos_longhorn }}"
+    namespace: "{{ homelab_kubernetes_namespace_name }}"
     name: longhorn
     update_repo_cache: true
-    release_state:  "{{ ahl_k3s_state }}"
+    release_state:  "{{ homelab_kubernetes_state }}"
 
 - name: Create a Traefik ingress for Longhorn.
   kubernetes.core.k8s:
-    state: "{{ ahl_k3s_state }}"
+    state: "{{ homelab_kubernetes_state }}"
     template: traefik_ingress_route.yml.j2
