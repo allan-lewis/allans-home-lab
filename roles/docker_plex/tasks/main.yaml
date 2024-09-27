@@ -1,11 +1,14 @@
 ## AHL
 ---
-- name: Create Plex config volume.
+- name: Create Plex config volume and temp directory.
   ansible.builtin.file:
-    path: "{{ homelab_docker_plex_config_volume }}"
+    path: "{{ item }}"
     state: directory
     owner: "{{ ansible_ssh_user }}"
     group: "{{ ansible_ssh_user }}"
+  with_items:
+    - "{{ homelab_docker_plex_config_volume }}"
+    - "{{ homelab_docker_plex_tmp }}"
 
 - name: Write the Docker Compose manifest.
   ansible.builtin.template:
