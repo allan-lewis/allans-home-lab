@@ -1,9 +1,9 @@
 ## AHL
 ---
 - name: Install the "r-stack" used for media acquisition.
-  hosts: media_acquisition_nodes
+  hosts: homelab_docker_media_acquisition_nodes
   become: yes
   gather_facts: false
 
   roles:  
-    - role: media_acquisition
+    - role: docker_media_acquisition
