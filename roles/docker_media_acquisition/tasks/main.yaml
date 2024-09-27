@@ -1,0 +1,19 @@
+## AHL
+---
+- name: Create Media Acquisition volumes.
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: directory
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+  with_items:
+      - path: "{{ homelab_media_library_movies_volume }}"
+      - path: "{{ homelab_media_library_shows_volume }}"
+      - path: "{{ homelab_media_library_music_volume }}"
+      - path: "{{ homelab_docker_media_acquisition_jackett_config }}"
+      - path: "{{ homelab_docker_media_acquisition_config }}"
+      - path: "{{ homelab_docker_media_acquisition_config }}"
+      - path: "{{ homelab_docker_media_acquisition_transmission_config }}"
+      - path: "{{ homelab_docker_media_acquisition_jackett_downloads }}"
+      - path: "{{ homelab_docker_media_acquisition_torrent_downloads }}"
+      - path: "{{ homelab_docker_media_acquisition_torrent_watch }}"
