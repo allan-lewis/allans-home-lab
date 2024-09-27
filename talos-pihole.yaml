@@ -1,7 +1,7 @@
 ## AHL
 ---
 - name: Install Pi-hole.
-  hosts: homelab_talos_management_nodes
+  hosts: homelab_talos_pihole_nodes
   become: yes
   gather_facts: false
   environment:

@@ -1,11 +1,11 @@
 apiVersion: metallb.io/v1beta1
 kind: IPAddressPool
 metadata:
-  name: {{ metallb_pool_name }}
+  name: {{ homelab_talos_metallb_pool_name }}
   namespace: metallb-system
 spec:
   addresses:
-    - {{ metallb_range_start }} - {{ metallb_range_end }}
+    - {{ homelab_talos_metallb_range_start }} - {{ homelab_talos_metallb_range_end }}
 ---
 apiVersion: metallb.io/v1beta1
 kind: L2Advertisement
