@@ -6,4 +6,5 @@
   gather_facts: false
 
   roles:  
+    - role: getent
     - role: docker_media_acquisition

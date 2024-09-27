@@ -1,1 +1,15 @@
 services:
+
+  jackett:
+    container_name: "jackett"
+    image: "lscr.io/linuxserver/jackett:{{ homelab_versions.docker_jackett }}"
+    restart: "unless-stopped"
+    ports: 
+      - "{{ homelab_ports.homelab_docker_jackett_port }}:9117/tcp"
+    volumes: 
+      - "{{ homelab_docker_media_acquisition_jackett_config }}:/config"
+      - "{{ homelab_docker_media_acquisition_jackett_downloads }}:/downloads"
+    environment: 
+      TZ: "{{ homelab_time_zone }}"
+      PUID: "{{ homelab_user_id }}"
+      PGID: "{{ homelab_group_id }}"

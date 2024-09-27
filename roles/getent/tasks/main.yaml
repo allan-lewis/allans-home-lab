@@ -7,7 +7,7 @@
 
 - name: Set uid and gid facts.
   ansible.builtin.set_fact:
-    ahl_user_uid: "{{ ansible_facts.getent_passwd[ansible_ssh_user].1 | int }}"
-    ahl_user_gid: "{{ ansible_facts.getent_passwd[ansible_ssh_user].2 | int }}"
+    homelab_user_id: "{{ ansible_facts.getent_passwd[ansible_ssh_user].1 | int }}"
+    homelab_group_id: "{{ ansible_facts.getent_passwd[ansible_ssh_user].2 | int }}"
   register: ahl_getent_passwd
   when: ahl_getent_passwd is undefined

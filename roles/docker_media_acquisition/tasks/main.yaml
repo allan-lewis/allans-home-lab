@@ -22,3 +22,9 @@
   ansible.builtin.template:
     src: docker-compose.yaml.j2
     dest: "{{ homelab_docker_media_acquisition_tmp }}/docker-compose.yml"
+
+- name: Deploy the Docker Compose stack.
+  community.docker.docker_compose_v2:
+    project_src: "{{ homelab_docker_media_acquisition_tmp }}"
+    pull: "always"
+    recreate: "always"
