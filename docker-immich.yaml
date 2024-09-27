@@ -1,0 +1,10 @@
+
+## AHL
+---
+- name: Install Immich.
+  hosts: homelab_docker_immich_nodes
+  become: yes
+  gather_facts: false
+
+  roles:  
+    - role: docker_immich

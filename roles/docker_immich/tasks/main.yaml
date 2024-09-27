@@ -2,21 +2,21 @@
 ---
 - name: Create a temporary directory.
   ansible.builtin.file:
-    path: "{{ immich_tmp_dir }}"
+    path: "{{ homelab_docker_immich_tmp }}"
     state: directory
 
 - name: Download the Docker Compose configuration.
   ansible.builtin.get_url:
     url: "https://github.com/immich-app/immich/releases/latest/download/docker-compose.yml"
-    dest: "{{ immich_tmp_dir }}/docker-compose.yml"
+    dest: "{{ homelab_docker_immich_tmp }}/docker-compose.yml"
 
 - name: Write the Docker Compose environment file.
   ansible.builtin.template:
     src: env.j2
-    dest: "{{ immich_tmp_dir }}/.env"
+    dest: "{{ homelab_docker_immich_tmp }}/.env"
 
 - name: Deploy the Docker Compose application.
   community.docker.docker_compose_v2:
-    project_src: "{{ immich_tmp_dir }}"
+    project_src: "{{ homelab_docker_immich_tmp }}"
     pull: "always"
     recreate: "always"
