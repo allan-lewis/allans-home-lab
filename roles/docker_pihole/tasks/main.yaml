@@ -8,7 +8,7 @@
     group: "{{ ansible_ssh_user }}"
   with_items:
       - path: "{{ homelab_docker_pihole_data }}"
-      - path: "{{ homelab_docker_pihole_dns_volume }}"
+      - path: "{{ homelab_docker_pihole_dns }}"
       - path: "{{ homelab_docker_pihole_tmp }}"
 
 - name: Disable the default DNS service.
