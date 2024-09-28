@@ -39,4 +39,4 @@
   until: pvc_bound.rc == 0
   retries: 500
   delay: 10
-  with_items: "{{ homelab_talos_longhorn_pvcs }}"
+  with_items: "{{ homelab_talos_longhorn_pvcs | default([]) }}"
