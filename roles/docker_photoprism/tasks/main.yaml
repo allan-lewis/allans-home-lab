@@ -4,8 +4,8 @@
   ansible.builtin.file:
     path: "{{ item.path }}"
     state: directory
-    owner: "{{ control_user }}"
-    group: "{{ control_user }}"
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
   with_items:
       - path: "{{ homelab_docker_photoprism_storage }}"
       - path: "{{ homelab_docker_photoprism_tmp }}"
