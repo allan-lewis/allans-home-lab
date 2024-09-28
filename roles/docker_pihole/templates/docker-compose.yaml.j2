@@ -15,5 +15,5 @@ services:
     environment: 
       TZ: "{{ homelab_time_zone }}"
       WEBPASSWORD: "{{ homelab_docker_pihole_admin_password }}"
-    capabilities:
+    cap_add:
       - NET_ADMIN
