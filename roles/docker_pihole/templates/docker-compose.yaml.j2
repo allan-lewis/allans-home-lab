@@ -1,15 +1,10 @@
 services:
 
   pihole:
-    container_default_behavior: no_defaults
-    detach: yes
-    name: "pihole"
+    container_name: "pihole"
     image: "pihole/pihole:{{ homelab_versions.docker_pihole }}"
-    state: "started"
-    recreate: "yes"
-    pull: "always"
-    restart_policy: "unless-stopped"
-    published_ports: 
+    restart: "unless-stopped"
+    ports: 
       - "53:53/tcp"
       - "53:53/udp"
       - "67:67/udp"
@@ -17,8 +12,8 @@ services:
     volumes: 
       - "{{ homelab_docker_pihole_data }}:/etc/pihole"
       - "{{ homelab_docker_pihole_dns }}:/etc/dnsmasq.d"
-    env: 
-      TZ: 'America/New_York'
+    environment: 
+      TZ: "{{ homelab_time_zone }}
       WEBPASSWORD: "{{ homelab_docker_pihole_admin_password }}"
     capabilities:
       - NET_ADMIN
