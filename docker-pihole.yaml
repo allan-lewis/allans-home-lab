@@ -1,9 +1,9 @@
 ## AHL
 ---
 - name: Install Pi-hole.
-  hosts: pihole_nodes
+  hosts: homelab_docker_pihole_nodes
   become: yes
   gather_facts: false
 
   roles:  
-    - role: pihole
+    - role: docker_pihole

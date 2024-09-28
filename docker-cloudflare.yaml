@@ -1,10 +1,9 @@
 ## AHL
 ---
-
 - name: Install Cloudflare tunnel(s).
-  hosts: cloudflare_nodes
+  hosts: homelab_docker_cloudflare_nodes
   become: yes
   gather_facts: false
 
   roles:  
-    - role: cloudflare
+    - role: docker_cloudflare
