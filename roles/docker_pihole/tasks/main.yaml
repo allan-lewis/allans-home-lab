@@ -32,6 +32,6 @@
 
 - name: Deploy the Docker Compose stack.
   community.docker.docker_compose_v2:
-    project_src: "{{ homelab_docker_plex_tmp }}"
+    project_src: "{{ homelab_docker_pihole_tmp }}"
     pull: "always"
     recreate: "always"
