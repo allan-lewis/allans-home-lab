@@ -1,26 +1,22 @@
 ## AHL
 ---
-- name: Create application volumes.
+- name: Create application volumes and directories.
   ansible.builtin.file:
     path: "{{ item.path }}"
     state: directory
     owner: "{{ control_user }}"
     group: "{{ control_user }}"
   with_items:
-      - path: "{{ photoprism_storage_volume }}"
-
-- name: Create a temporary directory.
-  ansible.builtin.file:
-    path: "{{ photoprism_tmp_dir }}"
-    state: directory
+      - path: "{{ homelab_docker_photoprism_storage }}"
+      - path: "{{ homelab_docker_photoprism_tmp }}"
 
 - name: Write the Docker Compose configuration.
   ansible.builtin.template:
     src: docker-compose.yaml.j2
-    dest: "{{ photoprism_tmp_dir }}/docker-compose.yml"
+    dest: "{{ homelab_docker_photoprism_tmp }}/docker-compose.yml"
 
 - name: Deploy the Docker Compose application.
   community.docker.docker_compose_v2:
-    project_src: "{{ photoprism_tmp_dir }}"
+    project_src: "{{ homelab_docker_photoprism_tmp }}"
     pull: "always"
     recreate: "always"

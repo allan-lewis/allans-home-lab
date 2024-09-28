@@ -109,10 +109,10 @@ services:
     ## Storage Folders: "~" is a shortcut for your home directory, "." for the current directory
     volumes:
       # "/host/folder:/photoprism/folder"                # Example
-      - "{{ photoprism_originals_volume }}/photoprism/originals"               # Original media files (DO NOT REMOVE)
+      - "{{ homelab_docker_photoprism_originals }}/photoprism/originals"               # Original media files (DO NOT REMOVE)
       # - "/example/family:/photoprism/originals/family" # *Additional* media folders can be mounted like this
-      - "{{ photoprism_import_volume }}:/photoprism/import"                  # *Optional* base folder from which files can be imported to originals
-      - "{{ photoprism_storage_volume }}:/photoprism/storage"                  # *Writable* storage folder for cache, database, and sidecar files (DO NOT REMOVE)
+      - "{{ homelab_docker_photoprism_import }}:/photoprism/import"                  # *Optional* base folder from which files can be imported to originals
+      - "{{ homelab_docker_photoprism_storage }}:/photoprism/storage"                  # *Writable* storage folder for cache, database, and sidecar files (DO NOT REMOVE)
 
   ## MariaDB Database Server (recommended)
   ## see https://docs.photoprism.app/getting-started/faq/#should-i-use-sqlite-mariadb-or-mysql

@@ -1,0 +1,10 @@
+
+## AHL
+---
+- name: Install PhotoPrism.
+  hosts: homelab_docker_photoprism_nodes
+  become: yes
+  gather_facts: false
+
+  roles:  
+    - role: docker_photoprism

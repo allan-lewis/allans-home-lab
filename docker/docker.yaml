@@ -1,9 +1,0 @@
-## AHL
----
-- name: Install Docker and its dependencies.
-  hosts: docker_nodes
-  become: yes
-  gather_facts: true
-
-  roles:
-    - docker
