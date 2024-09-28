@@ -13,7 +13,7 @@ services:
       - "{{ homelab_docker_pihole_data }}:/etc/pihole"
       - "{{ homelab_docker_pihole_dns }}:/etc/dnsmasq.d"
     environment: 
-      TZ: "{{ homelab_time_zone }}
+      TZ: "{{ homelab_time_zone }}"
       WEBPASSWORD: "{{ homelab_docker_pihole_admin_password }}"
     capabilities:
       - NET_ADMIN
