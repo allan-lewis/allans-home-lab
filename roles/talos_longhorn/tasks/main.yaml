@@ -32,3 +32,11 @@
   kubernetes.core.k8s:
     state: "{{ homelab_kubernetes_state }}"
     template: traefik_ingress_route.yml.j2
+
+- name: Wait for all PVCs to be bound.
+  ansible.builtin.shell: kubectl -n {{item.namespace}} wait --for=jsonpath='{.status.phase}'=Bound pvc/{{ item.name }} --timeout=60s
+  register: pvc_bound
+  until: pvc_bound.rc == 0
+  retries: 500
+  delay: 10
+  with_items: "{{ homelab_talos_longhorn_pvcs }}"
