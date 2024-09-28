@@ -1,0 +1,31 @@
+## AHL
+---
+- name: Create a temporary directoryfor the Docker Compose manifest.
+  ansible.builtin.file:
+    path: "{{ homelab_docker_cloudflare_tmp }}"
+    state: directory
+
+- name: Write the Docker Compose manifest.
+  ansible.builtin.template:
+    src: docker-compose.yaml.j2
+    dest: "{{ homelab_docker_cloudflare_tmp }}/docker-compose.yml"
+
+- name: Deploy the Docker Compose stack.
+  community.docker.docker_compose_v2:
+    project_src: "{{ homelab_docker_cloudflare_tmp }}"
+    pull: "always"
+    recreate: "always"
+
+# - name: Install the Cloudflare Tunnel Docker container.
+#   community.docker.docker_container:
+#     container_default_behavior: no_defaults
+#     detach: yes
+#     name: "cloudflare"
+#     image: "cloudflare/cloudflared:latest"
+#     state: "{{ cloudflare_state | default('started') }}"
+#     recreate: "yes"
+#     pull: "always"
+#     restart_policy: "unless-stopped"
+#     command: "tunnel run"
+#     env: 
+#       TUNNEL_TOKEN: "{{ cf_tunnel_token }}"
