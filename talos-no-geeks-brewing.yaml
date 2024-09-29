@@ -1,11 +1,11 @@
 ## AHL
 ---
 - name: Install No Geeks Brewing services.
-  hosts: talos_no_geeks_brewing
+  hosts: homelab_talos_no_geeks_brewing_nodes
   become: yes
   gather_facts: false
   environment:
-    K8S_AUTH_KUBECONFIG: "{{ kubeconfig_path }}"
+    K8S_AUTH_KUBECONFIG: "{{ homelab_kubernetes_kubeconfig_path }}"
     
   roles:
     - role: talos_no_geeks_brewing
