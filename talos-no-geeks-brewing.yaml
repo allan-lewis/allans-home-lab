@@ -2,7 +2,7 @@
 ---
 - name: Install No Geeks Brewing services.
   hosts: homelab_talos_no_geeks_brewing_nodes
-  become: yes
+  become: no
   gather_facts: false
   environment:
     K8S_AUTH_KUBECONFIG: "{{ homelab_kubernetes_kubeconfig_path }}"

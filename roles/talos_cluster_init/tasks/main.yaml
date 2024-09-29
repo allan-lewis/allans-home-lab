@@ -70,6 +70,11 @@
   until: bootstrap_result.rc == 0
   changed_when: bootstrap_result.rc == 0
 
+- name: Apply machine configs (including patches) to worker nodes.
+  ansible.builtin.command: talosctl apply-config --insecure --nodes {{ hostvars[item].homelab_talos_node_ephemeral_host }} --file {{ homelab_talos_cluster_config_dir }}/worker.yaml --config-patch @{{ homelab_talos_cluster_patch_dir }}/{{ item }}.yaml
+  with_items: "{{ groups['homelab_talos_worker_nodes'] }}"
+  changed_when: true
+
 - name: Get kube config.
   ansible.builtin.command: talosctl kubeconfig {{ homelab_kubernetes_kubeconfig_path }} --talosconfig {{ homelab_talos_cluster_config_file }}
   changed_when: true
