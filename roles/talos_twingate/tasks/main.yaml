@@ -14,14 +14,15 @@
 - name: Install the Twingate Helm chart.
   kubernetes.core.helm:
     chart_ref: twingate/connector
-    namespace: "{{ namespace_name }}"
+    chart_version: "{{ homelab_versions.talos_twingate }}"
+    namespace: "{{ homelab_kubernetes_namespace_name }}"
     name: "{{ item.name }}"
     update_repo_cache: true
-    release_state: "{{ ahl_k3s_state }}"
+    release_state: "{{ homelab_kubernetes_state }}"
     values:
       connector:
-        network: "{{ network_name }}"
+        network: "{{ homelab_talos_twingate_network_name }}"
         accessToken: "{{ item.access_token }}"
         refreshToken: "{{ item.refresh_token }}"
-  with_items: "{{ twingate_connectors }}"
-  no_log: true
+  with_items: "{{ homelab_talos_twingate_connectors | default([]) }}"
+  no_log: "{{ homelab_talos_twingate_no_log | default(true) }}"

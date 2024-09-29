@@ -1,11 +1,11 @@
 ## AHL
 ---
 - name: Install Twingate.
-  hosts: talos_twingate
+  hosts: homelab_talos_twingate_nodes
   become: yes
   gather_facts: false
   environment:
-    K8S_AUTH_KUBECONFIG: "{{ kubeconfig_path }}"
+    K8S_AUTH_KUBECONFIG: "{{ homelab_kubernetes_kubeconfig_path }}"
 
   roles:
     - role: talos_twingate
