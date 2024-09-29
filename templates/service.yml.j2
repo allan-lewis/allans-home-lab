@@ -2,12 +2,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ talos_kubernetes_service_name }}
+  name: {{ homelab_kubernetes_service_name }}
   namespace: {{ homelab_kubernetes_namespace_name }}
 spec:
   selector:
-    app: {{ app_name | default(talos_kubernetes_service_name) }}
+    app: {{ homelab_kubernetes_app_name | default(homelab_kubernetes_service_name) }}
   ports:
   - name: http
-    targetPort: {{ talos_kubernetes_service_target_port | default(talos_kubernetes_service_port) }}
-    port: {{ talos_kubernetes_service_port }}
+    targetPort: {{ homelab_kubernetes_service_target_port | default(homelab_kubernetes_service_port) }}
+    port: {{ homelab_kubernetes_service_port }}

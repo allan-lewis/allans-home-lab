@@ -10,11 +10,8 @@ spec:
   entryPoints:
     - websecure
 {% if homelab_talos_traefik_routes is defined and homelab_talos_traefik_routes | length > 0 %}
-  routes:
-{% else %}
-  routes: []
-{% endif %}
 {% for route in homelab_talos_traefik_routes %}
+  routes:
     - match: Host(`{{ route.host }}`)
       kind: Rule
       middlewares:
@@ -42,5 +39,8 @@ spec:
           port: 9000
 {% endif %}
 {% endfor %}
+{% else %}
+  routes: []
+{% endif %}
   tls:
     secretName: production-tls

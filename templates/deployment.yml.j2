@@ -1,0 +1,44 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: {{ homelab_kubernetes_deployment_name | default(homelab_kubernetes_service_name) }}
+  namespace: {{ homelab_kubernetes_namespace_name }}
+  labels:
+    app: {{ homelab_kubernetes_app_name | default(homelab_kubernetes_service_name) }}
+spec:
+  replicas: {{ homelab_kubernetes_service_replicas | default(2) }}
+  progressDeadlineSeconds: 600
+  revisionHistoryLimit: 2
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: {{ app_name | default(homelab_kubernetes_service_name) }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ homelab_kubernetes_deployment_name | default(homelab_kubernetes_service_name) }}
+        app: {{ homelab_kubernetes_app_name | default(homelab_kubernetes_service_name) }}
+    spec:
+      containers:
+      - name: {{ homelab_kubernetes_container_name }} 
+        image: {{ homelab_kubernetes_container_image }} 
+        imagePullPolicy: "Always"
+        env:
+{% for env in homelab_kubernetes_environment_vars | default([]) %}
+        - name: {{ env.name }}
+          value: {{ env.value }}
+{% endfor %}
+        volumeMounts:
+{% for mount in homelab_kubernetes_volume_mounts | default([]) %}
+        - name: {{  mount.name }}
+          mountPath: {{ mount.path }}  
+{% endfor %}
+      volumes:
+{% for volume in homelab_kubernetes_volumes | default([]) %}
+      - name: {{ volume.name }}
+        persistentVolumeClaim:
+          claimName: {{ volume.claim }}
+{% endfor %}
+ 
