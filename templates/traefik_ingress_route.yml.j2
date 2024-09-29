@@ -10,8 +10,8 @@ spec:
   entryPoints:
     - websecure
 {% if homelab_talos_traefik_routes is defined and homelab_talos_traefik_routes | length > 0 %}
-{% for route in homelab_talos_traefik_routes %}
   routes:
+{% for route in homelab_talos_traefik_routes %}
     - match: Host(`{{ route.host }}`)
       kind: Rule
       middlewares:
