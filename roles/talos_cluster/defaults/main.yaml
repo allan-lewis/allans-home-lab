@@ -1,7 +1,0 @@
-## AHL
----
-talos_archive_dir: "{{ ansible_env.HOME }}/talos_archive"
-talos_completion_file: "{{ ansible_env.HOME }}/talos_cluster"
-talos_config_file: "{{ talos_config_dir }}/talosconfig"
-talos_kube_dir: "{{ ansible_env.HOME }}/.kube"
-talos_first_node: "{{ groups['talos_nodes'][0] }}"

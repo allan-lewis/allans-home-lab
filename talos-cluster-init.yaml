@@ -1,0 +1,10 @@
+## AHL
+---
+- name: Initialize a new Talos cluster.
+  hosts: homelab_talos_management_nodes
+  become: no
+  gather_facts: true
+
+  roles:
+    - role: talos_cluster_pre
+    - role: talos_cluster_init

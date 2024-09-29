@@ -1,6 +1,6 @@
 ## AHL
 ---
-- name: Install Cloudflare.
+- name: Install Cloudflare Tunnels.
   hosts: homelab_talos_cloudflare_nodes
   become: yes
   gather_facts: false

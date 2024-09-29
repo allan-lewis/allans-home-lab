@@ -1,0 +1,6 @@
+## AHL
+---
+homelab_talos_cluster_archive_dir: "{{ ansible_env.HOME }}/talos_archive"
+homelab_talos_cluster_completion_file: "{{ ansible_env.HOME }}/talos_cluster"
+homelab_talos_cluster_config_file: "{{ homelab_talos_cluster_config_dir }}/talosconfig"
+homelab_talos_cluster_first_node: "{{ groups['homelab_talos_control_plane_nodes'][0] }}"
