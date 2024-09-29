@@ -7,7 +7,7 @@
     
 - name: Install Cloudflare tunnels. 
   kubernetes.core.k8s:
-    state: "{{ ahl_k3s_state }}"
+    state: "{{ homelab_kubernetes_state }}"
     template: cloudflare.yml.j2
-  with_items: "{{ cloudflare_tunnels }}"
-  no_log: true
+  with_items: "{{ homelab_talos_cloudflare_tunnels | default([]) }}"
+  no_log: "{{ homelab_talos_cloudflare_no_log | default(true) }}"

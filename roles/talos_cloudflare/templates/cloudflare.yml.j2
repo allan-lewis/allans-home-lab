@@ -4,7 +4,7 @@ metadata:
   labels:
     app: cloudflared-{{ item.tunnel_name }}
   name: cf-tunnel-{{ item.tunnel_name }}
-  namespace: {{ namespace_name }}
+  namespace: {{ homelab_kubernetes_namespace_name }}
 spec:
   replicas: 2
   selector:

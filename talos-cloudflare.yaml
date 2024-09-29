@@ -1,0 +1,11 @@
+## AHL
+---
+- name: Install Cloudflare.
+  hosts: homelab_talos_cloudflare_nodes
+  become: yes
+  gather_facts: false
+  environment:
+    K8S_AUTH_KUBECONFIG: "{{ homelab_kubernetes_kubeconfig_path }}"
+
+  roles:
+    - role: talos_cloudflare
