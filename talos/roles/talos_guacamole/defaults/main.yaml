@@ -1,6 +1,0 @@
-## AHL
-guacamole_service_name: guacamole
-guacamole_port: 35100
-guacd_port: 35101
-guacd_service_name: guacd
-namespace_name: guacamole

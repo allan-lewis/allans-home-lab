@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ homelab_kubernetes_service_name }}
+  namespace: {{ homelab_kubernetes_namespace_name }}
+spec:
+  ipFamilyPolicy: SingleStack
+  selector:
+    app: {{ homelab_kubernetes_service_name }}
+  ports:
+    - port: {{ homelab_kubernetes_service_port }}
+      targetPort: {{ homelab_kubernetes_service_target_port }}
+  type: LoadBalancer
+  loadBalancerIP: {{ homelab_kubernetes_service_load_balancer_ip }}
