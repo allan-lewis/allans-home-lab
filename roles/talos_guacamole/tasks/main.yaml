@@ -18,7 +18,7 @@
       - name: GUACD_HOSTNAME
         value: "{{ homelab_talos_guacamole_guacd_host }}"
       - name: GUACD_PORT
-        value: "{{ homelab_talos_guacd_service_port }}"
+        value: "\"{{ homelab_talos_guacd_service_port }}\""
       - name: MYSQL_HOSTNAME
         value: "{{ homelab_talos_guacamole_mysql_host }}"
       - name: MYSQL_DATABASE
