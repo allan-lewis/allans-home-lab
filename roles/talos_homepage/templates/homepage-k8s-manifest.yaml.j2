@@ -43,13 +43,9 @@ data:
   custom.css: ""
   custom.js: ""
   bookmarks.yaml: |
-    - Developer:
-        - Github:
-            - abbr: GH
-              href: https://github.com/
-{% for group in  homelab_talos_bookmark_groups %}
+{% for group in  homelab_talos_bookmark_groups | default([]) %}
     - {{ group.name }}:
-{% for bookmark in group.bookmarks %}
+{% for bookmark in group.bookmarks | default([]) %}
         - {{ bookmark.name }}:
            - abbr: {{ bookmark.abbr }}
              href: {{ bookmark.href }}
