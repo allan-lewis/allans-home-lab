@@ -1,17 +1,15 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ homepage_name }}
+  name: {{ homelab_talos_homepage_name }}
   labels:
-    app.kubernetes.io/name: {{ homepage_name }}
+    app.kubernetes.io/name: {{ homelab_talos_homepage_name }}
 rules:
   - apiGroups:
       - ""
     resources:
       - namespaces
       - pods
-      - apps
-      - deployments
       - nodes
     verbs:
       - get
@@ -25,7 +23,7 @@ rules:
       - get
       - list
   - apiGroups:
-      - traefik.io
+      - traefik.containo.us
     resources:
       - ingressroutes
     verbs:
@@ -39,24 +37,18 @@ rules:
     verbs:
       - get
       - list
-  - apiGroups:
-      - apiextensions.k8s.io
-    resources:
-      - customresourcedefinitions/status
-    verbs:
-      - get
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: {{ homepage_name }}
+  name: {{ homelab_talos_homepage_name }}
   labels:
-    app.kubernetes.io/name: {{ homepage_name }}
+    app.kubernetes.io/name: {{ homelab_talos_homepage_name }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: {{ homepage_name }}
+  name: {{ homelab_talos_homepage_name }}
 subjects:
   - kind: ServiceAccount
-    name: {{ homepage_name }}
+    name: {{ homelab_talos_homepage_name }}
     namespace: default

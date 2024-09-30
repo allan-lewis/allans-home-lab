@@ -2,12 +2,12 @@
 ---
 - name: Create a secret for the Homepage service account.
   kubernetes.core.k8s:
-    state: "{{ ahl_k3s_state }}"
+    state: "{{ homelab_kubernetes_state }}"
     template: homepage-secret.yaml.j2
 
 - name: Create the Homepage service account.
   kubernetes.core.k8s:
-    state: "{{ ahl_k3s_state }}"
+    state: "{{ homelab_kubernetes_state }}"
     template: service-account.yaml.j2
 
 - name: Write the config to temporary storage (useful for debugging).
@@ -17,26 +17,30 @@
 
 - name: Create the Homepage configuration (for real, in k8s).
   kubernetes.core.k8s:
-    state: "{{ ahl_k3s_state }}"
+    state: "{{ homelab_kubernetes_state }}"
     template: homepage-config.yaml.j2
 
 - name: Create the Homepage roles and bindings.
   kubernetes.core.k8s:
-    state: "{{ ahl_k3s_state }}"
+    state: "{{ homelab_kubernetes_state }}"
     template: homepage-roles.yaml.j2
 
 - name: Create the Homepage deployment.
   kubernetes.core.k8s:
-    state: "{{ ahl_k3s_state }}"
+    state: "{{ homelab_kubernetes_state }}"
     template: homepage-deployment.yaml.j2
 
 - name: Create the k8s Homepage service.
   kubernetes.core.k8s:
-    state: "{{ ahl_k3s_state }}"
+    state: "{{ homelab_kubernetes_state }}"
     template: homepage-service.yaml.j2
 
 - name: Create a Traefik ingress for Homepage.
   kubernetes.core.k8s:
-    state: "{{ ahl_k3s_state }}"
+    state: "{{ homelab_kubernetes_state }}"
     template: traefik_ingress_route.yml.j2
-  
+  vars:
+    homelab_kubernetes_service_name: "{{ homelab_talos_homepage_name }}"
+    homelab_kubernetes_service_port: "{{ homelab_talos_homepage_port }}"
+    homelab_talos_traefik_routes:
+      - host: "{{ homelab_talos_homepage_host }}"

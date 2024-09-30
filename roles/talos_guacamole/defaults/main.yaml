@@ -4,9 +4,6 @@ homelab_kubernetes_namespace_name: guacamole
 homelab_talos_guacamole_service_name: guacamole
 homelab_talos_guacamole_service_target_port: 8080
 homelab_talos_guacamole_service_port: 35100
-# guacamole_service_name: guacamole
-# guacamole_port: 35100
 homelab_talos_guacd_service_port: 35101
 homelab_talos_guacd_service_name: guacd
 homelab_talos_guacd_service_target_port: 4822
-# namespace_name: guacamole
