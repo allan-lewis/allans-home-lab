@@ -7,5 +7,5 @@
 
 - name: Apply the Homepage k8s manifest.
   kubernetes.core.k8s:
-    state: "{{ homepage_kubernetes_state }}"
+    state: "{{ homelab_kubernetes_state }}"
     template: homepage-k8s-manifest.yaml.j2
