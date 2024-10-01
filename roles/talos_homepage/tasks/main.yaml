@@ -7,10 +7,5 @@
 
 - name: Apply the Homepage k8s manifest.
   kubernetes.core.k8s:
-    state: "{{ item }}"
+    state: "{{ homepage_kubernetes_state }}"
     template: homepage-k8s-manifest.yaml.j2
-    force: true
-  ## Getting the page to re-render can be annoying; this is faster
-  with_items:
-    - "absent"
-    - "present"
