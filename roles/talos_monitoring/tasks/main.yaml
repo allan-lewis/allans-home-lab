@@ -12,7 +12,7 @@
     template: namespace.yml.j2
 
 - name: Label namespace with appropriate privileges.
-  ansible.builtin.shell: kubectl label namespace {{ namespace_name }} pod-security.kubernetes.io/enforce=privileged
+  ansible.builtin.shell: kubectl label namespace {{ homelab_kubernetes_namespace_name }} pod-security.kubernetes.io/enforce=privileged
   changed_when: true
 
 - name: Write the values file for the Helm chart.
@@ -23,22 +23,22 @@
 - name: Install the monitoring Helm chart.
   kubernetes.core.helm:
     chart_ref: prometheus-community/kube-prometheus-stack
-    chart_version: "{{ version_monitoring }}"
-    namespace: "{{ namespace_name }}"
+    chart_version: "{{ homelab_versions.talos_monitoring }}"
+    namespace: "{{ homelab_kubernetes_namespace_name }}"
     name: prometheus
     update_repo_cache: true
     create_namespace: true
-    release_state: "{{ ahl_k3s_state }}"
+    release_state: "{{ homelab_kubernetes_state }}"
     values_files:
       - /tmp/prometheus.values.yml
 
 - name: Create Traefik ingresses for monitoring.
   kubernetes.core.k8s:
-    state: "{{ ahl_k3s_state }}"
+    state: "{{ homelab_kubernetes_state }}"
     template: traefik_ingress_route.yml.j2
   vars:
-    service_name:  "{{ item.service_name }}"
-    service_port: "{{ item.service_port }}"
-    routes:
+    homelab_kubernetes_service_name:  "{{ item.service_name }}"
+    homelab_kubernetes_service_port: "{{ item.service_port }}"
+    homelab_talos_traefik_routes:
       - host: "{{ item.host }}"
-  with_items: "{{ monitoring_ingresses }}"
+  with_items: "{{ homelab_talos_monitoring_ingresses }}"

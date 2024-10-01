@@ -6,10 +6,10 @@ prometheus:
             storageClassName: longhorn
             resources:
               requests:
-                storage: {{ prometheus_storage | default('128Gi') }}
+                storage: {{ homelab_talos_monitoring_prometheus_storage | default('128Gi') }}
 
       additionalScrapeConfigs:
-{% for config in scrape_configs | default([]) %}
+{% for config in homelab_talos_monitoring_prometheus_scrape_configs | default([]) %}
         - job_name: '{{ config.name }}'
           scheme: {{ config.scheme | default ('http') }}
 {% if config.basic_auth is defined %}

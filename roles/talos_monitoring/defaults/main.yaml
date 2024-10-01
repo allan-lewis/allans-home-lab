@@ -1,0 +1,13 @@
+## AHL
+---
+homelab_kubernetes_namespace_name: monitoring
+homelab_talos_monitoring_ingresses:
+  - service_name: prometheus-kube-prometheus-prometheus
+    service_port: 9090
+    host: "{{ homelab_talos_monitoring_prometheus_host }}"
+  - service_name: prometheus-grafana
+    service_port: 80
+    host: "{{ homelab_talos_monitoring_grafana_host }}"
+  - service_name: prometheus-kube-prometheus-alertmanager
+    service_port: 9093
+    host: "{{ homelab_talos_monitoring_alertmanager_host }}"
