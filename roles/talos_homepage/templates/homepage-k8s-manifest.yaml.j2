@@ -43,7 +43,7 @@ data:
   custom.css: ""
   custom.js: ""
   bookmarks.yaml: |
-{% for group in  (homelab_talos_bookmark_groups | default([])) %}
+{% for group in  (homelab_talos_homepage_bookmark_groups | default([])) %}
     - {{ group.name }}:
 {% for bookmark in group.bookmarks | default([]) %}
         - {{ bookmark.name }}:
