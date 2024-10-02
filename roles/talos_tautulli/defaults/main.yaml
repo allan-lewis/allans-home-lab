@@ -6,5 +6,6 @@ homelab_kubernetes_service_port: "{{ homelab_ports.talos_tautulli }}"
 homelab_kubernetes_container_name: tautulli
 homelab_kubernetes_container_image: "lscr.io/linuxserver/tautulli:{{ homelab_versions.talos_tautulli }}"
 homelab_kubernetes_service_replicas: 1
+homelab_kubernetes_service_target_port: 8181
 homelab_talos_traefik_routes:
   - host: "{{ homelab_talos_tautulli_host }}"
