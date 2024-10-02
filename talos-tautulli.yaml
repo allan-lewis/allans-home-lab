@@ -1,0 +1,12 @@
+## AHL
+---
+- name: Install Tautulli.
+  hosts: homelab_talos_tautulli_nodes
+  become: no
+  gather_facts: yes
+  environment:
+    K8S_AUTH_KUBECONFIG: "{{ homelab_kubernetes_kubeconfig_path }}"
+
+  roles:
+    - role: getent
+    - role: talos_tautulli
