@@ -1,0 +1,11 @@
+auth:
+  rootPassword: {{ homelab_k8s_mariadb_root_password }}
+  password: {{ homelab_k8s_mariadb_root_password }}
+  replicationPassword: {{ homelab_k8s_mariadb_root_password }}
+
+primary:
+  service:
+    type: LoadBalancer
+    loadBalancerIP: {{ homelab_k8s_mariadb_lb_ip }}
+  persistence:
+    existingClaim: mariadb

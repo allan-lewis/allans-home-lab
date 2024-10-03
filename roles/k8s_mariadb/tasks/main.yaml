@@ -19,11 +19,11 @@
 - name: Install the Bitnami MariaDB Helm chart.
   kubernetes.core.helm:
     chart_ref: bitnami/mariadb
-    chart_version: "{{ mariadb_version }}"
-    namespace: "{{ namespace_name }}"
+    chart_version: "{{ homelab_versions.k8s_mariadb }}"
+    namespace: "{{ homelab_kubernetes_namespace_name }}"
     name: mariadb
     update_repo_cache: true
     create_namespace: true
-    release_state: "{{ ahl_k3s_state }}"
+    release_state: "{{ homelab_kubernetes_state }}"
     values_files:
       - /tmp/mariadb-values.yml
