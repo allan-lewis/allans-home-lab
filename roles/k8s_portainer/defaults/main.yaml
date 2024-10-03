@@ -1,0 +1,7 @@
+## AHL
+---
+homelab_kubernetes_namespace_name: "portainer"
+homelab_kubernetes_service_name: "portainer"
+homelab_kubernetes_service_port: 9000
+homelab_talos_traefik_routes:
+  - host: "{{ homelab_k8s_portainer_host }}"

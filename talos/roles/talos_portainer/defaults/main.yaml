@@ -1,6 +1,0 @@
-portainer_name: portainer
-namespace_name: "{{ portainer_name }}"
-service_name: "{{ portainer_name }}"
-service_port: 9000
-routes:
-  - host: "{{ portainer_host }}"

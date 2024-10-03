@@ -2,7 +2,7 @@
 ---
 - name: Add the Portainer Helm respository.
   kubernetes.core.helm_repository:
-    name: "{{ portainer_name }}"
+    name: "portainer"
     repo_url: https://portainer.github.io/k8s/
     repo_state: present 
 
@@ -16,18 +16,19 @@
     src: portainer-values.yaml.j2
     dest: /tmp/portainer-values.yaml
 
-- name: Install the Portainer Helm chart
+- name: Install the Portainer Helm chart.
   kubernetes.core.helm:
     chart_ref: portainer/portainer
-    namespace: "{{ namespace_name }}"
-    name: "{{ portainer_name }}"
+    chart_version: "{{ homelab_versions.k8s_portainer }}"
+    namespace: "{{ homelab_kubernetes_namespace_name }}"
+    name: "portainer"
     update_repo_cache: true
     create_namespace: true
-    release_state:  "{{ ahl_k3s_state }}"
+    release_state:  "{{ homelab_kubernetes_state }}"
     values_files:
       - /tmp/portainer-values.yaml
 
 - name: Create a Traefik ingress for Portainer.
   kubernetes.core.k8s:
-    state: "{{ ahl_k3s_state }}"
+    state: "{{ homelab_kubernetes_state }}"
     template: traefik_ingress_route.yml.j2
