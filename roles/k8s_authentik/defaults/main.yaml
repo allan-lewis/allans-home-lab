@@ -1,0 +1,3 @@
+homelab_kubernetes_authentik_outpost_host: ak-outpost-authentik-embedded-outpost
+homelab_kubernetes_authentik_outpost_port: 9000
+homelab_kubernetes_namespace_name: authentik

@@ -19,16 +19,16 @@
 - name: Install the Authentik Helm chart.
   kubernetes.core.helm:
     chart_ref: authentik/authentik
-    chart_version: "{{ version_authentik }}"
+    chart_version: "{{ homelab_versions.k8s_authentik }}"
     name: authentik
     update_repo_cache: true
     create_namespace: true
-    release_state: "{{ ahl_k3s_state }}"
-    namespace: "{{ namespace_name }}"
+    release_state: "{{ homelab_kubernetes_state }}"
+    namespace: "{{ homelab_kubernetes_namespace_name }}"
     values_files:
       - /tmp/authentik_values.yaml
 
 - name: Create a Traefik middleware for Authentik.
   kubernetes.core.k8s:
-    state: "{{ ahl_k3s_state }}"
+    state: "{{ homelab_kubernetes_state }}"
     template: authentik_middleware.yaml.j2

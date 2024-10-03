@@ -1,0 +1,11 @@
+## AHL
+---
+- name: Install Authentik.
+  hosts: homelab_k8s_authentik_nodes
+  become: no
+  gather_facts: no
+  environment:
+    K8S_AUTH_KUBECONFIG: "{{ homelab_kubernetes_kubeconfig_path }}"
+  
+  roles:
+    - role: k8s_authentik

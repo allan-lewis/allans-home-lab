@@ -19,6 +19,7 @@
 - name: Install the Nextcloud Helm chart.
   kubernetes.core.helm:
     chart_ref: nextcloud/nextcloud
+    chart_version: "{{ homelab_versions.k8s_nextcloud }}"
     name: nextcloud
     update_repo_cache: true
     create_namespace: true

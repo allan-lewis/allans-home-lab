@@ -5,7 +5,7 @@ metadata:
   namespace: default
 spec:
   forwardAuth:
-    address: http://{{ authentik_outpost_host }}.{{ namespace_name }}.svc.cluster.local:{{ authentik_outpost_port }}/outpost.goauthentik.io/auth/traefik
+    address: http://{{ homelab_kubernetes_authentik_outpost_host }}.{{ homelab_kubernetes_namespace_name }}.svc.cluster.local:{{ homelab_kubernetes_authentik_outpost_port }}/outpost.goauthentik.io/auth/traefik
     trustForwardHeader: true
     authResponseHeaders:
       - X-authentik-username
