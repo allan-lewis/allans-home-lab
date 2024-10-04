@@ -1,9 +1,0 @@
-## AHL
----
-- name: Install Prometheus, Grafana, and Alertmanager.
-  hosts: k3s_monitoring
-  become: yes
-  gather_facts: false
-  
-  roles:
-    - role: monitoring

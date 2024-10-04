@@ -1,0 +1,14 @@
+nextcloud:
+  host: {{ homelab_k8s_nextcloud_host }}
+  username: {{ homelab_k8s_nextcloud_user }}
+  password: {{ homelab_k8s_nextcloud_password }}
+
+persistence:
+  enabled: true
+  annotations: {}
+  existingClaim: {{ homelab_k8s_nextcloud_claim_name | default('nextcloud') }}
+  size: {{ homelab_k8s_nextcloud_claim_size | default('64Gi') }}
+
+phpClientHttpsFix:
+  enabled: true
+  protocol: https

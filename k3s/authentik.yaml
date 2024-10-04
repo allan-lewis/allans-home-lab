@@ -1,9 +1,0 @@
-## AHL
----
-- name: Install Authentik.
-  hosts: k3s_authentik
-  become: yes
-  gather_facts: false
-  
-  roles:
-    - role: authentik

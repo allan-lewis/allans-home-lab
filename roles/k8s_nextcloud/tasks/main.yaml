@@ -23,12 +23,12 @@
     name: nextcloud
     update_repo_cache: true
     create_namespace: true
-    release_state: "{{ ahl_k3s_state }}"
-    namespace: "{{ namespace_name }}"
+    release_state: "{{ homelab_kubernetes_state }}"
+    namespace: "{{ homelab_kubernetes_namespace_name }}"
     values_files:
       - /tmp/nextcloud_values.yaml
 
 - name: Create a Traefik ingress for Nextcloud.
   kubernetes.core.k8s:
-    state: "{{ ahl_k3s_state }}"
+    state: "{{ homelab_kubernetes_state }}"
     template: traefik_ingress_route.yml.j2

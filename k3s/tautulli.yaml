@@ -1,8 +1,0 @@
-## AHL
----
-- name: Install Tautulli.
-  hosts: k3s_tautulli
-  become: yes
-  gather_facts: false
-  roles:
-    - role: tautulli

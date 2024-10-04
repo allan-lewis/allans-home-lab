@@ -1,9 +1,0 @@
-## AHL
----
-- name: Install Nextcloud.
-  hosts: k3s_nextcloud
-  become: yes
-  gather_facts: false
-  
-  roles:
-    - role: nextcloud

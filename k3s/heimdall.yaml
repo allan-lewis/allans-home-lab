@@ -1,9 +1,0 @@
-## AHL
----
-- name: Install Heimdall.
-  hosts: k3s_heimdall
-  become: yes
-  gather_facts: false
-
-  roles:
-    - role: heimdall
