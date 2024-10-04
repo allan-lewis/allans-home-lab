@@ -1,8 +1,0 @@
-## AHL
----
-vaultwarden_name: "vaultwarden"
-namespace_name: "{{ vaultwarden_name }}"
-service_name: "{{ vaultwarden_name }}"
-service_port: 35500
-target_port: 80
-routes:  "{{ vaultwarden_hosts }}"

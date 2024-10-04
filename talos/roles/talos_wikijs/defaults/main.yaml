@@ -1,7 +1,0 @@
-## AHL
-wikijs_name: wikijs
-namespace_name: "{{ wikijs_name }}"
-service_name: "{{ wikijs_name }}"
-service_port: 80
-routes:
-  - host: "{{ wikijs_host }}"

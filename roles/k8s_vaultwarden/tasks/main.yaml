@@ -1,0 +1,35 @@
+## AHL
+---
+- name: Create a namespace for Vaultwarden.
+  kubernetes.core.k8s:
+    state: present
+    template: namespace.yml.j2
+
+- name: Create the k8s Vaultwarden deployment.
+  kubernetes.core.k8s:
+    state: "{{ homelab_kubernetes_state }}"
+    template: deployment.yml.j2
+  vars:
+    homelab_kubernetes_service_name: "{{ homelab_kubernetes_namespace_name }}"
+    homelab_kubernetes_container_name: "{{ homelab_kubernetes_namespace_name }}"
+    homelab_kubernetes_container_image: "vaultwarden/server:{{ homelab_versions.k8s_vaultwarden }}"
+    homelab_kubernetes_service_replicas: 1
+    homelab_kubernetes_environment_vars:
+      - name: ADMIN_TOKEN
+        value: "{{ homelab_k8s_vaultwarden_admin_token }}"
+    homelab_kubernetes_volume_mounts:
+      - name: vaultwarden-data
+        path: /data  
+    homelab_kubernetes_volumes:
+      - name: vaultwarden-data
+        claim: vaultwarden
+
+- name: Create the k8s Vaultwarden service.
+  kubernetes.core.k8s:
+    state: "{{ homelab_kubernetes_state }}"
+    template: service.yml.j2
+
+- name: Create a Traefik ingress for Vaultwarden.
+  kubernetes.core.k8s:
+    state: "{{ homelab_kubernetes_state }}"
+    template: traefik_ingress_route.yml.j2
