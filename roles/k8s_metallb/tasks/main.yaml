@@ -2,24 +2,24 @@
 ---
 - name: Create a temporary directory for k8s manifests.
   ansible.builtin.file:
-    path: "{{ homelab_talos_metallb_tmp }}"
+    path: "{{ homelab_k8s_metallb_tmp }}"
     state: directory
 
 - name: Download the MetalLB manifest.
   ansible.builtin.get_url:
-    url: "https://raw.githubusercontent.com/metallb/metallb/{{ homelab_versions.talos_metallb }}/config/manifests/metallb-native.yaml"
-    dest: "{{ homelab_talos_metallb_tmp }}/metallb.yaml"
+    url: "https://raw.githubusercontent.com/metallb/metallb/{{ homelab_versions.k8s_metallb }}/config/manifests/metallb-native.yaml"
+    dest: "{{ homelab_k8s_metallb_tmp }}/metallb.yaml"
     mode: '0664'
 
 - name: Install MetalLB.
   kubernetes.core.k8s:
     state: "{{ homelab_kubernetes_state }}"
-    src: "{{ homelab_talos_metallb_tmp }}/metallb.yaml"
+    src: "{{ homelab_k8s_metallb_tmp }}/metallb.yaml"
 
 - name: Write config file for MetalLB.
   ansible.builtin.template:
-    src: "config.yaml.j2"
-    dest: "{{ homelab_talos_metallb_tmp }}/config.yaml"
+    src: "k8s-metallb-config.yaml.j2"
+    dest: "{{ homelab_k8s_metallb_tmp }}/config.yaml"
 
 - name: Wait for MetalLB resources.
   command: >-
@@ -62,4 +62,4 @@
 - name: Configure MetalLB.
   kubernetes.core.k8s:
     state: "{{ homelab_kubernetes_state }}"
-    src: "{{ homelab_talos_metallb_tmp }}/config.yaml"
+    src: "{{ homelab_k8s_metallb_tmp }}/config.yaml"

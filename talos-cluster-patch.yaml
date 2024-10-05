@@ -3,7 +3,7 @@
 - name: Patch changes into an existing Talos cluster.
   hosts: homelab_talos_management_nodes
   become: no
-  gather_facts: no
+  gather_facts: yes
 
   roles:
     - role: talos_cluster_pre

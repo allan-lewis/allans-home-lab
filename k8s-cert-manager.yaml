@@ -1,7 +1,7 @@
 ## AHL
 ---
 - name: Install cert-manager.
-  hosts: homelab_talos_cert_manager_nodes
+  hosts: homelab_k8s_cert_manager_nodes
   become: no
   gather_facts: no
   environment:
