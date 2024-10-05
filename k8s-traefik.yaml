@@ -1,11 +1,11 @@
 ## AHL
 ---
-- name: Install nginx.
-  hosts: homelab_talos_nginx_nodes
+- name: Install Traefik.
+  hosts: homelab_talos_traefik_nodes
   become: no
-  gather_facts: false
+  gather_facts: no
   environment:
     K8S_AUTH_KUBECONFIG: "{{ homelab_kubernetes_kubeconfig_path }}"
     
   roles:
-    - role: talos_nginx
+    - role: k8s_traefik

@@ -3,9 +3,9 @@
 - name: Install Pi-hole.
   hosts: homelab_talos_pihole_nodes
   become: no
-  gather_facts: false
+  gather_facts: no
   environment:
     K8S_AUTH_KUBECONFIG: "{{ homelab_kubernetes_kubeconfig_path }}"
 
   roles:
-    - role: talos_pihole
+    - role: k8s_pihole
