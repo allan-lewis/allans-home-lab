@@ -4,7 +4,7 @@ globalArguments:
 
 additionalArguments:
   - "--serversTransport.insecureSkipVerify=true"
-  - "--log.level=DEBUG"
+  # - "--log.level=DEBUG"
 
 deployment:
   enabled: true
@@ -21,7 +21,7 @@ ports:
   websecure:
     tls:
       enabled: true
-{% for port in homelab_talos_traefik_extra_ports | default([]) %}
+{% for port in homelab_k8s_traefik_extra_ports | default([]) %}
   {{ port.name }}:
     port: {{ port.port }}
     expose: {{ port.expose }}
@@ -55,6 +55,6 @@ service:
   annotations: {}
   labels: {}
   spec:
-    loadBalancerIP: {{ homelab_talos_traefik_load_balancer_ip }} # this should be an IP in the MetalLB range
+    loadBalancerIP: {{ homelab_k8s_traefik_load_balancer_ip }} # this should be an IP in the MetalLB range
   loadBalancerSourceRanges: []
   externalIPs: []

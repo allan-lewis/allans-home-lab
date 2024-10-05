@@ -1,7 +1,8 @@
 ## AHL
 ---
-homelab_kubernetes_namespace_name: longhorn-system
-homelab_kubernetes_service_name: longhorn-frontend
-homelab_kubernetes_service_port: 80
-homelab_talos_traefik_routes:
-  - host: "{{ homelab_talos_longhorn_host }}"
+homelab_k8s_namespace: longhorn-system
+homelab_k8s_service_name: longhorn-frontend
+homelab_k8s_service_port: 80
+homelab_k8s_traefik_routes:
+  - host: "{{ homelab_k8s_longhorn_host }}"
+homelab_k8s_longhorn_pvcs: []

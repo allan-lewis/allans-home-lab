@@ -1,7 +1,7 @@
 ## AHL
 ---
 - name: Install Traefik.
-  hosts: homelab_talos_traefik_nodes
+  hosts: homelab_k8s_traefik_nodes
   become: no
   gather_facts: no
   environment:

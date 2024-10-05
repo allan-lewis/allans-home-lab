@@ -8,30 +8,37 @@
 
 - name: Create a namespace for Longhorn.
   kubernetes.core.k8s:
-    template: namespace.yml.j2
+    template: homelab-k8s-namespace.yaml.j2
 
 - name: Label namespace with appropriate privileges.
-  ansible.builtin.shell: kubectl label namespace {{ homelab_kubernetes_namespace_name }} pod-security.kubernetes.io/enforce=privileged
+  ansible.builtin.shell: kubectl label namespace {{ homelab_k8s_namespace }} pod-security.kubernetes.io/enforce=privileged
   changed_when: true
 
 - name: Create a secret for AWS credentials.
   kubernetes.core.k8s:
-    state: "{{ homelab_kubernetes_state }}"
-    template: secret.yml.j2
+    state: "{{ homelab_k8s_state }}"
+    template: k8s-longhorn-aws-secret.yml.j2
 
 - name: Install the Longhorn Helm chart.
   kubernetes.core.helm:
     chart_ref: longhorn/longhorn
-    chart_version: "{{ homelab_versions.talos_longhorn }}"
-    namespace: "{{ homelab_kubernetes_namespace_name }}"
+    chart_version: "{{ homelab_versions.k8s_longhorn }}"
+    namespace: "{{ homelab_k8s_namespace }}"
     name: longhorn
     update_repo_cache: true
-    release_state:  "{{ homelab_kubernetes_state }}"
+    release_state:  "{{ homelab_k8s_state }}"
 
 - name: Create a Traefik ingress for Longhorn.
   kubernetes.core.k8s:
-    state: "{{ homelab_kubernetes_state }}"
-    template: traefik_ingress_route.yml.j2
+    state: "{{ homelab_k8s_state }}"
+    template: homelab-k8s-traefik-ingress-route.yaml.j2
+
+- name: Ensure that namespaces exist for PVCs.
+  kubernetes.core.k8s:
+    template: homelab-k8s-namespace.yaml.j2
+  vars:
+    homelab_k8s_namespace: "{{ item.namespace }}"
+  with_items: "{{ homelab_k8s_longhorn_pvcs }}"
 
 - name: Wait for all PVCs to be bound.
   ansible.builtin.shell: kubectl -n {{item.namespace}} wait --for=jsonpath='{.status.phase}'=Bound pvc/{{ item.name }} --timeout=60s
@@ -39,4 +46,4 @@
   until: pvc_bound.rc == 0
   retries: 500
   delay: 10
-  with_items: "{{ homelab_talos_longhorn_pvcs | default([]) }}"
+  with_items: "{{ homelab_k8s_longhorn_pvcs }}"

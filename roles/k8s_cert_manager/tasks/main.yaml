@@ -13,7 +13,7 @@
 
 - name: Install cert-manager CRDs.
   kubernetes.core.k8s:
-    state: "{{ homelab_kubernetes_state }}"
+    state: "{{ homelab_k8s_state }}"
     src: /tmp/cert-manager.crds.yaml
 
 - name:  Write the values file for the Helm chart.
@@ -29,19 +29,19 @@
     name: cert-manager
     update_repo_cache: true
     create_namespace: true
-    release_state:  "{{ homelab_kubernetes_state }}"
+    release_state:  "{{ homelab_k8s_state }}"
     values_files:
       - /tmp/cert-manager.values.yml
 
 - name: Install LetsEncrypt certificate issuers.
   kubernetes.core.k8s:
-    state: "{{ homelab_kubernetes_state }}"
+    state: "{{ homelab_k8s_state }}"
     template: "{{ item }}"
   with_items: "{{ homelab_k8s_cert_manager_cert_issuers }}"
 
 - name: Install Cloudflare token secret.
   kubernetes.core.k8s:
-    state:  "{{ homelab_kubernetes_state }}"
+    state:  "{{ homelab_k8s_state }}"
     template: k8s-cert-manager-cloudflare-secret.yaml.j2
 
 - name: Request certificates.

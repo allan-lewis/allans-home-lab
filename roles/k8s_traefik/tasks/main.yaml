@@ -3,7 +3,7 @@
 - name: Create a namespace for Traefik.
   kubernetes.core.k8s:
     state: present
-    template: namespace.yml.j2
+    template: homelab-k8s-namespace.yaml.j2
 
 - name: Add the Traefik Helm respository.
   kubernetes.core.helm_repository:
@@ -12,55 +12,55 @@
 
 - name: Write the values file for the Helm chart.
   ansible.builtin.template:
-    src: values.yml.j2
+    src: k8s-traefik-values.yaml.j2
     dest: /tmp/traefik.values.yml
 
 - name: Install the Traefik Helm chart.
   kubernetes.core.helm:
     chart_ref: traefik/traefik
-    chart_version: "{{ homelab_versions.talos_traefik }}"
+    chart_version: "{{ homelab_versions.k8s_traefik }}"
     namespace: traefik
     name: traefik
     update_repo_cache: true
     create_namespace: true
-    release_state: "{{ homelab_kubernetes_state }}"
+    release_state: "{{ homelab_k8s_state }}"
     values_files:
       - /tmp/traefik.values.yml
 
 - name: Create custom headers middleware.
   kubernetes.core.k8s:
-    state: "{{ homelab_kubernetes_state }}"
-    template: default-headers.yml.j2
+    state: "{{ homelab_k8s_state }}"
+    template: k8s-traefik-custom-headers.yaml.j2
 
 - name: Create a dashboard authentication secret.
   kubernetes.core.k8s:
-    state: "{{ homelab_kubernetes_state }}"
-    template: secret-dashboard.yml.j2
+    state: "{{ homelab_k8s_state }}"
+    template: k8s-traefik-dashboard-secret.yaml.j2
 
 - name: Create an ingress for the Traefik dashboard.
   kubernetes.core.k8s:
-    state: "{{ homelab_kubernetes_state }}"
-    template: ingress.yml.j2
+    state: "{{ homelab_k8s_state }}"
+    template: k8s-traefik-dashboard-ingress.yaml.j2
 
 - name: Create the k8s Traefik services.
   kubernetes.core.k8s:
-    state: "{{ homelab_kubernetes_state }}"
-    template: traefik_services_service.yml.j2
-  with_items: "{{ homelab_talos_traefik_services }}"
+    state: "{{ homelab_k8s_state }}"
+    template: k8s-traefik-service.yaml.j2
+  with_items: "{{ homelab_k8s_traefik_services }}"
   vars:
     service_name: "{{ item.service_name }}"
     service_port: "{{ item.service_port }}"
 
 - name: Create the k8s Traefik endpoints.
   kubernetes.core.k8s:
-    state: "{{ homelab_kubernetes_state }}"
-    template: traefik_services_endpoints.yml.j2
-  with_items: "{{ homelab_talos_traefik_services }}"
+    state: "{{ homelab_k8s_state }}"
+    template: k8s-traefik-endpoints.yaml.j2
+  with_items: "{{ homelab_k8s_traefik_services }}"
 
 - name: Create ingresses for Traefik services.
   kubernetes.core.k8s:
-    state: "{{ homelab_kubernetes_state }}"
-    template: traefik_ingress_route.yml.j2
+    state: "{{ homelab_k8s_state }}"
+    template: homelab-k8s-traefik-ingress-route.yaml.j2
   vars:
-    homelab_kubernetes_service_name: traefik-services
-    homelab_talos_traefik_routes: "{{ homelab_talos_traefik_services | default([]) }}"
+    homelab_k8s_service_name: traefik-services
+    homelab_k8s_traefik_routes: "{{ homelab_k8s_traefik_services | default([]) }}"
