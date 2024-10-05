@@ -2,12 +2,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ homelab_kubernetes_service_name }}
-  namespace: {{ homelab_kubernetes_namespace_name }}
+  name: {{ homelab_k8s_service_name }}
+  namespace: {{ homelab_k8s_namespace }}
 spec:
   selector:
-    app: {{ homelab_kubernetes_app_name | default(homelab_kubernetes_service_name) }}
+    app: {{ homelab_k8s_application_name | default(homelab_k8s_service_name) }}
   ports:
   - name: http
-    targetPort: {{ homelab_kubernetes_service_target_port | default(homelab_kubernetes_service_port) }}
-    port: {{ homelab_kubernetes_service_port }}
+    targetPort: {{ homelab_k8s_service_target_port | default(homelab_k8s_service_port) }}
+    port: {{ homelab_k8s_service_port }}

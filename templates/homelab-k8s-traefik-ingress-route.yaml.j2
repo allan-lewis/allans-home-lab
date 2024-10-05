@@ -2,16 +2,16 @@
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
-  name: {{ homelab_kubernetes_ingress_name | default(homelab_kubernetes_service_name) }}
+  name: {{ homelab_k8s_ingress_name | default(homelab_k8s_service_name) }}
   namespace:  default
   annotations: 
     kubernetes.io/ingress.class: traefik-external
 spec:
   entryPoints:
     - websecure
-{% if homelab_talos_traefik_routes is defined and homelab_talos_traefik_routes | length > 0 %}
+{% if homelab_k8s_traefik_routes is defined and homelab_k8s_traefik_routes | length > 0 %}
   routes:
-{% for route in homelab_talos_traefik_routes %}
+{% for route in homelab_k8s_traefik_routes %}
     - match: Host(`{{ route.host }}`)
       kind: Rule
       middlewares:
@@ -19,13 +19,13 @@ spec:
         - name: authentik
           namespace: default
 {% endif %}
-        - name: {{ homelab_talos_traefik_ingress_route_middleware_name }}
-          namespace: {{ homelab_talos_traefik_ingress_route_middleware_namespace }}
+        - name: {{ homelab_k8s_traefik_ingress_route_middleware_name }}
+          namespace: {{ homelab_k8s_traefik_ingress_route_middleware_namespace }}
       priority: 10
       services:
-        - name: {{ route.service_name | default(homelab_kubernetes_service_name) }}
-          namespace:  {{ homelab_kubernetes_namespace_name }}
-          port: {{ route.service_port | default(homelab_kubernetes_service_port) }}
+        - name: {{ route.service_name | default(homelab_k8s_service_name) }}
+          namespace:  {{ homelab_k8s_namespace }}
+          port: {{ route.service_port | default(homelab_k8s_service_name) }}
           scheme: {{ route.scheme | default('http') }}        
 {% if route.authentik | default(false) %}
     - kind: Rule
