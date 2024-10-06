@@ -3,7 +3,7 @@
 - name: Create a namespace for Cloudflare.
   kubernetes.core.k8s:
     state: present
-    template: namespace.yml.j2
+    template: homelab-k8s-namespace.yaml.j2
     
 - name: Install Cloudflare tunnels. 
   kubernetes.core.k8s:
