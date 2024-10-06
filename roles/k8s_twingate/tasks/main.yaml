@@ -9,20 +9,20 @@
 - name: Create a namespace for Twingate.
   kubernetes.core.k8s:
     state: present
-    template: namespace.yml.j2
+    template: homelab-k8s-namespace.yaml.j2
 
 - name: Install the Twingate Helm chart.
   kubernetes.core.helm:
     chart_ref: twingate/connector
-    chart_version: "{{ homelab_versions.talos_twingate }}"
-    namespace: "{{ homelab_kubernetes_namespace_name }}"
+    chart_version: "{{ homelab_versions.k8s_twingate }}"
+    namespace: "{{ homelab_k8s_namespace }}"
     name: "{{ item.name }}"
     update_repo_cache: true
-    release_state: "{{ homelab_kubernetes_state }}"
+    release_state: "{{ homelab_k8s_state }}"
     values:
       connector:
-        network: "{{ homelab_talos_twingate_network_name }}"
+        network: "{{ homelab_k8s_twingate_network_name }}"
         accessToken: "{{ item.access_token }}"
         refreshToken: "{{ item.refresh_token }}"
-  with_items: "{{ homelab_talos_twingate_connectors | default([]) }}"
-  no_log: "{{ homelab_talos_twingate_no_log | default(true) }}"
+  with_items: "{{ homelab_k8s_twingate_connectors | default([]) }}"
+  no_log: "{{ homelab_k8s_twingate_no_log | default(true) }}"
