@@ -31,5 +31,5 @@
 
 - name: Create a Traefik ingress for Vaultwarden.
   kubernetes.core.k8s:
-    state: "{{ homelab_kubernetes_state }}"
+    state: "{{ homelab_k8s_state }}"
     template: homelab-k8s-traefik-ingress-route.yaml.j2
