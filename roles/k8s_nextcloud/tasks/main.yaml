@@ -3,7 +3,7 @@
 - name:  Create a namespace for Nextcloud.
   kubernetes.core.k8s:
     state: present
-    template: namespace.yml.j2
+    template: homelab-k8s-namespace.yaml.j2
 
 - name: Add the Nextcloud Helm respository.
   kubernetes.core.helm_repository:
@@ -13,7 +13,7 @@
 
 - name: Write the values file for the Helm chart.
   ansible.builtin.template:
-    src: nextcloud_values.yaml.j2
+    src: k8s-nextcloud-values.yaml.j2
     dest: /tmp/nextcloud_values.yaml
 
 - name: Install the Nextcloud Helm chart.
@@ -23,12 +23,12 @@
     name: nextcloud
     update_repo_cache: true
     create_namespace: true
-    release_state: "{{ homelab_kubernetes_state }}"
-    namespace: "{{ homelab_kubernetes_namespace_name }}"
+    release_state: "{{ homelab_k8s_state }}"
+    namespace: "{{ homelab_k8s_namespace }}"
     values_files:
       - /tmp/nextcloud_values.yaml
 
 - name: Create a Traefik ingress for Nextcloud.
   kubernetes.core.k8s:
-    state: "{{ homelab_kubernetes_state }}"
-    template: traefik_ingress_route.yml.j2
+    state: "{{ homelab_k8s_state }}"
+    template: homelab-k8s-traefik-ingress-route.yaml.j2
