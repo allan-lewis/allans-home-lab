@@ -3,5 +3,5 @@
 homelab_k8s_namespace: nextcloud
 homelab_k8s_service_name: nextcloud
 homelab_k8s_service_port: 8080
-homelab_k8s_traefik_routes:
+homelab_k8s_nextcloud_routes:
   - host: "{{ homelab_k8s_nextcloud_host }}"
