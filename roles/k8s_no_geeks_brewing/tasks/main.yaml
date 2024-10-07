@@ -3,59 +3,59 @@
 - name: Create a namespace for No Geeks Brewing.
   kubernetes.core.k8s:
     state: present
-    template: namespace.yml.j2
+    template: homelab-k8s-namespace.yaml.j2
 
 - name: Create a k8s deployment for the NGB API.
   kubernetes.core.k8s:
-    state: "{{ homelab_kubernetes_state }}"
-    template: deployment.yml.j2
+    state: "{{ homelab_k8s_state }}"
+    template: homelab-k8s-deployment.yaml.j2
   vars:
-    homelab_kubernetes_service_name: "{{ homelab_talos_no_geeks_brewing_api_name }}"
-    homelab_kubernetes_container_name: "{{ homelab_talos_no_geeks_brewing_api_name }}"
-    homelab_kubernetes_container_image: "allanelewis/no-geeks-brewing-api:{{ homelab_versions.talos_no_geeks_brewing_api }}"
-    homelab_kubernetes_environment_vars:
+    homelab_k8s_service_name: "{{ homelab_k8s_no_geeks_brewing_api_name }}"
+    homelab_k8s_container_name: "{{ homelab_k8s_no_geeks_brewing_api_name }}"
+    homelab_k8s_container_image: "allanelewis/no-geeks-brewing-api:{{ homelab_versions.k8s_no_geeks_brewing_api }}"
+    homelab_k8s_environment_vars:
       - name: NGB_BREWFATHER_AUTH_TOKEN
         value: "{{ homelab_talos_no_geeks_brewing_api_auth_token }}"
 
 - name: Create a k8s service for the NGB API.
   kubernetes.core.k8s:
-    state: "{{ homelab_kubernetes_state }}"
-    template: service.yml.j2
+    state: "{{ homelab_k8s_state }}"
+    template: homelab-k8s-service.yaml.j2
   vars:
-    homelab_kubernetes_service_name: "{{ homelab_talos_no_geeks_brewing_api_name }}"
-    homelab_kubernetes_service_port: "{{ homelab_talos_no_geeks_brewing_api_port }}"
+    homelab_k8s_service_name: "{{ homelab_k8s_no_geeks_brewing_api_name }}"
+    homelab_k8s_service_port: "{{ homelab_k8s_no_geeks_brewing_api_port }}"
 
 - name: Create a Traefik ingress for the NGB API.
   kubernetes.core.k8s:
-    state: "{{ homelab_kubernetes_state }}"
-    template: traefik_ingress_route.yml.j2
+    state: "{{ homelab_k8s_state }}"
+    template: homelab-k8s-traefik-ingress-route.yaml.j2
   vars:
-    homelab_kubernetes_service_name: "{{ homelab_talos_no_geeks_brewing_api_name }}"
-    homelab_kubernetes_service_port: "{{ homelab_talos_no_geeks_brewing_api_port }}"
-    homelab_talos_traefik_routes: "{{ homelab_talos_no_geeks_brewing_api_routes }}"
+    homelab_k8s_service_name: "{{ homelab_k8s_no_geeks_brewing_api_name }}"
+    homelab_k8s_service_port: "{{ homelab_k8s_no_geeks_brewing_api_port }}"
+    homelab_k8s_traefik_routes: "{{ homelab_k8s_no_geeks_brewing_api_routes }}"
 
 - name: Create a k8s deployment for the NGB web site.
   kubernetes.core.k8s:
-    state: "{{ homelab_kubernetes_state }}"
-    template: deployment.yml.j2
+    state: "{{ homelab_k8s_state }}"
+    template: homelab-k8s-deployment.yaml.j2
   vars:
-    homelab_kubernetes_service_name: "{{ homelab_talos_no_geeks_brewing_site_name }}"
-    homelab_kubernetes_container_name: "{{ homelab_talos_no_geeks_brewing_site_name }}"
-    homelab_kubernetes_container_image: "allanelewis/no-geeks-brewing-gui:{{ homelab_versions.talos_no_geeks_brewing_site }}"
+    homelab_k8s_service_name: "{{ homelab_k8s_no_geeks_brewing_site_name }}"
+    homelab_k8s_container_name: "{{ homelab_k8s_no_geeks_brewing_site_name }}"
+    homelab_k8s_container_image: "allanelewis/no-geeks-brewing-gui:{{ homelab_versions.k8s_no_geeks_brewing_site }}"
 
 - name: Create a k8s service for the NGB web site.
   kubernetes.core.k8s:
-    state: "{{ homelab_kubernetes_state }}"
-    template: service.yml.j2
+    state: "{{ homelab_k8s_state }}"
+    template: homelab-k8s-service.yaml.j2
   vars:
-    homelab_kubernetes_service_name: "{{ homelab_talos_no_geeks_brewing_site_name }}"
-    homelab_kubernetes_service_port: "{{ homelab_talos_no_geeks_brewing_site_port }}"
+    homelab_k8s_service_name: "{{ homelab_k8s_no_geeks_brewing_site_name }}"
+    homelab_k8s_service_port: "{{ homelab_k8s_no_geeks_brewing_site_port }}"
 
 - name: Create a Traefik ingress for the NGB web site.
   kubernetes.core.k8s:
-    state: "{{ homelab_kubernetes_state }}"
-    template: traefik_ingress_route.yml.j2
+    state: "{{ homelab_k8s_state }}"
+    template: homelab-k8s-traefik-ingress-route.yaml.j2
   vars:
-    homelab_kubernetes_service_name: "{{ homelab_talos_no_geeks_brewing_site_name }}"
-    homelab_kubernetes_service_port: "{{ homelab_talos_no_geeks_brewing_site_port }}"
-    homelab_talos_traefik_routes: "{{ homelab_talos_no_geeks_brewing_site_routes }}"
+    homelab_k8s_service_name: "{{ homelab_k8s_no_geeks_brewing_site_name }}"
+    homelab_k8s_service_port: "{{ homelab_k8s_no_geeks_brewing_site_port }}"
+    homelab_k8s_traefik_routes: "{{ homelab_k8s_no_geeks_brewing_site_routes }}"
