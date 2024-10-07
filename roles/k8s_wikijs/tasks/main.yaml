@@ -35,6 +35,6 @@
 - name: Create a Traefik ingress for Wiki.js.
   kubernetes.core.k8s:
     state: "{{ homelab_k8s_state }}"
-    template: traefik_ingress_route.yml.j2
+    template: homelab-k8s-traefik-ingress-route.yaml.j2
   vars:
     homelab_k8s_traefik_routes: "{{ homelab_k8s_wikijs_routes }}"
