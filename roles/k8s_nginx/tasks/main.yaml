@@ -3,19 +3,19 @@
 - name: Create the nginx namespace.
   kubernetes.core.k8s:
     state: present
-    template: namespace.yml.j2
+    template: homelab-k8s-namespace.yaml.j2
 
 - name: Create the k8s nginx deployment.
   kubernetes.core.k8s:
-    state: "{{ homelab_kubernetes_state }}"
-    template: deployment.yml.j2
+    state: "{{ homelab_k8s_state }}"
+    template: homelab-k8s-deployment.yaml.j2
 
 - name: Create the k8s nginx service.
   kubernetes.core.k8s:
-    state: "{{ homelab_kubernetes_state }}"
-    template: service.yml.j2
+    state: "{{ homelab_k8s_state }}"
+    template: homelab-k8s-service.yaml.j2
 
 - name: Create Traefik ingresses for nginx.
   kubernetes.core.k8s:
-    state: "{{ homelab_kubernetes_state }}"
-    template: traefik_ingress_route.yml.j2
+    state: "{{ homelab_k8s_state }}"
+    template: homelab-k8s-traefik-ingress-route.yaml.j2

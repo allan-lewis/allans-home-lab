@@ -1,9 +1,9 @@
 ## AHL
 ---
-homelab_kubernetes_container_name: nginx
-homelab_kubernetes_container_image: "nginx:{{ homelab_versions.talos_nginx }}"
-homelab_kubernetes_namespace_name: nginx
-homelab_kubernetes_service_name: nginx
-homelab_kubernetes_service_port: 80
-homelab_kubernetes_service_replicas: 3
-homelab_talos_traefik_routes: "{{ homelab_talos_nginx_routes }}"
+homelab_k8s_container_name: nginx
+homelab_k8s_container_image: "nginx:{{ homelab_versions.k8s_nginx }}"
+homelab_k8s_namespace: nginx
+homelab_k8s_service_name: nginx
+homelab_k8s_service_port: 80
+homelab_k8s_service_replicas: 2
+homelab_k8s_traefik_routes: "{{ homelab_k8s_nginx_routes }}"
