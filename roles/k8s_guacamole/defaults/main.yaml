@@ -1,9 +1,9 @@
 ## AHL
 ---
-homelab_kubernetes_namespace_name: guacamole
-homelab_talos_guacamole_service_name: guacamole
-homelab_talos_guacamole_service_target_port: 8080
-homelab_talos_guacamole_service_port: 35100
-homelab_talos_guacd_service_port: 35101
-homelab_talos_guacd_service_name: guacd
-homelab_talos_guacd_service_target_port: 4822
+homelab_k8s_namespace: guacamole
+homelab_k8s_guacamole_service_name: guacamole
+homelab_k8s_guacamole_service_target_port: 8080
+homelab_k8s_guacamole_service_port: 35100
+homelab_k8s_guacd_service_port: 35101
+homelab_k8s_guacd_service_name: guacd
+homelab_k8s_guacd_service_target_port: 4822
