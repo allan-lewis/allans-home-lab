@@ -32,3 +32,5 @@
   kubernetes.core.k8s:
     state: "{{ homelab_k8s_state }}"
     template: homelab-k8s-traefik-ingress-route.yaml.j2
+  vars:
+    homelab_k8s_traefik_routes: "{{ homelab_k8s_pihole_routes }}"

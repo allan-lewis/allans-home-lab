@@ -32,6 +32,8 @@
   kubernetes.core.k8s:
     state: "{{ homelab_k8s_state }}"
     template: homelab-k8s-traefik-ingress-route.yaml.j2
+  vars:
+    homelab_k8s_traefik_routes: "{{ homelab_k8s_longhorn_routes }}"
 
 - name: Ensure that namespaces exist for PVCs.
   kubernetes.core.k8s:

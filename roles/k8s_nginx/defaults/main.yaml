@@ -6,4 +6,3 @@ homelab_k8s_namespace: nginx
 homelab_k8s_service_name: nginx
 homelab_k8s_service_port: 80
 homelab_k8s_service_replicas: 2
-homelab_k8s_traefik_routes: "{{ homelab_k8s_nginx_routes }}"

@@ -3,5 +3,5 @@
 homelab_k8s_namespace: pihole
 homelab_k8s_service_name: pihole-web
 homelab_k8s_service_port: 80
-homelab_k8s_traefik_routes:
+homelab_k8s_pihole_routes:
   - host: "{{ homelab_k8s_pihole_host }}"
