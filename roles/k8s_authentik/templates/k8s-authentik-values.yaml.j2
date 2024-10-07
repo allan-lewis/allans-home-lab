@@ -1,11 +1,11 @@
 authentik:
-    secret_key: {{ homelab_kubernetes_authentik_secret_key }}
+    secret_key: {{ homelab_k8s_authentik_secret_key }}
     # This sends anonymous usage-data, stack traces on errors and
     # performance data to sentry.io, and is fully opt-in
     error_reporting:
         enabled: true
     postgresql:
-        password: {{ homelab_kubernetes_authentik_postgres_password }}
+        password: {{ homelab_k8s_authentik_postgres_password }}
 
 server:
     ingress:
@@ -13,11 +13,11 @@ server:
         ingressClassName: traefik
         enabled: true
         hosts:
-            - {{ homelab_kubernetes_authentik_hostname }}
+            - {{ homelab_k8s_authentik_hostname }}
 
 postgresql:
     enabled: true
     auth:
-        password: {{ homelab_kubernetes_authentik_postgres_password }}
+        password: {{ homelab_k8s_authentik_postgres_password }}
 redis:
     enabled: true

@@ -3,7 +3,7 @@
 - name:  Create a namespace for Authentik.
   kubernetes.core.k8s:
     state: present
-    template: namespace.yml.j2
+    template: homelab-k8s-namespace.yaml.j2
 
 - name: Add the Authentik Helm respository.
   kubernetes.core.helm_repository:
@@ -13,7 +13,7 @@
 
 - name: Write the values file for the Helm chart.
   ansible.builtin.template:
-    src: authentik_values.yaml.j2
+    src: k8s-authentik-values.yaml.j2
     dest: /tmp/authentik_values.yaml
 
 - name: Install the Authentik Helm chart.
@@ -23,12 +23,12 @@
     name: authentik
     update_repo_cache: true
     create_namespace: true
-    release_state: "{{ homelab_kubernetes_state }}"
-    namespace: "{{ homelab_kubernetes_namespace_name }}"
+    release_state: "{{ homelab_k8s_state }}"
+    namespace: "{{ homelab_k8s_namespace }}"
     values_files:
       - /tmp/authentik_values.yaml
 
 - name: Create a Traefik middleware for Authentik.
   kubernetes.core.k8s:
-    state: "{{ homelab_kubernetes_state }}"
-    template: authentik_middleware.yaml.j2
+    state: "{{ homelab_k8s_state }}"
+    template: k8s-authentik-middleware.yaml.j2
