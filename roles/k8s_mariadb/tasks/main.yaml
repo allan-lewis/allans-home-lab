@@ -9,21 +9,21 @@
 - name: Create a namespace for MariaDB.
   kubernetes.core.k8s:
     state: present
-    template: namespace.yml.j2
+    template: homelab-k8s-namespace.yaml.j2
 
 - name: Write the values file for the Helm chart.
   ansible.builtin.template:
-    src: mariadb-values.yml.j2
+    src: k8s-mariadb-values.yaml.j2
     dest: /tmp/mariadb-values.yml
 
 - name: Install the Bitnami MariaDB Helm chart.
   kubernetes.core.helm:
     chart_ref: bitnami/mariadb
     chart_version: "{{ homelab_versions.k8s_mariadb }}"
-    namespace: "{{ homelab_kubernetes_namespace_name }}"
+    namespace: "{{ homelab_k8s_namespace }}"
     name: mariadb
     update_repo_cache: true
     create_namespace: true
-    release_state: "{{ homelab_kubernetes_state }}"
+    release_state: "{{ homelab_k8s_state }}"
     values_files:
       - /tmp/mariadb-values.yml
