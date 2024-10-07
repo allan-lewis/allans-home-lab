@@ -31,4 +31,4 @@
 - name: Create a Traefik ingress.
   kubernetes.core.k8s:
     state: "{{ homelab_k8s_state }}"
-    template: traefik_ingress_route.yml.j2
+    template: homelab-k8s-traefik-ingress-route.yaml.j2
