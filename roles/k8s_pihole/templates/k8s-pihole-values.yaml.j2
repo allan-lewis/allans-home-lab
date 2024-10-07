@@ -11,26 +11,26 @@ persistentVolumeClaim:
   existingClaim: pihole
 
 serviceWeb:
-  loadBalancerIP: {{ homelab_talos_pihole_address }}
+  loadBalancerIP: {{ homelab_k8s_pihole_address }}
   annotations:
     metallb.universe.tf/allow-shared-ip: pihole-svc
   type: LoadBalancer
 
 serviceDns:
-  loadBalancerIP: {{ homelab_talos_pihole_address }}
+  loadBalancerIP: {{ homelab_k8s_pihole_address }}
   annotations:
     metallb.universe.tf/allow-shared-ip: pihole-svc
   type: LoadBalancer
 
 serviceDhcp:
-  loadBalancerIP: {{ homelab_talos_pihole_address }}
+  loadBalancerIP: {{ homelab_k8s_pihole_address }}
   annotations:
     metallb.universe.tf/allow-shared-ip: pihole-svc
   type: LoadBalancer
 
 dnsmasq:
   customDnsEntries:
-{% for entry in homelab_talos_pihole_dns_entries %}
+{% for entry in homelab_k8s_pihole_dns_entries %}
     - address=/{{ entry.name }}/{{ entry.address }}
 {% endfor %}
 
@@ -38,7 +38,7 @@ dnsmasq:
   # Here we specify custom cname entries that should point to `A` records or
   # elements in customDnsEntries array.
   # The format should be:
-{% for entry in homelab_talos_pihole_dns_cnames %}
+{% for entry in homelab_k8s_pihole_dns_cnames %}
     - cname={{ entry.name }},{{ entry.target }}
 {% endfor %}
 
@@ -50,7 +50,7 @@ podDnsConfig:
   - 1.1.1.1
 
 #! use an existing secret in a prod env
-adminPassword: "{{ homelab_talos_pihole_admin_password }}"
+adminPassword: "{{ homelab_k8s_pihole_admin_password }}"
 
 resources:
   limits:

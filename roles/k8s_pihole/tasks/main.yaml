@@ -9,26 +9,26 @@
 - name: Create a namespace for Pi-hole.
   kubernetes.core.k8s:
     state: present
-    template: namespace.yml.j2
+    template: homelab-k8s-namespace.yaml.j2
 
 - name: Write the values file for the Helm chart.
   ansible.builtin.template:
-    src: pihole-values.yml.j2
+    src: k8s-pihole-values.yaml.j2
     dest: /tmp/pihole-values.yml
 
 - name: Install the Pi-hole Helm chart.
   kubernetes.core.helm:
     chart_ref: mojo2600/pihole
-    chart_version:  "{{ homelab_versions.talos_pihole }}"
-    namespace: "{{ homelab_kubernetes_namespace_name }}"
+    chart_version:  "{{ homelab_versions.k8s_pihole }}"
+    namespace: "{{ homelab_k8s_namespace }}"
     name: pihole
     update_repo_cache: true
     create_namespace: true
-    release_state: "{{ homelab_kubernetes_state }}"
+    release_state: "{{ homelab_k8s_state }}"
     values_files:
       - /tmp/pihole-values.yml
       
 - name: Create a Traefik ingress.
   kubernetes.core.k8s:
-    state: "{{ homelab_kubernetes_state }}"
+    state: "{{ homelab_k8s_state }}"
     template: traefik_ingress_route.yml.j2

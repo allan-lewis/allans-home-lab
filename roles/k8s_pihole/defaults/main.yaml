@@ -1,7 +1,7 @@
 ## AHL
 ---
-homelab_kubernetes_namespace_name: pihole
-homelab_kubernetes_service_name: pihole-web
-homelab_kubernetes_service_port: 80
-homelab_talos_traefik_routes:
-  - host: "{{ homelab_talos_pihole_host }}"
+homelab_k8s_namespace: pihole
+homelab_k8s_service_name: pihole-web
+homelab_k8s_service_port: 80
+homelab_k8ss_traefik_routes:
+  - host: "{{ homelab_k8s_pihole_host }}"
