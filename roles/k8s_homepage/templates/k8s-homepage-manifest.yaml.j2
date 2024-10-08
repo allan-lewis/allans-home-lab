@@ -31,19 +31,19 @@ data:
   kubernetes.yaml: |
     mode: cluster
   settings.yaml: |
-    title: "{{ homelab_talos_homepage_title }}"
+    title: "{{ homelab_k8s_homepage_title }}"
     headerStyle: clean
     useEqualHeights: true
 {% if homelab_talos_homepage_theme is defined %}
-    theme: "{{homelab_talos_homepage_theme}}"
+    theme: "{{homelab_k8s_homepage_theme}}"
 {% endif %}
 {% if homelab_talos_homepage_color is defined %}
-    color: "{{homelab_talos_homepage_color}}"
+    color: "{{homelab_k8s_homepage_color}}"
 {% endif %}
   custom.css: ""
   custom.js: ""
   bookmarks.yaml: |
-{% for group in  (homelab_talos_homepage_bookmark_groups | default([])) %}
+{% for group in  (homelab_k8s_homepage_bookmark_groups | default([])) %}
     - {{ group.name }}:
 {% for bookmark in group.bookmarks | default([]) %}
         - {{ bookmark.name }}:
@@ -74,7 +74,7 @@ data:
   widgets.yaml: |
     - greeting:
         text_size: xl
-        text: "{{ homelab_talos_homepage_title }}"
+        text: "{{ homelab_k8s_homepage_title }}"
     - datetime:
         text_size: xl
         format:
@@ -195,7 +195,7 @@ spec:
       enableServiceLinks: true
       containers:
         - name: homepage
-          image: "ghcr.io/gethomepage/homepage:{{ homelab_versions.talos_homepage }}"
+          image: "ghcr.io/gethomepage/homepage:{{ homelab_versions.k8s_homepage }}"
           imagePullPolicy: Always
           ports:
             - name: http
@@ -244,7 +244,7 @@ metadata:
     app.kubernetes.io/name: homepage
 spec:
   rules:
-    - host: "{{ homelab_talos_homepage_host }}"
+    - host: "{{ homelab_k8s_homepage_host }}"
       http:
         paths:
           - path: "/"

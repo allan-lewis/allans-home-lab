@@ -2,10 +2,10 @@
 ---
 - name: Write the Homepage k8s manifest to disk (useful for debugging).
   ansible.builtin.template:
-    src: "homepage-k8s-manifest.yaml.j2"
-    dest: "{{ homelab_talos_homepage_k8s_tmp }}"
+    src: "k8s-homepage-manifest.yaml.j2"
+    dest: "{{ homelab_k8s_homepage_k8s_tmp }}"
 
 - name: Apply the Homepage k8s manifest.
   kubernetes.core.k8s:
-    state: "{{ homelab_kubernetes_state }}"
-    template: homepage-k8s-manifest.yaml.j2
+    state: "{{ homelab_k8s_state }}"
+    template: k8s-homepage-manifest.yaml.j2
