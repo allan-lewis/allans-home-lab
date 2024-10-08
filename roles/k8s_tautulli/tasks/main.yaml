@@ -3,33 +3,35 @@
 - name: Create a namespace for Tautulli.
   kubernetes.core.k8s:
     state: present
-    template: namespace.yml.j2
+    template: homelab-k8s-namespace.yaml.j2
 
 - name: Create the k8s Tautulli deployment.
   kubernetes.core.k8s:
-    state: "{{ homelab_kubernetes_state }}"
-    template: deployment.yml.j2
+    state: "{{ homelab_k8s_state }}"
+    template: homelab-k8s-deployment.yaml.j2
   vars:
-    homelab_kubernetes_environment_vars:
+    homelab_k8s_environment_vars:
       - name: TZ
         value: "{{ homelab_time_zone }}"
       - name: PUID
         value: "\"{{ homelab_user_id }}\""
       - name: PGID
         value: "\"{{ homelab_group_id }}\""
-    homelab_kubernetes_volume_mounts:
+    homelab_k8s_volume_mounts:
       - name: tautulli-config
         path: /config  
-    homelab_kubernetes_volumes:
+    homelab_k8s_volumes:
       - name: tautulli-config
         claim: container-docker-tautulli
 
 - name: Create the k8s Tautulli service.
   kubernetes.core.k8s:
-    state: "{{ homelab_kubernetes_state }}"
-    template: service.yml.j2
+    state: "{{ homelab_k8s_state }}"
+    template: homelab-k8s-service.yaml.j2
 
 - name: Create a Traefik ingress for Tautulli.
   kubernetes.core.k8s:
-    state: "{{ homelab_kubernetes_state }}"
-    template: traefik_ingress_route.yml.j2
+    state: "{{ homelab_k8s_state }}"
+    template: homelab-k8s-traefik-ingress-route.yaml.j2
+  vars:
+    homelab_k8s_traefik_routes: "{{ homelab_k8s_tautulli_routes }}"
