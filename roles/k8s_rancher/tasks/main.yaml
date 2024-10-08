@@ -9,26 +9,28 @@
 - name: Create a namespace for Rancher.
   kubernetes.core.k8s:
     state: present
-    template: namespace.yml.j2
+    template: homelab-k8s-namespace.yaml.j2
 
 - name: Write the values file for the Helm chart.
   ansible.builtin.template:
-    src: rancher-values.yml.j2
+    src: k8s-rancher-values.yaml.j2
     dest: /tmp/rancher-values.yml
 
 - name: Install the Rancher Helm chart.
   kubernetes.core.helm:
     chart_ref: rancher-stable/rancher
     chart_version: "{{ homelab_versions.k8s_rancher }}"
-    namespace: "{{ homelab_kubernetes_namespace_name }}"
+    namespace: "{{ homelab_k8s_namespace }}"
     name: "rancher"
     update_repo_cache: true
     create_namespace: true
-    release_state: "{{ homelab_kubernetes_state }}"
+    release_state: "{{ homelab_k8s_state }}"
     values_files:
       - /tmp/rancher-values.yml
 
 - name: Create a Traefik ingress for Rancher.
   kubernetes.core.k8s:
     state: "{{ homelab_kubernetes_state }}"
-    template: traefik_ingress_route.yml.j2
+    template: homelab-k8s-traefik-ingress-route.yaml.j2
+  vars:
+    homelab_k8s_traefik_routes: "{{ homelab_k8s_rancher_routes }}"
