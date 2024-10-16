@@ -9,6 +9,7 @@ prometheus:
                 storage: {{ homelab_k8s_monitoring_prometheus_storage | default('128Gi') }}
 
       additionalScrapeConfigs:
+## {{ homelab_k8s_monitoring_prometheus_scrape_configs }}
 {% for config in homelab_k8s_monitoring_prometheus_scrape_configs | default([]) %}
 ## {{ config.name }}
         - job_name: '{{ config.name }}'
@@ -20,7 +21,7 @@ prometheus:
 {% endif %}
           static_configs:
             - targets:
-{% for host in groups[config.group] %}
+{% for host in config.hosts %}
               - {{  hostvars[host].ansible_host }}:{{ config.port }}
 {% endfor %}
 {% endfor %}
