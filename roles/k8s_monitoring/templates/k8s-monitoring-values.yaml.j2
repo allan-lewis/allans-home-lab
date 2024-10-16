@@ -19,8 +19,8 @@ prometheus:
 {% endif %}
           static_configs:
             - targets:
-{% for target in config.targets %}
-              - {{target.host}}:{{ target.port }}
+{% for host in groups[config.group] %}
+              - {{  hostvars[host].ansible_host }}:{{ config.port }}
 {% endfor %}
 {% endfor %}
 

@@ -20,25 +20,25 @@
     src: k8s-monitoring-values.yaml.j2
     dest: /tmp/prometheus.values.yml
 
-- name: Install the monitoring Helm chart.
-  kubernetes.core.helm:
-    chart_ref: prometheus-community/kube-prometheus-stack
-    chart_version: "{{ homelab_versions.k8s_monitoring }}"
-    namespace: "{{ homelab_k8s_namespace }}"
-    name: prometheus
-    update_repo_cache: true
-    create_namespace: true
-    release_state: "{{ homelab_k8s_state }}"
-    values_files:
-      - /tmp/prometheus.values.yml
+# - name: Install the monitoring Helm chart.
+#   kubernetes.core.helm:
+#     chart_ref: prometheus-community/kube-prometheus-stack
+#     chart_version: "{{ homelab_versions.k8s_monitoring }}"
+#     namespace: "{{ homelab_k8s_namespace }}"
+#     name: prometheus
+#     update_repo_cache: true
+#     create_namespace: true
+#     release_state: "{{ homelab_k8s_state }}"
+#     values_files:
+#       - /tmp/prometheus.values.yml
 
-- name: Create Traefik ingresses for monitoring.
-  kubernetes.core.k8s:
-    state: "{{ homelab_k8s_state }}"
-    template: homelab-k8s-traefik-ingress-route.yaml.j2
-  vars:
-    homelab_k8s_service_name:  "{{ item.service_name }}"
-    homelab_k8s_service_port: "{{ item.service_port }}"
-    homelab_k8s_traefik_routes:
-      - host: "{{ item.host }}"
-  with_items: "{{ homelab_k8s_monitoring_ingresses }}"
+# - name: Create Traefik ingresses for monitoring.
+#   kubernetes.core.k8s:
+#     state: "{{ homelab_k8s_state }}"
+#     template: homelab-k8s-traefik-ingress-route.yaml.j2
+#   vars:
+#     homelab_k8s_service_name:  "{{ item.service_name }}"
+#     homelab_k8s_service_port: "{{ item.service_port }}"
+#     homelab_k8s_traefik_routes:
+#       - host: "{{ item.host }}"
+#   with_items: "{{ homelab_k8s_monitoring_ingresses }}"
