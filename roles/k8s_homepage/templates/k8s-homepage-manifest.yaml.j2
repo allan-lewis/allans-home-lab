@@ -34,10 +34,23 @@ data:
     title: "{{ homelab_k8s_homepage_title }}"
     headerStyle: clean
     useEqualHeights: true
-{% if homelab_talos_homepage_theme is defined %}
+{% if homelab_k8s_homepage_service_groups is defined %}
+    layout:
+{% for group in  (homelab_k8s_homepage_service_groups | default([])) %}
+      {{ group.name }}:
+        style: {{ group.style | default('row') }}
+        columns: {{ group.columns | default(4) }}
+{% endfor %}
+{% for group in  (homelab_k8s_homepage_bookmark_groups | default([])) %}
+      {{ group.name }}:
+        style: {{ group.style | default('row') }}
+        columns: {{ group.columns | default(2) }}
+{% endfor %}
+{% endif %}
+{% if homelab_k8s_homepage_theme is defined %}
     theme: "{{homelab_k8s_homepage_theme}}"
 {% endif %}
-{% if homelab_talos_homepage_color is defined %}
+{% if homelab_k8s_homepage_color is defined %}
     color: "{{homelab_k8s_homepage_color}}"
 {% endif %}
   custom.css: ""
@@ -52,25 +65,24 @@ data:
 {% endfor %}
 {% endfor %}
   services.yaml: |
-    - My First Group:
-        - My First Service:
-            href: http://localhost/
-            description: Homepage is awesome
-        - Longhorn:
-            icon: longhorn.png
-            href: https://longhorn.local.allanshomelab.com
-            description: Distributed k8s storage
-            namespace: longhorn-system
-            app: longhorn
-    - My Second Group:
-        - My Second Service:
-            href: http://localhost/
-            description: Homepage is the best
-
-    - My Third Group:
-        - My Third Service:
-            href: http://localhost/
-            description: Homepage is 😎
+{% for group in  (homelab_k8s_homepage_service_groups | default([])) %}
+    - {{ group.name }}:
+{% for service in group.services | default([]) %}
+        - {{ service.name }}:
+            icon: {{ service.icon | default('') }}
+            href: {{ service.href }}
+            description: {{ service.description }}
+            namespace: {{ service.namespace | default('') }}
+            app: {{ service.app | default('') }}
+            server: {{ service.server | default('') }}
+            container: {{ service.container | default('') }}
+{% if service.widget is defined %}
+            widget:
+              type: {{ service.widget.type }}
+              url: {{ service.widget.url }}
+{% endif %}
+{% endfor %}
+{% endfor %}
   widgets.yaml: |
     - greeting:
         text_size: xl
@@ -81,7 +93,12 @@ data:
           dateStyle: full
           timeStyle: short
           hour12: false
-  docker.yaml: ""
+  docker.yaml: |
+{%for docker_node in groups['homelab_docker_nodes'] %}
+    {{ docker_node }}:
+      host: {{ hostvars[docker_node].ansible_host  }}
+      port: {{ homelab_ports.docker_proxy }}
+{% endfor %}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -201,6 +218,10 @@ spec:
             - name: http
               containerPort: 3000
               protocol: TCP
+          env:
+            # Update an environment variable to force the POD to restart with the updated config set
+            - name: CONFIG_RELOAD
+              value: "{{ now().timestamp() | int }}"
           volumeMounts:
             - mountPath: /app/config/custom.js
               name: homepage-config

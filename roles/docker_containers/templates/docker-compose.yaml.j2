@@ -35,7 +35,7 @@ services:
     image: "ghcr.io/tecnativa/docker-socket-proxy:{{ homelab_versions.docker_proxy }}"
     restart: "unless-stopped"
     ports: 
-      - "{{ homelab_ports.homelab_docker_proxy_port }}:2375/tcp"
+      - "{{ homelab_ports.docker_proxy }}:2375/tcp"
     volumes: 
       - /var/run/docker.sock:/var/run/docker.sock:ro 
     environment:
