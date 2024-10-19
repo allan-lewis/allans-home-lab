@@ -15,66 +15,66 @@
     - mount
     - reboot
 
-# - name: Setup nodes that will run Docker containers.
-#   hosts: homelab_docker_nodes
-#   become: yes
-#   gather_facts: true
+- name: Setup nodes that will run Docker containers.
+  hosts: homelab_docker_nodes
+  become: yes
+  gather_facts: true
 
-#   roles:
-#     - docker
-#     - docker_containers
+  roles:
+    - docker
+    - docker_containers
 
-# - name: Schedule automated backup jobs.
-#   hosts: homelab_backup_nodes
-#   become: yes
-#   gather_facts: yes
+- name: Schedule automated backup jobs.
+  hosts: homelab_backup_nodes
+  become: yes
+  gather_facts: yes
 
-#   roles:
-#     - private_key
-#     - known_hosts
-#     - backup
+  roles:
+    - private_key
+    - known_hosts
+    - backup
 
-# - name: Install Node Exporter.
-#   hosts: homelab_node_exporter_nodes
-#   become: yes
-#   gather_facts: yes
+- name: Install Node Exporter.
+  hosts: homelab_node_exporter_nodes
+  become: yes
+  gather_facts: yes
   
-#   roles:
-#     - node_exporter
+  roles:
+    - node_exporter
 
-# - name: Setup hosts to manage the home lab (as root).
-#   hosts: homelab_management_nodes
-#   become: yes
-#   gather_facts: yes
+- name: Setup hosts to manage the home lab (as root).
+  hosts: homelab_management_nodes
+  become: yes
+  gather_facts: yes
 
-#   roles:
-#     - talosctl
-#     - kubernetes
-#     - helm
-#     - private_key
+  roles:
+    - talosctl
+    - kubernetes
+    - helm
+    - private_key
 
-# - name: Setup hosts to manage the home lab (as the control user).
-#   hosts: homelab_management_nodes
-#   become: no
-#   gather_facts: yes
+- name: Setup hosts to manage the home lab (as the control user).
+  hosts: homelab_management_nodes
+  become: no
+  gather_facts: yes
 
-#   roles:
-#     - ansible
-#     - github
-#     - known_hosts
+  roles:
+    - ansible
+    - github
+    - known_hosts
 
-# - name: Setup OpenVPN nodes.
-#   hosts: homelab_openvpn_nodes
-#   become: yes
-#   gather_facts: yes
+- name: Setup OpenVPN nodes.
+  hosts: homelab_openvpn_nodes
+  become: yes
+  gather_facts: yes
 
-#   roles:
-#     - openvpn
+  roles:
+    - openvpn
 
-# - name: Install Tailscale.
-#   hosts: homelab_tailscale_nodes
-#   become: yes
-#   gather_facts: yes
+- name: Install Tailscale.
+  hosts: homelab_tailscale_nodes
+  become: yes
+  gather_facts: yes
   
-#   roles:
-#     - role: artis3n.tailscale
+  roles:
+    - role: artis3n.tailscale
