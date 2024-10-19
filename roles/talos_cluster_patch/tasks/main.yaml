@@ -1,9 +1,21 @@
 ## AHL
 ---
-- name: Write patch files for all nodes.
-  ansible.builtin.template:
-    src: "talos-node-patch.yaml.j2"
-    dest: "{{ talos_patch_directory }}/{{ item }}.yaml"
-  with_items: "{{ groups['talos_nodes'] }}"
+- name: Check for completion file existence from previous install.
+  ansible.builtin.stat:
+    path: "{{ homelab_talos_cluster_completion_file }}"
+  register: cluster_exists
 
-  # talosctl patch machineconfig --nodes 192.168.86.145 --patch @/home/ansible/.talos/patch/capella.yaml --talosconfig ~/.talos/talosconfig
+- name: Display the result of the completion file check.
+  ansible.builtin.debug:
+    var: cluster_exists
+
+- name: Abort setup if there is no previous cluster completion file.
+  ansible.builtin.assert:
+    that: "cluster_exists.stat.exists"
+    fail_msg: "Aborting patch operation. File {{ homelab_talos_cluster_completion_file }} does not exist."
+    success_msg: "Proceeding with cluster patching."
+
+- name: Apply patches to all hosts.
+  ansible.builtin.command: talosctl patch machineconfig --nodes {{ hostvars[item].ansible_host }} --patch @{{ homelab_talos_cluster_patch_dir }}/{{ item }}.yaml --talosconfig {{ homelab_talos_cluster_config_file }} {{ homelab_talos_cluster_dry_run | default('--dry-run') }}
+  with_items: "{{ groups['homelab_talos_control_plane_nodes'] + groups['homelab_talos_worker_nodes'] }}"
+  changed_when: true

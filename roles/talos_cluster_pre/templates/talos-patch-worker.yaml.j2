@@ -9,27 +9,26 @@ machine:
     wipe: {{ hostvars[item].homelab_talos_node_talos_wipe | default(false) }}
 
   kubelet:
+{% if homelab_talos_worker_extra_mounts is defined %}
     extraMounts:
-      - destination: /var/lib/longhorn
+{% for mount in homelab_talos_worker_extra_mounts %}
+      - destination: {{ mount.destination }}
         type: bind
-        source: /var/lib/longhorn
+        source: {{ mount.source }}
         options:
           - bind
           - rshared
           - rw
-{% if homelab_talos_node_longhorn_disk is defined %}
-      - destination: {{ homelab_talos_node_longhorn_storage }}
-        type: bind
-        source: {{ homelab_talos_node_longhorn_storage }}
-        options:
-          - bind
-          - rshared
-          - rw
+{% endfor %}
+{% endif %}
 
-  disks:
-    - device: {{ homelab_talos_node_longhorn_disk }}
+{% if homelab_talos_worker_disks is defined %}
+    disks:
+{% for disk in homelab_talos_worker_disks %}
+    - device: {{ disk.device }}
       partitions:
-        - mountpoint: {{ homelab_talos_node_longhorn_storage }}
+        - mountpoint: {{ disk.mountpoint }}
+{% endfor %}
 {% endif %}
 
   network:
