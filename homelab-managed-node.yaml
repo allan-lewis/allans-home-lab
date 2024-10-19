@@ -11,9 +11,9 @@
     - ssh
     - apt
     - dependencies
-#     - network
-#     - mount
-#     - reboot
+    - network
+    - mount
+    - reboot
 
 # - name: Setup nodes that will run Docker containers.
 #   hosts: homelab_docker_nodes
