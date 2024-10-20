@@ -79,7 +79,7 @@ data:
 {% if service.widget is defined %}
             widget:
               type: {{ service.widget.type }}
-              url: {{ service.widget.url }}
+              url: {{ service.widget.url | default('') }}
               username: {{ service.widget.username | default('') }}
               password: {{ service.widget.password | default('') }}
               key: {{ service.widget.password | default('') }}
