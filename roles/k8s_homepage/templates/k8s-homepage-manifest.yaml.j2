@@ -80,6 +80,8 @@ data:
             widget:
               type: {{ service.widget.type }}
               url: {{ service.widget.url }}
+              username: {{ service.widget.username | default('') }}
+              password: {{ service.widget.password | default('') }}
 {% endif %}
 {% endfor %}
 {% endfor %}
