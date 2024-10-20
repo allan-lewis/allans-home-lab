@@ -82,9 +82,9 @@ data:
               url: {{ service.widget.url | default('') }}
               username: {{ service.widget.username | default('') }}
               password: {{ service.widget.password | default('') }}
-              key: {{ service.widget.password | default('') }}
-              accountid: {{ service.widget.password | default('') }}
-              tunnelid: {{ service.widget.password | default('') }}
+              key: {{ service.widget.key | default('') }}
+              accountid: {{ service.widget.accountid | default('') }}
+              tunnelid: {{ service.widget.tunnelid | default('') }}
 {% if service.widget.fields is defined %}
               fields: {{ service.widget.fields }}
 {% endif %}
