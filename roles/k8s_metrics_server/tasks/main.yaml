@@ -1,0 +1,6 @@
+## AHL
+---
+- name: Install Metrics Server manifest.
+  kubernetes.core.k8s:
+    state:  "{{ homelab_k8s_state }}"
+    template: metrics-server-manifest.yaml.j2

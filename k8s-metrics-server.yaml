@@ -1,0 +1,11 @@
+## AHL
+---
+- name: Install Metrics Server.
+  hosts: homelab_k8s_metrics_server_nodes
+  become: no
+  gather_facts: no
+  environment:
+    K8S_AUTH_KUBECONFIG: "{{ homelab_k8s_kubeconfig_path }}"
+  
+  roles:
+    - role: k8s_metrics_server
