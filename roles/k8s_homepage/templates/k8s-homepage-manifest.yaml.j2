@@ -230,6 +230,8 @@ spec:
             # Update an environment variable to force the POD to restart with the updated config set
             - name: CONFIG_RELOAD
               value: "{{ now().timestamp() | int }}"
+            - name: LOG_LEVEL
+              value: debug
           volumeMounts:
             - mountPath: /app/config/custom.js
               name: homepage-config
