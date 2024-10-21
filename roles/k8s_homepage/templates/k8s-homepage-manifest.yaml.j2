@@ -74,9 +74,11 @@ data:
             description: {{ service.description }}
             namespace: {{ service.namespace | default('') }}
             app: {{ service.app | default('') }}
-            podSelector: {{ service.podSelector | default('') }}
             server: {{ service.server | default('') }}
             container: {{ service.container | default('') }}
+{% if service.podSelector is defined %}
+            podSelector: {{ service.podSelector | default('') }}
+{% endif %}
 {% if service.widget is defined %}
             widget:
               type: {{ service.widget.type }}
