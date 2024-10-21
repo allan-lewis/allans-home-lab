@@ -104,18 +104,6 @@ data:
           dateStyle: full
           timeStyle: short
           hour12: false
-    - Kubernetes:
-        cluster:
-          show: true
-          cpu: true
-          memory: true
-          showLabel: true
-          label: "cluster"
-        nodes:
-          show: true
-          cpu: true
-          memory: true
-          showLabel: true
   docker.yaml: |
 {%for docker_node in groups['homelab_docker_nodes'] %}
     {{ docker_node }}:
