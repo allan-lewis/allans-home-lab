@@ -18,7 +18,9 @@
     update_cache: true
 
 - name: Install required Python modules.
-  ansible.builtin.pip:
-    name: 
-      - kubernetes
-      - jmespath
+  ansible.builtin.apt:
+    pkg:
+      - python3-kubernetes
+      - python3-jmespath
+    state: latest
+    update_cache: true
