@@ -25,9 +25,9 @@ machine:
 {% if homelab_talos_worker_disks is defined %}
     disks:
 {% for disk in homelab_talos_worker_disks %}
-    - device: {{ disk.device }}
-      partitions:
-        - mountpoint: {{ disk.mountpoint }}
+      - device: {{ disk.device }}
+        partitions:
+          - mountpoint: {{ disk.mountpoint }}
 {% endfor %}
 {% endif %}
 
