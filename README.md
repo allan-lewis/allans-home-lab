@@ -13,7 +13,7 @@ ansible-playbook talos-cluster-init.yaml
 Discard any existing cluster and create a new one
 
 ~~~
-ansible-playbook talos-cluster-init.yaml 
+ansible-playbook talos-cluster-init.yaml -e "homelab_talos_cluster_replace=yes"
 ~~~
 
 ## Regular maintenance
