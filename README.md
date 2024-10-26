@@ -4,7 +4,17 @@
 
 ### Create a cluster
 
+Create a new cluster from scratch
 
+~~~
+ansible-playbook talos-cluster-init.yaml
+~~~
+
+Discard any existing cluster and create a new one
+
+~~~
+ansible-playbook talos-cluster-init.yaml 
+~~~
 
 ## Regular maintenance
 
