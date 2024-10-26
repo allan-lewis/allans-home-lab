@@ -16,6 +16,8 @@ Discard any existing cluster and create a new one
 ansible-playbook talos-cluster-init.yaml -e "homelab_talos_cluster_replace=yes"
 ~~~
 
+### Patch an existing cluster
+
 Create patch files and apply in "dry-run" mode
 
 ~~~
