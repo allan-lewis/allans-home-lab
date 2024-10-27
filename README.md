@@ -30,6 +30,27 @@ Create and apply patch files
 ansible-playbook talos-cluster-patch.yaml -e "homelab_talos_cluster_dry_run=''"
 ~~~
 
+### Install k8s services
+
+~~~
+ansible-playbook k8s-metallb.yaml
+~~~
+~~~
+ansible-playbook k8s-metrics-server.yaml
+~~~
+~~~
+ansible-playbook k8s-cert-manager.yaml
+~~~
+~~~
+ansible-playbook k8s-cloudflare.yaml
+~~~
+~~~
+ansible-playbook k8s-twingate.yaml
+~~~
+~~~
+ansible-playbook k8s-traefik.yaml
+~~~
+
 ## Regular maintenance
 
 Ensure that control nodes are preparted to run playbooks.
