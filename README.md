@@ -50,6 +50,51 @@ ansible-playbook k8s-twingate.yaml
 ~~~
 ansible-playbook k8s-traefik.yaml
 ~~~
+~~~
+ansible-playbook k8s-longhorn.yaml
+~~~
+~~~
+ansible-playbook k8s-homepage.yaml
+~~~
+~~~
+ansible-playbook k8s-pihole.yaml
+~~~
+~~~
+ansible-playbook k8s-monitoring.yaml
+~~~
+~~~
+ansible-playbook k8s-nginx.yaml
+~~~
+~~~
+ansible-playbook k8s-no-geeks-brewing.yaml
+~~~
+~~~
+ansible-playbook k8s-authentik.yaml
+~~~
+~~~
+ansible-playbook k8s-vaultwarden.yaml
+~~~
+~~~
+ansible-playbook k8s-wikijs.yaml
+~~~
+~~~
+ansible-playbook k8s-mariadb.yaml
+~~~
+~~~
+ansible-playbook k8s-guacamole.yaml
+~~~
+~~~
+ansible-playbook k8s-portainer.yaml
+~~~
+~~~
+ansible-playbook k8s-tautulli.yaml
+~~~
+~~~
+ansible-playbook k8s-nextcloud.yaml
+~~~
+~~~
+ansible-playbook k8s-rancher.yaml
+~~~
 
 ## Regular maintenance
 
