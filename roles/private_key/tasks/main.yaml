@@ -13,8 +13,8 @@
     src: "{{ homelab_private_key_src }}"
     dest: "{{ homelab_private_key_dest }}"
     remote_src: true
-    owner: "{{ homelab_control_user }}"
-    group: "{{ homelab_control_user }}"
+    owner: "{{ homelab_private_key_owner }}"
+    group: "{{ homelab_private_key_group | default(homelab_private_key_owner) }}"
     mode: '0600'
 
 - name: Unmount the share containing the private key.

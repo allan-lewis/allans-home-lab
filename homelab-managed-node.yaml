@@ -28,6 +28,10 @@
   hosts: homelab_backup_nodes
   become: yes
   gather_facts: yes
+  vars:
+    homelab_known_host_group: "{{ homelab_backup_known_host_group }}"
+    homelab_private_key_dest: "{{ homelab_backup_private_key_dest }}"
+    homelab_private_key_owner: "{{ homelab_backup_private_key_owner }}"
 
   roles:
     - private_key
@@ -46,6 +50,9 @@
   hosts: homelab_management_nodes
   become: yes
   gather_facts: yes
+  vars:
+    homelab_private_key_dest: "{{ homelab_management_private_key_dest }}"
+    homelab_private_key_owner: "{{ homelab_management_private_key_owner }}"
 
   roles:
     - talosctl
@@ -57,6 +64,8 @@
   hosts: homelab_management_nodes
   become: no
   gather_facts: yes
+  vars:
+    homelab_known_host_group: "{{ homelab_management_known_host_group }}"
 
   roles:
     - ansible
