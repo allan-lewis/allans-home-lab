@@ -91,6 +91,9 @@ data:
 {% if service.widget.fields is defined %}
               fields: {{ service.widget.fields }}
 {% endif %}
+{% if service.widget.version is defined %}
+              version: {{ service.widget.version }}
+{% endif %}
 {% endif %}
 {% endfor %}
 {% endfor %}
