@@ -7,7 +7,7 @@
 
 - name: Download the Docker Compose configuration.
   ansible.builtin.get_url:
-    url: "https://github.com/immich-app/immich/releases/{{ homelab_versions.docker_immich }}/download/docker-compose.yml"
+    url: "https://github.com/immich-app/immich/releases/download/{{ homelab_versions.docker_immich }}/docker-compose.yml"
     dest: "{{ homelab_docker_immich_tmp }}/docker-compose.yml"
 
 - name: Write the Docker Compose environment file.
