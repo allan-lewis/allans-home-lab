@@ -27,6 +27,18 @@
         value: "{{ homelab_k8s_guacamole_mysql_user }}"
       - name: MYSQL_PASSWORD
         value: "{{ homelab_k8s_guacamole_mysql_password }}"
+      - name: OPENID_AUTHORIZATION_ENDPOINT
+        value: "{{ homelab_k8s_guacamole_openid_authorization_endpoint }}"
+      - name: OPENID_CLIENT_ID
+        value: "{{ homelab_k8s_guacamole_openid_client_id }}"
+      - name: OPENID_ISSUER
+        value: "{{ homelab_k8s_guacamole_openid_issuer }}"
+      - name: OPENID_JWKS_ENDPOINT
+        value: "{{ homelab_k8s_guacamole_openid_jwks_endpoint }}"
+      - name: OPENID_REDIRECT_URI
+        value: "{{ homelab_k8s_guacamole_openid_redirect_uri }}"
+      - name: OPENID_USERNAME_CLAIM_TYPE
+        value: preferred_username
 
 - name: Create the k8s Guacamole service.
   kubernetes.core.k8s:
