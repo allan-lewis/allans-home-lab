@@ -4,6 +4,16 @@ storage:
 
 metrics: true
 
+{% if homelab_docker_gatus_security is defined %}
+security:
+  oidc:
+    issuer-url: "{{ homelab_docker_gatus_security.issuer_url }}"
+    client-id: "{{ homelab_docker_gatus_security.client_id }}"
+    client-secret: "{{ homelab_docker_gatus_security.client_secret }}"
+    redirect-url: "{{ homelab_docker_gatus_security.redirect_url }}"
+    scopes: [openid]
+
+{% endif %}
 alerting:
   telegram:
     token: "{{ homelab_telegram_bot_token }}"
