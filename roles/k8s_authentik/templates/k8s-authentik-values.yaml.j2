@@ -13,7 +13,9 @@ server:
         ingressClassName: traefik
         enabled: true
         hosts:
-            - {{ homelab_k8s_authentik_hostname }}
+{% for host in homelab_k8s_authentik_hostnames %}
+            - {{ host }}
+{% endfor %}
 
 postgresql:
     enabled: true
