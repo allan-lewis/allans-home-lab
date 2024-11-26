@@ -1,0 +1,6 @@
+homelab_docker_authentik_volume_postgres_data: "{{ homelab_docker_volume_root }}/postgres/data"
+homelab_docker_authentik_volume_redis_data: "{{ homelab_docker_volume_root }}/redis/data"
+homelab_docker_authentik_volume_media: "{{ homelab_docker_volume_root }}/media"
+homelab_docker_authentik_volume_templates: "{{ homelab_docker_volume_root }}/templates"
+homelab_docker_authentik_volume_certs: "{{ homelab_docker_volume_root }}/certs"
+homelab_docker_authentik_tmp: "/tmp/docker-compose-authentik"
