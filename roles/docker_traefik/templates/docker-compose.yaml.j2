@@ -28,19 +28,22 @@ services:
     volumes:
       - "{{ homelab_docker_traefik_letsencrypt_volume }}:/letsencrypt"
       - "{{ homelab_docker_traefik_volume }}:/traefik"
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+
+  authentik-proxy:
+      image: ghcr.io/goauthentik/proxy
+      ports:
+          - 9000:9000
+          - 9443:9443
+      environment:
+          AUTHENTIK_HOST: {{ homelab_docker_authentik_host }}
+          AUTHENTIK_INSECURE: "true"
+          AUTHENTIK_TOKEN: {{ homelab_docker_authentik_token }}
+      restart: unless-stopped
 
   whoami:
     image: "traefik/whoami:latest"
     container_name: "whoami"
     restart: unless-stopped
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.whoami-http.rule=Host(`{{ homelab_docker_traefik_whoami_host }}`)"
-      - "traefik.http.routers.whoami-http.entrypoints=web"
-      - "traefik.http.routers.whoami-http.middlewares=redirect-to-https"
-      - "traefik.http.routers.whoami-https.rule=Host(`{{ homelab_docker_traefik_whoami_host }}`)"
-      - "traefik.http.routers.whoami-https.entrypoints=websecure"
-      - "traefik.http.routers.whoami-https.tls.certresolver=myresolver"
-      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
-      - "traefik.http.middlewares.redirect-to-https.redirectscheme.permanent=true"
+    ports:
+        - {{ homelab_ports.docker_whoami | default(8180) }}:80
