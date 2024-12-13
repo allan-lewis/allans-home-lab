@@ -31,7 +31,7 @@ services:
     volumes:
       - {{ homelab_docker_authentik_volume_redis_data }}:/data
   server:
-    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${homelab_versions.docker_authentik}
+    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:{{ homelab_versions.docker_authentik }}
     restart: unless-stopped
     command: server
     environment:
