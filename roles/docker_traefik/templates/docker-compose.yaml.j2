@@ -31,7 +31,7 @@ services:
       - "/var/run/docker.sock:/var/run/docker.sock"
 
   authentik-proxy:
-      image: ghcr.io/goauthentik/proxy
+      image: ghcr.io/goauthentik/proxy:{{ homelab_versions.docker_authentik }}
       ports:
           - 9000:9000
           - 9443:9443
