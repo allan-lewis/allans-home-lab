@@ -17,5 +17,5 @@
 
 - name: Apply patches to all hosts.
   ansible.builtin.command: talosctl patch machineconfig --nodes {{ hostvars[item].ansible_host }} --patch @{{ homelab_talos_cluster_patch_dir }}/{{ item }}.yaml --talosconfig {{ homelab_talos_cluster_config_file }} {{ homelab_talos_cluster_dry_run | default('--dry-run') }}
-  with_items: "{{ groups['homelab_talos_control_plane_nodes'] + groups['homelab_talos_worker_nodes'] }}"
+  with_items: "{{ groups['homelab_talos_cluster_nodes'] }}"
   changed_when: true

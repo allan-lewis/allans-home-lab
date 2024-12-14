@@ -48,9 +48,9 @@
   ansible.builtin.command: talosctl gen config {{ homelab_talos_cluster_name | default('talos-cluster') }} https://{{ hostvars[homelab_talos_cluster_first_node].ansible_host }}:6443 --output-dir {{ homelab_talos_cluster_config_dir }} --install-image {{ homelab_talos_cluster_image }}
   changed_when: true
 
-- name: Apply machine configs (including patches) to control nodes.
+- name: Apply machine configs (including patches) to nodes.
   ansible.builtin.command: talosctl apply-config --insecure --nodes {{ hostvars[item].homelab_talos_node_ephemeral_host }} --file {{ homelab_talos_cluster_config_dir }}/controlplane.yaml --config-patch @{{ homelab_talos_cluster_patch_dir }}/{{ item }}.yaml
-  with_items: "{{ groups['homelab_talos_control_plane_nodes'] }}"
+  with_items: "{{ groups['homelab_talos_cluster_nodes'] }}"
   changed_when: true
 
 - name: Configure the first Talos endpoint.
@@ -69,11 +69,6 @@
   delay: 30
   until: bootstrap_result.rc == 0
   changed_when: bootstrap_result.rc == 0
-
-- name: Apply machine configs (including patches) to worker nodes.
-  ansible.builtin.command: talosctl apply-config --insecure --nodes {{ hostvars[item].homelab_talos_node_ephemeral_host }} --file {{ homelab_talos_cluster_config_dir }}/worker.yaml --config-patch @{{ homelab_talos_cluster_patch_dir }}/{{ item }}.yaml
-  with_items: "{{ groups['homelab_talos_worker_nodes'] }}"
-  changed_when: true
 
 - name: Get kube config.
   ansible.builtin.command: talosctl kubeconfig {{ homelab_k8s_kubeconfig_path }} --talosconfig {{ homelab_talos_cluster_config_file }}

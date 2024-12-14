@@ -5,14 +5,8 @@
     path: "{{ homelab_talos_cluster_patch_dir }}"
     state: directory
 
-- name: Write patch files for control plane nodes.
+- name: Write patch files for all nodes.
   ansible.builtin.template:
-    src: "talos-patch-control-plane.yaml.j2"
+    src: "talos-patch-all-in-one.yaml.j2"
     dest: "{{ homelab_talos_cluster_patch_dir }}/{{ item }}.yaml"
-  with_items: "{{ groups['homelab_talos_control_plane_nodes'] | default([]) }}"
-
-- name: Write patch files for worker nodes.
-  ansible.builtin.template:
-    src: "talos-patch-worker.yaml.j2"
-    dest: "{{ homelab_talos_cluster_patch_dir }}/{{ item }}.yaml"
-  with_items: "{{ groups['homelab_talos_worker_nodes'] | default([]) }}"
+  with_items: "{{ groups['homelab_talos_cluster_nodes'] }}"
