@@ -14,7 +14,7 @@
     homelab_k8s_container_name: "{{ homelab_k8s_no_geeks_brewing_api_name }}"
     homelab_k8s_container_image: "allanelewis/ngb-graphql:{{ homelab_versions.k8s_no_geeks_brewing_api }}"
     homelab_k8s_environment_vars:
-      - name: NGB_BREWFATHER_AUTH_TOKEN
+      - name: NOGEEKSBREWING_BREWFATHER_AUTHTOKEN
         value: "{{ homelab_k8s_no_geeks_brewing_api_auth_token }}"
 
 - name: Create a k8s service for the NGB API.
