@@ -39,6 +39,8 @@ machine:
         addresses:
           - {{ hostvars[item].ansible_host }}/24
         dhcp: false
+        vip:
+          ip: {{ homelab_talos_cluster_vip }}
         routes:
           - network: 0.0.0.0/0
             gateway: {{ homelab_talos_cluster_network_gateway }}
