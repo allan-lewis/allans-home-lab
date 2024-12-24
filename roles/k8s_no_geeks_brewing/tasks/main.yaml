@@ -41,7 +41,16 @@
   vars:
     homelab_k8s_service_name: "{{ homelab_k8s_no_geeks_brewing_site_name }}"
     homelab_k8s_container_name: "{{ homelab_k8s_no_geeks_brewing_site_name }}"
-    homelab_k8s_container_image: "allanelewis/no-geeks-brewing-gui:{{ homelab_versions.k8s_no_geeks_brewing_site }}"
+    homelab_k8s_container_image: "allanelewis/ngb-nextjs:{{ homelab_versions.k8s_no_geeks_brewing_site }}"
+    homelab_k8s_environment_vars:
+      - name: AUTH_SECRET
+        value: "{{ homelab_k8s_no_geeks_brewing_auth_secret }}"
+      - name: AUTH_AUTHENTIK_ID
+        value: "{{ homelab_k8s_no_geeks_brewing_auth_authentik_id }}"
+      - name: AUTH_AUTHENTIK_SECRET
+        value: "{{ homelab_k8s_no_geeks_brewing_auth_authentik_secret }}"
+      - name: AUTH_AUTHENTIK_ISSUER
+        value: "{{ homelab_k8s_no_geeks_brewing_auth_authentik_issuer }}"
 
 - name: Create a k8s service for the NGB web site.
   kubernetes.core.k8s:
