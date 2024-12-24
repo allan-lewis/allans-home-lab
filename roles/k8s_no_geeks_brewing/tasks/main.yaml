@@ -52,7 +52,7 @@
       - name: AUTH_AUTHENTIK_ISSUER
         value: "{{ homelab_k8s_no_geeks_brewing_auth_authentik_issuer }}"
       - name: AUTH_TRUST_HOST
-        value: "true"
+        value: true
 
 - name: Create a k8s service for the NGB web site.
   kubernetes.core.k8s:
