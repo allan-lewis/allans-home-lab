@@ -55,6 +55,8 @@
         value: "'true'"
       - name: AUTH_URL
         value: "{{ homelab_k8s_no_geeks_brewing_auth_url }}"
+      - name: GRAPHQL_URL
+        value: "{{ homelab_k8s_no_geeks_brewing_graphql_url }}"
 
 - name: Create a k8s service for the NGB web site.
   kubernetes.core.k8s:
