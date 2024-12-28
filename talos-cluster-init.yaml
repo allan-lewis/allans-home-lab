@@ -8,3 +8,4 @@
   roles:
     - role: talos_cluster_pre
     - role: talos_cluster_init
+    - role: talos_cluster_post

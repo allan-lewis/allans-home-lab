@@ -15,6 +15,11 @@
     fail_msg: "Aborting patch operation. File {{ homelab_talos_cluster_completion_file }} does not exist."
     success_msg: "Proceeding with cluster patching."
 
+- name: Print the command that will be run to patch hosts.
+  ansible.builtin.debug:
+    msg: talosctl patch machineconfig --nodes {{ hostvars[item].ansible_host }} --patch @{{ homelab_talos_cluster_patch_dir }}/{{ item }}.yaml --talosconfig {{ homelab_talos_cluster_config_file }} {{ homelab_talos_cluster_dry_run | default('--dry-run') }}
+  with_items: "{{ groups['homelab_talos_cluster_nodes'] }}"
+
 - name: Apply patches to all hosts.
   ansible.builtin.command: talosctl patch machineconfig --nodes {{ hostvars[item].ansible_host }} --patch @{{ homelab_talos_cluster_patch_dir }}/{{ item }}.yaml --talosconfig {{ homelab_talos_cluster_config_file }} {{ homelab_talos_cluster_dry_run | default('--dry-run') }}
   with_items: "{{ groups['homelab_talos_cluster_nodes'] }}"

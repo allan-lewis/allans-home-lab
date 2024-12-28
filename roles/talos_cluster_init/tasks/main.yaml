@@ -70,10 +70,6 @@
   until: bootstrap_result.rc == 0
   changed_when: bootstrap_result.rc == 0
 
-- name: Get kube config.
-  ansible.builtin.command: talosctl kubeconfig {{ homelab_k8s_kubeconfig_path }} --talosconfig {{ homelab_talos_cluster_config_file }}
-  changed_when: true
-
 - name: Create the completion file.
   ansible.builtin.file:
     path: "{{ homelab_talos_cluster_completion_file }}"
