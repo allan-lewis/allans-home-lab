@@ -30,16 +30,16 @@ services:
       - "{{ homelab_docker_traefik_volume }}:/traefik"
       - "/var/run/docker.sock:/var/run/docker.sock"
 
-  authentik-proxy:
-      image: ghcr.io/goauthentik/proxy:{{ homelab_versions.docker_authentik }}
-      ports:
-          - 9000:9000
-          - 9443:9443
-      environment:
-          AUTHENTIK_HOST: {{ homelab_docker_authentik_host }}
-          AUTHENTIK_INSECURE: "true"
-          AUTHENTIK_TOKEN: {{ homelab_docker_authentik_token }}
-      restart: unless-stopped
+  # authentik-proxy:
+  #     image: ghcr.io/goauthentik/proxy:{{ homelab_versions.docker_authentik }}
+  #     ports:
+  #         - 9000:9000
+  #         - 9443:9443
+  #     environment:
+  #         AUTHENTIK_HOST: {{ homelab_docker_authentik_host }}
+  #         AUTHENTIK_INSECURE: "true"
+  #         AUTHENTIK_TOKEN: {{ homelab_docker_authentik_token }}
+  #     restart: unless-stopped
 
   whoami:
     image: "traefik/whoami:latest"
