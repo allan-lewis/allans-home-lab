@@ -19,3 +19,5 @@
         homelab_k8s_environment_vars:
           - name: NOGEEKSBREWING_BREWFATHER_AUTHTOKEN
             value: "{{ homelab_k8s_no_geeks_brewing_api_auth_token }}"
+        homelab_k8s_traefik_routes:
+          - host: "{{ homelab_k8s_no_geeks_brewing_api_host }}"
