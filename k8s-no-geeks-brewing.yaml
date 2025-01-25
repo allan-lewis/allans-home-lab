@@ -1,11 +1,21 @@
 ## AHL
 ---
 - name: Install No Geeks Brewing services.
-  hosts: homelab_k8s_no_geeks_brewing_nodes
+  hosts: homelab_talos_management_nodes[0]
   become: no
   gather_facts: no
   environment:
     K8S_AUTH_KUBECONFIG: "{{ homelab_k8s_kubeconfig_path }}"
     
   roles:
-    - role: k8s_no_geeks_brewing
+    # NO GEEKS BREWING API
+    - role: k8s_generic_service
+      vars:
+        homelab_k8s_namespace: "{{ homelab_k8s_no_geeks_brewing_namespace | default('no-geeks-brewing') }}"
+        homelab_k8s_service_name: "{{ homelab_k8s_no_geeks_brewing_api_service_name | default('no-geeks-brewing-api-server') }}"
+        homelab_k8s_service_port: "{{ homelab_k8s_no_geeks_brewing_api_service_port | default(8080) }}"
+        homelab_k8s_container_name: "{{ homelab_k8s_no_geeks_brewing_api_container_name | default('no-geeks-brewing-api') }}"
+        homelab_k8s_container_image: "{{ homelab_k8s_no_geeks_brewing_api_container_image | default('allanelewis/ngb-graphql:' + homelab_versions.k8s_no_geeks_brewing_api) }}"
+        homelab_k8s_environment_vars:
+          - name: NOGEEKSBREWING_BREWFATHER_AUTHTOKEN
+            value: "{{ homelab_k8s_no_geeks_brewing_api_auth_token }}"
