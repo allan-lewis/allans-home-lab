@@ -29,3 +29,5 @@
         homelab_k8s_volumes:
           - name: tautulli-config
             claim: container-docker-tautulli
+        homelab_k8s_traefik_routes:
+          - host: "{{ homelab_k8s_tautulli_host }}"
