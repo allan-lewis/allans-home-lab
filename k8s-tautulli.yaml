@@ -1,7 +1,7 @@
 ## AHL
 ---
 - name: Install Tautulli.
-  hosts: homelab_k8s_tautulli_nodes
+  hosts: homelab_talos_management_nodes[0]
   become: no
   gather_facts: no
   environment:
@@ -9,4 +9,23 @@
 
   roles:
     - role: getent
-    - role: k8s_tautulli
+    - role: k8s_generic_service
+      vars:
+        homelab_k8s_namespace: "{{ homelab_k8s_tautulli_namespace | default('tautulli') }}"
+        homelab_k8s_service_name: "{{ homelab_k8s_tautulli_service_name | default('tautulli') }}"
+        homelab_k8s_container_name: "{{ homelab_k8s_tautulli_container_name | default('tautulli') }}"
+        homelab_k8s_container_image: "{{ homelab_k8s_it_tools_container_image | default('lscr.io/linuxserver/tautulli:' + homelab_versions.k8s_tautulli) }}"
+        homelab_k8s_service_port: "{{ homelab_k8s_it_tools_service_name | default(8181) }}"
+        homelab_k8s_environment_vars:
+          - name: TZ
+            value: "{{ homelab_time_zone }}"
+          - name: PUID
+            value: "\"{{ homelab_user_id }}\""
+          - name: PGID
+            value: "\"{{ homelab_group_id }}\""
+        homelab_k8s_volume_mounts:
+          - name: tautulli-config
+            path: /config  
+        homelab_k8s_volumes:
+          - name: tautulli-config
+            claim: container-docker-tautulli

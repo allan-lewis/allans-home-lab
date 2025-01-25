@@ -1,0 +1,21 @@
+## AHL
+---
+- name: Create the k8s namespace.
+  kubernetes.core.k8s:
+    state: present
+    template: homelab-k8s-namespace.yaml.j2
+
+- name: Create the k8s deployment.
+  kubernetes.core.k8s:
+    state: "{{ homelab_k8s_state }}"
+    template: homelab-k8s-deployment.yaml.j2
+
+- name: Create the k8s k8s service.
+  kubernetes.core.k8s:
+    state: "{{ homelab_k8s_state }}"
+    template: homelab-k8s-service.yaml.j2
+
+- name: Create the Traefik ingress(es).
+  kubernetes.core.k8s:
+    state: "{{ homelab_k8s_state }}"
+    template: homelab-k8s-traefik-ingress-route.yaml.j2
