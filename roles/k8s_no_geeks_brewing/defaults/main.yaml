@@ -1,7 +1,0 @@
-## AHL
----
-homelab_k8s_namespace: no-geeks-brewing
-homelab_k8s_no_geeks_brewing_api_name: ngb-api
-homelab_k8s_no_geeks_brewing_api_port: 8080
-homelab_k8s_no_geeks_brewing_site_name: ngb-site
-homelab_k8s_no_geeks_brewing_site_port: 3000

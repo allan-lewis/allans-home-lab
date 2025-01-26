@@ -1,8 +1,0 @@
-## AHL
----
-homelab_k8s_container_name: nginx
-homelab_k8s_container_image: "nginx:{{ homelab_versions.k8s_nginx }}"
-homelab_k8s_namespace: nginx
-homelab_k8s_service_name: nginx
-homelab_k8s_service_port: 80
-homelab_k8s_service_replicas: 2
