@@ -10,7 +10,7 @@
     state: "{{ homelab_k8s_state }}"
     template: homelab-k8s-deployment.yaml.j2
 
-- name: Create the k8s k8s service.
+- name: Create the k8s service.
   kubernetes.core.k8s:
     state: "{{ homelab_k8s_state }}"
     template: "{{ homelab_k8s_service_template | default('homelab-k8s-service-cluster-ip.yaml.j2') }}"
@@ -19,4 +19,4 @@
   kubernetes.core.k8s:
     state: "{{ homelab_k8s_state }}"
     template: homelab-k8s-traefik-ingress-route.yaml.j2
-  when: homelab_k8s_service_ingress is defined and homelab_k8s_service_ingress | bool
+  when: homelab_k8s_traefik_routes is defined
