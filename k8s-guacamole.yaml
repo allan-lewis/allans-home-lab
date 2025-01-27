@@ -8,6 +8,7 @@
     K8S_AUTH_KUBECONFIG: "{{ homelab_k8s_kubeconfig_path }}"
   vars:
     homelab_k8s_namespace: "{{ homelab_k8s_guacamole_namespace | default('guacamole') }}"
+    homelab_k8s_guacamole_guacd_port: "{{ homelab_k8s_guacd_service_port | default(35101) }}"
 
   roles:
     # GUACAMOLE
@@ -24,7 +25,7 @@
           - name: GUACD_HOSTNAME
             value: "{{ homelab_k8s_guacamole_guacd_host }}"
           - name: GUACD_PORT
-            value: "\"{{ homelab_k8s_guacd_service_port | default(35101) }}\""
+            value: "\"{{ homelab_k8s_guacamole_guacd_port }}\""
           - name: MYSQL_HOSTNAME
             value: "{{ homelab_k8s_guacamole_mysql_host }}"
           - name: MYSQL_DATABASE
@@ -50,7 +51,7 @@
       vars:
         homelab_k8s_service_load_balancer_ip: "{{ homelab_k8s_guacd_load_balancer_ip }}"
         homelab_k8s_service_name: "{{ homelab_k8s_guacd_service_name | default('guacd') }}"
-        homelab_k8s_service_port: "{{ homelab_k8s_guacd_service_port | default(35101) }}"
+        homelab_k8s_service_port: "{{ homelab_k8s_guacamole_guacd_port }}"
         homelab_k8s_service_target_port: "{{ homelab_k8s_guacd_service_target_port | default(4822) }}"
         homelab_k8s_service_template: "homelab-k8s-service-load-balancer.yaml.j2"
         homelab_k8s_container_name: "{{ homelab_k8s_guacd_container_name | default('guacd') }}"
