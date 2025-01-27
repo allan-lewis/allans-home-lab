@@ -1,7 +1,7 @@
 ## AHL
 ---
 - name: Install No Geeks Brewing services.
-  hosts: homelab_talos_management_nodes[0]
+  hosts: homelab_k8s_no_geeks_brewing_nodes
   become: no
   gather_facts: no
   environment:
