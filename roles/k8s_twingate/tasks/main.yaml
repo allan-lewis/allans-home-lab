@@ -5,6 +5,7 @@
   vars:
     homelab_k8s_twingate_access_token: "{{ twingate_item.access_token }}"
     homelab_k8s_twingate_refresh_token: "{{ twingate_item.refresh_token }}"
+    homelab_k8s_helm_name: "{{ twingate_item.name }}"
     homelab_k8s_helm_temp_dir: "{{ homelab_k8s_twingate_helm_temp_dir | default('/tmp') }}"
     homelab_k8s_helm_value_file: "{{ homelab_k8s_helm_temp_dir }}/{{ twingate_item.name }}-values.yaml"
     homelab_k8s_helm_value_files:
