@@ -1,0 +1,47 @@
+## AHL
+---
+- name: Setup the Helm respository.
+  kubernetes.core.helm_repository:
+    name: "{{ homelab_k8s_helm_repo_name }}"
+    repo_url: "{{ homelab_k8s_helm_repo_url }}"
+    repo_state: "{{ homelab_k8s_state }}"
+
+- name: Setup the k8s namespace.
+  kubernetes.core.k8s:
+    state: present
+    template: homelab-k8s-namespace.yaml.j2
+
+- name: Write value file(s) needed for the Helm chart.
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  when: homelab_k8s_helm_value_files is defined
+  with_items: "{{ homelab_k8s_helm_value_files }}"
+
+- name: Produce list of value files destination(s).
+  set_fact:
+    homelab_k8s_helm_value_file_destinations: "{{ homelab_k8s_helm_value_file_destinations | default([]) | union([item.dest]) }}"
+  loop: "{{ homelab_k8s_helm_value_files }}"
+  when: homelab_k8s_helm_value_files is defined
+
+- name: Display list of value files destination(s).
+  debug:
+    var: homelab_k8s_helm_value_file_destinations
+  when: homelab_k8s_helm_value_files is defined
+
+- name: Setup the Helm chart.
+  kubernetes.core.helm:
+    chart_ref: "{{ homelab_k8s_helm_chart_ref }}"
+    chart_version:  "{{ homelab_k8s_helm_chart_version }}"
+    namespace: "{{ homelab_k8s_namespace }}"
+    name: "{{ homelab_k8s_helm_name }}"
+    update_repo_cache: true
+    create_namespace: true
+    release_state: "{{ homelab_k8s_state }}"
+    values_files: "{{ homelab_k8s_helm_value_file_destinations | default([]) }}"
+
+- name: Create the Traefik ingress(es).
+  kubernetes.core.k8s:
+    state: "{{ homelab_k8s_state }}"
+    template: homelab-k8s-traefik-ingress-route.yaml.j2
+  when: homelab_k8s_traefik_routes is defined
