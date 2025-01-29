@@ -18,9 +18,13 @@
   when: homelab_k8s_helm_value_files is defined
   with_items: "{{ homelab_k8s_helm_value_files }}"
 
+- name: Reset loop fact.
+  set_fact:
+    homelab_k8s_helm_value_file_destinations: []
+
 - name: Produce list of value files destination(s).
   set_fact:
-    homelab_k8s_helm_value_file_destinations: "{{ homelab_k8s_helm_value_file_destinations | default([]) | union([item.dest]) }}"
+    homelab_k8s_helm_value_file_destinations: "{{ homelab_k8s_helm_value_file_destinations | union([item.dest]) }}"
   loop: "{{ homelab_k8s_helm_value_files }}"
   when: homelab_k8s_helm_value_files is defined
 

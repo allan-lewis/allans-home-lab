@@ -1,28 +1,15 @@
 ## AHL
 ---
-- name: Add the Twingate Helm respository.
-  kubernetes.core.helm_repository:
-    name: twingate
-    repo_url: https://twingate.github.io/helm-charts
-    repo_state: present 
-
-- name: Create a namespace for Twingate.
-  kubernetes.core.k8s:
-    state: present
-    template: homelab-k8s-namespace.yaml.j2
-
-- name: Install the Twingate Helm chart.
-  kubernetes.core.helm:
-    chart_ref: twingate/connector
-    chart_version: "{{ homelab_versions.k8s_twingate }}"
-    namespace: "{{ homelab_k8s_namespace }}"
-    name: "{{ item.name }}"
-    update_repo_cache: true
-    release_state: "{{ homelab_k8s_state }}"
-    values:
-      connector:
-        network: "{{ homelab_k8s_twingate_network_name }}"
-        accessToken: "{{ item.access_token }}"
-        refreshToken: "{{ item.refresh_token }}"
-  with_items: "{{ homelab_k8s_twingate_connectors | default([]) }}"
-  no_log: "{{ homelab_k8s_twingate_no_log | default(true) }}"
+- ansible.builtin.include_role:
+    name: k8s_generic_helm
+  vars:
+    homelab_k8s_twingate_access_token: "{{ twingate_item.access_token }}"
+    homelab_k8s_twingate_refresh_token: "{{ twingate_item.refresh_token }}"
+    homelab_k8s_helm_temp_dir: "{{ homelab_k8s_twingate_helm_temp_dir | default('/tmp') }}"
+    homelab_k8s_helm_value_file: "{{ homelab_k8s_helm_temp_dir }}/{{ twingate_item.name }}-values.yaml"
+    homelab_k8s_helm_value_files:
+      - src: "homelab-k8s-helm-twingate.yaml.j2"
+        dest: "{{ homelab_k8s_helm_value_file }}"
+  loop: "{{ homelab_k8s_twingate_connectors | default([]) }}"  
+  loop_control:
+    loop_var: twingate_item
