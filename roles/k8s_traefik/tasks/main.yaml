@@ -1,31 +1,11 @@
 ## AHL
 ---
-- name: Create a namespace for Traefik.
-  kubernetes.core.k8s:
-    state: present
-    template: homelab-k8s-namespace.yaml.j2
-
-- name: Add the Traefik Helm respository.
-  kubernetes.core.helm_repository:
-    name: traefik 
-    repo_url: https://traefik.github.io/charts
-
-- name: Write the values file for the Helm chart.
-  ansible.builtin.template:
-    src: k8s-traefik-values.yaml.j2
-    dest: /tmp/traefik.values.yml
-
-- name: Install the Traefik Helm chart.
-  kubernetes.core.helm:
-    chart_ref: traefik/traefik
-    chart_version: "{{ homelab_versions.k8s_traefik }}"
-    namespace: traefik
-    name: traefik
-    update_repo_cache: true
-    create_namespace: true
-    release_state: "{{ homelab_k8s_state }}"
-    values_files:
-      - /tmp/traefik.values.yml
+- ansible.builtin.include_role:
+    name: k8s_generic_helm
+  vars:    
+    homelab_k8s_helm_value_files:
+      - src: "homelab-k8s-helm-traefik.yaml.j2"
+        dest: "{{ homelab_k8s_traefik_helm_values_file | default('/tmp/traefik-values.yaml') }}"
 
 - name: Create custom headers middleware.
   kubernetes.core.k8s:

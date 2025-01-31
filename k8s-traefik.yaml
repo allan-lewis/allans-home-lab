@@ -9,3 +9,10 @@
     
   roles:
     - role: k8s_traefik
+      vars:
+        homelab_k8s_helm_chart_ref: "{{ homelab_k8s_traefik_helm_chart_ref | default('traefik/traefik') }}"
+        homelab_k8s_helm_chart_version: "{{ homelab_k8s_traefik_helm_chart_version | default(homelab_versions.k8s_traefik) }}"
+        homelab_k8s_helm_name: "{{ homelab_k8s_traefik_helm_name | default('traefik') }}"
+        homelab_k8s_helm_repo_name: "{{ homelab_k8s_traefik_helm_repo_name | default('traefik') }}"
+        homelab_k8s_helm_repo_url: "{{ homelab_k8s_traefik_helm_repo_url | default('https://traefik.github.io/charts') }}"
+        homelab_k8s_namespace: "{{ homelab_k8s_traefik_namespace | default('traefik')}}"
