@@ -1,36 +1,8 @@
 ## AHL
 ---
-- name: Add Rancher Helm respository.
-  kubernetes.core.helm_repository:
-    name: rancher-stable
-    repo_url: https://releases.rancher.com/server-charts/stable
-    repo_state: present 
-
-- name: Create a namespace for Rancher.
-  kubernetes.core.k8s:
-    state: present
-    template: homelab-k8s-namespace.yaml.j2
-
-- name: Write the values file for the Helm chart.
-  ansible.builtin.template:
-    src: k8s-rancher-values.yaml.j2
-    dest: /tmp/rancher-values.yml
-
-- name: Install the Rancher Helm chart.
-  kubernetes.core.helm:
-    chart_ref: rancher-stable/rancher
-    chart_version: "{{ homelab_versions.k8s_rancher }}"
-    namespace: "{{ homelab_k8s_namespace }}"
-    name: "rancher"
-    update_repo_cache: true
-    create_namespace: true
-    release_state: "{{ homelab_k8s_state }}"
-    values_files:
-      - /tmp/rancher-values.yml
-
-- name: Create a Traefik ingress for Rancher.
-  kubernetes.core.k8s:
-    state: "{{ homelab_k8s_state }}"
-    template: homelab-k8s-traefik-ingress-route.yaml.j2
-  vars:
-    homelab_k8s_traefik_routes: "{{ homelab_k8s_rancher_routes }}"
+- ansible.builtin.include_role:
+    name: k8s_generic_helm
+  vars:    
+    homelab_k8s_helm_value_files:
+      - src: "homelab-k8s-helm-rancher.yaml.j2"
+        dest: "{{ homelab_k8s_rancher_helm_values_file | default('/tmp/rancher-values.yaml') }}"

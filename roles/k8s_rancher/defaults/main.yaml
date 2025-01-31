@@ -1,7 +1,0 @@
-## AHL
----
-homelab_k8s_namespace: "cattle-system"
-homelab_k8s_service_name: "rancher"
-homelab_k8s_service_port: "80"
-homelab_k8s_rancher_routes:
-  - host: "{{ homelab_k8s_rancher_host }}"
