@@ -1,7 +1,0 @@
-## AHL
----
-homelab_k8s_namespace: "portainer"
-homelab_k8s_service_name: "portainer"
-homelab_k8s_service_port: 9000
-homelab_k8s_portainer_routes:
-  - host: "{{ homelab_k8s_portainer_host }}"
