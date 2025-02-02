@@ -28,7 +28,7 @@ spec:
         args:
         - --token
         - {{ item.tunnel_token }}
-        image: cloudflare/cloudflared:latest
+        image: cloudflare/cloudflared:{{ homelab_versions.k8s_cloudflare }}
         name: cloudflared-{{ item.tunnel_name }}
         livenessProbe:
           httpGet:
