@@ -32,6 +32,21 @@
     values_files:
       - /tmp/prometheus.values.yml
 
+- name: Delete CRDs.
+  ansible.builtin.shell: kubectl delete crd {{ item }} --ignore-not-found=true
+  when: homelab_k8s_state == 'absent'
+  with_items:
+    - "alertmanagerconfigs.monitoring.coreos.com"
+    - "alertmanagers.monitoring.coreos.com"
+    - "podmonitors.monitoring.coreos.com"
+    - "probes.monitoring.coreos.com"
+    - "prometheusagents.monitoring.coreos.com"
+    - "prometheuses.monitoring.coreos.com"
+    - "prometheusrules.monitoring.coreos.com"
+    - "scrapeconfigs.monitoring.coreos.com"
+    - "servicemonitors.monitoring.coreos.com"
+    - "thanosrulers.monitoring.coreos.com"
+
 - name: Create Traefik ingresses for monitoring.
   kubernetes.core.k8s:
     state: "{{ homelab_k8s_state }}"
