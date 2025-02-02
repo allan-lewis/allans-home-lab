@@ -14,7 +14,7 @@
         homelab_k8s_namespace: "{{ homelab_k8s_tautulli_namespace | default('tautulli') }}"
         homelab_k8s_service_name: "{{ homelab_k8s_tautulli_service_name | default('tautulli') }}"
         homelab_k8s_container_name: "{{ homelab_k8s_tautulli_container_port | default('tautulli') }}"
-        homelab_k8s_container_image: "{{ homelab_k8s_it_tools_container_image | default('lscr.io/linuxserver/tautulli:' + homelab_versions.k8s_tautulli) }}"
+        homelab_k8s_container_image: "{{ homelab_k8s_it_tools_container_image | default('linuxserver/tautulli:' + homelab_versions.k8s_tautulli) }}"
         homelab_k8s_service_port: "{{ homelab_k8s_it_tools_service_name | default(8181) }}"
         homelab_k8s_environment_vars:
           - name: TZ
