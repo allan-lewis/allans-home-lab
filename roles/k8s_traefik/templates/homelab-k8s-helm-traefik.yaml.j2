@@ -8,7 +8,7 @@ additionalArguments:
 
 deployment:
   enabled: true
-  replicas: 3
+  replicas: {{ homelab_k8s_service_replicas | default(3) }}
   annotations: {}
   podAnnotations: {}
   additionalContainers: []
