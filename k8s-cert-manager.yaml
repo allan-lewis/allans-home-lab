@@ -9,3 +9,10 @@
 
   roles:
     - role: k8s_cert_manager
+      vars:
+        homelab_k8s_helm_chart_ref: "{{ homelab_k8s_cert_manager_helm_chart_ref | default('jetstack/cert-manager') }}"
+        homelab_k8s_helm_chart_version: "{{ homelab_k8s_cert_manager_helm_chart_version | default(homelab_versions.k8s_cert_manager) }}"
+        homelab_k8s_helm_name: "{{ homelab_k8s_cert_manager_helm_name | default('cert-manager') }}"
+        homelab_k8s_helm_repo_name: "{{ homelab_k8s_cert_manager_helm_repo_name | default('jetstack') }}"
+        homelab_k8s_helm_repo_url: "{{ homelab_k8s_cert_manager_helm_repo_url | default('https://charts.jetstack.io') }}"
+        homelab_k8s_namespace: "{{ homelab_k8s_cert_manager_namespace | default('cert-manager')}}"
