@@ -9,3 +9,10 @@
   
   roles:
     - role: k8s_longhorn
+      vars:
+        homelab_k8s_helm_chart_ref: "{{ homelab_k8s_longhorn_helm_chart_ref | default('longhorn/longhorn') }}"
+        homelab_k8s_helm_chart_version: "{{ homelab_k8s_longhorn_helm_chart_version | default(homelab_versions.k8s_longhorn) }}"
+        homelab_k8s_helm_name: "{{ homelab_k8s_longhorn_helm_name | default('longhorn') }}"
+        homelab_k8s_helm_repo_name: "{{ homelab_k8s_longhorn_helm_repo_name | default('longhorn') }}"
+        homelab_k8s_helm_repo_url: "{{ homelab_k8s_longhorn_helm_repo_url | default('https://charts.longhorn.io') }}"
+        homelab_k8s_namespace: "{{ homelab_k8s_longhorn_namespace | default('longhorn-system')}}"
