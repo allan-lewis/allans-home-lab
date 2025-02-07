@@ -16,3 +16,6 @@
         homelab_k8s_helm_repo_name: "{{ homelab_k8s_longhorn_helm_repo_name | default('longhorn') }}"
         homelab_k8s_helm_repo_url: "{{ homelab_k8s_longhorn_helm_repo_url | default('https://charts.longhorn.io') }}"
         homelab_k8s_namespace: "{{ homelab_k8s_longhorn_namespace | default('longhorn-system')}}"
+        homelab_k8s_service_name: "{{ homelab_k8s_longhorn_service_name | default('longhorn-frontend') }}"
+        homelab_k8s_service_port: "{{ homelab_k8s_longhorn_service_port | default(80) }}"
+        homelab_k8s_traefik_routes: "{{ homelab_k8s_longhorn_traefik_routes }}"

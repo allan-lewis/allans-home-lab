@@ -1,8 +1,0 @@
-## AHL
----
-# homelab_k8s_namespace: longhorn-system
-# homelab_k8s_service_name: longhorn-frontend
-# homelab_k8s_service_port: 80
-# homelab_k8s_longhorn_routes:
-#   - host: "{{ homelab_k8s_longhorn_host }}"
-# homelab_k8s_longhorn_pvcs: []
