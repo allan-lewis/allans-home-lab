@@ -1,7 +1,0 @@
-## AHL
----
-homelab_k8s_namespace: "wikijs"
-homelab_k8s_service_name: "wikijs"
-homelab_k8s_service_port: "80"
-homelab_k8s_wikijs_routes:
-  - host: "{{ homelab_k8s_wikijs_host }}"
