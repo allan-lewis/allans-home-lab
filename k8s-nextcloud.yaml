@@ -9,3 +9,13 @@
   
   roles:
     - role: k8s_nextcloud
+      vars:
+        homelab_k8s_helm_chart_ref: "{{ homelab_k8s_nextcloud_helm_chart_ref | default('nextcloud/nextcloud') }}"
+        homelab_k8s_helm_chart_version: "{{ homelab_k8s_nextcloud_helm_chart_version | default(homelab_versions.k8s_nextcloud) }}"
+        homelab_k8s_helm_repo_name: "{{ homelab_k8s_nextcloud_helm_repo_name | default('nextcloud') }}"
+        homelab_k8s_helm_repo_url: "{{ homelab_k8s_nextcloud_helm_repo_url | default('https://nextcloud.github.io/helm/') }}"
+        homelab_k8s_helm_name: "{{ homelab_k8s_nextcloud_helm_name | default('nextcloud') }}"
+        homelab_k8s_namespace: "{{ homelab_k8s_nextcloud_namespace | default('nextcloud')}}"
+        homelab_k8s_service_name: "{{ homelab_k8s_nextcloud_service_name | default('nextcloud') }}"
+        homelab_k8s_service_port: "{{ homelab_k8s_nextcloud_service_port | default(8080) }}"
+        homelab_k8s_traefik_routes: "{{ homelab_k8s_nextcloud_traefik_routes }}"
