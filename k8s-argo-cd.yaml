@@ -3,18 +3,20 @@
   hosts: homelab_k8s_argocd_nodes
   become: no
   gather_facts: no
+  vars:
+    homelab_k8s_argocd_name: "argocd"
 
   roles:
     - role: k8s_generic_helm
       vars:
         homelab_k8s_helm_chart_ref: argocd/argo-cd
         homelab_k8s_helm_chart_version: 7.8.2
-        homelab_k8s_helm_name: argocd
-        homelab_k8s_helm_repo_name: argocd
+        homelab_k8s_helm_name: "{{ homelab_k8s_argocd_name }}"
+        homelab_k8s_helm_repo_name: "{{ homelab_k8s_argocd_name }}"
         homelab_k8s_helm_repo_url: https://argoproj.github.io/argo-helm
-        homelab_k8s_namespace: argocd
+        homelab_k8s_namespace: "{{ homelab_k8s_argocd_name }}"
         homelab_k8s_service_name: argocd-server
         homelab_k8s_service_port: 443
         homelab_k8s_traefik_routes:
-          - host: "argocd.nonprod.allanshomelab.com"
+          - host: "{{ homelab_k8s_argocd_host }}"
             scheme: "https"
