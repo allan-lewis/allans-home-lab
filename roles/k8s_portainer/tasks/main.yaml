@@ -1,8 +1,0 @@
-## AHL
----
-- ansible.builtin.include_role:
-    name: k8s_generic_helm
-  vars:
-    homelab_k8s_helm_value_files:
-      - src: "homelab-k8s-helm-portainer.yaml.j2"
-        dest: "{{ homelab_k8s_portainer_helm_values_file | default('/tmp/portainer-values.yaml') }}"
