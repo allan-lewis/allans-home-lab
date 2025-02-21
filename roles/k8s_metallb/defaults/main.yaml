@@ -1,4 +1,0 @@
-## AHL
----
-homelab_k8s_metallb_pool_name: default-pool
-homelab_k8s_metallb_tmp: /tmp/metallb
