@@ -1,4 +1,0 @@
-## AHL
----
-homelab_k8s_authentik_outpost_host: ak-outpost-authentik-embedded-outpost
-homelab_k8s_authentik_outpost_port: 9000
