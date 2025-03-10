@@ -14,21 +14,6 @@ services:
       PUID: "{{ homelab_user_id }}"
       PGID: "{{ homelab_group_id }}"
 
-  radarr:
-    container_name: "radarr"
-    image: "lscr.io/linuxserver/radarr:{{  homelab_versions.docker_radarr }}"
-    restart: "unless-stopped"
-    ports: 
-      - "{{ homelab_ports.docker_radarr }}:7878/tcp"
-    volumes: 
-      - "{{ homelab_docker_media_acquisition_radarr_config }}:/config"
-      - "{{ homelab_media_acquisition_movies }}:/movies"
-      - "{{ homelab_docker_media_acquisition_transmission_downloads }}:/downloads"
-    environment: 
-      TZ: "{{ homelab_time_zone }}"
-      PUID: "{{ homelab_user_id }}"
-      PGID: "{{ homelab_group_id }}"
-
   sonarr:
     container_name: "sonarr"
     image: "lscr.io/linuxserver/sonarr:{{ homelab_versions.docker_sonarr }}"
