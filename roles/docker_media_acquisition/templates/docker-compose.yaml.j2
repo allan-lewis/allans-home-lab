@@ -14,21 +14,6 @@ services:
       PUID: "{{ homelab_user_id }}"
       PGID: "{{ homelab_group_id }}"
 
-  sonarr:
-    container_name: "sonarr"
-    image: "lscr.io/linuxserver/sonarr:{{ homelab_versions.docker_sonarr }}"
-    restart: "unless-stopped"
-    ports: 
-      - "{{ homelab_ports.docker_sonarr }}:8989/tcp"
-    volumes: 
-      - "{{ homelab_docker_media_acquisition_sonarr_config }}:/config"
-      - "{{ homelab_media_acquisition_shows }}:/tv"
-      - "{{ homelab_docker_media_acquisition_transmission_downloads }}:/downloads"
-    environment: 
-      TZ: "{{ homelab_time_zone }}"
-      PUID: "{{ homelab_user_id }}"
-      PGID: "{{ homelab_group_id }}"
-
   transmission:
     container_name: "transmission"
     image: "lscr.io/linuxserver/transmission:{{ homelab_versions.docker_transmission }}"
