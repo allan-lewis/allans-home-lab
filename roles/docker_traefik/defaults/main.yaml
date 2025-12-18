@@ -1,3 +1,0 @@
-homelab_docker_traefik_tmp_dir: /tmp/traefik
-homelab_docker_traefik_volume: "{{ homelab_docker_volume_root }}/traefik"
-homelab_docker_traefik_letsencrypt_volume: "{{ homelab_docker_volume_root }}/letsencrypt"

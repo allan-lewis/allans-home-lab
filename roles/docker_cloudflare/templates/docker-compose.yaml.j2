@@ -1,9 +1,0 @@
-services:
-
-  cloudflare:
-    container_name: "cloudflare"
-    image: "cloudflare/cloudflared:{{ homelab_versions.docker_cloudflare }}"
-    restart: "unless-stopped"
-    command: "tunnel run"
-    environment: 
-      TUNNEL_TOKEN: "{{ homelab_docker_cloudflare_tunnel_token }}"

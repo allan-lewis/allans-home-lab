@@ -1,4 +1,0 @@
-## AHL
----
-homelab_talos_cluster_patch_dir: "/tmp/homelab_talos_cluster_patch"
-homelab_talos_node_longhorn_storage: "/var/mnt/longhorn-storage"
