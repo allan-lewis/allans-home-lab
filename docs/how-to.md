@@ -107,3 +107,46 @@ Run `l0-runway`:
 - When debugging failures in later layers
 
 If `l0-runway` succeeds, it is safe to proceed to subsequent layers.
+
+## Building an Arch ISO (L1)
+
+The `l1-arch-iso` target builds a custom Arch Linux ISO suitable for automated provisioning. It downloads the latest upstream Arch ISO, applies local customizations, prepares the image for cloud-init–style provisioning, and uploads the resulting artifact to Proxmox.
+
+### Usage
+
+```bash
+make l1-arch-iso
+```
+
+### What `l1-arch-iso` Does
+
+Running `l1-arch-iso` performs the following steps:
+
+- Downloads the latest official Arch Linux ISO
+- Unpacks and customizes the ISO contents
+- Applies configuration needed for unattended installs
+- Installs required tooling and early-boot configuration
+- Prepares the image for cloud-init or equivalent first-boot customization
+- Rebuilds the ISO with the applied changes
+- Uploads the resulting ISO to the configured Proxmox host and storage
+- Produces a manifest documenting Proxmox coordinates for the ISO to be used in later stages
+- Updates the "stable" Arch ISO manifest to point at the manifest produced here (optional, enabled by default)
+
+The resulting ISO is intended to be used as an installation source for automated VM builds in later layers.
+
+### Outputs
+
+- A customized, versioned Arch Linux ISO
+- An uploaded ISO artifact available in Proxmox storage
+- Local build artifacts and manifests (removable via `clean`)
+
+### When to Run
+
+Run `l1-arch-iso`:
+
+- When bootstrapping a new environment
+- When upstream Arch ISO changes are required
+- After modifying ISO customization logic
+- Before provisioning new Arch-based hosts in L2
+
+This target only produces image artifacts and does not create or modify any running infrastructure.

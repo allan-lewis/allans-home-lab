@@ -64,10 +64,10 @@ clean: ## Remove ALL artifacts across ALL layers
 l0-runway: ## Runway checks (OS/persona independent)
 	@$(RUN) bash -lc 'scripts/l0/runway.sh'
 
-# ## ---- L1 TARGETS FOR ALL PERSONAS FOR A SINGLE OS
-# l1-arch-iso: ## L1 Arch ISO build/upload
-# 	@$(RUN) bash -lc 'set -euo pipefail; \
-# 	  scripts/l1-upload-arch-iso.sh'
+## ---- L1 TARGETS FOR ALL PERSONAS FOR A SINGLE OS
+l1-arch-iso: ## L1 Arch ISO build/upload
+	@$(RUN) bash -lc 'set -euo pipefail; \
+	  scripts/l1-upload-arch-iso.sh'
 #
 # # Usage examples:
 # #   make l1-arch-template                    # full packer build + manifest
