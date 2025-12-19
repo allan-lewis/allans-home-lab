@@ -165,7 +165,9 @@ The `l1-ubuntu-template` target builds a reusable Ubuntu VM template for Proxmox
 
 ### Usage
 
-    make l1-ubuntu-template
+```bash
+make l1-ubuntu-template
+```
 
 ### What `l1-ubuntu-template` Does
 
@@ -194,5 +196,46 @@ Run `l1-ubuntu-template`:
 - After changing template or cloud-init configuration
 - When intentionally promoting a new template version to stable
 - Before provisioning new Ubuntu hosts in L2
+
+This target produces image and metadata artifacts only and does not provision or modify running hosts.
+
+## Building an Arch VM Template (L1)
+
+The `l1-arch-template` target builds a reusable Arch Linux VM template on Proxmox using Packer. It produces a fully bootstrapped, cloud-init–ready template suitable for automated provisioning in later layers.
+
+### Usage
+
+```bash
+make l1-arch-template
+```
+
+### What `l1-arch-template` Does
+
+Running `l1-arch-template` performs the following steps:
+
+- Uses Packer to create a new Arch Linux VM on Proxmox
+- Performs a fully automated Arch installation
+- Installs required base packages, guest tooling, and cloud-init support
+- Applies template-level configuration appropriate for all future hosts
+- Converts the VM into a Proxmox template
+- Generates a GitHub-versioned manifest describing the build outputs
+- Optionally updates a stable manifest reference for downstream consumers
+
+The resulting template is designed to be consumed by L2 when provisioning Arch-based hosts.
+
+### Outputs
+
+- A cloud-init–ready Arch Linux VM template in Proxmox
+- A versioned build manifest committed to the repository
+- An optional stable manifest reference pointing at the approved template
+
+### When to Run
+
+Run `l1-arch-template`:
+
+- When bootstrapping or updating the Arch base template
+- After modifying Packer build logic or provisioning steps
+- When intentionally promoting a new Arch template version
+- Before provisioning new Arch hosts in L2
 
 This target produces image and metadata artifacts only and does not provision or modify running hosts.

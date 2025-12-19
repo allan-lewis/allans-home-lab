@@ -68,15 +68,15 @@ l0-runway: ## Runway checks (OS/persona independent)
 l1-arch-iso: ## Arch ISO build/upload
 	@$(RUN) bash -lc 'set -euo pipefail; \
 	  scripts/l1/arch-iso.sh'
-#
-# l1-arch-template: ## L1 build+manifest for Arch (Packer + Proxmox template manifest)
-# 	@$(RUN) bash -lc 'set -euo pipefail; \
-# 	  scripts/l1-template-arch.sh packer/arch'
-#
+
+l1-arch-template: ## L1 build+manifest for Arch (Packer + Proxmox template manifest)
+	@$(RUN) bash -lc 'set -euo pipefail; \
+	  scripts/l1/arch-template.sh packer/l1/arch'
+
 l1-ubuntu-template: ## Ubuntu template build/upload
 	@$(RUN) bash -lc 'set -euo pipefail; \
 	  scripts/l1/ubuntu-template.sh'
-#
+
 # ## ---- L2 TARGETS PER OS/PERSONA
 #
 # l2-arch-devops-apply: ## Plan/Apply Arch DevOps VM via Terraform (plan by default)
