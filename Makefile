@@ -45,19 +45,13 @@ endif
 #   l3-ubuntu-core-converge \
 #   l3-ubuntu-docker-converge \
 #   l3-ubuntu-openvpn-converge \
-#   l3-ubuntu-tinker-converge \
-#   l4-arch-devops-smoke \
-#   l4-arch-tinker-smoke \
-#   l4-ubuntu-core-smoke \
-#   l4-ubuntu-docker-smoke \
-#   l4-ubuntu-openvpn-smoke \
-#   l4-ubuntu-tinker-smoke
+#   l3-ubuntu-tinker-converge
 
-help: ## Show targets
+help: ## Show a list of all targets
 	@awk 'BEGIN{FS=":.*##"; printf "\nTargets:\n"} /^[a-zA-Z0-9_\-]+:.*?##/ { printf "  \033[36m%-18s\033[0m %s\n", $$1, $$2 }' $(MAKEFILE_LIST)
 
 ## ---- GLOBAL TARGETS
-clean: ## Remove ALL artifacts across ALL layers
+clean: ## Remove all non-versioned build artifacts and temporary files
 	@$(RUN) bash -lc 'scripts/clean.sh'
 
 ## ---- L0 TARGETS FOR ALL OS/PERSONA
@@ -65,15 +59,15 @@ l0-runway: ## Runway checks (OS/persona independent)
 	@$(RUN) bash -lc 'scripts/l0/runway.sh'
 
 ## ---- L1 TARGETS FOR ALL PERSONAS FOR A SINGLE OS
-l1-arch-iso: ## Arch ISO build/upload
+l1-arch-iso: ## Put a custom, bootable Arch ISO onto Proxmox
 	@$(RUN) bash -lc 'set -euo pipefail; \
 	  scripts/l1/arch-iso.sh'
 
-l1-arch-template: ## L1 build+manifest for Arch (Packer + Proxmox template manifest)
+l1-arch-template: ## Prepare a Proxmox VM template suitable for Arch installations
 	@$(RUN) bash -lc 'set -euo pipefail; \
 	  scripts/l1/arch-template.sh packer/l1/arch'
 
-l1-ubuntu-template: ## Ubuntu template build/upload
+l1-ubuntu-template: ## Prepare a Proxmox VM template suitable for Ubuntu installations
 	@$(RUN) bash -lc 'set -euo pipefail; \
 	  scripts/l1/ubuntu-template.sh'
 
@@ -150,30 +144,3 @@ l1-ubuntu-template: ## Ubuntu template build/upload
 # l3-ubuntu-tinker-converge: ## Converge Ubuntu Tinker hosts (L3 via Ansible)
 # 	@$(RUN) bash -lc 'set -euo pipefail; \
 # 	  scripts/l3-converge.sh ubuntu ubuntu_tinker'
-#
-# ## ---- L4 SMOKE TEST TARGETS
-#
-# l4-arch-devops-smoke: ## L4 smoke test for Arch DevOps hosts
-# 	@$(RUN) bash -lc 'set -euo pipefail; \
-# 	  scripts/l4-smoke.sh arch devops'
-#
-# l4-arch-tinker-smoke: ## L4 smoke test for Arch Tinker hosts
-# 	@$(RUN) bash -lc 'set -euo pipefail; \
-# 	  scripts/l4-smoke.sh arch tinker'
-#
-# l4-ubuntu-core-smoke: ## L4 smoke test for Ubuntu core hosts
-# 	@$(RUN) bash -lc 'set -euo pipefail; \
-# 	  scripts/l4-smoke.sh ubuntu core'
-#
-# l4-ubuntu-docker-smoke: ## L4 smoke test for Ubuntu Docker hosts
-# 	@$(RUN) bash -lc 'set -euo pipefail; \
-# 	  scripts/l4-smoke.sh ubuntu docker'
-#
-# l4-ubuntu-openvpn-smoke: ## L4 smoke test for Ubuntu OpenVPN hosts
-# 	@$(RUN) bash -lc 'set -euo pipefail; \
-# 	  scripts/l4-smoke.sh ubuntu openvpn'
-#
-# l4-ubuntu-tinker-smoke: ## L4 smoke test for Ubuntu Tinker hosts
-# 	@$(RUN) bash -lc 'set -euo pipefail; \
-# 	  scripts/l4-smoke.sh ubuntu tinker'
-#
