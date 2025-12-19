@@ -45,6 +45,7 @@ echo "Group:      ${GROUP}"
 echo "Playbook  : ${PLAYBOOK}"
 echo "Tags   : ${TAGS:-<none>}"
 echo "Limit  : ${LIMIT:-<none>}"
+echo "Extra  : ${extra[@]}"
 
 exit 0
 
