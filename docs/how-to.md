@@ -35,6 +35,14 @@ These variables are validated early in the workflow and execution will fail if a
 
 By default, the provided `Makefile` prefixes all commands with an invocation of Doppler, providing a clean and easy way to populate environment variables.  This prefixing can be skipped if a different method of providing these values is preferred.
 
+A make call like this:
+
 ```bash
 doppler run -- make <target>
+```
 
+Will be executed like this:
+
+```bash
+doppler run -- make <target>
+```
