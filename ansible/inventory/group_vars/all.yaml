@@ -1,0 +1,13 @@
+---
+## HOMELAB-WIDE VARIABLES
+default_remote_nas_ip: "{{ hostvars['procyon'].ansible_host }}"
+
+gitops_user: "lab"
+gitops_uid: 1000
+gitops_gid: 1000
+gitops_tz: "America/New_York"
+
+## ANSIBLE BUILT-IN VARIABLES
+ansible_python_interpreter: "/usr/bin/python3"
+ansible_user: "{{ gitops_user }}"
+

@@ -14,7 +14,7 @@ case "${LAYER}" in
     ;;
 esac
 
-# PLAYBOOK="ansible/playbooks/l3-converge-${OS}.yml"
+PLAYBOOK="ansible/${LAYER}/converge.yaml"
 
 if [[ ! -d "${INVENTORY}" ]]; then
   echo "Inventory not found at: ${INVENTORY}" >&2
@@ -23,7 +23,6 @@ fi
 
 if [[ ! -f "${PLAYBOOK}" ]]; then
   echo "Converge playbook not found at: ${PLAYBOOK}" >&2
-  echo "Expected per-OS converge playbook: l3-converge-${OS}.yml" >&2
   exit 1
 fi
 
