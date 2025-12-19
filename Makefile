@@ -51,17 +51,14 @@ TF_DIR ?= terraform/l2
 #   l3-ubuntu-tinker-converge
 
 help: ## Show a list of all targets
-	@awk 'BEGIN{FS=":.*##"; printf "\nTargets:\n"} /^[a-zA-Z0-9_\-]+:.*?##/ { printf "  \033[36m%-18s\033[0m %s\n", $$1, $$2 }' $(MAKEFILE_LIST)
+	@awk 'BEGIN{FS=":.*##"; printf "\nTargets:\n"} /^[a-zA-Z0-9_%.\/\-]+:.*##/ { printf "  \033[36m%-18s\033[0m %s\n", $$1, $$2 }' $(MAKEFILE_LIST)
 
-## ---- GLOBAL TARGETS
 clean: ## Remove all non-versioned build artifacts and temporary files
 	@$(RUN) bash -lc 'scripts/clean.sh'
 
-## ---- L0 TARGETS FOR ALL OS/PERSONA
 l0-runway: ## Runway checks (OS/persona independent)
 	@$(RUN) bash -lc 'scripts/l0/runway.sh'
 
-## ---- L1 TARGETS FOR ALL PERSONAS FOR A SINGLE OS
 l1-arch-iso: ## Put a custom, bootable Arch ISO onto Proxmox
 	@$(RUN) bash -lc 'set -euo pipefail; \
 	  scripts/l1/arch-iso.sh'
@@ -74,12 +71,11 @@ l1-ubuntu-template: ## Prepare a Proxmox VM template suitable for Ubuntu install
 	@$(RUN) bash -lc 'set -euo pipefail; \
 	  scripts/l1/ubuntu-template.sh'
 
-# ## ---- L2 TARGETS PER OS/PERSONA
-l2-apply-%: ## Ex: make l2-apply-arch_devops
+l2-apply-%: ## Apply Terraform resources for an OS/persona pair
 	@$(RUN) bash -lc 'set -euo pipefail; \
 	  scripts/l2/terraform.sh "$(TF_DIR)/$*" apply'
 
-l2-destroy-%: ## Ex: make l2-destroy-ubuntu_docker
+l2-destroy-%: ## Destroy Terraform resources for an OS/persona pair
 	@$(RUN) bash -lc 'set -euo pipefail; \
 	  scripts/l2/terraform.sh "$(TF_DIR)/$*" destroy'
 

@@ -239,3 +239,50 @@ Run `l1-arch-template`:
 - Before provisioning new Arch hosts in L2
 
 This target produces image and metadata artifacts only and does not provision or modify running hosts.
+
+## Provisioning and Destroying Infrastructure (L2)
+
+The `l2-apply-%` and `l2-destroy-%` targets manage Terraform resources for a specific OS/persona pair. The `%` portion is the Terraform workspace directory name (for example, `ubuntu_devops`), which maps to a directory under `terraform/l2/` and determines which Terraform configuration is operated on.
+
+### Usage
+
+Apply (defaults to plan mode):
+
+```bash
+make l2-apply-ubuntu_devops
+```
+
+Apply (perform real changes):
+
+```bash
+APPLY=1 make l2-apply-ubuntu_devops
+```
+
+Destroy (defaults to plan mode):
+
+```bash
+make l2-destroy-ubuntu_devops
+```
+
+Destroy (perform real changes):
+
+```bash
+APPLY=1 make l2-destroy-ubuntu_devops
+```
+
+### What These Targets Do
+
+- `l2-apply-%` runs the equivalent of `terraform apply` against `terraform/l2/<name>`
+- `l2-destroy-%` runs the equivalent of `terraform destroy` against `terraform/l2/<name>`
+
+Both targets route through `scripts/l2/terraform.sh`, which selects the Terraform directory based on the provided suffix (e.g. `ubuntu_devops`).
+
+### Safety Default: Plan Mode
+
+By default, both targets run in a non-destructive plan mode and will not modify infrastructure.
+
+To apply changes (including creating or destroying resources), you must set:
+
+```bash
+APPLY=1
+```
