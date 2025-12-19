@@ -33,22 +33,9 @@ TF_DIR ?= terraform/l2
   l1-arch-template \
   l1-ubuntu-template \
   l2-apply-% \
-  l2-destroy-%
-#   l2-arch-devops-apply \
-#   l2-arch-devops-destroy \
-#   l2-arch-tinker-apply \
-#   l2-arch-tinker-destroy \
-#   l2-ubuntu-docker-apply \
-#   l2-ubuntu-openvpn-apply \
-#   l2-ubuntu-openvpn-destroy \
-#   l2-ubuntu-tinker-apply \
-#   l2-ubuntu-tinker-destroy \
-#   l3-arch-devops-converge \
-#   l3-arch-tinker-converge \
-#   l3-ubuntu-core-converge \
-#   l3-ubuntu-docker-converge \
-#   l3-ubuntu-openvpn-converge \
-#   l3-ubuntu-tinker-converge
+  l2-destroy-% \
+  l3-converge-% \
+  l4-converge-%
 
 help: ## Show a list of all targets
 	@awk 'BEGIN{FS=":.*##"; printf "\nTargets:\n"} /^[a-zA-Z0-9_%.\/\-]+:.*##/ { printf "  \033[36m%-18s\033[0m %s\n", $$1, $$2 }' $(MAKEFILE_LIST)
@@ -79,34 +66,10 @@ l2-destroy-%: ## Destroy Terraform resources for an OS/persona pair
 	@$(RUN) bash -lc 'set -euo pipefail; \
 	  scripts/l2/terraform.sh "$(TF_DIR)/$*" destroy'
 
-# ## ---- L3 TARGETS PER OS/PERSONA
-# # Usage examples:
-# #   make l3-<os>-<persona>-converge                          	# all hosts, all tags
-# #   make l3-<os>-<persona>-converge L3_LIMIT=host1          	# single host
-# #   make l3-<os>-<persona>-converge L3_LIMIT='host1:host2'  # Ansible limit expression
-# #   make l3-<os>-<persona>-converge L3_TAGS=base             	# only "base" tag
-# #   make l3-<os>-<persona>-converge L3_TAGS=base,desktop     	# multiple tags
-#
-# l3-arch-devops-converge: ## Converge Arch DevOps hosts (L3 via Ansible)
-# 	@$(RUN) bash -lc 'set -euo pipefail; \
-# 	  scripts/l3-converge.sh arch arch_devops'
-#
-# l3-arch-tinker-converge: ## Converge Arch Tinker hosts (L3 via Ansible)
-# 	@$(RUN) bash -lc 'set -euo pipefail; \
-# 	  scripts/l3-converge.sh arch arch_tinker'
-#
-# l3-ubuntu-core-converge: ## Converge Ubuntu core hosts (L3 via Ansible)
-# 	@$(RUN) bash -lc 'set -euo pipefail; \
-# 	  scripts/l3-converge.sh ubuntu ubuntu_core'
-#
-# l3-ubuntu-docker-converge: ## Converge Ubuntu Docker hosts (L3 via Ansible)
-# 	@$(RUN) bash -lc 'set -euo pipefail; \
-# 	  scripts/l3-converge.sh ubuntu ubuntu_misc'
-#
-# l3-ubuntu-openvpn-converge: ## Converge Ubuntu OpenVPN hosts (L3 via Ansible)
-# 	@$(RUN) bash -lc 'set -euo pipefail; \
-# 	  scripts/l3-converge.sh ubuntu ubuntu_openvpn'
-#
-# l3-ubuntu-tinker-converge: ## Converge Ubuntu Tinker hosts (L3 via Ansible)
-# 	@$(RUN) bash -lc 'set -euo pipefail; \
-# 	  scripts/l3-converge.sh ubuntu ubuntu_tinker'
+l3-converge-%: ## Converge a group of hosts (capabilities)
+	@$(RUN) bash -lc 'set -euo pipefail; \
+	  scripts/l3/converge.sh "$*"'
+
+l4-converge-%: ## Converge a group of hosts (workloads)
+	@$(RUN) bash -lc 'set -euo pipefail; \
+	  scripts/l4/converge.sh "$*"'
