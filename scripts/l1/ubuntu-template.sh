@@ -62,7 +62,8 @@ echo "==> Uploading cloud image to Proxmox..."
 SSH_HOST="${PVE_SSH_IP#*://}"
 SSH_HOST="${SSH_HOST%/}"
 
-scp -vv -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+rsync -ah --progress \
+  -e "ssh -o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" \
   "${IMAGE_PATH}" \
   "${PVE_SSH_USER}@${SSH_HOST}:/tmp/${IMAGE_NAME}"
 

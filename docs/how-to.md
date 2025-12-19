@@ -29,8 +29,6 @@ The following environment variables **must be set** for infrastructure-related o
 
 These variables are validated early in the workflow and execution will fail if any are missing.
 
----
-
 ### Doppler (Recommended / Happy Path)
 
 By default, the provided `Makefile` prefixes all commands with an invocation of Doppler, providing a clean and easy way to populate environment variables.  This prefixing can be skipped if a different method of providing these values is preferred.
@@ -46,6 +44,17 @@ Will be executed like this (by default):
 ```bash
 doppler run -- make <target>
 ```
+
+### Stable Manifest Behavior
+
+By default, L1 tasks that upload ISOs and templates update the stable manifest reference to point at the newly built artifact manifest.
+
+To disable this behavior, set:
+
+    UPDATE_STABLE=no
+
+Any value other than `yes` will prevent the stable manifest from being updated.
+
 ## Cleaning the Workspace
 
 The `clean` target removes all locally generated artifacts and temporary files created during normal operation of the stack.
@@ -149,3 +158,41 @@ Run `l1-arch-iso`:
 - Before provisioning new Arch-based hosts in L2
 
 This target only produces image artifacts and does not create or modify any running infrastructure.
+
+## Building an Ubuntu VM Template (L1)
+
+The `l1-ubuntu-template` target builds a reusable Ubuntu VM template for Proxmox. It downloads an upstream Ubuntu cloud image, prepares it for cloud-init–based provisioning, uploads it to Proxmox, and records the result in versioned build metadata.
+
+### Usage
+
+    make l1-ubuntu-template
+
+### What `l1-ubuntu-template` Does
+
+Running `l1-ubuntu-template` performs the following steps:
+
+- Downloads the specified Ubuntu cloud image
+- Uploads the image to the configured Proxmox storage
+- Creates or updates a VM template configured for cloud-init
+- Applies template-level settings required for automated provisioning
+- Generates a GitHub-versioned manifest describing the build outputs
+- Optionally updates a stable manifest reference for downstream consumers
+
+The resulting template is intended to be consumed by L2 when provisioning Ubuntu-based hosts.
+
+### Outputs
+
+- A cloud-init–ready Ubuntu VM template in Proxmox
+- A versioned build manifest committed to the repository
+- A `stable` manifest reference pointing at the latest approved build (optional)
+
+### When to Run
+
+Run `l1-ubuntu-template`:
+
+- When introducing a new Ubuntu base image
+- After changing template or cloud-init configuration
+- When intentionally promoting a new template version to stable
+- Before provisioning new Ubuntu hosts in L2
+
+This target produces image and metadata artifacts only and does not provision or modify running hosts.
