@@ -52,7 +52,7 @@ The `clean` target removes all locally generated artifacts and temporary files c
 
 ### Usage
 
-```
+```bash
 make clean
 ```
 
@@ -76,3 +76,34 @@ The `clean` target does **not**:
 * Remove secrets or environment configuration
 
 It is safe to run at any time and only affects the local working directory.
+
+## Running L0 Checks
+
+The `l0-runway` target validates that the local execution environment is safe and correctly configured before any other layer is run.
+
+### Usage
+
+```bash
+make l0-runway
+```
+
+### What `l0-runway` Does
+
+Running `l0-runway` performs early validation such as:
+
+- Required tooling is installed and accessible
+- Required environment variables are present
+- Credentials and API access are available
+- Target configuration is internally consistent
+
+No infrastructure or remote hosts are modified.
+
+### When to Run
+
+Run `l0-runway`:
+
+- Before running any other layer
+- After changing environment variables or secrets
+- When debugging failures in later layers
+
+If `l0-runway` succeeds, it is safe to proceed to subsequent layers.
