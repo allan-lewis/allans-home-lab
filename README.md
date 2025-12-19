@@ -127,6 +127,61 @@ By baking common OS concerns into images, L1:
 
 If L1 succeeds, downstream layers can assume a known-good operating system baseline.
 
+## L2 – Infrastructure Provisioning
+
+**Purpose:**  
+Declaratively provision infrastructure resources from version-controlled specifications.
+
+L2 is responsible for creating and managing infrastructure based on intent defined in code. It turns image artifacts produced by L1 into running machines and supporting resources, without applying any host-level configuration or workload logic.
+
+### Responsibilities
+
+L2 focuses on infrastructure-level concerns, including:
+
+- Reading host and persona specifications from structured definitions
+- Provisioning virtual machines and related resources (e.g. via Terraform)
+- Attaching L1-built images or templates to provisioned hosts
+- Defining static resource characteristics (CPU, memory, disk, networking)
+- Applying metadata such as names, tags, and grouping information
+- Managing infrastructure lifecycle (create, update, destroy)
+- Producing machine-addressable outputs for downstream layers
+
+L2 answers the question: *“What infrastructure exists?”*
+
+### What L2 Does *Not* Do
+
+L2 does **not**:
+
+- Configure operating systems or install packages
+- Manage users, services, or security policy
+- Deploy applications or workloads
+- Perform OS convergence or drift correction
+- Make assumptions about how a host will be used at runtime
+
+All host behavior is intentionally deferred to L3 and beyond.
+
+### Outputs
+
+L2 produces infrastructure state and metadata, such as:
+
+- Running (but minimally configured) hosts
+- IP addresses, hostnames, and unique identifiers
+- Generated inventories or host lists
+- Terraform state and outputs
+
+These outputs are consumed by L3 to perform OS convergence.
+
+### Why L2 Exists
+
+By isolating infrastructure provisioning into its own layer, L2:
+
+- Makes infrastructure changes explicit and reviewable
+- Enables safe iteration on host shape without touching OS config
+- Allows infrastructure to be rebuilt or destroyed independently
+- Cleanly separates “what exists” from “how it behaves”
+
+If L2 succeeds, downstream layers can assume that required infrastructure is present and reachable.
+
 ## Layer Dependency Model
 
 The orchestration stack is intentionally **linear**: each layer depends only on the layers below it, and produces outputs consumed by the layers above it.
