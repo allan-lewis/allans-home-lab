@@ -68,8 +68,8 @@ l2-destroy-%: ## Destroy Terraform resources for an OS/persona pair
 
 l3-converge-%: ## Converge a group of hosts (capabilities)
 	@$(RUN) bash -lc 'set -euo pipefail; \
-	  scripts/l3/converge.sh "$*"'
+	  scripts/converge.sh "$*" l3'
 
 l4-converge-%: ## Converge a group of hosts (workloads)
 	@$(RUN) bash -lc 'set -euo pipefail; \
-	  scripts/l4/converge.sh "$*"'
+	  scripts/converge.sh "$*" l4'
