@@ -182,6 +182,126 @@ By isolating infrastructure provisioning into its own layer, L2:
 
 If L2 succeeds, downstream layers can assume that required infrastructure is present and reachable.
 
+## L3 – OS Convergence
+
+**Purpose:**  
+Converge provisioned hosts into a consistent, policy-compliant operating system state based on OS and persona.
+
+L3 is responsible for transforming a newly provisioned machine into a predictable, trustworthy host. It applies all operating-system-level configuration and enables host capabilities, while remaining intentionally unaware of any specific application workloads.
+
+### Responsibilities
+
+L3 focuses on host-level concerns, including:
+
+- Applying OS-specific baselines (e.g. Ubuntu vs Arch)
+- Installing and configuring system packages
+- Managing users, groups, and SSH access
+- Enforcing security and hardening policies
+- Configuring system services and daemons
+- Installing monitoring and metrics agents
+- Installing backup frameworks (scheduling, logging, rotation)
+- Enabling runtime capabilities based on persona (e.g. Docker engine)
+- Establishing standardized directory structures and permissions
+
+L3 answers the question: *“What kind of machine is this?”*
+
+### What L3 Does *Not* Do
+
+L3 does **not**:
+
+- Deploy application workloads or services
+- Manage application configuration or data
+- Define backup targets or application-specific fragments
+- Expose user-facing functionality
+- Perform runtime orchestration or health validation
+
+Anything that represents a concrete workload or service belongs to L4.
+
+### Personas and Capabilities
+
+Personas are applied at L3 to define **capabilities**, not workloads.  
+Examples include:
+
+- A host capable of running Docker Compose workloads
+- A Kubernetes node with container runtime and kubelet installed
+- A VPN gateway with appropriate kernel and firewall configuration
+
+Personas may enable or disable capabilities selectively, but they do not imply that any application is actually running.
+
+### Outputs
+
+L3 produces fully converged hosts that are:
+
+- Reachable and consistently configured
+- Idempotent and safe to re-run
+- Equipped with declared runtime capabilities
+- Ready for workload deployment
+
+These hosts are consumed directly by L4 for application orchestration.
+
+### Why L3 Exists
+
+By isolating OS convergence and capability enablement into L3, the system:
+
+- Prevents application logic from mutating base system state
+- Enables safe host rebuilds without entangling workloads
+- Keeps OS policy centralized and auditable
+- Establishes a clean contract between infrastructure and applications
+
+If L3 succeeds, downstream layers can assume a stable, well-understood host substrate.
+
+## L4 – Runtime Orchestration & Validation
+
+**Purpose:**  
+Deploy, manage, and validate application workloads on converged hosts.
+
+L4 is responsible for everything that turns a capable host into a *useful system*. It applies workload-specific configuration, deploys services, and validates that those services are operating as intended.
+
+Unlike earlier layers, L4 is explicitly **stateful** and **workload-aware**.
+
+### Responsibilities
+
+L4 focuses on runtime and application-level concerns, including:
+
+- Deploying application workloads (e.g. Docker Compose stacks, Kubernetes manifests)
+- Managing application configuration and secrets
+- Creating and managing application data directories and volumes
+- Applying application-specific backup fragments
+- Configuring ingress, routing, and service exposure
+- Applying workload-aware networking and policy (e.g. VPN routing rules)
+- Performing runtime validation and health checks
+- Restarting, upgrading, or removing application stacks
+
+L4 answers the question: *“What is this system currently running?”*
+
+### What L4 Does *Not* Do
+
+L4 does **not**:
+
+- Install or configure base operating system packages
+- Modify OS-level security or hardening policy
+- Install runtime substrates (e.g. Docker engine, container runtime)
+- Assume responsibility for host identity or baseline correctness
+
+L4 consumes capabilities established by L3, but must not redefine them.
+
+### Execution Characteristics
+
+- L4 is designed to be **safe to re-run** as applications change
+- L4 may be run independently of earlier layers when iterating on workloads
+- Failures in L4 should not compromise host integrity
+
+### Outputs
+
+L4 produces:
+
+- Running application services
+- User-facing functionality
+- Runtime state and data
+- Health and observability signals
+
+If L4 succeeds, the system is not just provisioned — it is operational.
+
 ## Layer Dependency Model
 
 The orchestration stack is intentionally **linear**: each layer depends only on the layers below it, and produces outputs consumed by the layers above it.
@@ -217,3 +337,65 @@ L0  →  L1  →  L2  →  L3  →  L4
 * Responsibilities must not leak downward (e.g. L4 must not install OS packages or mutate base system state).
 
 This dependency model keeps failures localized, rebuilds predictable, and each layer understandable in isolation.
+
+## Capability vs Workload
+
+A central design principle of this orchestration stack is the strict separation between **capabilities** and **workloads**.
+
+This distinction defines the boundary between **L3** and **L4**, and is critical to maintaining a system that is safe to rebuild, reason about, and evolve over time.
+
+### Capabilities (L3)
+
+Capabilities describe what a host *can do*.
+
+They are properties of the operating system and its substrate, and are expected to be stable, repeatable, and safe to apply broadly.
+
+Examples of capabilities include:
+
+- Operating system baseline configuration
+- Users, groups, and SSH access
+- Security and hardening policy
+- Monitoring and metrics agents
+- Backup frameworks (scheduling, logging, execution)
+- Container runtimes (e.g. Docker engine)
+- Kernel and networking prerequisites (e.g. IP forwarding)
+- Persona-based enablement of host features
+
+Capabilities answer the question:  
+**“What kind of machine is this?”**
+
+### Workloads (L4)
+
+Workloads describe what a host *is currently running*.
+
+They are inherently stateful, often user-facing, and may change frequently over time.
+
+Examples of workloads include:
+
+- Application services (e.g. Traefik, Pi-hole, Plex)
+- Docker Compose or Kubernetes deployments
+- Application configuration and secrets
+- Application data and volumes
+- Backup fragments tied to specific services
+- Workload-aware networking and routing policy
+- Health checks and runtime validation
+
+Workloads answer the question:  
+**“What does this machine do?”**
+
+### Why the Distinction Matters
+
+Keeping capabilities and workloads separate allows the system to:
+
+- Rebuild hosts safely without entangling application state
+- Re-run OS convergence without impacting running services
+- Iterate on applications independently of infrastructure
+- Fail fast when prerequisites are missing
+- Maintain a clear mental model as the system grows
+
+A useful rule of thumb:
+
+> If removing it still leaves a healthy operating system, it is a workload.  
+> If removing it breaks the host’s ability to function as intended, it is a capability.
+
+This doctrine is enforced throughout the L3/L4 boundary and guides all future role and playbook design.
