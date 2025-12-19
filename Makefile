@@ -22,6 +22,7 @@ include .env # load .env if present
 export
 endif
 
+TF_DIR ?= terraform/l2
 .DEFAULT_GOAL := help
 
 .PHONY: \
@@ -30,7 +31,9 @@ endif
   l0-runway \
   l1-arch-iso \
   l1-arch-template \
-  l1-ubuntu-template 
+  l1-ubuntu-template \
+  l2-apply-% \
+  l2-destroy-%
 #   l2-arch-devops-apply \
 #   l2-arch-devops-destroy \
 #   l2-arch-tinker-apply \
@@ -72,47 +75,14 @@ l1-ubuntu-template: ## Prepare a Proxmox VM template suitable for Ubuntu install
 	  scripts/l1/ubuntu-template.sh'
 
 # ## ---- L2 TARGETS PER OS/PERSONA
-#
-# l2-arch-devops-apply: ## Plan/Apply Arch DevOps VM via Terraform (plan by default)
-# 	@$(RUN) bash -lc 'set -euo pipefail; \
-# 	  scripts/l2-terraform.sh terraform/l2/arch_devops apply'
-#
-# l2-arch-devops-destroy: ## Plan/Destroy Arch DevOps VM via Terraform (dry-run by default)
-# 	@$(RUN) bash -lc 'set -euo pipefail; \
-# 	  scripts/l2-terraform.sh terraform/l2/arch_devops destroy'
-#
-# l2-arch-tinker-apply: ## Plan/Apply Arch Tinker VM via Terraform (plan by default)
-# 	@$(RUN) bash -lc 'set -euo pipefail; \
-# 	  scripts/l2-terraform.sh terraform/l2/arch_tinker apply'
-#
-# l2-arch-tinker-destroy: ## Plan/Destroy Arch Tinker VM via Terraform (dry-run by default)
-# 	@$(RUN) bash -lc 'set -euo pipefail; \
-# 	  scripts/l2-terraform.sh terraform/l2/arch_tinker destroy'
-#
-# l2-ubuntu-docker-apply: ## Plan/Apply Ubuntu Docker VMs via Terraform (plan by default)
-# 	@$(RUN) bash -lc 'set -euo pipefail; \
-# 	  scripts/l2-terraform.sh terraform/l2/ubuntu_docker apply'
-#
-# l2-ubuntu-docker-destroy: ## Plan/Destroy Ubuntu Docker VMs via Terraform (dry-run by default)
-# 	@$(RUN) bash -lc 'set -euo pipefail; \
-# 	  scripts/l2-terraform.sh terraform/l2/ubuntu_docker destroy'
-#
-# l2-ubuntu-openvpn-apply: ## Plan/Apply Ubuntu OpenVPN VM via Terraform (plan by default)
-# 	@$(RUN) bash -lc 'set -euo pipefail; \
-# 	  scripts/l2-terraform.sh terraform/l2/ubuntu_openvpn apply'
-#
-# l2-ubuntu-openvpn-destroy: ## Plan/Destroy Ubuntu OpenVPN VM via Terraform (dry-run by default)
-# 	@$(RUN) bash -lc 'set -euo pipefail; \
-# 	  scripts/l2-terraform.sh terraform/l2/ubuntu_openvpn destroy'
-#
-# l2-ubuntu-tinker-apply: ## Plan/Apply Ubuntu Tinker VM via Terraform (plan by default)
-# 	@$(RUN) bash -lc 'set -euo pipefail; \
-# 	  scripts/l2-terraform.sh terraform/l2/ubuntu_tinker apply'
-#
-# l2-ubuntu-tinker-destroy: ## Plan/Destroy Ubuntu Tinker VM via Terraform (dry-run by default)
-# 	@$(RUN) bash -lc 'set -euo pipefail; \
-# 	  scripts/l2-terraform.sh terraform/l2/ubuntu_tinker destroy'
-#
+l2-apply-%: ## Ex: make l2-apply-arch_devops
+	@$(RUN) bash -lc 'set -euo pipefail; \
+	  scripts/l2/terraform.sh "$(TF_DIR)/$*" apply'
+
+l2-destroy-%: ## Ex: make l2-destroy-ubuntu_docker
+	@$(RUN) bash -lc 'set -euo pipefail; \
+	  scripts/l2/terraform.sh "$(TF_DIR)/$*" destroy'
+
 # ## ---- L3 TARGETS PER OS/PERSONA
 # # Usage examples:
 # #   make l3-<os>-<persona>-converge                          	# all hosts, all tags
