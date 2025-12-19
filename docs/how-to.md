@@ -38,11 +38,41 @@ By default, the provided `Makefile` prefixes all commands with an invocation of 
 A make call like this:
 
 ```bash
-doppler run -- make <target>
+make <target>
 ```
 
-Will be executed like this:
+Will be executed like this (by default):
 
 ```bash
 doppler run -- make <target>
 ```
+## Cleaning the Workspace
+
+The `clean` target removes all locally generated artifacts and temporary files created during normal operation of the stack.
+
+### Usage
+
+```
+make clean
+```
+
+### What `clean` Does
+
+Running `clean` removes local-only state such as:
+
+* Generated artifacts and manifests
+* Rendered inventories and intermediate files
+* Cached downloads and temporary working directories
+* Build output from tooling like Packer, Terraform, and Ansible
+
+The goal is to return the repository to a **fresh checkout–equivalent state**.
+
+### What `clean` Does *Not* Do
+
+The `clean` target does **not**:
+
+* Destroy infrastructure
+* Modify remote systems
+* Remove secrets or environment configuration
+
+It is safe to run at any time and only affects the local working directory.
