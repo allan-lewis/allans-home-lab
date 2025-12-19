@@ -89,16 +89,11 @@ echo "ISO path: ${ISO_PATH}"
 
 # Optional: upload to Proxmox if env vars are present
 if [[ -n "${PVE_ACCESS_HOST}" && -n "${PVE_NODE}" && -n "${PM_TOKEN_ID}" && -n "${PM_TOKEN_SECRET}" ]]; then
-  echo "==> Uploading ISO to Proxmox via API"
+  echo "==> Uploading ISO to Proxmox via rsync"
 
-  BASE_URL="https://${PVE_SSH_IP}:8006"
-
-  echo "Using base URL: ${BASE_URL}"
-
-  curl -k --fail-with-body \
-    -X POST "${BASE_URL}/api2/json/nodes/${PVE_NODE}/storage/${PVE_ISO_STORAGE}/upload?content=iso" \
-    -H "Authorization: PVEAPIToken=${PM_TOKEN_ID}=${PM_TOKEN_SECRET}" \
-    -F "filename=@${ISO_PATH}"
+  rsync -ah --partial --progress --inplace \
+    -e "ssh -o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" \
+    "${ISO_PATH}" "root@${PVE_SSH_IP}:/var/lib/vz/template/iso/${ISO_NAME}"
 
   echo "Upload complete."
 else
