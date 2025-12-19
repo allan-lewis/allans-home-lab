@@ -33,7 +33,8 @@ These variables are validated early in the workflow and execution will fail if a
 
 ### Doppler (Recommended / Happy Path)
 
-By default, the provided `Makefile` runs commands via:
+By default, the provided `Makefile` prefixes all commands with an invocation of Doppler, providing a clean and easy way to populate environment variables.  This prefixing can be skipped if a different method of providing these values is preferred.
 
 ```bash
 doppler run -- make <target>
+
