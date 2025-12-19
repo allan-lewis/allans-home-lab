@@ -1,5 +1,9 @@
 # Allan's Home Lab
 
+## Documentation
+
+- [How-To Guides](docs/how-to.md)
+
 ## Project Overview
 
 This repository implements a **layered, GitOps-style homelab orchestration stack** designed to reliably build, provision, converge, and operate infrastructure from bare metal up to fully configured services.
