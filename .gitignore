@@ -94,3 +94,4 @@ Icon?
 !archinstall_config.json
 
 .iso-build/
+.template-build-ubuntu/

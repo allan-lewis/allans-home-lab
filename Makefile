@@ -58,7 +58,7 @@ help: ## Show targets
 
 ## ---- GLOBAL TARGETS
 clean: ## Remove ALL artifacts across ALL layers
-	@$(RUN) bash -lc 'scripts/clean-artifacts.sh'
+	@$(RUN) bash -lc 'scripts/clean.sh'
 
 ## ---- L0 TARGETS FOR ALL OS/PERSONA
 l0-runway: ## Runway checks (OS/persona independent)
@@ -67,7 +67,7 @@ l0-runway: ## Runway checks (OS/persona independent)
 ## ---- L1 TARGETS FOR ALL PERSONAS FOR A SINGLE OS
 l1-arch-iso: ## Arch ISO build/upload
 	@$(RUN) bash -lc 'set -euo pipefail; \
-	  scripts/l1/upload-arch-iso.sh'
+	  scripts/l1/arch-iso.sh'
 #
 # l1-arch-template: ## L1 build+manifest for Arch (Packer + Proxmox template manifest)
 # 	@$(RUN) bash -lc 'set -euo pipefail; \
@@ -75,7 +75,7 @@ l1-arch-iso: ## Arch ISO build/upload
 #
 l1-ubuntu-template: ## Ubuntu template build/upload
 	@$(RUN) bash -lc 'set -euo pipefail; \
-	  scripts/l1-template-ubuntu.sh'
+	  scripts/l1/ubuntu-template.sh'
 #
 # ## ---- L2 TARGETS PER OS/PERSONA
 #

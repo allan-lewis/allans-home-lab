@@ -7,3 +7,4 @@ cd "$ROOT_DIR"
 
 rm -rf artifacts
 rm -rf .iso-build
+rm -rf .template-build-ubuntu
