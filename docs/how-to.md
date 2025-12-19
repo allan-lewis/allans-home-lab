@@ -129,8 +129,6 @@ Running `l1-arch-iso` performs the following steps:
 - Prepares the image for cloud-init or equivalent first-boot customization
 - Rebuilds the ISO with the applied changes
 - Uploads the resulting ISO to the configured Proxmox host and storage
-- Produces a manifest documenting Proxmox coordinates for the ISO to be used in later stages
-- Updates the "stable" Arch ISO manifest to point at the manifest produced here (optional, enabled by default)
 
 The resulting ISO is intended to be used as an installation source for automated VM builds in later layers.
 
@@ -138,7 +136,8 @@ The resulting ISO is intended to be used as an installation source for automated
 
 - A customized, versioned Arch Linux ISO
 - An uploaded ISO artifact available in Proxmox storage
-- Local build artifacts and manifests (removable via `clean`)
+- Source-controlled manifest documenting Proxmox coordinates for the ISO (to be used in later stages)
+- Updated "stable" Arch ISO manifest link (optional, enabled by default)
 
 ### When to Run
 
