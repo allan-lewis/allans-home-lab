@@ -286,3 +286,59 @@ To apply changes (including creating or destroying resources), you must set:
 ```bash
 APPLY=1
 ```
+
+## Converging Hosts (L3 and L4)
+
+The `l3-converge-%` and `l4-converge-%` targets run Ansible convergence against a specific group of hosts. The `%` portion must map to a valid Ansible inventory group, and convergence is limited to the hosts in that group.
+
+### Usage
+
+Converge host capabilities (L3):
+
+```bash
+make l3-converge-ubuntu_devops
+```
+
+Converge workloads (L4):
+
+```bash
+make l4-converge-ubuntu_devops
+```
+
+### What These Targets Do
+
+- `l3-converge-%` applies **L3 convergence**, configuring operating system state and host capabilities
+- `l4-converge-%` applies **L4 convergence**, deploying and managing application workloads
+
+Both targets route through a shared convergence script, which selects the appropriate Ansible playbooks based on the requested layer.
+
+### Inventory Group Requirement
+
+The suffix provided to the target (for example, `ubuntu_devops`) must correspond to an existing Ansible inventory group. Only hosts in that group will be targeted during convergence.
+
+### Additional Execution Controls
+
+The following variables may be used to further limit or scope execution:
+
+- `TAGS`  
+  Restricts Ansible execution to specific tags.
+
+```bash
+TAGS=backup make l3-converge-ubuntu_devops
+```
+
+- `LIMIT`  
+  Restricts execution to a subset of hosts or groups.
+
+```bash
+LIMIT=host1 make l4-converge-ubuntu_devops
+```
+
+These controls may be combined as needed to safely iterate on changes.
+
+### When to Run
+
+Run L3 convergence when refining OS configuration or host capabilities.  
+Run L4 convergence when deploying, updating, or validating application workloads.
+
+Both targets are safe to re-run and are designed to support incremental iteration.

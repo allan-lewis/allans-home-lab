@@ -81,5 +81,5 @@
         name: all_shell
         apply:
           tags: [l3, step_shell]
-      when: in_arch
+      when: in_arch or in_ubuntu
       tags: [l3, step_shell]
