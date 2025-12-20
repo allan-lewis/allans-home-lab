@@ -47,8 +47,6 @@ echo "Tags   : ${TAGS:-<none>}"
 echo "Limit  : ${LIMIT:-<none>}"
 echo "Extra  : ${extra[@]}"
 
-exit 0
-
 if ((${#extra[@]})); then
   ansible-playbook \
     -i "${INVENTORY}" \
@@ -60,4 +58,4 @@ else
     "${PLAYBOOK}"
 fi
 
-echo "=== [L3] Converge complete ==="
+echo "=== [${LAYER}] Converge complete ==="

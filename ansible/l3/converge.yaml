@@ -1,1 +1,67 @@
 ---
+- name: L3 OS Convergence
+  hosts: "{{ converge_group }}"
+  gather_facts: true
+  become: true
+
+  vars:
+    in_arch: "{{ inventory_hostname in (groups['arch'] | default([])) }}"
+    in_ubuntu: "{{ inventory_hostname in (groups['ubuntu'] | default([])) }}"
+
+  tasks:
+    # -----------------
+    # Arch steps
+    # -----------------
+    - name: L3 | Arch | base
+      ansible.builtin.include_role:
+        name: arch_base
+        apply:
+          tags: [l3, os_arch, step_base]
+      when: in_arch
+      tags: [l3, os_arch, step_base]
+
+    - name: L3 | Arch | harden
+      ansible.builtin.include_role:
+        name: arch_harden
+        apply:
+          tags: [l3, os_arch, step_harden]
+      when: in_arch
+      tags: [l3, os_arch, step_harden]
+
+    - name: L3 | Arch | services
+      ansible.builtin.include_role:
+        name: arch_services
+        apply:
+          tags: [l3, os_arch, step_services]
+      when: in_arch
+      tags: [l3, os_arch, step_services]
+
+    # -----------------
+    # Ubuntu steps
+    # -----------------
+    # - name: L3 | Ubuntu | base
+    #   ansible.builtin.include_role:
+    #     name: ubuntu_base
+    #     apply:
+    #       tags: [l3, os_ubuntu, step_base]
+    #   when: in_ubuntu
+    #   tags: [l3, os_ubuntu, step_base]
+
+    # - name: L3 | Ubuntu | harden
+    #   ansible.builtin.include_role:
+    #     name: ubuntu_harden
+    #     apply:
+    #       tags: [l3, os_ubuntu, step_harden]
+    #   when: in_ubuntu
+    #   tags: [l3, os_ubuntu, step_harden]
+
+    # -----------------
+    # Steps for all OS
+    # -----------------
+    - name: L3 | All | shell
+      ansible.builtin.include_role:
+        name: all_shell
+        apply:
+          tags: [l3, step_shell]
+      when: in_arch
+      tags: [l3, step_shell]
