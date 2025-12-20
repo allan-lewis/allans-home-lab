@@ -8,6 +8,7 @@
     in_arch: "{{ inventory_hostname in (groups['arch'] | default([])) }}"
     in_arch_aur: "{{ inventory_hostname in (groups['arch_aur'] | default([])) }}"
     in_arch_desktop: "{{ inventory_hostname in (groups['arch_desktop'] | default([])) }}"
+    in_arch_docker: "{{ inventory_hostname in (groups['arch_docker'] | default([])) }}"
     in_arch_node_exporter: "{{ inventory_hostname in (groups['arch_node_exporter'] | default([])) }}"
     in_ubuntu: "{{ inventory_hostname in (groups['ubuntu'] | default([])) }}"
     in_ubuntu_node_exporter: "{{ inventory_hostname in (groups['ubuntu_node_exporter'] | default([])) }}"
@@ -56,6 +57,14 @@
       when: in_arch_desktop
       tags: [l3, os_arch, step_desktop]
 
+    - name: L3 | Arch | docker
+      ansible.builtin.include_role:
+        name: arch_docker
+        apply:
+          tags: [l3, os_arch, step_docker]
+      when: in_arch_docker
+      tags: [l3, os_arch, step_docker]
+
     # -----------------
     # Ubuntu steps
     # -----------------
@@ -85,6 +94,22 @@
           tags: [l3, step_shell]
       when: in_arch or in_ubuntu
       tags: [l3, step_shell]
+
+    - name: L3 | All | ssh keys
+      ansible.builtin.include_role:
+        name: all_ssh_keys
+        apply:
+          tags: [l3, step_ssh_keys]
+      when: in_arch or in_ubuntu
+      tags: [l3, step_ssh_keys]
+
+    - name: L3 | All | backup runner
+      ansible.builtin.include_role:
+        name: all_backup_runner
+        apply:
+          tags: [l3, step_backup_runner]
+      when: in_arch or in_ubuntu
+      tags: [l3, step_backup_runner]
 
     - name: L3 | All | node exporter
       ansible.builtin.include_role:

@@ -71,9 +71,11 @@ all:
   children:
     arch:
       hosts:
-        cujo:
-        sheemie:
       children:
+        arch_docker:
+          hosts:
+            cujo:
+            sheemie:
         arch_node_exporter:
           hosts:
             langolier:

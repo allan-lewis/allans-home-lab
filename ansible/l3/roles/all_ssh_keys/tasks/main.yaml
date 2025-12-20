@@ -1,0 +1,56 @@
+---
+- name: SSH Keys | Validate required environment variables are present
+  ansible.builtin.assert:
+    that:
+      - (lookup('env', 'SSH_PRIVATE_KEY') | default('', true)) | length > 0
+      - (lookup('env', 'SSH_PUBLIC_KEY')  | default('', true)) | length > 0
+    fail_msg: >-
+      SSH_PRIVATE_KEY and SSH_PUBLIC_KEY environment variables must both be set
+      and non-empty.
+  no_log: true
+
+- name: SSH Keys | Load SSH keys from environment
+  ansible.builtin.set_fact:
+    _ssh_private_key_b64: "{{ lookup('env', 'SSH_PRIVATE_KEY') | default('', true) }}"
+    _ssh_public_key_b64:  "{{ lookup('env', 'SSH_PUBLIC_KEY')  | default('', true) }}"
+  no_log: true
+
+- name: SSH Keys | Normalize user list (dedupe)
+  ansible.builtin.set_fact:
+    _ssh_key_users: "{{ ssh_keys_users | unique }}"
+
+- name: SSH Keys | Load passwd database
+  ansible.builtin.getent:
+    database: passwd
+
+- name: SSH Keys | Ensure ~/.ssh directory exists
+  ansible.builtin.file:
+    path: "{{ getent_passwd[item][4] }}/.ssh"
+    state: directory
+    owner: "{{ item }}"
+    group: "{{ item }}"
+    mode: "0700"
+  loop: "{{ _ssh_key_users }}"
+  become: true
+
+- name: SSH Keys | Install private key
+  ansible.builtin.copy:
+    dest: "{{ getent_passwd[item][4] }}/.ssh/{{ ssh_keys_private_filename }}"
+    content: "{{ _ssh_private_key_b64 | b64decode }}"
+    owner: "{{ item }}"
+    group: "{{ item }}"
+    mode: "0600"
+  loop: "{{ _ssh_key_users }}"
+  become: true
+  no_log: true
+
+- name: SSH Keys | Install public key
+  ansible.builtin.copy:
+    dest: "{{ getent_passwd[item][4] }}/.ssh/{{ ssh_keys_public_filename }}"
+    content: "{{ _ssh_public_key_b64 | b64decode }}"
+    owner: "{{ item }}"
+    group: "{{ item }}"
+    mode: "0644"
+  loop: "{{ _ssh_key_users }}"
+  become: true
+  no_log: true

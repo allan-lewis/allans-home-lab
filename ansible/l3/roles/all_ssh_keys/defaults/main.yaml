@@ -1,0 +1,6 @@
+ssh_keys_users:
+  - root
+  - "{{ gitops_user }}"
+
+ssh_keys_private_filename: id_ed25519
+ssh_keys_public_filename: id_ed25519.pub
