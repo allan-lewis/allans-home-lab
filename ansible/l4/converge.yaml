@@ -18,7 +18,7 @@
         name: all_backups
         apply:
           tags: [l4, step_backups]
-      when: in_ubuntu_devops or in_arch_devops
+      when: in_ubuntu or in_arch
       tags: [l4, step_backups]
 
     - name: L4 | All | devops
