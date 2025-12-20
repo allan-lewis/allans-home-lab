@@ -1,0 +1,4 @@
+---
+backup_runner_volumes: []
+backup_runner_base_dir: /etc/gitops-homelab/backup
+backup_runner_fragment_header: "Default fragment automatically rendered based on hosts' 'backup_volumes' variable"
