@@ -13,6 +13,14 @@
     # -----------------
     # Steps for all OS
     # -----------------
+    - name: L4 | All | backups
+      ansible.builtin.include_role:
+        name: all_backups
+        apply:
+          tags: [l4, step_backups]
+      when: in_ubuntu_devops or in_arch_devops
+      tags: [l4, step_backups]
+
     - name: L4 | All | devops
       ansible.builtin.include_role:
         name: all_devops

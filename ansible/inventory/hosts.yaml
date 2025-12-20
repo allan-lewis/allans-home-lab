@@ -70,25 +70,51 @@ all:
 
   children:
     arch:
-      hosts:
       children:
-        arch_docker:
-          hosts:
-            cujo:
-        arch_node_exporter:
+        arch_devops:
           hosts:
             langolier:
-    ubuntu:
-      hosts:
-        todash:
-      children:
-        ubuntu_docker:
+        arch_tinker:
           hosts:
+            cujo:
+
+    docker:
+      children:
+        docker_monitoring:
+          hosts:
+            cujo:
+            sheemie:
             todash:
-          children:
-            ubuntu_devops:
-              hosts:
-                sheemie:
+
+    ubuntu:
+      children:
+        ubuntu_devops:
+          hosts:
+            sheemie:
+        ubuntu_tinker:
+          hosts:
+            todash:     
+
+    # arch:
+    #   hosts:
+    #   children:
+    #     arch_docker:
+    #       hosts:
+    #         cujo:
+    #     arch_node_exporter:
+    #       hosts:
+    #         langolier:
+    # ubuntu:
+    #   hosts:
+    #     todash:
+    #   children:
+    #     ubuntu_docker:
+    #       hosts:
+    #         todash:
+    #       children:
+    #         ubuntu_devops:
+    #           hosts:
+    #             sheemie:
 
   # children:
   #   fully_managed:

@@ -136,3 +136,11 @@
           tags: [l3, step_devops]
       when: in_ubuntu_devops or in_arch_devops
       tags: [l3, step_devops]
+
+    - name: L3 | All | docker monitoring
+      ansible.builtin.include_role:
+        name: all_docker_compose
+        apply:
+          tags: [l3, step_docker_monitoring]
+      when: "'docker_monitoring' in group_names"
+      tags: [l3, step_docker_monitoring]
