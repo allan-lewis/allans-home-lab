@@ -6,6 +6,8 @@
 
   vars:
     in_arch: "{{ inventory_hostname in (groups['arch'] | default([])) }}"
+    in_arch_aur: "{{ inventory_hostname in (groups['arch_aur'] | default([])) }}"
+    in_arch_desktop: "{{ inventory_hostname in (groups['arch_desktop'] | default([])) }}"
     in_ubuntu: "{{ inventory_hostname in (groups['ubuntu'] | default([])) }}"
 
   tasks:
@@ -35,6 +37,22 @@
           tags: [l3, os_arch, step_services]
       when: in_arch
       tags: [l3, os_arch, step_services]
+
+    - name: L3 | Arch | AUR
+      ansible.builtin.include_role:
+        name: arch_aur
+        apply:
+          tags: [l3, os_arch, step_aur]
+      when: in_arch_aur
+      tags: [l3, os_arch, step_aur]
+
+    - name: L3 | Arch | desktop
+      ansible.builtin.include_role:
+        name: arch_desktop
+        apply:
+          tags: [l3, os_arch, step_desktop]
+      when: in_arch_desktop
+      tags: [l3, os_arch, step_desktop]
 
     # -----------------
     # Ubuntu steps
