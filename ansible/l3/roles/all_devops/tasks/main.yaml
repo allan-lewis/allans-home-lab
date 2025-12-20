@@ -117,3 +117,78 @@
       {{
         (ansible_version.stdout | default('') ).splitlines() | first | default('ansible: <no output>')
       }}
+
+- name: HashiCorp | Determine architecture
+  ansible.builtin.set_fact:
+    hashicorp_arch: "{{ hashicorp_arch_map[ansible_architecture] | default('unsupported') }}"
+
+- name: HashiCorp | Fail on unsupported architecture
+  ansible.builtin.fail:
+    msg: "Unsupported architecture for HashiCorp tools: {{ ansible_architecture }}"
+  when: hashicorp_arch == 'unsupported'
+
+- name: Terraform | Check if installed
+  ansible.builtin.command: terraform version
+  register: terraform_pre
+  changed_when: false
+  failed_when: false
+
+- name: Terraform | Download binary
+  become: true
+  ansible.builtin.get_url:
+    url: "https://releases.hashicorp.com/terraform/{{ terraform_version }}/terraform_{{ terraform_version }}_linux_{{ hashicorp_arch }}.zip"
+    dest: "/tmp/terraform.zip"
+    mode: "0644"
+  when: terraform_pre.rc != 0
+
+- name: Terraform | Unpack
+  become: true
+  ansible.builtin.unarchive:
+    src: "/tmp/terraform.zip"
+    dest: "/usr/local/bin"
+    remote_src: true
+    mode: "0755"
+  when: terraform_pre.rc != 0
+
+- name: Terraform | Verify
+  ansible.builtin.command: terraform version
+  register: terraform_version_out
+  changed_when: false
+  failed_when: terraform_version_out.rc != 0
+
+- name: Terraform | Show version
+  ansible.builtin.debug:
+    msg: "{{ terraform_version_out.stdout_lines | first }}"
+
+- name: Packer | Check if installed
+  ansible.builtin.command: packer version
+  register: packer_pre
+  changed_when: false
+  failed_when: false
+
+- name: Packer | Download binary
+  become: true
+  ansible.builtin.get_url:
+    url: "https://releases.hashicorp.com/packer/{{ packer_version }}/packer_{{ packer_version }}_linux_{{ hashicorp_arch }}.zip"
+    dest: "/tmp/packer.zip"
+    mode: "0644"
+  when: packer_pre.rc != 0
+
+- name: Packer | Unpack
+  become: true
+  ansible.builtin.unarchive:
+    src: "/tmp/packer.zip"
+    dest: "/usr/local/bin"
+    remote_src: true
+    mode: "0755"
+  when: packer_pre.rc != 0
+
+- name: Packer | Verify
+  ansible.builtin.command: packer version
+  register: packer_version_out
+  changed_when: false
+  failed_when: packer_version_out.rc != 0
+
+- name: Packer | Show version
+  ansible.builtin.debug:
+    msg: "{{ packer_version_out.stdout_lines | first }}"

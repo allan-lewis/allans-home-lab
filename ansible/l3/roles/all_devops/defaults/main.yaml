@@ -1,3 +1,12 @@
 ---
 all_devops_packages:
   - ansible
+
+terraform_version: "1.14.2"
+packer_version: "1.14.3"
+
+hashicorp_arch_map:
+  x86_64: amd64
+  amd64: amd64
+  aarch64: arm64
+  arm64: arm64
