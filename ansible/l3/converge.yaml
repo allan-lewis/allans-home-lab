@@ -8,7 +8,9 @@
     in_arch: "{{ inventory_hostname in (groups['arch'] | default([])) }}"
     in_arch_aur: "{{ inventory_hostname in (groups['arch_aur'] | default([])) }}"
     in_arch_desktop: "{{ inventory_hostname in (groups['arch_desktop'] | default([])) }}"
+    in_arch_node_exporter: "{{ inventory_hostname in (groups['arch_node_exporter'] | default([])) }}"
     in_ubuntu: "{{ inventory_hostname in (groups['ubuntu'] | default([])) }}"
+    in_ubuntu_node_exporter: "{{ inventory_hostname in (groups['ubuntu_node_exporter'] | default([])) }}"
 
   tasks:
     # -----------------
@@ -83,3 +85,11 @@
           tags: [l3, step_shell]
       when: in_arch or in_ubuntu
       tags: [l3, step_shell]
+
+    - name: L3 | All | node exporter
+      ansible.builtin.include_role:
+        name: all_node_exporter
+        apply:
+          tags: [l3, step_node_exporter]
+      when: in_arch_node_exporter or in_ubuntu_node_exporter
+      tags: [l3, step_node_exporter]

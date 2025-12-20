@@ -72,8 +72,11 @@ all:
     arch:
       hosts:
         cujo:
-        langolier:
         sheemie:
+      children:
+        arch_node_exporter:
+          hosts:
+            langolier:
     ubuntu:
       hosts:
         todash:
