@@ -1,0 +1,119 @@
+---
+- name: Check if Doppler is already installed
+  ansible.builtin.command: doppler --version
+  register: doppler_version_pre
+  changed_when: false
+  failed_when: false
+
+- name: Download Doppler CLI install script
+  become: true
+  ansible.builtin.get_url:
+    url: "https://cli.doppler.com/install.sh"
+    dest: "/tmp/doppler-install.sh"
+    mode: "0700"
+  when: doppler_version_pre.rc != 0
+
+- name: Run Doppler CLI install script
+  become: true
+  ansible.builtin.command:
+    cmd: "/bin/bash /tmp/doppler-install.sh"
+  register: doppler_install
+  changed_when: true
+  failed_when: doppler_install.rc != 0
+  when: doppler_version_pre.rc != 0
+
+- name: Verify Doppler installation
+  ansible.builtin.command: doppler --version
+  register: doppler_version
+  changed_when: false
+  failed_when: doppler_version.rc != 0
+
+- name: Display Doppler version (first line)
+  ansible.builtin.debug:
+    msg: "doppler: {{ (doppler_version.stdout | default('')).split('\n')[0] }}"
+
+- name: AWS CLI | Check if aws is already installed
+  ansible.builtin.command: aws --version
+  register: aws_version_pre
+  changed_when: false
+  failed_when: false
+
+# Map Ansible arch names to AWS bundle names
+- name: AWS CLI | Determine AWS bundle architecture
+  ansible.builtin.set_fact:
+    awscli_v2_arch: >-
+      {{
+        'x86_64' if ansible_architecture in ['x86_64', 'amd64'] else
+        'aarch64' if ansible_architecture in ['aarch64', 'arm64'] else
+        'unsupported'
+      }}
+
+- name: AWS CLI | Fail on unsupported architecture
+  ansible.builtin.fail:
+    msg: "Unsupported architecture for AWS CLI v2 install: {{ ansible_architecture }}"
+  when: awscli_v2_arch == 'unsupported'
+
+- name: AWS CLI | Download AWS CLI v2 zip
+  become: true
+  ansible.builtin.get_url:
+    url: "https://awscli.amazonaws.com/awscli-exe-linux-{{ awscli_v2_arch }}.zip"
+    dest: "/tmp/awscliv2.zip"
+    mode: "0644"
+  when: aws_version_pre.rc != 0
+
+- name: AWS CLI | Unpack AWS CLI v2 installer
+  become: true
+  ansible.builtin.unarchive:
+    src: "/tmp/awscliv2.zip"
+    dest: "/tmp"
+    remote_src: true
+  when: aws_version_pre.rc != 0
+
+- name: AWS CLI | Install AWS CLI v2
+  become: true
+  ansible.builtin.command:
+    cmd: "/tmp/aws/install -i /usr/local/aws-cli -b /usr/local/bin"
+    creates: "/usr/local/bin/aws"
+  register: awscli_install
+  changed_when: awscli_install.rc == 0
+  failed_when: awscli_install.rc != 0
+  when: aws_version_pre.rc != 0
+
+- name: AWS CLI | Verify installation
+  ansible.builtin.command: aws --version
+  register: aws_version
+  changed_when: false
+  failed_when: aws_version.rc != 0
+
+- name: AWS CLI | Display version
+  ansible.builtin.debug:
+    msg: "aws: {{ aws_version.stdout | default('') }}"
+
+- name: DevOps | Install packages (Arch)
+  become: true
+  community.general.pacman:
+    name: "{{ all_devops_packages }}"
+    state: present
+    update_cache: true
+  when: ansible_facts.os_family == "Archlinux"
+
+- name: DevOps | Install packages (Debian/Ubuntu)
+  become: true
+  ansible.builtin.apt:
+    name: "{{ all_devops_packages }}"
+    state: present
+    update_cache: true
+  when: ansible_facts.os_family == "Debian"
+
+- name: Ansible | Verify
+  ansible.builtin.command: ansible --version
+  register: ansible_version
+  changed_when: false
+  failed_when: ansible_version.rc != 0
+
+- name: Ansible | Show version (first line)
+  ansible.builtin.debug:
+    msg: >-
+      {{
+        (ansible_version.stdout | default('') ).splitlines() | first | default('ansible: <no output>')
+      }}

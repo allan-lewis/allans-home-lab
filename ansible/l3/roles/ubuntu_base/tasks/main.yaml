@@ -1,0 +1,56 @@
+---
+- name: Set the time zone.
+  community.general.timezone:
+    name: "{{ gitops_tz | default('America/New_York') }}"
+
+- name: Perform an apt update.
+  ansible.builtin.apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+
+- name: Perform an apt upgrade.
+  ansible.builtin.apt: upgrade=dist force_apt_get=yes
+
+- name: Install necessary dependencies.
+  ansible.builtin.apt:
+    pkg:
+      - unzip
+      - zsh
+      - curl
+      - stow
+      - net-tools
+      - nfs-common
+      - neovim
+    state: latest
+    update_cache: true
+
+- name: Ensure required packages for adding PPAs are present
+  ansible.builtin.apt:
+    name:
+      - software-properties-common
+      - ca-certificates
+    state: present
+    update_cache: true
+- name: Add Fastfetch official PPA
+  ansible.builtin.apt_repository:
+    repo: ppa:zhangsongcui3371/fastfetch
+    state: present
+    filename: fastfetch
+
+- name: Install fastfetch
+  ansible.builtin.apt:
+    name: fastfetch
+    state: present
+    update_cache: true
+
+- name: Download and install Starship
+  shell: curl -sS https://starship.rs/install.sh | sh -s -- -y
+  args:
+    creates: /usr/local/bin/starship
+
+- name: Verify Starship installation
+  command: "starship --version"
+  register: starship_version_output
+  changed_when: false
+
+- name: Display Starship version
+  debug:
+    msg: "Starship installed successfully: {{ starship_version_output.stdout }}"

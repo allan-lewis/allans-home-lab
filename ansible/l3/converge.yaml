@@ -8,10 +8,12 @@
     in_arch: "{{ inventory_hostname in (groups['arch'] | default([])) }}"
     in_arch_aur: "{{ inventory_hostname in (groups['arch_aur'] | default([])) }}"
     in_arch_desktop: "{{ inventory_hostname in (groups['arch_desktop'] | default([])) }}"
+    in_arch_devops: "{{ inventory_hostname in (groups['arch_devops'] | default([])) }}"
     in_arch_docker: "{{ inventory_hostname in (groups['arch_docker'] | default([])) }}"
     in_arch_node_exporter: "{{ inventory_hostname in (groups['arch_node_exporter'] | default([])) }}"
     in_ubuntu: "{{ inventory_hostname in (groups['ubuntu'] | default([])) }}"
     in_ubuntu_node_exporter: "{{ inventory_hostname in (groups['ubuntu_node_exporter'] | default([])) }}"
+    in_ubuntu_devops: "{{ inventory_hostname in (groups['ubuntu_devops'] | default([])) }}"
 
   tasks:
     # -----------------
@@ -68,21 +70,29 @@
     # -----------------
     # Ubuntu steps
     # -----------------
-    # - name: L3 | Ubuntu | base
-    #   ansible.builtin.include_role:
-    #     name: ubuntu_base
-    #     apply:
-    #       tags: [l3, os_ubuntu, step_base]
-    #   when: in_ubuntu
-    #   tags: [l3, os_ubuntu, step_base]
+    - name: L3 | Ubuntu | base
+      ansible.builtin.include_role:
+        name: ubuntu_base
+        apply:
+          tags: [l3, os_ubuntu, step_base]
+      when: in_ubuntu
+      tags: [l3, os_ubuntu, step_base]
 
-    # - name: L3 | Ubuntu | harden
-    #   ansible.builtin.include_role:
-    #     name: ubuntu_harden
-    #     apply:
-    #       tags: [l3, os_ubuntu, step_harden]
-    #   when: in_ubuntu
-    #   tags: [l3, os_ubuntu, step_harden]
+    - name: L3 | Ubuntu | harden
+      ansible.builtin.include_role:
+        name: ubuntu_harden
+        apply:
+          tags: [l3, os_ubuntu, step_harden]
+      when: in_ubuntu
+      tags: [l3, os_ubuntu, step_harden]
+
+    - name: L3 | Ubuntu | docker
+      ansible.builtin.include_role:
+        name: ubuntu_docker
+        apply:
+          tags: [l3, os_ubuntu, step_docker]
+      when: in_ubuntu
+      tags: [l3, os_ubuntu, step_docker]
 
     # -----------------
     # Steps for all OS
@@ -118,3 +128,11 @@
           tags: [l3, step_node_exporter]
       when: in_arch_node_exporter or in_ubuntu_node_exporter
       tags: [l3, step_node_exporter]
+
+    - name: L3 | All | devops
+      ansible.builtin.include_role:
+        name: all_devops
+        apply:
+          tags: [l3, os_ubuntu, step_devops]
+      when: in_ubuntu_devops or in_arch_devops
+      tags: [l3, os_ubuntu, step_devops]

@@ -57,7 +57,7 @@ all:
       gatus_slug: "(K8s Control Plane)"
     sheemie:
       ansible_host: 192.168.86.229
-      gatus_slug: "(Arch DevOps, BTW)"
+      gatus_slug: "(Ubuntu DevOps)"
     sirius:
       ansible_host: 192.168.86.105
       gatus_slug: "(Proxmox Hypervisor)"
@@ -75,13 +75,20 @@ all:
         arch_docker:
           hosts:
             cujo:
-            sheemie:
         arch_node_exporter:
           hosts:
             langolier:
     ubuntu:
       hosts:
         todash:
+      children:
+        ubuntu_docker:
+          hosts:
+            todash:
+          children:
+            ubuntu_devops:
+              hosts:
+                sheemie:
 
   # children:
   #   fully_managed:

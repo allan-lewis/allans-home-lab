@@ -1,0 +1,17 @@
+{
+  "hosts": {
+    "sheemie": {
+      "terraform": {
+        "ip": "192.168.86.229",
+        "ssh_user": "lab",
+        "tags": ["orchestrator", "terraform", "ubuntu", "devops"],
+        "cpu": 4,
+        "memory_mb": 4096,
+        "disk_gb": 32,
+        "template_ref": "ubuntu/devops/stable",
+        "node": "shardik",
+        "ipconfig": "ip=192.168.86.229/24,gw=192.168.86.1"
+      }
+    }
+  }
+}
