@@ -1,0 +1,163 @@
+---
+- name: Source | Ensure source code directory exists
+  become: true
+  ansible.builtin.file:
+    path: "{{ source_code_dir }}"
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "0755"
+
+- name: Source | Clone repositories
+  become: true
+  become_user: "{{ ansible_user }}"
+  ansible.builtin.git:
+    repo: "{{ item.repo }}"
+    dest: "{{ source_code_dir }}/{{ item.dest | default(item.repo | basename | regex_replace('\\.git$', '')) }}"
+    version: "{{ item.version | default('main') }}"
+    update: yes
+    force: no
+  loop: "{{ source_code_repos }}"
+  when: source_code_repos | length > 0
+
+- name: Doppler | Check if token is available
+  ansible.builtin.set_fact:
+    doppler_token_available: "{{ doppler_service_token | length > 0 }}"
+
+- name: Doppler | Token availability
+  ansible.builtin.debug:
+    msg:
+      doppler_token_available: "{{ doppler_token_available }}"
+      doppler_service_token_defined: "{{ doppler_service_token is defined }}"
+      doppler_service_token_length: "{{ doppler_service_token | default('') | length }}"
+
+- name: Doppler | Verify CLI is available
+  become: true
+  become_user: "{{ doppler_user }}"
+  ansible.builtin.command: doppler --version
+  register: doppler_version
+  changed_when: false
+  failed_when: doppler_version.rc != 0
+  when: doppler_token_available
+
+- name: Doppler | Ensure scope directory exists
+  become: true
+  ansible.builtin.file:
+    path: "{{ doppler_scope_dir }}"
+    state: directory
+    owner: "{{ doppler_user }}"
+    group: "{{ doppler_user }}"
+    mode: "0755"
+  when: doppler_token_available
+
+- name: Doppler | Configure service token for scoped directory
+  become: true
+  become_user: "{{ doppler_user }}"
+  no_log: true
+  ansible.builtin.shell: |
+    set -euo pipefail
+    printf '%s\n' "$DOPPLER_SERVICE_TOKEN" | doppler configure set token --scope "{{ doppler_scope_dir }}"
+  args:
+    executable: /bin/bash
+  environment:
+    DOPPLER_SERVICE_TOKEN: "{{ doppler_service_token }}"
+  changed_when: false
+  when: doppler_token_available
+
+- name: Doppler | Configure project/config for scoped directory
+  become: true
+  become_user: "{{ doppler_user }}"
+  no_log: true
+  ansible.builtin.command:
+    cmd: >
+      doppler setup
+      --project {{ doppler_project }}
+      --config {{ doppler_config }}
+      --scope {{ doppler_scope_dir }}
+      --no-interactive
+  register: doppler_setup
+  changed_when: false
+  failed_when: doppler_setup.rc != 0
+  when: doppler_token_available
+
+
+- name: AWS | Determine whether AWS credentials are available
+  ansible.builtin.set_fact:
+    aws_creds_available: >-
+      {{
+        (aws_access_key_id | default('') | length > 0) and
+        (aws_secret_access_key | default('') | length > 0)
+      }}
+
+- name: AWS | Debug credential availability (no secrets)
+  ansible.builtin.debug:
+    msg:
+      aws_creds_available: "{{ aws_creds_available }}"
+      aws_access_key_id_defined: "{{ aws_access_key_id is defined }}"
+      aws_access_key_id_length: "{{ aws_access_key_id | default('') | length }}"
+      aws_secret_access_key_defined: "{{ aws_secret_access_key is defined }}"
+      aws_secret_access_key_length: "{{ aws_secret_access_key | default('') | length }}"
+
+- name: AWS | Verify AWS CLI is available
+  become: true
+  become_user: "{{ aws_cli_user }}"
+  ansible.builtin.command: aws --version
+  register: aws_cli_version
+  changed_when: false
+  failed_when: aws_cli_version.rc != 0
+  when: aws_creds_available
+
+- name: AWS | Create AWS config dir
+  become: true
+  ansible.builtin.file:
+    path: "{{ aws_cli_home }}/.aws"
+    state: directory
+    owner: "{{ aws_cli_user }}"
+    group: "{{ aws_cli_user }}"
+    mode: "0700"
+  when: aws_creds_available or (aws_creds_required | default(false) | bool)
+
+- name: AWS | Ensure AWS config and credentials files exist
+  become: true
+  ansible.builtin.file:
+    path: "{{ aws_cli_home }}/.aws/{{ item }}"
+    state: touch
+    owner: "{{ aws_cli_user }}"
+    group: "{{ aws_cli_user }}"
+    mode: "0600"
+  loop:
+    - config
+    - credentials
+  when: aws_creds_available or (aws_creds_required | default(false) | bool)
+
+- name: AWS | Configure default AWS profile in config
+  become: true
+  ansible.builtin.ini_file:
+    path: "{{ aws_cli_home }}/.aws/config"
+    section: default
+    option: "{{ item.key }}"
+    value: "{{ item.value }}"
+    owner: "{{ aws_cli_user }}"
+    group: "{{ aws_cli_user }}"
+    mode: "0600"
+  loop:
+    - { key: "region",    value: "{{ aws_default_region }}" }
+    - { key: "output",    value: "json" }
+    - { key: "cli_pager", value: "" }
+  when: aws_creds_available or (aws_creds_required | default(false) | bool)
+
+- name: AWS | Configure default AWS credentials (no_log)
+  become: true
+  no_log: true
+  ansible.builtin.ini_file:
+    path: "{{ aws_cli_home }}/.aws/credentials"
+    section: default
+    option: "{{ item.key }}"
+    value: "{{ item.value }}"
+    owner: "{{ aws_cli_user }}"
+    group: "{{ aws_cli_user }}"
+    mode: "0600"
+  loop:
+    - { key: "aws_access_key_id",     value: "{{ aws_access_key_id }}" }
+    - { key: "aws_secret_access_key", value: "{{ aws_secret_access_key }}" }
+  when: aws_creds_available

@@ -133,6 +133,6 @@
       ansible.builtin.include_role:
         name: all_devops
         apply:
-          tags: [l3, os_ubuntu, step_devops]
+          tags: [l3, step_devops]
       when: in_ubuntu_devops or in_arch_devops
-      tags: [l3, os_ubuntu, step_devops]
+      tags: [l3, step_devops]

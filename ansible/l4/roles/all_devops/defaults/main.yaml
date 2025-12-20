@@ -1,0 +1,15 @@
+---
+source_code_dir: "/home/lab/src"
+source_code_repos: []
+  # - repo: https://github.com/allan-lewis/allans-home-lab.git
+  #   dest: gitops-homelab
+  #   version: main
+
+doppler_user: "{{ gitops_user }}"
+doppler_scope_dir: "{{ source_code_dir }}"
+
+aws_cli_user: "{{ gitops_user }}"
+aws_cli_home: "/home/lab"
+aws_access_key_id: "{{ lookup('env', 'AWS_ACCESS_KEY_ID') | default('', true) }}"
+aws_secret_access_key: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') | default('', true) }}"
+aws_default_region: "{{ lookup('env', 'AWS_DEFAULT_REGION') | default('us-east-1', true) }}"

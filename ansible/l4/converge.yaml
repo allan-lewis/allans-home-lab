@@ -1,1 +1,22 @@
 ---
+- name: L4 OS Convergence
+  hosts: "{{ converge_group }}"
+  gather_facts: true
+  become: true
+  vars:
+    in_arch: "{{ inventory_hostname in (groups['arch'] | default([])) }}"
+    in_arch_devops: "{{ inventory_hostname in (groups['arch_devops'] | default([])) }}"
+    in_ubuntu: "{{ inventory_hostname in (groups['ubuntu'] | default([])) }}"
+    in_ubuntu_devops: "{{ inventory_hostname in (groups['ubuntu_devops'] | default([])) }}"
+
+  tasks:
+    # -----------------
+    # Steps for all OS
+    # -----------------
+    - name: L4 | All | devops
+      ansible.builtin.include_role:
+        name: all_devops
+        apply:
+          tags: [l4, step_devops]
+      when: in_ubuntu_devops or in_arch_devops
+      tags: [l4, step_devops]
