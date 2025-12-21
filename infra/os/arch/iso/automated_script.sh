@@ -92,33 +92,31 @@ systemctl enable systemd-networkd.service systemd-resolved.service
 systemctl enable sshd.service qemu-guest-agent.service
 systemctl enable cloud-init-local.service cloud-init-main.service cloud-config.service cloud-final.service
 
-# --- Ensure GRUB boots a pacman-managed kernel (CRITICAL FIX) ---
-# We boot /boot/vmlinuz-linux per grub.cfg, but the linux package provides vmlinuz under /usr/lib/modules/<kver>/vmlinuz.
-# Sync the newest installed kernel into /boot/vmlinuz-linux, then rebuild initramfs and grub.cfg.
-sync_boot_kernel() {
-  local k
-  k="$(ls -1 /usr/lib/modules/*/vmlinuz | sort -V | tail -1)"
-  install -Dm644 "$k" /boot/vmlinuz-linux
-}
-
 # Install GRUB (BIOS mode)
 if [[ -b /dev/vda ]]; then grub-install --target=i386-pc /dev/vda
 elif [[ -b /dev/sda ]]; then grub-install --target=i386-pc /dev/sda
 elif [[ -b /dev/nvme0n1 ]]; then grub-install --target=i386-pc /dev/nvme0n1
 else echo "No disk for grub-install" >&2; exit 1; fi
 
-# One-time sync for first boot correctness
-sync_boot_kernel
+# --- Ensure GRUB boots a pacman-managed kernel ---
+# GRUB boots /boot/vmlinuz-linux, but pacman provides vmlinuz under /usr/lib/modules/<kver>/vmlinuz.
+# We keep /boot/vmlinuz-linux synced to the newest installed kernel, and rebuild initramfs + grub.cfg.
 
-# Regenerate initramfs (creates /boot/initramfs-linux.img)
+# Helper script used by pacman hook (and for initial sync)
+install -Dm755 /dev/stdin /usr/local/sbin/grub-sync-kernel <<'EOF'
+#!/usr/bin/env bash
+set -euo pipefail
+
+k="$(ls -1 /usr/lib/modules/*/vmlinuz | sort -V | tail -1)"
+install -Dm644 "$k" /boot/vmlinuz-linux
+
 mkinitcpio -P
-
-# Generate GRUB config (will reference /boot/vmlinuz-linux + /boot/initramfs-linux.img)
 grub-mkconfig -o /boot/grub/grub.cfg
+EOF
 
-# --- Pacman hook: keep /boot and GRUB in sync on future kernel upgrades ---
+# Pacman hook: keep /boot and GRUB in sync on future kernel upgrades
 mkdir -p /etc/pacman.d/hooks
-cat >/etc/pacman.d/hooks/99-grub-sync-kernel.hook <<'EOF_HOOK'
+cat >/etc/pacman.d/hooks/99-grub-sync-kernel.hook <<'EOF'
 [Trigger]
 Type = Package
 Operation = Install
@@ -126,14 +124,13 @@ Operation = Upgrade
 Target = linux
 
 [Action]
-Description = Sync kernel to /boot, rebuild initramfs, and regenerate GRUB config
+Description = Sync kernel to /boot and regenerate initramfs/GRUB config
 When = PostTransaction
-Exec = /bin/bash -lc 'set -euo pipefail; \
-  k="$(ls -1 /usr/lib/modules/*/vmlinuz | sort -V | tail -1)"; \
-  install -Dm644 "$k" /boot/vmlinuz-linux; \
-  mkinitcpio -P; \
-  grub-mkconfig -o /boot/grub/grub.cfg'
-EOF_HOOK
+Exec = /usr/local/sbin/grub-sync-kernel
+EOF
+
+# One-time sync now so first boot is correct
+/usr/local/sbin/grub-sync-kernel
 
 # Lock root (cloud-init will handle user + key)
 passwd -l root || true
