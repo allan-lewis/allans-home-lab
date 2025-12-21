@@ -32,3 +32,8 @@ backup_runner_volumes: [
     dest: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/db-dumps" 
   }
 ]
+
+source_code_repos:
+  - repo: git@github.com:allan-lewis/gitops-homelab.git
+    dest: gitops-homelab
+    version: main

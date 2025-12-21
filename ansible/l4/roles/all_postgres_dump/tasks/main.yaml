@@ -1,0 +1,16 @@
+---
+- name: Postgres DB dump | Ensure /usr/local/bin exists
+  ansible.builtin.file:
+    path: /usr/local/bin
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Postgres DB dump | Render env file next to script
+  ansible.builtin.template:
+    src: dump-postgres-db.env.j2
+    dest: /usr/local/bin/dump-postgres-db.env
+    owner: root
+    group: root
+    mode: "0640"

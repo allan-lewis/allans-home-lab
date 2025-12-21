@@ -1,6 +1,7 @@
 ---
 all_devops_packages:
   - ansible
+  - kubectl
 
 terraform_version: "1.14.2"
 packer_version: "1.14.3"

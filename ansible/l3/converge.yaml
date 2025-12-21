@@ -126,6 +126,14 @@
       when: converge_s3_mirror
       tags: [l3, step_s3_mirror]
 
+    - name: L3 | All | postgres dump
+      ansible.builtin.include_role:
+        name: all_postgres_dump
+        apply:
+          tags: [l3, step_db_dump]
+      when: converge_postgres_dump
+      tags: [l3, step_db_dump]
+
     - name: L3 | All | node exporter
       ansible.builtin.include_role:
         name: all_node_exporter

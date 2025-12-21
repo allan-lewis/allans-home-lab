@@ -31,3 +31,11 @@
           tags: [l4, step_s3_mirror]
       when: converge_s3_mirror
       tags: [l4, step_s3_mirror]
+
+    - name: L4 | All | postgres dump
+      ansible.builtin.include_role:
+        name: all_postgres_dump
+        apply:
+          tags: [l4, step_db_dump]
+      when: converge_postgres_dump
+      tags: [l4, step_db_dump]
