@@ -1,0 +1,6 @@
+---
+converge_docker_monitoring: true
+
+compose_app_name: monitoring
+compose_source_type: template
+compose_template_src: "templates/docker-compose/monitoring.compose.yaml.j2"

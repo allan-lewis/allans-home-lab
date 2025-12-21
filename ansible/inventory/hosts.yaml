@@ -75,9 +75,11 @@ all:
           hosts:
             langolier:
         arch_docker:
-          hosts:
-            callahan:
-            langolier:
+          children:
+            arch_docker_monitoring:
+              hosts:
+                callahan:
+                langolier:
         arch_tinker:
           hosts:
             callahan:
