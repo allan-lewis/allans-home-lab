@@ -1,4 +1,6 @@
 ---
+converge_arch: true
+
 dotfiles_stow_packages:
   - common-zsh
   - arch-zsh

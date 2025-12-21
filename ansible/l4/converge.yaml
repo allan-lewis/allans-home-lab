@@ -3,11 +3,6 @@
   hosts: "{{ converge_group }}"
   gather_facts: true
   become: true
-  vars:
-    in_arch: "{{ inventory_hostname in (groups['arch'] | default([])) }}"
-    in_arch_devops: "{{ inventory_hostname in (groups['arch_devops'] | default([])) }}"
-    in_ubuntu: "{{ inventory_hostname in (groups['ubuntu'] | default([])) }}"
-    in_ubuntu_devops: "{{ inventory_hostname in (groups['ubuntu_devops'] | default([])) }}"
 
   tasks:
     # -----------------
@@ -18,7 +13,7 @@
         name: all_backups
         apply:
           tags: [l4, step_backups]
-      when: in_ubuntu or in_arch
+      when: converge_ubuntu or converge_arch
       tags: [l4, step_backups]
 
     - name: L4 | All | devops
@@ -26,5 +21,5 @@
         name: all_devops
         apply:
           tags: [l4, step_devops]
-      when: in_ubuntu_devops or in_arch_devops
+      when: (converge_devops | default(false)) | bool
       tags: [l4, step_devops]

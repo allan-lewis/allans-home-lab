@@ -4,17 +4,6 @@
   gather_facts: true
   become: true
 
-  vars:
-    in_arch: "{{ inventory_hostname in (groups['arch'] | default([])) }}"
-    in_arch_aur: "{{ inventory_hostname in (groups['arch_aur'] | default([])) }}"
-    in_arch_desktop: "{{ inventory_hostname in (groups['arch_desktop'] | default([])) }}"
-    in_arch_devops: "{{ inventory_hostname in (groups['arch_devops'] | default([])) }}"
-    in_arch_docker: "{{ inventory_hostname in (groups['arch_docker'] | default([])) }}"
-    in_arch_node_exporter: "{{ inventory_hostname in (groups['arch_node_exporter'] | default([])) }}"
-    in_ubuntu: "{{ inventory_hostname in (groups['ubuntu'] | default([])) }}"
-    in_ubuntu_node_exporter: "{{ inventory_hostname in (groups['ubuntu_node_exporter'] | default([])) }}"
-    in_ubuntu_devops: "{{ inventory_hostname in (groups['ubuntu_devops'] | default([])) }}"
-
   tasks:
     # -----------------
     # Arch steps
@@ -24,7 +13,7 @@
         name: arch_base
         apply:
           tags: [l3, os_arch, step_base]
-      when: in_arch
+      when: converge_arch
       tags: [l3, os_arch, step_base]
 
     - name: L3 | Arch | harden
@@ -32,7 +21,7 @@
         name: arch_harden
         apply:
           tags: [l3, os_arch, step_harden]
-      when: in_arch
+      when: converge_arch
       tags: [l3, os_arch, step_harden]
 
     - name: L3 | Arch | services
@@ -40,7 +29,7 @@
         name: arch_services
         apply:
           tags: [l3, os_arch, step_services]
-      when: in_arch
+      when: converge_arch
       tags: [l3, os_arch, step_services]
 
     - name: L3 | Arch | AUR
@@ -48,15 +37,15 @@
         name: arch_aur
         apply:
           tags: [l3, os_arch, step_aur]
-      when: in_arch_aur
+      when: (converge_arch_aur | default(false)) | bool
       tags: [l3, os_arch, step_aur]
 
     - name: L3 | Arch | desktop
       ansible.builtin.include_role:
-        name: arch_desktop
+        name: arch_desktop 
         apply:
           tags: [l3, os_arch, step_desktop]
-      when: in_arch_desktop
+      when: (converge_arch_desktop | default(false)) | bool
       tags: [l3, os_arch, step_desktop]
 
     - name: L3 | Arch | docker
@@ -64,7 +53,7 @@
         name: arch_docker
         apply:
           tags: [l3, os_arch, step_docker]
-      when: in_arch_docker
+      when: (converge_docker | default(false)) | bool
       tags: [l3, os_arch, step_docker]
 
     # -----------------
@@ -75,7 +64,7 @@
         name: ubuntu_base
         apply:
           tags: [l3, os_ubuntu, step_base]
-      when: in_ubuntu
+      when: converge_ubuntu
       tags: [l3, os_ubuntu, step_base]
 
     - name: L3 | Ubuntu | harden
@@ -83,7 +72,7 @@
         name: ubuntu_harden
         apply:
           tags: [l3, os_ubuntu, step_harden]
-      when: in_ubuntu
+      when: converge_ubuntu
       tags: [l3, os_ubuntu, step_harden]
 
     - name: L3 | Ubuntu | docker
@@ -91,7 +80,7 @@
         name: ubuntu_docker
         apply:
           tags: [l3, os_ubuntu, step_docker]
-      when: in_ubuntu
+      when: (converge_docker | default(false)) | bool
       tags: [l3, os_ubuntu, step_docker]
 
     # -----------------
@@ -102,7 +91,7 @@
         name: all_shell
         apply:
           tags: [l3, step_shell]
-      when: in_arch or in_ubuntu
+      when: converge_arch or converge_ubuntu
       tags: [l3, step_shell]
 
     - name: L3 | All | ssh keys
@@ -110,7 +99,7 @@
         name: all_ssh_keys
         apply:
           tags: [l3, step_ssh_keys]
-      when: in_arch or in_ubuntu
+      when: converge_arch or converge_ubuntu
       tags: [l3, step_ssh_keys]
 
     - name: L3 | All | backup runner
@@ -118,7 +107,7 @@
         name: all_backup_runner
         apply:
           tags: [l3, step_backup_runner]
-      when: in_arch or in_ubuntu
+      when: converge_arch or converge_ubuntu
       tags: [l3, step_backup_runner]
 
     - name: L3 | All | node exporter
@@ -126,7 +115,7 @@
         name: all_node_exporter
         apply:
           tags: [l3, step_node_exporter]
-      when: in_arch_node_exporter or in_ubuntu_node_exporter
+      when: (converge_node_exporter | default(false)) | bool
       tags: [l3, step_node_exporter]
 
     - name: L3 | All | devops
@@ -134,7 +123,7 @@
         name: all_devops
         apply:
           tags: [l3, step_devops]
-      when: in_ubuntu_devops or in_arch_devops
+      when: (converge_devops | default(false)) | bool
       tags: [l3, step_devops]
 
     - name: L3 | All | docker monitoring
@@ -142,5 +131,5 @@
         name: all_docker_compose
         apply:
           tags: [l3, step_docker_monitoring]
-      when: "'docker_monitoring' in group_names"
+      when: (converge_docker_monitoring | default(false)) | bool
       tags: [l3, step_docker_monitoring]

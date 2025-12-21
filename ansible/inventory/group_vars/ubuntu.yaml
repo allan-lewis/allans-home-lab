@@ -1,4 +1,6 @@
 ---
+converge_ubuntu: true
+
 dotfiles_stow_packages:
   - common-zsh
   - ubuntu-zsh
