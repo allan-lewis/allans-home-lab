@@ -8,6 +8,14 @@
     # -----------------
     # Arch steps
     # -----------------
+    - name: L3 | Arch | sanity
+      ansible.builtin.include_role:
+        name: arch_sanity
+        apply:
+          tags: [l3, os_arch, step_sanity]
+      when: converge_arch
+      tags: [l3, os_arch, step_sanity]
+
     - name: L3 | Arch | base
       ansible.builtin.include_role:
         name: arch_base

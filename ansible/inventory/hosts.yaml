@@ -7,9 +7,15 @@ all:
     arcturus:
       ansible_host: 192.168.86.124
       gatus_slug: "(Home Automation)"
+    barlow:
+      ansible_host: 192.168.86.213
+      gatus_slug: "(Ubuntu Sandbox)"
     blaine:
       ansible_host: 192.168.86.223
       gatus_slug: "(OpenVPN Gateway)"
+    callahan:
+      ansible_host: 192.168.86.214
+      gatus_slug: "(Arch Sandbox, BTW)"
     carrie:
       ansible_host: 192.168.86.228
       gatus_slug: "(Ubuntu Docker/Misc)"
@@ -17,8 +23,8 @@ all:
       ansible_host: 192.168.86.212
       gatus_slug: "(Windows 11)"
     cujo:
-      ansible_host: 192.168.86.217
-      gatus_slug: "(Arch Sandbox, BTW)"
+      ansible_host: 192.168.86.215
+      gatus_slug: "(Ubuntu DevOps)"
     derry:
       ansible_host: 192.168.86.210
       gatus_slug: "(Local Backup)"
@@ -55,18 +61,12 @@ all:
     roland:
       ansible_host: 192.168.86.151
       gatus_slug: "(K8s Control Plane)"
-    sheemie:
-      ansible_host: 192.168.86.229
-      gatus_slug: "(Ubuntu DevOps)"
     sirius:
       ansible_host: 192.168.86.105
       gatus_slug: "(Proxmox Hypervisor)"
     susannah:
       ansible_host: 192.168.86.154
       gatus_slug: "(K8s Worker)"
-    todash:
-      ansible_host: 192.168.86.218
-      gatus_slug: "(Ubuntu Docker/Sandbox)"
 
   children:
     arch:
@@ -76,25 +76,23 @@ all:
             langolier:
         arch_docker:
           hosts:
-            cujo:
-        arch_node_exporter:
-          hosts:
+            callahan:
             langolier:
         arch_tinker:
           hosts:
-            cujo:
+            callahan:
 
     ubuntu:
       children:
         ubuntu_devops:
           hosts:
-            sheemie:
+            cujo:
         ubuntu_docker:
           children:
             ubuntu_docker_monitoring:
               hosts:
-                sheemie:
-                todash:
+                cujo:
+                barlow:
         ubuntu_tinker:
           hosts:
-            todash:     
+            barlow:     
