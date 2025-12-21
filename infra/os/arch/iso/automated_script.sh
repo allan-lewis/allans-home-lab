@@ -47,7 +47,8 @@ sed -i 's/^#en_US.UTF-8/en_US.UTF-8/' /etc/locale.gen
 locale-gen
 echo 'LANG=en_US.UTF-8' > /etc/locale.conf
 ln -sf /usr/share/zoneinfo/UTC /etc/localtime
-hwclock --systohc
+# NOTE: Avoid baking a potentially-wrong RTC into the image; let NTP correct time on first boot.
+# hwclock --systohc
 echo "arch-ci" > /etc/hostname
 
 # Console keymap
@@ -91,15 +92,48 @@ systemctl enable systemd-networkd.service systemd-resolved.service
 systemctl enable sshd.service qemu-guest-agent.service
 systemctl enable cloud-init-local.service cloud-init-main.service cloud-config.service cloud-final.service
 
+# --- Ensure GRUB boots a pacman-managed kernel (CRITICAL FIX) ---
+# We boot /boot/vmlinuz-linux per grub.cfg, but the linux package provides vmlinuz under /usr/lib/modules/<kver>/vmlinuz.
+# Sync the newest installed kernel into /boot/vmlinuz-linux, then rebuild initramfs and grub.cfg.
+sync_boot_kernel() {
+  local k
+  k="$(ls -1 /usr/lib/modules/*/vmlinuz | sort -V | tail -1)"
+  install -Dm644 "$k" /boot/vmlinuz-linux
+}
+
 # Install GRUB (BIOS mode)
 if [[ -b /dev/vda ]]; then grub-install --target=i386-pc /dev/vda
 elif [[ -b /dev/sda ]]; then grub-install --target=i386-pc /dev/sda
 elif [[ -b /dev/nvme0n1 ]]; then grub-install --target=i386-pc /dev/nvme0n1
 else echo "No disk for grub-install" >&2; exit 1; fi
+
+# One-time sync for first boot correctness
+sync_boot_kernel
+
+# Regenerate initramfs (creates /boot/initramfs-linux.img)
+mkinitcpio -P
+
+# Generate GRUB config (will reference /boot/vmlinuz-linux + /boot/initramfs-linux.img)
 grub-mkconfig -o /boot/grub/grub.cfg
 
-# Regenerate initramfs
-mkinitcpio -P
+# --- Pacman hook: keep /boot and GRUB in sync on future kernel upgrades ---
+mkdir -p /etc/pacman.d/hooks
+cat >/etc/pacman.d/hooks/99-grub-sync-kernel.hook <<'EOF_HOOK'
+[Trigger]
+Type = Package
+Operation = Install
+Operation = Upgrade
+Target = linux
+
+[Action]
+Description = Sync kernel to /boot, rebuild initramfs, and regenerate GRUB config
+When = PostTransaction
+Exec = /bin/bash -lc 'set -euo pipefail; \
+  k="$(ls -1 /usr/lib/modules/*/vmlinuz | sort -V | tail -1)"; \
+  install -Dm644 "$k" /boot/vmlinuz-linux; \
+  mkinitcpio -P; \
+  grub-mkconfig -o /boot/grub/grub.cfg'
+EOF_HOOK
 
 # Lock root (cloud-init will handle user + key)
 passwd -l root || true
