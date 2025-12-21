@@ -23,3 +23,11 @@
           tags: [l4, step_devops]
       when: converge_devops
       tags: [l4, step_devops]
+
+    - name: L4 | All | s3 mirror
+      ansible.builtin.include_role:
+        name: all_s3_mirror
+        apply:
+          tags: [l4, step_s3_mirror]
+      when: converge_s3_mirror
+      tags: [l4, step_s3_mirror]

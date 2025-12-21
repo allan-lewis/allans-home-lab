@@ -1,0 +1,16 @@
+---
+- name: S3 mirror | Ensure config directory exists
+  ansible.builtin.file:
+    path: /etc/gitops-homelab
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: S3 mirror | Render bucket config file
+  ansible.builtin.template:
+    src: s3-buckets.conf.j2
+    dest: /etc/gitops-homelab/s3-buckets.conf
+    owner: root
+    group: root
+    mode: "0644"

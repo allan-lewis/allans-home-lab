@@ -1,7 +1,3 @@
-is_backup_enabled: true
-backup_runner_cron_hour: "*"
-backup_runner_user: "allan"
-backup_runner_remote_host: "{{ default_remote_nas_ip }}"
 is_restore_enabled: true
 backup_restore_owner: "lab"
 backup_restore_group: "lab"

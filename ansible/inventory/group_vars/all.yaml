@@ -23,3 +23,8 @@ step_s3_mirror: false
 
 git_author_name: "Allan Lewis"
 git_author_email: "allan@allanshomelab.com"
+
+backup_runner_remote_base_path: "/mnt/pool1/gitops-homelab/backup-runner/{{ inventory_hostname }}"
+backup_runner_cron_hour: "*"
+backup_runner_user: "allan"
+backup_runner_remote_host: "{{ default_remote_nas_ip }}"

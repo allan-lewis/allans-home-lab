@@ -1,0 +1,14 @@
+# Managed by Ansible (all_s3_mirror)
+# One bucket per line. Blank lines and # comments are allowed.
+
+{% set buckets = s3_mirror_buckets | default([]) %}
+{% if buckets is string %}
+{%   set buckets = buckets.split(',') %}
+{% endif %}
+
+{% for b in buckets %}
+{% set b = b | trim %}
+{% if b %}
+{{ b }}
+{% endif %}
+{% endfor %}
