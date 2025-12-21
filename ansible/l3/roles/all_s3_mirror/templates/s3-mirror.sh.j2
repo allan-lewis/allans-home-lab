@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+{% raw %}#!/usr/bin/env bash
 set -euo pipefail
 
 # Use "lab" user's AWS config/credentials even when running as root
@@ -7,30 +7,63 @@ export AWS_CONFIG_FILE="/home/lab/.aws/config"
 export AWS_PROFILE="default"
 export AWS_PAGER=""
 
-BASE="{{ s3_mirror_base_dir }}"
-FLAGS="{{ s3_mirror_sync_flags }}"
-
-{# s3_mirror_buckets comes from INI inventory as a string: "bucket-one,bucket-two"
-   or may be a real list if set via host_vars/group_vars later. Handle both. #}
-{% set buckets = s3_mirror_buckets %}
-{% if buckets is string %}
-  {% set buckets = buckets | split(',') %}
-{% endif %}
-
-BUCKETS=({% for b in buckets %}"{{ b }}"{% if not loop.last %} {% endif %}{% endfor %})
+# External bucket list (one bucket per line; blank lines and # comments allowed).
+# You can override with: S3_BUCKETS_FILE=/path/to/file
+S3_BUCKETS_FILE="${S3_BUCKETS_FILE:-/etc/gitops-homelab/s3-buckets.conf}"
 
 ts(){ date '+%F %T'; }
 log(){ echo "$(ts) | $*"; }
 
-# ---- pre-flight: ensure AWS credentials are present and valid ----
-if ! aws sts get-caller-identity >/dev/null 2>&1; then
-  log "ERROR: AWS credentials not configured or expired (run ''aws configure'' or login via SSO)."
-  exit 1
+trim() {
+  local s="$1"
+  # trim leading/trailing whitespace
+  s="${s#"${s%%[![:space:]]*}"}"
+  s="${s%"${s##*[![:space:]]}"}"
+  printf '%s' "$s"
+}
+
+# ---- load buckets from config file ----
+BUCKETS=()
+
+if [[ ! -f "$S3_BUCKETS_FILE" ]]; then
+  log "No bucket config file found at $S3_BUCKETS_FILE; nothing to do."
+  exit 0
 fi
 
+while IFS= read -r raw || [[ -n "$raw" ]]; do
+  # strip comments
+  raw="${raw%%#*}"
+  raw="$(trim "$raw")"
+  [[ -z "$raw" ]] && continue
+
+  # split on commas if present
+  IFS=',' read -r -a parts <<< "$raw"
+  for p in "${parts[@]}"; do
+    p="$(trim "$p")"
+    [[ -z "$p" ]] && continue
+    BUCKETS+=("$p")
+  done
+done < "$S3_BUCKETS_FILE"
+
+if (( ${#BUCKETS[@]} == 0 )); then
+  log "Bucket config file is empty ($S3_BUCKETS_FILE); nothing to do."
+  exit 0
+fi
+
+# ---- pre-flight: ensure AWS credentials are present and valid ----
+if ! aws sts get-caller-identity >/dev/null 2>&1; then
+  log "ERROR: AWS credentials not configured or expired (run 'aws configure' or login via SSO)."
+  exit 1
+fi
+{% endraw %}
+
+BASE="{{ s3_mirror_base_dir }}"
+FLAGS="{{ s3_mirror_sync_flags }}"
+
+{% raw %}
 mkdir -p "$BASE"
 
-log "Starting S3 mirror run"
+log "Starting S3 mirror run (config=$S3_BUCKETS_FILE)"
 failures=0
 
 for bucket in "${BUCKETS[@]}"; do
@@ -51,3 +84,4 @@ if (( failures > 0 )); then
 else
   log "Finished OK"
 fi
+{% endraw %}
