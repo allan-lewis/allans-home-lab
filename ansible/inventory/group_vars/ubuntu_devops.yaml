@@ -1,2 +1,3 @@
 ---
 converge_devops: true
+converge_s3_mirror: true

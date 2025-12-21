@@ -118,6 +118,14 @@
       when: converge_arch or converge_ubuntu
       tags: [l3, step_backup_runner]
 
+    - name: L3 | All | s3 mirror
+      ansible.builtin.include_role:
+        name: all_s3_mirror
+        apply:
+          tags: [l3, step_s3_mirror]
+      when: converge_s3_mirror
+      tags: [l3, step_s3_mirror]
+
     - name: L3 | All | node exporter
       ansible.builtin.include_role:
         name: all_node_exporter
