@@ -37,7 +37,7 @@
         name: arch_aur
         apply:
           tags: [l3, os_arch, step_aur]
-      when: (converge_arch_aur | default(false)) | bool
+      when: converge_arch_aur
       tags: [l3, os_arch, step_aur]
 
     - name: L3 | Arch | desktop
@@ -45,7 +45,7 @@
         name: arch_desktop 
         apply:
           tags: [l3, os_arch, step_desktop]
-      when: (converge_arch_desktop | default(false)) | bool
+      when: converge_arch_desktop
       tags: [l3, os_arch, step_desktop]
 
     - name: L3 | Arch | docker
@@ -53,7 +53,7 @@
         name: arch_docker
         apply:
           tags: [l3, os_arch, step_docker]
-      when: (converge_docker | default(false)) | bool
+      when: converge_docker and converge_arch
       tags: [l3, os_arch, step_docker]
 
     # -----------------
@@ -80,7 +80,7 @@
         name: ubuntu_docker
         apply:
           tags: [l3, os_ubuntu, step_docker]
-      when: (converge_docker | default(false)) | bool
+      when: converge_docker and converge_ubuntu
       tags: [l3, os_ubuntu, step_docker]
 
     # -----------------
@@ -115,7 +115,7 @@
         name: all_node_exporter
         apply:
           tags: [l3, step_node_exporter]
-      when: (converge_node_exporter | default(false)) | bool
+      when: converge_node_exporter
       tags: [l3, step_node_exporter]
 
     - name: L3 | All | devops
@@ -123,7 +123,7 @@
         name: all_devops
         apply:
           tags: [l3, step_devops]
-      when: (converge_devops | default(false)) | bool
+      when: converge_devops
       tags: [l3, step_devops]
 
     - name: L3 | All | docker monitoring
@@ -131,5 +131,5 @@
         name: all_docker_compose
         apply:
           tags: [l3, step_docker_monitoring]
-      when: (converge_docker_monitoring | default(false)) | bool
+      when: converge_docker_monitoring
       tags: [l3, step_docker_monitoring]
