@@ -59,22 +59,15 @@
     group: "{{ ansible_user }}"
     mode: "0755"
 
-- name: Source | Clone repositories (force SSH URL)
+- name: Source | Clone/update repositories
   become: true
   become_user: "{{ ansible_user }}"
   ansible.builtin.git:
-    repo: >-
-      {{
-        (item.repo is regex('^https://github\\.com/'))
-        | ternary(
-            'git@github.com:' ~ (item.repo | regex_replace('^https://github\\.com/', '') | regex_replace('\\.git$', '')) ~ '.git',
-            item.repo
-          )
-      }}
+    repo: "{{ item.repo }}"
     dest: "{{ source_code_dir }}/{{ item.dest | default(item.repo | basename | regex_replace('\\.git$', '')) }}"
     version: "{{ item.version | default('main') }}"
-    update: yes
-    force: no
+    update: true
+    force: false
     accept_hostkey: true
   loop: "{{ source_code_repos }}"
   when: source_code_repos | length > 0
