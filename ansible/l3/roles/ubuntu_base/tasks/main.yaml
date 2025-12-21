@@ -19,6 +19,7 @@
       - net-tools
       - nfs-common
       - neovim
+      - build-essential
     state: latest
     update_cache: true
 
