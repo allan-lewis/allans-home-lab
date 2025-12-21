@@ -53,7 +53,7 @@
         name: arch_docker
         apply:
           tags: [l3, os_arch, step_docker]
-      when: (converge_arch_docker | default(false)) | bool
+      when: (converge_docker | default(false)) | bool
       tags: [l3, os_arch, step_docker]
 
     # -----------------
@@ -80,7 +80,7 @@
         name: ubuntu_docker
         apply:
           tags: [l3, os_ubuntu, step_docker]
-      when: (converge_ubuntu_docker | default(false)) | bool
+      when: (converge_docker | default(false)) | bool
       tags: [l3, os_ubuntu, step_docker]
 
     # -----------------

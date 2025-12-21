@@ -1,2 +1,2 @@
 ---
-converge_ubuntu_docker: true
+converge_docker: true
