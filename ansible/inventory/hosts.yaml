@@ -74,148 +74,27 @@ all:
         arch_devops:
           hosts:
             langolier:
+        arch_docker:
+          hosts:
+            cujo:
+        arch_node_exporter:
+          hosts:
+            langolier:
         arch_tinker:
           hosts:
             cujo:
-
-    docker:
-      children:
-        docker_monitoring:
-          hosts:
-            cujo:
-            sheemie:
-            todash:
 
     ubuntu:
       children:
         ubuntu_devops:
           hosts:
             sheemie:
+        ubuntu_docker:
+          children:
+            ubuntu_docker_monitoring:
+              hosts:
+                sheemie:
+                todash:
         ubuntu_tinker:
           hosts:
             todash:     
-
-    # arch:
-    #   hosts:
-    #   children:
-    #     arch_docker:
-    #       hosts:
-    #         cujo:
-    #     arch_node_exporter:
-    #       hosts:
-    #         langolier:
-    # ubuntu:
-    #   hosts:
-    #     todash:
-    #   children:
-    #     ubuntu_docker:
-    #       hosts:
-    #         todash:
-    #       children:
-    #         ubuntu_devops:
-    #           hosts:
-    #             sheemie:
-
-  # children:
-  #   fully_managed:
-  #     children:
-  #       arch:
-  #         children:
-  #           arch_devops:
-  #             hosts:
-  #               langolier:
-  #               sheemie:
-  #           arch_tinker:
-  #             hosts:
-  #               cujo:
-  #           docker_compose:
-  #             hosts:
-  #               sheemie:
-  #             children:
-  #               docker_compose_monitoring:
-  #                 hosts:
-  #                   cujo:
-  #       ubuntu:
-  #         children:
-  #           docker_compose:
-  #             children:
-  #               docker_compose_monitoring:
-  #                 hosts:
-  #                   todash:
-  #                 children:
-  #                   docker_compose_immich:
-  #                     hosts:
-  #                       misery:
-  #                   docker_compose_it_tools:
-  #                     hosts:
-  #                       carrie:
-  #                   docker_compose_jellyfin:
-  #                     hosts:
-  #                       misery:
-  #                   docker_compose_media_acquisition:
-  #                     hosts:
-  #                       patricia:
-  #                   docker_compose_memos:
-  #                     hosts:
-  #                       carrie:
-  #                   docker_compose_ngb:
-  #                     hosts:
-  #                       carrie:
-  #                   docker_compose_nginx:
-  #                     hosts:
-  #                       carrie:
-  #                   docker_compose_plex:
-  #                     hosts:
-  #                       misery:
-  #                   docker_compose_portainer:
-  #                     hosts:
-  #                       carrie:
-  #                   docker_compose_tautulli:
-  #                     hosts:
-  #                       misery:
-  #                   docker_compose_vaultwarden:
-  #                     hosts:
-  #                       carrie:
-  #           ubuntu_misc:
-  #             hosts:
-  #               carrie:
-  #               misery:
-  #               patricia:
-  #           ubuntu_openvpn:
-  #             hosts:
-  #               blaine:
-  #           ubuntu_tinker:
-  #             hosts:
-  #               todash:
-  #   semi_managed:
-  #     children:
-  #       ubuntu:
-  #         children:
-  #           docker_compose:
-  #             children:
-  #               docker_compose_monitoring:
-  #                 children:
-  #                   docker_compose_cloudflare:
-  #                     hosts:
-  #                       flagg:
-  #                   docker_compose_gatus:
-  #                     hosts:
-  #                       flagg:
-  #                   docker_compose_pihole:
-  #                     hosts:
-  #                       flagg:
-  #                   docker_compose_traefik:
-  #                     hosts:
-  #                       flagg:
-  #                   docker_compose_twingate:
-  #                     hosts:
-  #                       flagg:
-  #           ubuntu_core:
-  #             hosts:
-  #               flagg:
-  #   unmanaged:
-  #     hosts:
-  #       gilead:
-  #       shardik:
-  #       sirius:
-
