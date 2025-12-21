@@ -1,4 +1,55 @@
 ---
+- name: Source | Ensure git author identity is configured
+  become: false
+  ansible.builtin.command: >
+    git config --global {{ item.key }} "{{ item.value }}"
+  loop:
+    - key: user.name
+      value: "{{ git_author_name }}"
+    - key: user.email
+      value: "{{ git_author_email }}"
+  changed_when: false
+
+- name: Source | Assert git author identity is defined
+  ansible.builtin.assert:
+    that:
+      - git_author_name is defined
+      - git_author_email is defined
+    fail_msg: >
+      Git author identity must be defined for L4 convergence
+
+- name: Source | Ensure ssh client + git are installed
+  become: true
+  ansible.builtin.package:
+    name:
+      - git
+      # - openssh
+    state: present
+
+- name: Source | Ensure ~/.ssh exists for repo user
+  become: true
+  become_user: "{{ ansible_user }}"
+  ansible.builtin.file:
+    path: "~/.ssh"
+    state: directory
+    mode: "0700"
+
+- name: Source | Scan GitHub host key (ed25519)
+  become: true
+  become_user: "{{ ansible_user }}"
+  ansible.builtin.command: ssh-keyscan -t ed25519 github.com
+  register: github_known_hosts_scan
+  changed_when: false
+
+- name: Source | Add GitHub to known_hosts
+  become: true
+  become_user: "{{ ansible_user }}"
+  ansible.builtin.known_hosts:
+    path: "~/.ssh/known_hosts"
+    name: "github.com"
+    key: "{{ github_known_hosts_scan.stdout }}"
+    state: present
+
 - name: Source | Ensure source code directory exists
   become: true
   ansible.builtin.file:
@@ -8,15 +59,23 @@
     group: "{{ ansible_user }}"
     mode: "0755"
 
-- name: Source | Clone repositories
+- name: Source | Clone repositories (force SSH URL)
   become: true
   become_user: "{{ ansible_user }}"
   ansible.builtin.git:
-    repo: "{{ item.repo }}"
+    repo: >-
+      {{
+        (item.repo is regex('^https://github\\.com/'))
+        | ternary(
+            'git@github.com:' ~ (item.repo | regex_replace('^https://github\\.com/', '') | regex_replace('\\.git$', '')) ~ '.git',
+            item.repo
+          )
+      }}
     dest: "{{ source_code_dir }}/{{ item.dest | default(item.repo | basename | regex_replace('\\.git$', '')) }}"
     version: "{{ item.version | default('main') }}"
     update: yes
     force: no
+    accept_hostkey: true
   loop: "{{ source_code_repos }}"
   when: source_code_repos | length > 0
 

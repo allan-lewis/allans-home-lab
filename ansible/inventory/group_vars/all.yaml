@@ -19,3 +19,6 @@ converge_docker: false
 converge_node_exporter: false
 converge_devops: false
 converge_docker_monitoring: false
+
+git_author_name: "Allan Lewis"
+git_author_email: "allan@allanshomelab.com"
