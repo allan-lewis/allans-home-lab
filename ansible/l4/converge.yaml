@@ -47,3 +47,32 @@
           tags: [l4, step_db_dump]
       when: converge_postgres_dump
       tags: [l4, step_db_dump]
+
+    - name: L4 | All | docker gatus
+      ansible.builtin.include_role:
+        name: all_docker_compose
+        apply:
+          tags: [l4, step_docker_gatus]
+      when: 
+      tags: [l4, step_docker_gatus]
+      vars:
+        compose_app_name: gatus
+        compose_source_type: template
+        compose_template_src: "templates/docker-compose/gatus.compose.yaml.j2"
+        compose_extra_templates:
+          - src: "templates/gatus/gatus.config.yaml.j2"
+            dest: "{{ gatus_config_dir }}/config.yaml"
+            uid: "{{ gitops_uid }}"
+            gid: "{{ gitops_gid }}"
+        compose_paths:
+          - path: "{{ gatus_data_dir }}" # /var/lib/gatus
+            create: true
+            uid: "{{ gitops_uid }}"
+            gid: "{{ gitops_gid }}"
+            mode: "0755"
+          - path: "{{ gatus_config_dir }}" # /etc/gatus
+            create: true
+            uid: "{{ gitops_uid }}"
+            gid: "{{ gitops_gid }}"
+            mode: "0755"
+

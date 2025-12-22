@@ -75,11 +75,9 @@ all:
           hosts:
             langolier:
         arch_docker:
-          children:
-            arch_docker_monitoring:
-              hosts:
-                callahan:
-                langolier:
+          hosts:
+            callahan:
+            langolier:
         arch_tinker:
           hosts:
             callahan:
@@ -93,12 +91,10 @@ all:
           hosts:
             cujo:
         ubuntu_docker:
-          children:
-            ubuntu_docker_monitoring:
-              hosts:
-                cujo:
-                barlow:
-                flagg:
+          hosts:
+            cujo:
+            barlow:
+            flagg:
         ubuntu_tinker:
           hosts:
             barlow:     

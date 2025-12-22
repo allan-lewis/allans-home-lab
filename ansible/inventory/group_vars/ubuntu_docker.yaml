@@ -1,2 +1,3 @@
 ---
 converge_docker: true
+converge_docker_monitoring: true
