@@ -1,7 +1,0 @@
----
-is_backup_enabled: true
-ssh_keys_install_private_for_ansible_user: true
-ssh_keys_install_public_for_ansible_user: true
-ssh_keys_install_private_for_root: true
-ssh_keys_install_public_for_root: true
-is_restore_enabled: false

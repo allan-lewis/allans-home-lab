@@ -1,0 +1,10 @@
+---
+converge_restore: true
+
+backup_runner_volumes: [
+  {
+    src: "/home/lab/remote-backup",
+    dest: "{{ default_remote_nas_per_host_backup_volume }}/remote-backup"
+  }
+]
+

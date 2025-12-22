@@ -1,7 +1,5 @@
 ---
 ## HOMELAB-WIDE VARIABLES
-default_remote_nas_ip: "{{ hostvars['procyon'].ansible_host }}"
-
 gitops_user: "lab"
 gitops_uid: 1000
 gitops_gid: 1000
@@ -11,6 +9,7 @@ gitops_tz: "America/New_York"
 ansible_python_interpreter: "/usr/bin/python3"
 ansible_user: "{{ gitops_user }}"
 
+## CONVERGENCE FEATURE FLAGS
 converge_arch: false
 converge_arch_aur: false
 converge_arch_desktop: false
@@ -21,6 +20,10 @@ converge_devops: false
 converge_docker_monitoring: false
 converge_s3_mirror: false
 converge_postgres_dump: false
+converge_restore: false
+
+## HOMELAB-WIDE VARIABLES
+default_remote_nas_ip: "{{ hostvars['procyon'].ansible_host }}"
 
 git_author_name: "Allan Lewis"
 git_author_email: "allan@allanshomelab.com"
@@ -29,3 +32,8 @@ backup_runner_remote_base_path: "/mnt/pool1/gitops-homelab/backup-runner/{{ inve
 backup_runner_cron_hour: "*"
 backup_runner_user: "allan"
 backup_runner_remote_host: "{{ default_remote_nas_ip }}"
+
+default_remote_nas_per_host_backup_volume: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}"
+backup_restore_owner: "lab"
+backup_restore_group: "lab"
+

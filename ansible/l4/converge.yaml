@@ -8,6 +8,14 @@
     # -----------------
     # Steps for all OS
     # -----------------
+    - name: L4 | All | restore
+      ansible.builtin.include_role:
+        name: all_restore
+        apply:
+          tags: [l4, step_restore]
+      when: converge_restore
+      tags: [l4, step_restore]
+    
     - name: L4 | All | backups
       ansible.builtin.include_role:
         name: all_backups
