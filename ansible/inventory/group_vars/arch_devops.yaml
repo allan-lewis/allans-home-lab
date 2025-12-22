@@ -2,3 +2,10 @@
 converge_devops: true
 converge_s3_mirror: true
 converge_postgres_dump: true
+
+all_devops_packages:
+  - ansible
+  - kubectl
+  - talosctl
+  - helm
+  - kustomize
