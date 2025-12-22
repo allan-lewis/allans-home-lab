@@ -92,6 +92,7 @@ all:
             cujo:
         ubuntu_docker:
           hosts:
+            carrie:
             cujo:
             barlow:
             flagg:

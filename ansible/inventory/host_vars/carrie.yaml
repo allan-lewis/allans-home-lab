@@ -1,3 +1,6 @@
+---
+converge_docker_it_tools: true
+
 portainer_data_dir: "/var/lib/portainer"
 
 "backup_runner_volumes": [
