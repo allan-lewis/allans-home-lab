@@ -86,6 +86,9 @@ all:
 
     ubuntu:
       children:
+        ubuntu_core:
+          hosts:
+            flagg:
         ubuntu_devops:
           hosts:
             cujo:
@@ -95,6 +98,7 @@ all:
               hosts:
                 cujo:
                 barlow:
+                flagg:
         ubuntu_tinker:
           hosts:
             barlow:     
