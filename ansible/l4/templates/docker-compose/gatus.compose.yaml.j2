@@ -1,0 +1,11 @@
+services:
+
+  gatus:
+    image: "twinproduction/gatus:latest"
+    container_name: "gatus"
+    restart: "unless-stopped"
+    ports: 
+      - "8080:8080/tcp"
+    volumes: 
+      - "{{ gatus_data_dir }}:/data"
+      - "{{ gatus_config_dir}}:/config"

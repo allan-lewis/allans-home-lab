@@ -53,7 +53,7 @@
         name: all_docker_compose
         apply:
           tags: [l4, step_docker_gatus]
-      when: 
+      when: converge_docker_gatus
       tags: [l4, step_docker_gatus]
       vars:
         compose_app_name: gatus
@@ -75,4 +75,3 @@
             uid: "{{ gitops_uid }}"
             gid: "{{ gitops_gid }}"
             mode: "0755"
-
