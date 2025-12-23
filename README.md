@@ -3,6 +3,7 @@
 ## Documentation
 
 - [How-To Guides](docs/how-to.md)
+- [Full Build](docs/full-build.md)
 
 ## Project Overview
 
