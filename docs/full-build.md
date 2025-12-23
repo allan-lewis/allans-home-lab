@@ -89,3 +89,6 @@ Then run L4 convergence to get the host operationally ready.
 ```bash
 make l4-converge-ubuntu_devops
 ```
+
+At this point the Ubuntu DevOps host can be used to manage remaining steps from the `/home/lab/src/allans-home-lab` folder.
+
