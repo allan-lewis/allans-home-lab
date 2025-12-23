@@ -90,4 +90,6 @@ all:
             cujo:
             barlow:
             flagg:
-
+        ubuntu_tinker:
+          hosts:
+            barlow:

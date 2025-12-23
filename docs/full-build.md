@@ -92,3 +92,18 @@ make l4-converge-ubuntu_devops
 
 At this point the Ubuntu DevOps host can be used to manage remaining steps from the `/home/lab/src/allans-home-lab` folder.
 
+### Build & Converge Ubuntu Tinker VM(s)
+
+Run the following to build/converge Ubuntu sanbox/tinker host(s).
+
+```bash
+make l2-apply-ubuntu_tinker APPLY=1
+```
+
+```bash
+make l3-converge-ubuntu_tinker
+```
+
+```bash
+make l4-converge-ubuntu_tinker
+```
