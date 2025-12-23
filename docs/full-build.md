@@ -107,3 +107,24 @@ make l3-converge-ubuntu_tinker
 ```bash
 make l4-converge-ubuntu_tinker
 ```
+
+### Build and Converge Arch VM(s)
+
+Run the following to build Arch hosts for both the dev ops and sandbox/tinker personas.
+
+```bash
+make l2-apply-arch_devops APPLY=1
+```
+```bash
+make l2-apply-arch_tinker APPLY=1
+```
+
+Convergence can be done Arch-wide.
+
+```bash
+make l3-converge-arch
+```
+
+```bash
+make l4-converge-arch
+```

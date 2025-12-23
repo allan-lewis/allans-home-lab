@@ -71,25 +71,24 @@ all:
   children:
     arch:
       children:
-        arch_devops:
-          hosts:
-            langolier:
         arch_docker:
+          children:
+            arch_devops:
+              hosts:
+                langolier:
           hosts:
             callahan:
-            langolier:
 
     ubuntu:
       children: 
-        ubuntu_devops:
-          hosts:
-            cujo:
         ubuntu_docker:
+          children:
+            ubuntu_devops:
+              hosts:
+                cujo:
+            ubuntu_tinker:
+              hosts:
+                barlow:
           hosts:
             carrie:
-            cujo:
-            barlow:
             flagg:
-        ubuntu_tinker:
-          hosts:
-            barlow:
