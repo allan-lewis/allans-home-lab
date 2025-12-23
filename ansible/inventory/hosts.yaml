@@ -78,15 +78,9 @@ all:
           hosts:
             callahan:
             langolier:
-        arch_tinker:
-          hosts:
-            callahan:
 
     ubuntu:
-      children:
-        ubuntu_core:
-          hosts:
-            flagg:
+      children: 
         ubuntu_devops:
           hosts:
             cujo:
@@ -96,6 +90,4 @@ all:
             cujo:
             barlow:
             flagg:
-        ubuntu_tinker:
-          hosts:
-            barlow:     
+

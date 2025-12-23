@@ -23,6 +23,7 @@ converge_postgres_dump: false
 converge_restore: false
 converge_docker_gatus: false
 converge_docker_it_tools: false
+converge_docker_ngb: false
 
 ## HOMELAB-WIDE VARIABLES
 default_remote_nas_ip: "{{ hostvars['procyon'].ansible_host }}"
