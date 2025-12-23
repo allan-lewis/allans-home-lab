@@ -23,6 +23,8 @@ nomodeset
 
 ### Proxmox Access Token
 
+Detail steps for creating user/token/permissions for PVEAdmin.
+
 ### Required Environment Variables
 
 The following environment variables **must be set** for infrastructure-related operations (particularly L1 and L2):
@@ -43,3 +45,47 @@ The following environment variables **must be set** for infrastructure-related o
   Proxmox storage identifier for VM disks (e.g. `local-lvm`)
 
 These variables are validated early in the workflow and execution will fail if any are missing.
+
+## Sanity Checks
+
+### Runway
+
+Run L0 runway checks to ensure that variables above have been configured correctly and that the Proxmox host is in a state where it can be used to deploy VMs.
+
+```bash
+make l0-runway
+```
+
+## Ubuntu DevOps VM
+
+While any of the make commands can be run from anywhere, including local Mac/Linux hosts, getting a dedicated Ubuntu server to a state where it can be used as a central dev ops box is a good general practice.
+
+### Create Ubuntu VM Template
+
+Run this L1 command to download a stable Linux ISO and create a VM template from it.
+
+```bash
+make l1-ubuntu-template
+```
+
+### Build Ubuntu DevOps VM
+
+Run the L2 command to create a VM using the template prodcued earlier.
+
+```bash
+make l2-apply-ubuntu_devops APPLY=1
+```
+
+### Converge Ubuntu DevOps VM
+
+Run L3 convergence to get the DevOps host's "personality" in place.
+
+```bash
+make l3-converge-ubuntu_devops
+```
+
+Then run L4 convergence to get the host operationally ready.
+
+```bash
+make l4-converge-ubuntu_devops
+```
