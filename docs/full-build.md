@@ -202,7 +202,21 @@ make l3-converge-carrie
 make l4-converge-carrie
 ```
 
-### OpenVPN
+### Build & Converge Ubuntu OpenVPN VM
+
+Run the following to create and configure the OpenVPN gateway.
+
+```bash
+make l2-apply-ubuntu_openvpn APPLY=1
+```
+
+```bash
+make l3-converge-ubuntu_openvpn
+```
+
+```bash
+make l4-converge-ubuntu_openvpn
+```
 
 ### Converge Bare Metal Ubuntu Host
 
