@@ -92,6 +92,48 @@ make l4-converge-ubuntu_devops
 
 At this point the Ubuntu DevOps host can be used to manage remaining steps from the `/home/lab/src/allans-home-lab` folder.
 
+## Arch VMs
+
+### Create Custom Bootable Arch ISO
+
+The following L1 command will create a bootable Arch ISO and customize it for use with cloud init.
+
+```bash
+make l1-arch-iso
+```
+
+### Create Arch VM Template
+
+Run a Packer build that uses the ISO created above to create a Proxmox VM template that can be used to build Arch VMs.
+
+```bash
+make l1-arch-template
+```
+
+### Create Arch VMs
+
+Run the following to build Arch hosts for both the dev ops and sandbox/tinker personas.
+
+```bash
+make l2-apply-arch_devops APPLY=1
+```
+```bash
+make l2-apply-arch_tinker APPLY=1
+```
+
+### Converge Arch VMs
+
+Convergence can be done Arch-wide.
+
+```bash
+make l3-converge-arch
+```
+
+```bash
+make l4-converge-arch
+``` 
+## Ubuntu VMs
+
 ### Build & Converge Ubuntu Tinker VM(s)
 
 Run the following to build/converge Ubuntu sanbox/tinker host(s).
@@ -108,23 +150,68 @@ make l3-converge-ubuntu_tinker
 make l4-converge-ubuntu_tinker
 ```
 
-### Build and Converge Arch VM(s)
+### Create Ubuntu Docker VMs
 
-Run the following to build Arch hosts for both the dev ops and sandbox/tinker personas.
+Do an L2 apply action that creates all VMs that will run Docker containers.
 
 ```bash
-make l2-apply-arch_devops APPLY=1
-```
-```bash
-make l2-apply-arch_tinker APPLY=1
+make l2-apply-ubuntu_docker APPLY=1
 ```
 
-Convergence can be done Arch-wide.
+### Build & Converge Ubuntu Docker VMs
+
+Hosts can either be converged as a group or individually.
+
+Group converge:
 
 ```bash
-make l3-converge-arch
+make l3-converge-ubuntu_docker
 ```
 
 ```bash
-make l4-converge-arch
+make l4-converge-ubuntu_docker
+```
+
+Misery (media):
+
+```bash
+make l3-converge-misery
+```
+
+```bash
+make l4-converge-misery
+```
+
+Patricia (media acquisition):
+
+```bash
+make l3-converge-patricia
+```
+
+```bash
+make l4-converge-patricia
+```
+
+Carrie (misc):
+
+```bash
+make l3-converge-carrie
+```
+
+```bash
+make l4-converge-carrie
+```
+
+### OpenVPN
+
+### Converge Bare Metal Ubuntu Host
+
+Use Ansible to converge the bare metal host (where L2 obviously doesn't apply).
+
+```bash
+make l3-converge-flagg
+```
+
+```bash
+make l4-converge-flagg
 ```
