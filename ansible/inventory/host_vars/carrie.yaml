@@ -3,9 +3,12 @@ converge_docker_it_tools: true
 converge_docker_ngb: true
 converge_docker_memos: true
 converge_docker_portainer: true
+converge_docker_nginx: true
+converge_docker_vaultwarden: true
 
 memos_data_dir: "/var/lib/memos"
 portainer_data_dir: "/var/lib/portainer"
+vaultwarden_data_dir: "/var/lib/vaultwarden"
 
 "backup_runner_volumes": [
   { 
@@ -17,7 +20,7 @@ portainer_data_dir: "/var/lib/portainer"
     "dest": "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/portainer"
   },
   {
-    "src": "/var/lib/vaultwarden",
+    "src": "{{ vaultwarden_data_dir }}",
     "dest": "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/vaultwarden" 
   }
 ]

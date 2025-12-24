@@ -154,3 +154,34 @@
             uid: "{{ gitops_uid }}"
             gid: "{{ gitops_gid }}"
             mode: "0755"
+
+    - name: L4 | All | docker nginx
+      ansible.builtin.include_role:
+        name: all_docker_compose
+        apply:
+          tags: [l4, step_docker_nginx]
+      when: converge_docker_nginx
+      tags: [l4, step_docker_nginx]
+      vars:
+        compose_app_name: nginx
+        compose_source_type: file
+        compose_file_src: files/docker-compose/nginx.compose.yaml
+
+    - name: L4 | All | docker vaultwarden
+      ansible.builtin.include_role:
+        name: all_docker_compose
+        apply:
+          tags: [l4, step_docker_vaultwarden]
+      when: converge_docker_vaultwarden
+      tags: [l4, step_docker_vaultwarden]
+      vars:
+        compose_app_name: vaultwarden
+        compose_source_type: template
+        compose_template_src: templates/docker-compose/vaultwarden.compose.yaml.j2
+        compose_env: 
+          ADMIN_TOKEN:  "{{ lookup('env', 'VAULTWARDEN_ADMIN_TOKEN') }}"
+          SIGNUPS_ALLOWED: "false"
+        compose_paths:
+          - path: "/var/lib/vaultwarden"
+            create: true
+            mode: "0755"

@@ -92,6 +92,8 @@ all:
           hosts:
             carrie:
             flagg:
+            misery:
+            patricia:
         ubuntu_openvpn:
           hosts:
             blaine:

@@ -4,9 +4,8 @@ services:
     container_name: vaultwarden
     restart: unless-stopped
     volumes:
-      - /var/lib/vaultwarden:/data
+      - {{ vaultwarden_data_dir }}:/data
     ports:
       - 35550:80
     env_file:
       - ./.env
-
