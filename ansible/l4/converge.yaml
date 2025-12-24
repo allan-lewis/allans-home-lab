@@ -118,3 +118,39 @@
           NO_GEEKS_BREWING_POST_LOGOUT_REDIRECT_URI: "{{ lookup('env', 'NO_GEEKS_BREWING_POST_LOGOUT_REDIRECT_URI') }}"
           NO_GEEKS_BREWING_AUTHENTIK_LOGOUT_URI: "{{ lookup('env', 'NO_GEEKS_BREWING_AUTHENTIK_LOGOUT_URI') }}"
           NO_GEEKS_BREWING_REDIRECT_URI: "{{ lookup('env', 'NO_GEEKS_BREWING_REDIRECT_URI') }}"
+
+    - name: L4 | All | docker memos
+      ansible.builtin.include_role:
+        name: all_docker_compose
+        apply:
+          tags: [l4, step_docker_memos]
+      when: converge_docker_memos
+      tags: [l4, step_docker_memos]
+      vars:
+        compose_app_name: memos
+        compose_source_type: template
+        compose_template_src: "templates/docker-compose/memos.compose.yaml.j2"
+        compose_paths:
+          - path: "{{ memos_data_dir }}"
+            create: true
+            uid: "{{ gitops_uid }}"
+            gid: "{{ gitops_gid }}"
+            mode: "0755"
+
+    - name: L4 | All | docker portainer
+      ansible.builtin.include_role:
+        name: all_docker_compose
+        apply:
+          tags: [l4, step_docker_portainer]
+      when: converge_docker_portainer
+      tags: [l4, step_docker_portainer]
+      vars:
+        compose_app_name: portainer
+        compose_source_type: template
+        compose_template_src: "templates/docker-compose/portainer.compose.yaml.j2"
+        compose_paths:
+          - path: "{{ portainer_data_dir }}"
+            create: true
+            uid: "{{ gitops_uid }}"
+            gid: "{{ gitops_gid }}"
+            mode: "0755"

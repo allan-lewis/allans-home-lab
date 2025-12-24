@@ -1,7 +1,10 @@
 ---
 converge_docker_it_tools: true
 converge_docker_ngb: true
+converge_docker_memos: true
+converge_docker_portainer: true
 
+memos_data_dir: "/var/lib/memos"
 portainer_data_dir: "/var/lib/portainer"
 
 "backup_runner_volumes": [
