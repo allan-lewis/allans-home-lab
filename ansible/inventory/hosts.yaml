@@ -92,3 +92,6 @@ all:
           hosts:
             carrie:
             flagg:
+        ubuntu_openvpn:
+          hosts:
+            blaine:

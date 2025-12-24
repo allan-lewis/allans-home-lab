@@ -1,3 +1,6 @@
 ---
+converge_node_exporter: true
+converge_openvpn: true
+
 vpn_lan_net: "192.168.86.0/24"
 vpn_dns_ip: "192.168.86.205"

@@ -91,6 +91,14 @@
       when: converge_docker and converge_ubuntu
       tags: [l3, os_ubuntu, step_docker]
 
+    - name: L3 | Ubuntu | openvpn
+      ansible.builtin.include_role:
+        name: ubuntu_openvpn
+        apply:
+          tags: [l3, os_ubuntu, step_openvpn]
+      when: converge_openvpn and converge_ubuntu
+      tags: [l3, os_ubuntu, step_openvpn]
+
     # -----------------
     # Steps for all OS
     # -----------------
