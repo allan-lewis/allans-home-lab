@@ -29,6 +29,12 @@ homelab_metrics_forward_url: "http://{{hostvars['gilead'].ansible_host}}:9100"
   }
 ]
 
+converge_docker_traefik: true
+traefik_acme_dir: "/var/lib/traefik/acme"
+traefik_config_dir: "/etc/traefik"
+
+converge_docker_authentik: true
+
 converge_docker_gatus: true
 gatus_config_dir: "/etc/gatus"
 gatus_data_dir: "/var/lib/gatus"
@@ -214,6 +220,15 @@ gatus_https_endpoints:
     group: "Sites (KVM)"
     url: "https://two.kvm.allanshomelab.com"
     pattern: "*JetKVM*"
+  - name: "Nginx"
+    group: "Sites (Docker)"
+    url: "http://nginx.docker.allanshomelab.com"
+    pattern: "*nginx*"
+    check_cert: false
+  - name: "Authentik (Docker)"
+    group: "Sites (Allan's Home Lab)"
+    url: "https://authn.allanshomelab.com"
+    pattern: "*authentik*"
 gatus_tcp_endpoints:
   - name: "PostgreSQL"
     group: "K8s Load Balancer IPs"
@@ -223,3 +238,109 @@ gatus_tcp_endpoints:
     group: "K8s Load Balancer IPs"
     url: "tcp://traefik.k8s.allanshomelab.com:443"
     ip: "192.168.86.187"
+
+traefik_services:
+  - name: "derry"
+    host: derry.hosts.allanshomelab.com
+    url: "http://{{hostvars['derry'].ansible_host}}:8000"
+  - name: "gilead"
+    host: gilead.hosts.allanshomelab.com
+    url: "http://{{hostvars['gilead'].ansible_host}}:80"
+  - name: "procyon"
+    host: procyon.hosts.allanshomelab.com
+    url: "http://{{hostvars['procyon'].ansible_host}}:80"
+  - name: "whoami"
+    host: whoami.docker.allanshomelab.com
+    url: "http://{{hostvars['flagg'].ansible_host}}:8180"
+  - name: "traefik-dashboard"
+    host: traefik.docker.allanshomelab.com
+    url: "http://{{ hostvars['flagg'].ansible_host}}:8088"
+  - name: pihole
+    host: dns.docker.allanshomelab.com
+    url: "http://{{ hostvars['flagg'].ansible_host }}:30080"
+  - name: gatus
+    host: gatus.docker.allanshomelab.com
+    url: "http://{{ hostvars['flagg'].ansible_host }}:8080"
+  - name: plex
+    host: plex.media.allanshomelab.com
+    url: "http://{{ hostvars['misery'].ansible_host }}:32400"
+  - name: prowlarr
+    host: prowlarr.media.allanshomelab.com
+    url: "http://{{ hostvars['patricia'].ansible_host }}:9696"
+  - name: lidarr
+    host: lidarr.media.allanshomelab.com
+    url: "http://{{ hostvars['patricia'].ansible_host }}:8686"
+  - name: radarr
+    host: radarr.media.allanshomelab.com
+    url: "http://{{ hostvars['patricia'].ansible_host }}:7878"
+  - name: sonarr
+    host: sonarr.media.allanshomelab.com
+    url: "http://{{ hostvars['patricia'].ansible_host }}:8989"
+  - name: jellyfin
+    host: jellyfin.media.allanshomelab.com
+    url: "http://{{ hostvars['misery'].ansible_host }}:8096"
+  - name: transmission
+    host: transmission.media.allanshomelab.com
+    url: "http://{{ hostvars['patricia'].ansible_host }}:9091"
+  - name: sirius
+    host: sirius.hosts.allanshomelab.com
+    url: "https://{{ hostvars['sirius'].ansible_host }}:8006"
+    scheme: https
+  - name: shardik
+    host: shardik.hosts.allanshomelab.com
+    url: "https://{{ hostvars['shardik'].ansible_host }}:8006"
+    scheme: https
+  - name: immich
+    host: photos.allanandvaia.com
+    url: "http://{{ hostvars['misery'].ansible_host }}:2283"
+    scheme: http
+  - name: tautulli
+    host: tautulli.media.allanshomelab.com
+    url: "http://{{ hostvars['misery'].ansible_host }}:8181"
+    scheme: http
+  - name: homeassistant
+    host: home.allanandvaia.com
+    url: "http://{{ hostvars['arcturus'].ansible_host }}:8123"
+    scheme: http
+  - name: kvm1
+    host: one.kvm.allanshomelab.com
+    url: "http://192.168.86.247"
+    scheme: http
+  - name: kvm2
+    host: two.kvm.allanshomelab.com
+    url: "http://192.168.86.248"
+    scheme: http
+  - name: tools
+    host: tools.docker.allanshomelab.com
+    url: "http://{{ hostvars['carrie'].ansible_host }}:8386"
+    scheme: http
+  - name: vault1
+    host: vault.allanshomelab.com
+    url: "http://{{ hostvars['carrie'].ansible_host }}:35550"
+    scheme: http
+  - name: vault2
+    host: vault.allanandvaia.com
+    url: "http://{{ hostvars['carrie'].ansible_host }}:35550"
+    scheme: http
+  - name: vault3
+    host: vault.129monroe.com
+    url: "http://{{ hostvars['carrie'].ansible_host }}:35550"
+    scheme: http
+  - name: ngb1
+    host: nogeeksbrewing.com
+    url: "http://{{ hostvars['carrie'].ansible_host }}:8080"
+    scheme: http
+  - name: ngb2
+    host: www.nogeeksbrewing.com
+    url: "http://{{ hostvars['carrie'].ansible_host }}:8080"
+    scheme: http
+  - name: memos
+    host: memos.allanandvaia.com
+    url: "http://{{ hostvars['carrie'].ansible_host }}:5230"
+    scheme: http
+  - name: portainer
+    host: portainer.docker.allanshomelab.com
+    url: "http://{{ hostvars['carrie'].ansible_host }}:9000"
+  - name: authentik
+    host: authn.allanshomelab.com
+    url: "http://{{ hostvars['flagg'].ansible_host }}:9180"
