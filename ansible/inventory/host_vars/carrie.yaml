@@ -5,6 +5,7 @@ converge_docker_memos: true
 converge_docker_portainer: true
 converge_docker_nginx: true
 converge_docker_vaultwarden: true
+converge_restore: true
 
 memos_data_dir: "/var/lib/memos"
 portainer_data_dir: "/var/lib/portainer"
