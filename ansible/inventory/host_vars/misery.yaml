@@ -18,6 +18,12 @@ jellyfin_config_dir: "/srv/jellyfin/config"
 jellyfin_cache_dir: "/srv/jellyfin/cache"
 jellyfin_media_library: "/mnt/media-library"
 
+converge_docker_immich: true
+immich_postgres_dir: "/srv/immich/postgres"
+immich_redis_dir: "/srv/immich/redis"
+immich_model_dir: "/srv/immich/model-cache"
+immich_upload_mount: "/mnt/immich"
+
 "backup_runner_volumes": [
   { 
     src: "{{ plex_config_dir }}",
@@ -32,7 +38,7 @@ jellyfin_media_library: "/mnt/media-library"
     dest: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/jellyfin/config" 
   },
   { 
-    src: "/srv/immich/postgres",
+    src: "{{ immich_postgres_dir }}",
     dest: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/immich/postgres-volume" 
   },
   { 

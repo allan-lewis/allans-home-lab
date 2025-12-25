@@ -324,3 +324,47 @@
             nfs_server: "{{ hostvars['procyon'].ansible_host }}"
             nfs_path: "/mnt/pool1/media-library"
             nfs_opts: "ro"
+
+    - name: L4 | All | docker immich
+      ansible.builtin.include_role:
+        name: all_docker_compose
+        apply:
+          tags: [l4, step_docker_immich]
+      when: converge_docker_immich
+      tags: [l4, step_docker_immich]
+      vars:
+        compose_app_name: immich
+        compose_immich_version: "v2.4.1"
+        # Use the vendor compose from the exact release tag
+        compose_source_type: url
+        compose_url: "https://github.com/immich-app/immich/releases/download/{{ compose_immich_version }}/docker-compose.yml"
+        # Everything here is auto-validated (undefined/empty => fail early)
+        compose_env:
+          IMMICH_VERSION: "{{ compose_immich_version }}"
+          UPLOAD_LOCATION: "{{ immich_upload_mount }}"
+          DB_DATA_LOCATION: "{{ immich_postgres_dir }}"  
+          REDIS_DATA_LOCATION: "{{ immich_redis_dir }}"
+          MODEL_CACHE_LOCATION: "{{ immich_model_dir }}"
+          COMPOSE_PROJECT_NAME: "immich"
+          DB_USERNAME: "postgres"
+          DB_DATABASE_NAME: "immich"
+          DB_PASSWORD: "{{ lookup('env', 'IMMICH_DB_PASSWORD') }}"
+        compose_paths:
+          # NFS uploads (do not chown from client; role will verify it's NFS-mounted)
+          - path: "{{ immich_upload_mount }}"
+            nfs: true
+            nfs_server: "{{ hostvars['procyon'].ansible_host }}"
+            nfs_path: "/mnt/pool1/immich"
+            nfs_opts: "rw"
+          # Postgres data (local; container will chown on first init)
+          - path: "{{ immich_postgres_dir }}"
+            create: true
+            mode: "0755"
+          # Redis data (local; volatile)
+          - path: "{{ immich_redis_dir }}"
+            create: true
+            mode: "0755"
+          # Model cache (local; volatile) — leave root-owned
+          - path: "{{ immich_model_dir }}"
+            create: true
+            mode: "0755"
