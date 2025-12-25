@@ -252,3 +252,11 @@
             uid: "{{ gitops_uid }}"
             gid: "{{ gitops_gid }}"
             mode: "0755"
+
+    # - name: L4 | All | docker pihole
+    #   ansible.builtin.include_role:
+    #     name: all_docker_compose
+    #     apply:
+    #       tags: [l4, step_docker_pihole]
+    #   when: converge_docker_pihole
+    #   tags: [l4, step_docker_pihole]
