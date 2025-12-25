@@ -8,9 +8,14 @@ converge_restore: true
 converge_docker_tautulli: true
 tautulli_config_dir: "/etc/tautulli"
 
+converge_docker_plex: true
+plex_config_dir: "/srv/plex/config"
+plex_transcode_dir: "/srv/plex/transcode"
+plex_media_library: "/mnt/media-library"
+
 "backup_runner_volumes": [
   { 
-    src: "/srv/plex/config",
+    src: "{{ plex_config_dir }}",
     dest: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/plex/config" 
   },
   { 

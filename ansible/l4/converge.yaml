@@ -260,3 +260,35 @@
     #       tags: [l4, step_docker_pihole]
     #   when: converge_docker_pihole
     #   tags: [l4, step_docker_pihole]
+
+    - name: L4 | All | docker plex
+      ansible.builtin.include_role:
+        name: all_docker_compose
+        apply:
+          tags: [l4, step_docker_plex]
+      when: converge_docker_plex
+      tags: [l4, step_docker_plex]
+      vars:  
+        compose_app_name: plex
+        compose_source_type: template
+        compose_template_src: templates/docker-compose/plex.compose.yaml.j2
+        compose_env:
+          PLEX_TZ: "{{ gitops_tz }}"
+          PLEX_PUID: "{{ gitops_uid }}"
+          PLEX_PGID: "{{ gitops_gid }}"
+        compose_paths:
+          - path: "{{ plex_config_dir }}"
+            create: true
+            uid: "{{ gitops_uid }}"
+            gid: "{{ gitops_gid }}"
+            mode: "0755"
+          - path: "{{ plex_transcode_dir }}"
+            create: true
+            uid: "{{ gitops_uid }}"
+            gid: "{{ gitops_gid }}"
+            mode: "0755"
+          - path: "{{ plex_media_library }}"
+            nfs: true
+            nfs_server: "{{ hostvars['procyon'].ansible_host }}"
+            nfs_path: "/mnt/pool1/media-library"
+            nfs_opts: "ro"

@@ -33,6 +33,7 @@ converge_docker_tautulli: false
 converge_docker_authentik: false
 converge_docker_traefik: false
 converge_docker_pihole: false
+converge_docker_plex: false
 
 ## HOMELAB-WIDE VARIABLES
 default_remote_nas_ip: "{{ hostvars['procyon'].ansible_host }}"
