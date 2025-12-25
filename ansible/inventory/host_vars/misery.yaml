@@ -13,6 +13,11 @@ plex_config_dir: "/srv/plex/config"
 plex_transcode_dir: "/srv/plex/transcode"
 plex_media_library: "/mnt/media-library"
 
+converge_docker_jellyfin: true
+jellyfin_config_dir: "/srv/jellyfin/config"
+jellyfin_cache_dir: "/srv/jellyfin/cache"
+jellyfin_media_library: "/mnt/media-library"
+
 "backup_runner_volumes": [
   { 
     src: "{{ plex_config_dir }}",
@@ -23,7 +28,7 @@ plex_media_library: "/mnt/media-library"
     dest: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/tautulli/config" 
   },
   { 
-    src: "/srv/jellyfin/config",
+    src: "{{ jellyfin_config_dir }}",
     dest: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/jellyfin/config" 
   },
   { 

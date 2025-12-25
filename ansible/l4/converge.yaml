@@ -292,3 +292,35 @@
             nfs_server: "{{ hostvars['procyon'].ansible_host }}"
             nfs_path: "/mnt/pool1/media-library"
             nfs_opts: "ro"
+
+    - name: L4 | All | docker jellyfin
+      ansible.builtin.include_role:
+        name: all_docker_compose
+        apply:
+          tags: [l4, step_docker_jellyfin]
+      when: converge_docker_jellyfin
+      tags: [l4, step_docker_jellyfin]
+      vars:   
+        compose_app_name: jellyfin
+        compose_source_type: template
+        compose_template_src: templates/docker-compose/jellyfin.compose.yaml.j2
+        compose_env:
+          JELLYFIN_PUBLISHED_URL: "https://jellyfin.media.allanshomelab.com"
+          JELLYFIN_USER_UID: "{{ gitops_uid }}"
+          JELLYFIN_GROUP_GID: "{{ gitops_gid }}"
+        compose_paths:
+          - path: "{{ jellyfin_config_dir }}"
+            create: true
+            uid: "{{ gitops_uid }}"
+            gid: "{{ gitops_gid }}"
+            mode: "0755"
+          - path: "{{ jellyfin_cache_dir }}"
+            create: true
+            uid: "{{ gitops_uid }}"
+            gid: "{{ gitops_gid }}"
+            mode: "0755"
+          - path: "{{ jellyfin_media_library }}"
+            nfs: true
+            nfs_server: "{{ hostvars['procyon'].ansible_host }}"
+            nfs_path: "/mnt/pool1/media-library"
+            nfs_opts: "ro"
