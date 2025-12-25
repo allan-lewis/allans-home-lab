@@ -31,7 +31,7 @@ tautulli_config_dir: "/etc/tautulli"
   }
 ]
 
-is_db_backup_enabled: true
+converge_postgres_dump: true
 postgres_db_container: immich_postgres
 postgres_db_name: "immich"
 postgres_db_user: "postgres"
