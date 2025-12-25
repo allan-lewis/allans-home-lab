@@ -67,6 +67,8 @@ services:
   prowlarr:
     image: lscr.io/linuxserver/prowlarr:latest
     container_name: prowlarr
+    restart: unless-stopped
+    networks: [media]
     environment:
       - PUID=1000
       - PGID=1000

@@ -368,3 +368,51 @@
           - path: "{{ immich_model_dir }}"
             create: true
             mode: "0755"
+
+    - name: L4 | All | docker media acquisition
+      ansible.builtin.include_role:
+        name: all_docker_compose
+        apply:
+          tags: [l4, step_docker_media_acquisition]
+      when: converge_docker_media_acquisition
+      tags: [l4, step_docker_media_acquisition]
+      vars:
+        compose_app_name: media_acquisition
+        compose_source_type: template
+        compose_template_src: templates/docker-compose/media_acquisition.compose.yaml.j2
+        compose_paths:
+          - path: "{{ lidarr_config_dir }}"
+            create: true
+            uid: "{{ gitops_uid }}"
+            gid: "{{ gitops_gid }}"
+            mode: "0755"
+          - path: "{{ radarr_config_dir }}"
+            create: true
+            uid: "{{ gitops_uid }}"
+            gid: "{{ gitops_gid }}"
+            mode: "0755"
+          - path: "{{ sonarr_config_dir }}"
+            create: true
+            uid: "{{ gitops_uid }}"
+            gid: "{{ gitops_gid }}"
+            mode: "0755"
+          - path: "{{ transmission_config_dir }}"
+            create: true
+            uid: "{{ gitops_uid }}"
+            gid: "{{ gitops_gid }}"
+            mode: "0755"
+          - path: "{{ prowlarr_config_dir }}"
+            create: true
+            uid: "{{ gitops_uid }}"
+            gid: "{{ gitops_gid }}"
+            mode: "0755"
+          - path: "{{ transmission_watch_dir }}"
+            create: true
+            uid: "{{ gitops_uid }}"
+            gid: "{{ gitops_gid }}"
+            mode: "0755"
+          - path: "{{ media_acquisition_mount }}"
+            nfs: true
+            nfs_server: "{{ media_acquisition_nfs_server }}"
+            nfs_path: "/mnt/pool1/media-acquisition"
+            nfs_opts: "rw"

@@ -1,27 +1,37 @@
+---
+converge_docker_media_acquisition: true
+lidarr_config_dir: "/etc/lidarr"
+prowlarr_config_dir: "/etc/prowlarr"
+radarr_config_dir: "/etc/radarr"
+sonarr_config_dir: "/etc/sonarr"
+transmission_config_dir: "/etc/transmission"
+transmission_watch_dir: "/var/lib/transmission/watch"
+media_acquisition_mount: "/mnt/media-acquisition"
+
 "backup_runner_cron_minute": 50
 "backup_runner_volumes": [
   { 
-    "src": "/etc/lidarr",
+    "src": "{{ lidarr_config_dir }}",
     "dest": "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/lidarr/config" 
   },
   { 
-    "src": "/etc/prowlarr",
+    "src": "{{ prowlarr_config_dir }}",
     "dest": "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/prowlarr/config" 
   },
   { 
-    "src": "/etc/radarr",
+    "src": "{{ radarr_config_dir }}",
     "dest": "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/radarr/config" 
   },
   { 
-    "src": "/etc/sonarr",
+    "src": "{{ sonarr_config_dir }}",
     "dest": "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/sonarr/config" 
   },
   { 
-    "src": "/etc/transmission",
+    "src": "{{ transmission_config_dir }}",
     "dest": "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/transmission/config" 
   },
   { 
-    "src": "/var/lib/transmission/watch",
+    "src": "{{ transmission_watch_dir }}",
     "dest": "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/transmission/watch" 
   }
 ]
