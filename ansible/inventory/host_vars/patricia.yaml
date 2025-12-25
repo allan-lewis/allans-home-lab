@@ -26,3 +26,5 @@
   }
 ]
 media_acquisition_nfs_server: "{{ default_remote_nas_ip }}"
+
+converge_restore: true
