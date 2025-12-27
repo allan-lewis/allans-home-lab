@@ -1,4 +1,11 @@
 ---
+converge_postgres_dump: true
+postgres_db_container: "authentik-postgresql-1"
+postgres_db_name: "authentik"
+postgres_db_user: "authentik"
+postgres_db_password: "{{ lookup('env', 'DOCKER_AUTHENTIK_PG_PASS') }}"
+postgres_db_backup_dir: /var/lib/postgres-db-dumps
+
 converge_docker_cloudflare: true
 
 twingate_access_token: "{{ lookup('env', 'TWINGATE_VALIANT_STINGRAY_ACCESS_TOKEN') }}"
@@ -31,6 +38,10 @@ homelab_metrics_forward_url: "http://{{hostvars['gilead'].ansible_host}}:9100"
   { 
     "src": "/var/lib/traefik/acme",
     "dest": "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/traefik_acme" 
+  },
+  { 
+    src: "{{ postgres_db_backup_dir }}",
+    dest: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/authentik/db-dumps" 
   }
 ]
 

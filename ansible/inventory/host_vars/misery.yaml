@@ -53,4 +53,3 @@ postgres_db_name: "immich"
 postgres_db_user: "postgres"
 postgres_db_password: "{{ lookup('env', 'IMMICH_DB_PASSWORD') }}"
 postgres_db_backup_dir: /var/lib/postgres-db-dumps
-
