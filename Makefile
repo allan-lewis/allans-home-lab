@@ -35,7 +35,9 @@ TF_DIR ?= terraform/l2
   l2-apply-% \
   l2-destroy-% \
   l3-converge-% \
-  l4-converge-%
+  l4-converge-% \
+  l4-converge-gatus \
+  l4-converge-gatus-all
 
 help: ## Show a list of all targets
 	@awk 'BEGIN{FS=":.*##"; printf "\nTargets:\n"} /^[a-zA-Z0-9_%.\/\-]+:.*##/ { printf "  \033[36m%-18s\033[0m %s\n", $$1, $$2 }' $(MAKEFILE_LIST)
@@ -74,3 +76,10 @@ l4-converge-%: ## Converge a group of hosts (workloads)
 	@$(RUN) bash -lc 'set -euo pipefail; \
 	  scripts/converge.sh "$*" l4'
 
+l4-converge-gatus: ## Converge just the Gatus config file
+	@$(RUN) bash -lc 'set -euo pipefail; \
+	  TAGS=step_docker_gatus scripts/converge.sh "flagg" l4'
+
+l4-converge-gatus-all: ## Converge the entire Gatus stack
+	@$(RUN) bash -lc 'set -euo pipefail; \
+	  TAGS=step_docker_gatus_all scripts/converge.sh "flagg" l4'
