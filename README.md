@@ -4,6 +4,7 @@
 
 - [How-To Guides](docs/how-to.md)
 - [Full Build](docs/full-build.md)
+- [Misc](docs/random-notes.md)
 
 ## Project Overview
 
