@@ -170,3 +170,12 @@
       when: converge_docker_monitoring
       tags: [l3, step_docker_monitoring]
 
+    - name: L3 | All | tailscale client
+      ansible.builtin.include_role:
+        name: artis3n.tailscale.machine
+        apply:
+          tags: [l3, step_tailscale]
+      when: converge_tailscale
+      tags: [l3, step_tailscale]
+      vars:
+        tailscale_authkey: "{{ lookup('env', 'TAILSCALE_AUTHKEY') }}"

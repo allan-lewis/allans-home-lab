@@ -101,3 +101,7 @@ all:
         ubuntu_openvpn:
           hosts:
             blaine:
+        ubuntu_tailscale:
+          hosts:
+            barlow:
+            flagg:

@@ -118,6 +118,15 @@
         (ansible_version.stdout | default('') ).splitlines() | first | default('ansible: <no output>')
       }}
 
+- name: Ansible | Install required collections
+  ansible.builtin.command:
+    cmd: >
+      ansible-galaxy collection install artis3n.tailscale
+  args:
+    creates: "/home/{{ gitops_user }}/.ansible/collections/ansible_collections/artis3n/tailscale"
+  become: true
+  become_user: "{{ gitops_user }}"
+
 - name: HashiCorp | Determine architecture
   ansible.builtin.set_fact:
     hashicorp_arch: "{{ hashicorp_arch_map[ansible_architecture] | default('unsupported') }}"
