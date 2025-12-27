@@ -253,14 +253,6 @@
             gid: "{{ gitops_gid }}"
             mode: "0755"
 
-    # - name: L4 | All | docker pihole
-    #   ansible.builtin.include_role:
-    #     name: all_docker_compose
-    #     apply:
-    #       tags: [l4, step_docker_pihole]
-    #   when: converge_docker_pihole
-    #   tags: [l4, step_docker_pihole]
-
     - name: L4 | All | docker plex
       ansible.builtin.include_role:
         name: all_docker_compose
@@ -446,3 +438,11 @@
         compose_file_src: files/docker-compose/cloudflare.compose.yaml
         compose_env:
           CLOUDFLARE_TUNNEL_TOKEN: "{{ lookup('env','CLOUDFLARE_TUNNEL_TOKEN') }}"
+
+    - name: L4 | All | docker pihole
+      ansible.builtin.include_role:
+        name: all_docker_pihole
+        apply:
+          tags: [l4, step_docker_pihole]
+      when: converge_docker_pihole
+      tags: [l4, step_docker_pihole]

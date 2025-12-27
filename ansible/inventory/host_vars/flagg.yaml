@@ -351,6 +351,7 @@ traefik_services:
     url: "http://{{ hostvars['flagg'].ansible_host }}:9180"
 
 converge_docker_pihole: true
+pihole_data_dir: "/var/lib/pihole"
 pihole_admin_password: "{{ lookup('env', 'PIHOLE_ADMIN_PASSWORD') }}"
 pihole_upstreams:
   - "1.1.1.1"
