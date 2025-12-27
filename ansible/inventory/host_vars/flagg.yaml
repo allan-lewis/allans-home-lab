@@ -1,4 +1,6 @@
 ---
+converge_docker_cloudflare: true
+
 twingate_access_token: "{{ lookup('env', 'TWINGATE_VALIANT_STINGRAY_ACCESS_TOKEN') }}"
 twingate_refresh_token: "{{ lookup('env', 'TWINGATE_VALIANT_STINGRAY_REFRESH_TOKEN') }}"
 
