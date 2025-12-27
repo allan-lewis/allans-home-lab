@@ -7,6 +7,9 @@ converge_docker_nginx: true
 converge_docker_vaultwarden: true
 converge_restore: true
 
+twingate_access_token: "{{ lookup('env', 'TWINGATE_MODEST_ANTEATER_ACCESS_TOKEN') }}"
+twingate_refresh_token: "{{ lookup('env', 'TWINGATE_MODEST_ANTEATER_REFRESH_TOKEN') }}"
+
 memos_data_dir: "/var/lib/memos"
 portainer_data_dir: "/var/lib/portainer"
 vaultwarden_data_dir: "/var/lib/vaultwarden"

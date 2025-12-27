@@ -37,6 +37,7 @@ converge_docker_plex: false
 converge_docker_jellyfin: false
 converge_docker_immich: false
 converge_docker_media_acquisition: false
+converge_docker_twingate: false
 
 ## HOMELAB-WIDE VARIABLES
 default_remote_nas_ip: "{{ hostvars['procyon'].ansible_host }}"

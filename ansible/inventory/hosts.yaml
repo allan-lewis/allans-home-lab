@@ -86,6 +86,10 @@ all:
             ubuntu_devops:
               hosts:
                 cujo:
+            ubuntu_docker_twingate:
+              hosts:
+                flagg:
+                carrie:
             ubuntu_tinker:
               hosts:
                 barlow:

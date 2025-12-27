@@ -1,4 +1,7 @@
 ---
+twingate_access_token: "{{ lookup('env', 'TWINGATE_VALIANT_STINGRAY_ACCESS_TOKEN') }}"
+twingate_refresh_token: "{{ lookup('env', 'TWINGATE_VALIANT_STINGRAY_REFRESH_TOKEN') }}"
+
 backup_runner_cron_hour: "*"
 backup_runner_cron_minute: "15"
 backup_runner_healthchecks_url: "https://hc-ping.com/fc7034f6-cb5d-4965-91ae-017aeb4591da"
