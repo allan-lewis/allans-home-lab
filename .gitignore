@@ -92,6 +92,7 @@ Icon?
 !/infra/** 
 !template-manifest.json
 !archinstall_config.json
+!renovate.json
 
 .iso-build/
 .template-build-ubuntu/
