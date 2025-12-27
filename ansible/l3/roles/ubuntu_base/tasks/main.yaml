@@ -18,8 +18,11 @@
       - stow
       - net-tools
       - nfs-common
-      - neovim
       - build-essential
+      - software-properties-common
+      - ca-certificates
+      - curl
+      - gpg
     state: latest
     update_cache: true
 
@@ -55,3 +58,24 @@
 - name: Display Starship version
   debug:
     msg: "Starship installed successfully: {{ starship_version_output.stdout }}"
+
+- name: Neovim | Ensure Ubuntu neovim package is absent
+  ansible.builtin.apt:
+    name: neovim
+    state: absent
+    purge: true
+  become: true
+
+- name: Neovim | Download pinned AppImage
+  ansible.builtin.get_url:
+    url: "{{ nvim_url }}"
+    dest: "{{ nvim_path }}"
+    mode: "0755"
+    force: true
+  become: true
+
+- name: Neovim | Verify version
+  ansible.builtin.command: "{{ nvim_path }} --version"
+  register: nvim_ver
+  changed_when: false
+  become: true
