@@ -36,6 +36,8 @@ TF_DIR ?= terraform/l2
   l2-destroy-% \
   l3-converge-% \
   l4-converge-% \
+  l4-converge-authentik-prod \
+  l4-converge-authentik-tinker \
   l4-converge-gatus \
   l4-converge-gatus-config \
   l4-converge-pihole-dns \
@@ -98,3 +100,11 @@ l4-converge-pihole: ## Converge the entire Pi-Hole stack
 l4-converge-pihole-dns: ## Converge just Pi-Hole DNS names
 	@$(RUN) bash -lc 'set -euo pipefail; \
 	  TAGS=step_docker_pihole scripts/converge.sh "flagg" l4'
+
+l4-converge-authentik-prod: ## Converge Authentik production deployment
+	@$(RUN) bash -lc 'set -euo pipefail; \
+	  TAGS=step_docker_authentik scripts/converge.sh "flagg" l4'
+
+l4-converge-authentik-tinker: ## Converge Authentik test/recovery deployment
+	@$(RUN) bash -lc 'set -euo pipefail; \
+	  TAGS=step_docker_authentik scripts/converge.sh "barlow" l4'

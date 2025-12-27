@@ -50,6 +50,7 @@ traefik_acme_dir: "/var/lib/traefik/acme"
 traefik_config_dir: "/etc/traefik"
 
 converge_docker_authentik: true
+authentik_version: "2025.10.3"
 
 converge_docker_gatus: true
 gatus_config_dir: "/etc/gatus"

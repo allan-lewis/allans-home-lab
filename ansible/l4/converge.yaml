@@ -188,7 +188,7 @@
         compose_source_type: url
         compose_url: "https://docs.goauthentik.io/docker-compose.yml"
         compose_env:
-          AUTHENTIK_TAG: "2025.10.3"
+          AUTHENTIK_TAG: "{{ authentik_version }}"
           COMPOSE_PORT_HTTP: 9180
           COMPOSE_PORT_HTTPS: 9143
           PG_PASS: "{{ lookup('env', 'DOCKER_AUTHENTIK_PG_PASS') }}"

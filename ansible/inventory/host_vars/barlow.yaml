@@ -1,3 +1,4 @@
 ---
 ## FOR DISASTER RECOVERY TESTING
 converge_docker_authentik: true
+authentik_version: "2025.10.3"
