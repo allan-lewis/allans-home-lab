@@ -59,12 +59,6 @@
       when: converge_postgres_dump
       tags: [l4, step_db_dump]
 
-    - name: L4 | All | docker gatus
-      ansible.builtin.include_role:
-        name: all_docker_gatus
-      when: converge_docker_gatus
-      tags: [l4, step_docker_gatus, step_docker_gatus_all]
-
     - name: L4 | All | docker it tools
       ansible.builtin.include_role:
         name: all_docker_compose
@@ -420,7 +414,11 @@
     - name: L4 | All | docker pihole
       ansible.builtin.include_role:
         name: all_docker_pihole
-        apply:
-          tags: [l4, step_docker_pihole]
       when: converge_docker_pihole
-      tags: [l4, step_docker_pihole]
+      tags: [l4, step_docker_pihole, step_docker_pihole_all]
+
+    - name: L4 | All | docker gatus
+      ansible.builtin.include_role:
+        name: all_docker_gatus
+      when: converge_docker_gatus
+      tags: [l4, step_docker_gatus, step_docker_gatus_all]

@@ -1,13 +1,13 @@
 ---
 - name: Pi-hole | Pre tasks
   ansible.builtin.import_tasks: pre.yaml
-  tags: [l4, step_docker_pihole]
+  tags: [l4, step_docker_pihole_all]
 
 - name: Pi-hole | Deploy docker compose app
   ansible.builtin.include_role:
     name: all_docker_compose
     apply:
-      tags: [l4, step_docker_pihole]
+      tags: [l4, step_docker_pihole_all]
   vars:
     compose_app_name: "pihole"
     compose_source_type: "template"
@@ -16,8 +16,12 @@
       - path: "{{ pihole_data_dir }}"
         create: true
         mode: "0755"
-  tags: [l4, step_docker_pihole]
+  tags: [l4, step_docker_pihole_all]
 
 - name: Pi-hole | Post tasks
   ansible.builtin.import_tasks: post.yaml
-  tags: [l4, step_docker_pihole]
+  tags: [l4, step_docker_pihole_all]
+
+- name: Pi-hole | Post tasks (DNS records)
+  ansible.builtin.import_tasks: post_dns.yaml
+  tags: [l4, step_docker_pihole, step_docker_pihole_all]

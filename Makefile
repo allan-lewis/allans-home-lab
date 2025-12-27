@@ -38,6 +38,8 @@ TF_DIR ?= terraform/l2
   l4-converge-% \
   l4-converge-gatus \
   l4-converge-gatus-config \
+  l4-converge-pihole-dns \
+  l4-converge-pihole \
   l4-converge-traefik
 
 help: ## Show a list of all targets
@@ -88,3 +90,11 @@ l4-converge-gatus-config: ## Converge just the Gatus config file
 l4-converge-traefik: ## Converge the entire Gatus stack
 	@$(RUN) bash -lc 'set -euo pipefail; \
 	  TAGS=step_docker_traefik scripts/converge.sh "flagg" l4'
+
+l4-converge-pihole: ## Converge the entire Pi-Hole stack
+	@$(RUN) bash -lc 'set -euo pipefail; \
+	  TAGS=step_docker_pihole_all scripts/converge.sh "flagg" l4'
+
+l4-converge-pihole-dns: ## Converge just Pi-Hole DNS names
+	@$(RUN) bash -lc 'set -euo pipefail; \
+	  TAGS=step_docker_pihole scripts/converge.sh "flagg" l4'
