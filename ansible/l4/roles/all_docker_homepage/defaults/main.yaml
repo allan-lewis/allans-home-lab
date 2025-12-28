@@ -1,0 +1,12 @@
+---
+homepage_config_templates:
+  - src: "bookmarks.yaml.j2"
+    dest: "/etc/homepage/bookmarks.yaml"
+  - src: "docker.yaml.j2"
+    dest: "/etc/homepage/docker.yaml"
+  - src: "services.yaml.j2"
+    dest: "/etc/homepage/services.yaml"
+  - src: "settings.yaml.j2"
+    dest: "/etc/homepage/settings.yaml"
+  - src: "widgets.yaml.j2"
+    dest: "/etc/homepage/widgets.yaml"

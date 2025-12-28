@@ -1,0 +1,22 @@
+---
+- name: Homepage | Render configuration YAML
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items: "{{ homepage_config_templates}}"
+  tags: [l4, step_docker_homepage_all, step_docker_homepage]
+
+- name: Homepage | Deploy docker compose app
+  ansible.builtin.include_role:
+    name: all_docker_compose
+    apply:
+      tags: [l4, step_docker_homepage_all]
+  tags: [l4, step_docker_homepage_all]
+  vars:
+    compose_app_name: homepage
+    compose_source_type: template
+    compose_template_src: "templates/docker-compose/homepage.compose.yaml.j2"
+    compose_paths:
+      - path: "{{ homepage_config_dir }}"
+        create: true
+        mode: "0755"

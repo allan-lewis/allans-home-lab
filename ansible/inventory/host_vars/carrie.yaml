@@ -7,6 +7,9 @@ converge_docker_nginx: true
 converge_docker_vaultwarden: true
 converge_restore: true
 
+converge_docker_homepage: true
+homepage_config_dir: "/etc/homepage"
+
 twingate_access_token: "{{ lookup('env', 'TWINGATE_MODEST_ANTEATER_ACCESS_TOKEN') }}"
 twingate_refresh_token: "{{ lookup('env', 'TWINGATE_MODEST_ANTEATER_REFRESH_TOKEN') }}"
 

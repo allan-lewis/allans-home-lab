@@ -194,6 +194,10 @@ gatus_https_endpoints:
     group: "Sites (K8s)"
     url: "https://homepage.k8s.allanshomelab.com"
     pattern: "*Homepage*"
+  - name: Homepage
+    group: "Sites (Docker)"
+    url: "https://homepage.docker.allanshomelab.com"
+    pattern: "*Homepage*"
   - name: Longhorn
     group: "Sites (K8s)"
     url: "https://longhorn.k8s.allanshomelab.com"
@@ -361,6 +365,9 @@ traefik_services:
   - name: authentik
     host: authn.allanshomelab.com
     url: "http://{{ hostvars['flagg'].ansible_host }}:9180"
+  - name: homepage
+    host: homepage.docker.allanshomelab.com
+    url: "http://{{ hostvars['carrie'].ansible_host }}:3007"
 
 converge_docker_pihole: true
 pihole_data_dir: "/var/lib/pihole"
@@ -445,4 +452,6 @@ pihole_cname_records:
   - alias: "plex.media.allanshomelab.com"
     target: "media.allanshomelab.com"
   - alias: "tools.docker.allanshomelab.com"
+    target: "docker.allanshomelab.com"
+  - alias: "homepage.docker.allanshomelab.com"
     target: "docker.allanshomelab.com"

@@ -40,6 +40,10 @@ TF_DIR ?= terraform/l2
   l4-converge-authentik-tinker \
   l4-converge-gatus \
   l4-converge-gatus-config \
+  l4-converge-homepage \
+  l4-converge-homepage-config \
+  l4-converge-immich-tinker \
+  l4-converge-immich-tinker \
   l4-converge-pihole-dns \
   l4-converge-pihole \
   l4-converge-traefik
@@ -116,3 +120,11 @@ l4-converge-immich-prod: ## Converge Immich production deployment
 l4-converge-immich-tinker: ## Converge Immich test/recovery deployment
 	@$(RUN) bash -lc 'set -euo pipefail; \
 	  TAGS=step_docker_immich scripts/converge.sh "barlow" l4'
+
+l4-converge-homepage: ## Converge the entire Gatus stack
+	@$(RUN) bash -lc 'set -euo pipefail; \
+	  TAGS=step_docker_homepage_all scripts/converge.sh "carrie" l4'
+
+l4-converge-homepage-config: ## Converge just the Gatus config file
+	@$(RUN) bash -lc 'set -euo pipefail; \
+	  TAGS=step_docker_homepage scripts/converge.sh "carrie" l4'

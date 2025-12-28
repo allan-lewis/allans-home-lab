@@ -422,3 +422,9 @@
         name: all_docker_gatus
       when: converge_docker_gatus
       tags: [l4, step_docker_gatus, step_docker_gatus_all]
+
+    - name: L4 | All | docker homepage
+      ansible.builtin.include_role:
+        name: all_docker_homepage
+      when: converge_docker_homepage
+      tags: [l4, step_docker_homepage, step_docker_homepage_all]

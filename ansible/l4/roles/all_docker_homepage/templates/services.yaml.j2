@@ -1,0 +1,61 @@
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/configs/services/
+
+- Home Lab Management:
+    - Gilead:
+        icon: truenas.png
+        href: https://gilead.hosts.allanshomelab.com
+        description: NAS (offsite backup)
+        widget:
+            type: truenas
+            url: https://gilead.hosts.allanshomelab.com
+            username: truenas_admin
+            password: "{{ lookup('env', 'HOMEPAGE_VAR_TRUENAS_PASSWORD') }}"
+    - Derry:
+        icon: asustor.png
+        href: https://derry.hosts.allanshomelab.com
+        description: NAS (local backup)
+    - Longhorn:
+        icon: longhorn.png
+        href: https://longhorn.k8s.allanshomelab.com
+        description: Distributed k8s storage
+    - Portainer:
+        icon: portainer.png
+        href: https://portainer.docker.allanshomelab.com
+        description: Container management
+        host: carrie
+        container: portainer
+    - Procyon:
+        icon: truenas.png
+        href: https://procyon.hosts.allanshomelab.com
+        description: NAS
+        namespace:
+        app:
+        server:
+        container:
+        widget:
+            type: truenas
+            url: https://procyon.hosts.allanshomelab.com
+            username: truenas_admin
+            password: "{{ lookup('env', 'HOMEPAGE_VAR_TRUENAS_PASSWORD') }}"
+    - Shardik:
+        icon: proxmox.png
+        href: https://shardik.hosts.allanshomelab.com
+        description: Hypervisor
+        widget:
+            type: proxmox
+            url: https://shardik.hosts.allanshomelab.com
+            username: "{{ lookup('env', 'HOMEPAGE_VAR_SHARDIK_USERNAME') }}"
+            password: "{{ lookup('env', 'HOMEPAGE_VAR_SHARDIK_PASSWORD') }}"
+            fields: ['vms', 'resources.cpu', 'resources.mem']
+    - Sirius:
+        icon: proxmox.png
+        href: https://sirius.hosts.allanshomelab.com
+        description: Hypervisor
+        widget:
+            type: proxmox
+            url: https://sirius.hosts.allanshomelab.com
+            username: "{{ lookup('env', 'HOMEPAGE_VAR_SIRIUS_USERNAME') }}"
+            password: "{{ lookup('env', 'HOMEPAGE_VAR_SIRIUS_PASSWORD') }}"
+            fields: ['vms', 'resources.cpu', 'resources.mem']
