@@ -108,3 +108,11 @@ l4-converge-authentik-prod: ## Converge Authentik production deployment
 l4-converge-authentik-tinker: ## Converge Authentik test/recovery deployment
 	@$(RUN) bash -lc 'set -euo pipefail; \
 	  TAGS=step_docker_authentik scripts/converge.sh "barlow" l4'
+
+l4-converge-immich-prod: ## Converge Immich production deployment
+	@$(RUN) bash -lc 'set -euo pipefail; \
+	  TAGS=step_docker_immich scripts/converge.sh "misery" l4'
+
+l4-converge-immich-tinker: ## Converge Immich test/recovery deployment
+	@$(RUN) bash -lc 'set -euo pipefail; \
+	  TAGS=step_docker_immich scripts/converge.sh "barlow" l4'

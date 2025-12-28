@@ -298,7 +298,7 @@
       tags: [l4, step_docker_immich]
       vars:
         compose_app_name: immich
-        compose_immich_version: "v2.4.1"
+        compose_immich_version: "{{ immich_version }}"
         # Use the vendor compose from the exact release tag
         compose_source_type: url
         compose_url: "https://github.com/immich-app/immich/releases/download/{{ compose_immich_version }}/docker-compose.yml"
@@ -318,7 +318,7 @@
           - path: "{{ immich_upload_mount }}"
             nfs: true
             nfs_server: "{{ hostvars['procyon'].ansible_host }}"
-            nfs_path: "/mnt/pool1/immich"
+            nfs_path: "{{ immich_upload_mount_nfs_path }}"
             nfs_opts: "rw"
           # Postgres data (local; container will chown on first init)
           - path: "{{ immich_postgres_dir }}"
