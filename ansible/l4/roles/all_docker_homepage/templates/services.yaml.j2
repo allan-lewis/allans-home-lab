@@ -104,3 +104,35 @@
         widget:
             type: prometheus
             url: https://prometheus.k8s.allanshomelab.com
+- Networking and Authentication:
+    - Authentik (Docker):
+        icon: authentik.png
+        href: https://authn.allanshomelab.com
+        description: Identity provider
+        server: flagg
+        container: authentik-server-1
+        widget:
+            type: authentik
+            url: https://authn.allanshomelab.com
+            key: "{{ lookup('env', 'HOMEPAGE_VAR_AUTHENTIK_KEY_DOCKER') }}"
+            version: 2
+    - Authentik (k8s):
+        icon: authentik.png
+        href: https://auth.allanshomelab.com
+        description: Identity provider
+        widget:
+            type: authentik
+            url: https://auth.allanshomelab.com
+            key: "{{ lookup('env', 'HOMEPAGE_VAR_AUTHENTIK_KEY_K8S') }}"
+            version: 2
+    - Cloudflared:
+        icon: cloudflare.png
+        href: {{HOMEPAGE_VAR_CLOUDFLARE_URL}}
+        description: Zero trust tunnel
+        server: flagg
+        container: cloudflare-cloudflared-1
+        widget:
+            type: cloudflared
+            key: {{HOMEPAGE_VAR_CLOUDFLARE_KEY}}
+            accountid: {{HOMEPAGE_VAR_CLOUDFLARE_ACCOUTNT_ID}}
+            tunnelid: {{HOMEPAGE_VAR_CLOUDFLARE_TUNNEL_ID}}
