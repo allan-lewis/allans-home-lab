@@ -243,7 +243,7 @@ gatus_https_endpoints:
     pattern: "*JetKVM*"
   - name: "Nginx"
     group: "Sites (Docker)"
-    url: "http://nginx.docker.allanshomelab.com"
+    url: "https://nginx.docker.allanshomelab.com"
     pattern: "*nginx*"
     check_cert: false
   - name: "Authentik (Docker)"
@@ -368,6 +368,9 @@ traefik_services:
   - name: homepage
     host: homepage.docker.allanshomelab.com
     url: "http://{{ hostvars['carrie'].ansible_host }}:3007"
+  - name: nginx
+    host: nginx.docker.allanshomelab.com
+    url: "http://{{ hostvars['carrie'].ansible_host }}"
 
 converge_docker_pihole: true
 pihole_data_dir: "/var/lib/pihole"
@@ -389,9 +392,7 @@ pihole_a_records:
   - name: "kvm.allanshomelab.com"
     address: "192.168.86.205"
   - name: "postgres.k8s.allanshomelab.com"
-    address: "192.168.86.196"    
-  - name: "nginx.docker.allanshomelab.com"
-    address: "192.168.86.228" 
+    address: "192.168.86.196"
 pihole_cname_records:
   - alias: "gatus.docker.allanshomelab.com"
     target: "docker.allanshomelab.com"
@@ -454,4 +455,6 @@ pihole_cname_records:
   - alias: "tools.docker.allanshomelab.com"
     target: "docker.allanshomelab.com"
   - alias: "homepage.docker.allanshomelab.com"
+    target: "docker.allanshomelab.com"
+  - alias: "nginx.docker.allanshomelab.com"
     target: "docker.allanshomelab.com"

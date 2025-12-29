@@ -55,7 +55,6 @@
             username: "{{ lookup('env', 'HOMEPAGE_VAR_SIRIUS_USERNAME') }}"
             password: "{{ lookup('env', 'HOMEPAGE_VAR_SIRIUS_PASSWORD') }}"
             fields: ['vms', 'resources.cpu', 'resources.mem']
-
 - Dev Ops:
     - Alertmanager:
         icon: alertmanager.png
@@ -127,12 +126,171 @@
             version: 2
     - Cloudflared:
         icon: cloudflare.png
-        href: {{HOMEPAGE_VAR_CLOUDFLARE_URL}}
+        href: "{{ lookup('env', 'HOMEPAGE_VAR_CLOUDFLARE_URL') }}"
         description: Zero trust tunnel
         server: flagg
         container: cloudflare-cloudflared-1
         widget:
             type: cloudflared
-            key: {{HOMEPAGE_VAR_CLOUDFLARE_KEY}}
-            accountid: {{HOMEPAGE_VAR_CLOUDFLARE_ACCOUTNT_ID}}
-            tunnelid: {{HOMEPAGE_VAR_CLOUDFLARE_TUNNEL_ID}}
+            key: "{{ lookup('env', 'HOMEPAGE_VAR_CLOUDFLARE_KEY') }}"
+            accountid: "{{ lookup('env', 'HOMEPAGE_VAR_CLOUDFLARE_ACCOUTNT_ID') }}"
+            tunnelid: "{{ lookup('env', 'HOMEPAGE_VAR_CLOUDFLARE_TUNNEL_ID') }}"
+    - Nginx:
+        icon: nginx.png
+        href: https://nginx.docker.allanshomelab.com
+        description: Web server
+        server: carrie
+        container: nginx
+    - Pi-hole:
+        icon: pi-hole.png
+        href: https://dns.docker.allanshomelab.com/admin
+        description: Backup DNS server
+        server: flagg
+        container: pihole
+        widget:
+            type: pihole
+            url: https://dns.docker.allanshomelab.com
+            version: 6
+            key: "{{ lookup('env', 'HOMEPAGE_VAR_PIHOLE_KEY_DOCKER') }}"
+    - Tailscale:
+        icon: tailscale.png
+        href: https://login.tailscale.com/admin/machines
+        description: Mesh VPN
+    - Traefik (k8s):
+        icon: traefik.png
+        href: https://traefik.k8s.allanshomelab.com
+        description: Reverse proxy/load balancer
+        widget:
+            type: traefik
+            url: https://traefik.k8s.allanshomelab.com
+    - Traefik (Docker):
+        icon: traefik.png
+        href: https://traefik.docker.allanshomelab.com
+        description: Reverse proxy/load balancer
+        server: flagg
+        container: traefik
+        widget:
+            type: traefik
+            url: https://traefik.docker.allanshomelab.com
+    - Twingate:
+        icon: twingate.png
+        href: https://allanshomelab.twingate.com/networks/overview
+        description: Zero-trust access
+        server: flagg
+        container: valiant_stingray
+- Media:
+    - Immich:
+        icon: immich.png
+        href: https://photos.allanandvaia.com
+        description: Photo and video management
+        server: misery
+        container: immich_server
+        widget:
+            type: immich
+            url: https://photos.allanandvaia.com
+            key: "{{ lookup('env', 'HOMEPAGE_VAR_IMMICH_KEY') }}"
+            version: 2
+    - Jellyfin:
+        icon: jellyfin.png
+        href: https://jellyfin.media.allanshomelab.com
+        description: Media server
+        server: misery
+        container: jellyfin
+        widget:
+            type: jellyfin
+            url: https://jellyfin.media.allanshomelab.com
+            key: "{{ lookup('env', 'HOMEPAGE_VAR_JELLYFIN_KEY') }}"
+            enableBlocks: true # optional, defaults to false
+            enableNowPlaying: true # optional, defaults to true
+            enableUser: true # optional, defaults to false
+            enableMediaControl: false # optional, defaults to true
+            showEpisodeNumber: true # optional, defaults to false
+            expandOneStreamToTwoRows: false # optional, defaults to true
+    - Lidarr:
+        icon: lidarr.png
+        href: https://lidarr.media.allanshomelab.com
+        description: Music management
+        server: patricia
+        container: lidarr
+        widget:
+            type: lidarr
+            url: https://lidarr.media.allanshomelab.com
+            key: "{{ lookup('env', 'HOMEPAGE_VAR_LIDARR_KEY') }}"
+    - Plex:
+        icon: plex.png
+        href: https://plex.media.allanshomelab.com
+        description: Media server
+        server: misery
+        container: plex
+        widget:
+            type: plex
+            url: https://plex.media.allanshomelab.com
+            key: "{{ lookup('env', 'HOMEPAGE_VAR_PLEX_KEY') }}"
+    - Prowlarr:
+        icon: prowlarr.png
+        href: https://prowlarr.media.allanshomelab.com
+        description: Indexer manager
+        server: patricia
+        container: prowlarr
+        widget:
+            type: prowlarr
+            url: https://prowlarr.media.allanshomelab.com
+            key: "{{ lookup('env', 'HOMEPAGE_VAR_PROWLARR_KEY') }}"
+    - Radarr:
+        icon: radarr.png
+        href: https://radarr.media.allanshomelab.com
+        description: Movie management
+        server: patricia
+        container: radarr
+        widget:
+            type: radarr
+            url: https://radarr.media.allanshomelab.com
+            key: "{{ lookup('env', 'HOMEPAGE_VAR_RADARR_KEY') }}"
+    - Sonarr:
+        icon: sonarr.png
+        href: https://sonarr.media.allanshomelab.com
+        description: Show management
+        server: patricia
+        container: sonarr
+        widget:
+            type: sonarr
+            url: https://sonarr.media.allanshomelab.com
+            key: "{{ lookup('env', 'HOMEPAGE_VAR_SONARR_KEY') }}"
+    - Tautulli:
+        icon: tautulli.png
+        href: https://tautulli.media.allanshomelab.com
+        description: Plex monitoring and analytics
+        server: misery
+        container: tautulli
+        widget:
+            type: tautulli
+            url: https://tautulli.media.allanshomelab.com
+            key: "{{ lookup('env', 'HOMEPAGE_VAR_TAUTULLI_KEY') }}"
+    - Transmission:
+        icon: transmission.png
+        href: https://transmission.media.allanshomelab.com
+        description: Torrent download client
+        server: patricia
+        container: transmission
+        widget:
+            type: transmission
+            url: https://transmission.media.allanshomelab.com
+- Productivity:
+    - IT Tools:
+        icon: it-tools.png
+        href: https://tools.docker.allanshomelab.com
+        description: Handy tools for developers
+        server: carrie
+        container: it_tools
+    - Memos:
+        icon: memos.png
+        href: https://memos.allanandvaia.com
+        description: Note-taking
+        server: carrie
+        container: memos
+    - Vaultwarden:
+        icon: bitwarden.png
+        href: https://vault.allanshomelab.com
+        description: Secrets management
+        server: carrie
+        container: vaultwarden
