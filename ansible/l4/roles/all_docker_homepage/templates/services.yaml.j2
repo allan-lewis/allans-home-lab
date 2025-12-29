@@ -30,10 +30,6 @@
         icon: truenas.png
         href: https://procyon.hosts.allanshomelab.com
         description: NAS
-        namespace:
-        app:
-        server:
-        container:
         widget:
             type: truenas
             url: https://procyon.hosts.allanshomelab.com
@@ -59,3 +55,52 @@
             username: "{{ lookup('env', 'HOMEPAGE_VAR_SIRIUS_USERNAME') }}"
             password: "{{ lookup('env', 'HOMEPAGE_VAR_SIRIUS_PASSWORD') }}"
             fields: ['vms', 'resources.cpu', 'resources.mem']
+
+- Dev Ops:
+    - Alertmanager:
+        icon: alertmanager.png
+        href: https://alerts.k8s.allanshomelab.com
+        description: Monitoring system
+    - Argo CD:
+        icon: argo-cd.png
+        href: "{{ lookup('env', 'HOMEPAGE_VAR_ARGO_CD_URL') }}"
+        description: CD tool for Kubernetes
+        widget:
+            type: argocd
+            url: "{{ lookup('env', 'HOMEPAGE_VAR_ARGO_CD_URL') }}"
+            key: "{{ lookup('env', 'HOMEPAGE_VAR_ARGO_CD_KEY') }}"
+            fields: ['apps', 'healthy', 'synced']
+    - Gatus:
+        icon: gatus.png
+        href: https://gatus.docker.allanshomelab.com
+        description: Health dashboard
+        server: flagg
+        container: gatus
+        widget:
+            type: gatus
+            url: https://gatus.docker.allanshomelab.com
+    - Grafana:
+        icon: grafana.png
+        href: https://grafana.allanshomelab.com
+        description: Operational dashboards
+        widget:
+            type: grafana
+            url: https://grafana.allanshomelab.com
+            username: "{{ lookup('env', 'HOMEPAGE_VAR_GRAFANA_USERNAME') }}"
+            password: "{{ lookup('env', 'HOMEPAGE_VAR_GRAFANA_PASSWORD') }}"
+            fields: ['dashboards', 'datasources']
+    - Healthchecks:
+        icon: healthchecks.png
+        href: https://healthchecks.io/projects/5f5c3869-90bf-4242-9174-76b5ecb3a357//checks/
+        description: Job minitoring service
+        widget:
+            type: healthchecks
+            url: https://healthchecks.io
+            key: "{{ lookup('env', 'HOMEPAGE_VAR_HEALTHCHECKS_KEY') }}"
+    - Prometheus:
+        icon: prometheus.png
+        href: https://prometheus.k8s.allanshomelab.com
+        description: Monitoring/alerting toolkit
+        widget:
+            type: prometheus
+            url: https://prometheus.k8s.allanshomelab.com
