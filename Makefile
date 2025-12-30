@@ -46,7 +46,8 @@ TF_DIR ?= terraform/l2
   l4-converge-immich-tinker \
   l4-converge-pihole-dns \
   l4-converge-pihole \
-  l4-converge-traefik
+  l4-converge-traefik \
+  l4-converge-vaultwarden
 
 help: ## Show a list of all targets
 	@awk 'BEGIN{FS=":.*##"; printf "\nTargets:\n"} /^[a-zA-Z0-9_%.\/\-]+:.*##/ { printf "  \033[36m%-18s\033[0m %s\n", $$1, $$2 }' $(MAKEFILE_LIST)
@@ -128,3 +129,7 @@ l4-converge-homepage: ## Converge the entire Gatus stack
 l4-converge-homepage-config: ## Converge just the Gatus config file
 	@$(RUN) bash -lc 'set -euo pipefail; \
 	  TAGS=step_docker_homepage scripts/converge.sh "carrie" l4'
+
+l4-converge-vaultwarden: ## Converge the entire Vaultwarden stack
+	@$(RUN) bash -lc 'set -euo pipefail; \
+	  TAGS=step_docker_vaultwarden scripts/converge.sh "carrie" l4'
