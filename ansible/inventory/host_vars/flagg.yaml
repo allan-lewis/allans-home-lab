@@ -102,10 +102,6 @@ gatus_https_endpoints:
     group: "Sites (Hosts)"
     url: "https://gilead.hosts.allanshomelab.com/ui/"
     pattern: "*ix-root*"
-  - name: "Authentik"
-    group: "Sites (Allan's Home Lab)"
-    url: "https://auth.allanshomelab.com"
-    pattern: "*authentik*"
   - name: "Allan's Home Lab"
     group: "Sites (Allan's Home Lab)"
     url: "https://allanshomelab.com"
@@ -114,18 +110,14 @@ gatus_https_endpoints:
     group: "Sites (Allan's Home Lab)"
     url: "https://www.allanshomelab.com"
     pattern: "*authentik*"
-  - name: "Authentik"
-    group: "Sites (Allan & Vaia)"
-    url: "https://auth.allanandvaia.com"
-    pattern: "*authentik*"
   - name: "Allan & Vaia"
     group: "Sites (Allan & Vaia)"
     url: "https://allanandvaia.com"
-    pattern: "*authentik*"
+    pattern: "*Home Assistant*"
   - name: "Allan & Vaia (www)"
     group: "Sites (Allan & Vaia)"
     url: "https://www.allanandvaia.com"
-    pattern: "*authentik*"
+    pattern: "*Home Assistant*"
   - name: "Home Assistant"
     group: "Sites (Allan & Vaia)"
     url: "https://home.allanandvaia.com"
@@ -138,10 +130,6 @@ gatus_https_endpoints:
     group: "Sites (Allan & Vaia)"
     url: "https://memos.allanandvaia.com"
     pattern: "*memos*"
-  - name: "Vaultwarden (Allan & Vaia)"
-    group: "Sites (Allan & Vaia)"
-    url: "https://vault.allanandvaia.com"
-    pattern: "*Vaultwarden*"
   - name: Grafana
     group: "Sites (Allan's Home Lab)"
     url: "https://grafana.allanshomelab.com"
@@ -154,18 +142,14 @@ gatus_https_endpoints:
     group: "Sites (Allan's Home Lab)"
     url: "https://vault.allanshomelab.com"
     pattern: "*Vaultwarden*"
-  - name: "Authentik"
-    group: "Sites (129 Monroe)"
-    url: "https://auth.129monroe.com"
-    pattern: "*authentik*"
   - name: "129 Monroe"
     group: "Sites (129 Monroe)"
     url: "https://129monroe.com"
-    pattern: "*authentik*"
+    pattern: "*Vaultwarden*"
   - name: "129 Monroe (www)"
     group: "Sites (129 Monroe)"
     url: "https://www.129monroe.com"
-    pattern: "*authentik*"
+    pattern: "*Vaultwarden*"
   - name: "Vaultwarden (129 Monroe)"
     group: "Sites (129 Monroe)"
     url: "https://vault.129monroe.com"
@@ -247,10 +231,6 @@ gatus_https_endpoints:
     url: "https://authn.allanshomelab.com"
     pattern: "*authentik*"
 gatus_tcp_endpoints:
-  - name: "PostgreSQL"
-    group: "K8s Load Balancer IPs"
-    url: "tcp://postgres.k8s.allanshomelab.com:5432"
-    ip: "192.168.86.196"
   - name: "Traefik"
     group: "K8s Load Balancer IPs"
     url: "tcp://traefik.k8s.allanshomelab.com:443"
@@ -315,8 +295,16 @@ traefik_services:
     host: tautulli.media.allanshomelab.com
     url: "http://{{ hostvars['misery'].ansible_host }}:8181"
     scheme: http
-  - name: homeassistant
+  - name: homeassistant1
     host: home.allanandvaia.com
+    url: "http://{{ hostvars['arcturus'].ansible_host }}:8123"
+    scheme: http
+  - name: homeassistant2
+    host: allanandvaia.com
+    url: "http://{{ hostvars['arcturus'].ansible_host }}:8123"
+    scheme: http
+  - name: homeassistant3
+    host: www.allanandvaia.com
     url: "http://{{ hostvars['arcturus'].ansible_host }}:8123"
     scheme: http
   - name: kvm1
@@ -336,11 +324,15 @@ traefik_services:
     url: "http://{{ hostvars['carrie'].ansible_host }}:35550"
     scheme: http
   - name: vault2
-    host: vault.allanandvaia.com
+    host: vault.129monroe.com
     url: "http://{{ hostvars['carrie'].ansible_host }}:35550"
     scheme: http
   - name: vault3
-    host: vault.129monroe.com
+    host: www.129monroe.com
+    url: "http://{{ hostvars['carrie'].ansible_host }}:35550"
+    scheme: http
+  - name: vault4
+    host: 129monroe.com
     url: "http://{{ hostvars['carrie'].ansible_host }}:35550"
     scheme: http
   - name: ngb1

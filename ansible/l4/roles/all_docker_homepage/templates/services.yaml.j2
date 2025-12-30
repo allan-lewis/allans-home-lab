@@ -104,7 +104,7 @@
             type: prometheus
             url: https://prometheus.k8s.allanshomelab.com
 - Networking and Authentication:
-    - Authentik (Docker):
+    - Authentik:
         icon: authentik.png
         href: https://authn.allanshomelab.com
         description: Identity provider
@@ -114,15 +114,6 @@
             type: authentik
             url: https://authn.allanshomelab.com
             key: "{{ lookup('env', 'HOMEPAGE_VAR_AUTHENTIK_KEY_DOCKER') }}"
-            version: 2
-    - Authentik (k8s):
-        icon: authentik.png
-        href: https://auth.allanshomelab.com
-        description: Identity provider
-        widget:
-            type: authentik
-            url: https://auth.allanshomelab.com
-            key: "{{ lookup('env', 'HOMEPAGE_VAR_AUTHENTIK_KEY_K8S') }}"
             version: 2
     - Cloudflared:
         icon: cloudflare.png
