@@ -1,4 +1,6 @@
 ---
+gatus_tautulli_api_key: "{{ lookup('env', 'HOMEPAGE_VAR_TAUTULLI_KEY') }}"
+
 converge_postgres_dump: true
 postgres_db_container: "authentik-postgresql-1"
 postgres_db_name: "authentik"
@@ -203,8 +205,8 @@ gatus_https_endpoints:
     pattern: "*OK*"
   - name: "Tautulli"
     group: "Sites (Media)"
-    url: "https://tautulli.media.allanshomelab.com"
-    pattern: "*Tautulli*"
+    url: "https://tautulli.media.allanshomelab.com/api/v2?apikey={{ gatus_tautulli_api_key }}&cmd=status"
+    pattern: "*Ok*"
   - name: "Traefik"
     group: "Sites (K8s)"
     url: "https://traefik.k8s.allanshomelab.com/dashboard/#/"
