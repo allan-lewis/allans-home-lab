@@ -47,6 +47,7 @@ TF_DIR ?= terraform/l2
   l4-converge-pihole-dns \
   l4-converge-pihole \
   l4-converge-traefik \
+  l4-converge-twingate \
   l4-converge-vaultwarden
 
 help: ## Show a list of all targets
@@ -133,3 +134,7 @@ l4-converge-homepage-config: ## Converge just the Gatus config file
 l4-converge-vaultwarden: ## Converge the entire Vaultwarden stack
 	@$(RUN) bash -lc 'set -euo pipefail; \
 	  TAGS=step_docker_vaultwarden scripts/converge.sh "carrie" l4'
+
+l4-converge-twingate: ## Converge the entire Twingate stack
+	@$(RUN) bash -lc 'set -euo pipefail; \
+	  TAGS=step_docker_twingate scripts/converge.sh "ubuntu_docker_twingate" l4'
