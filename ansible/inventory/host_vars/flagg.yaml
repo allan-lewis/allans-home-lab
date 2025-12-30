@@ -369,7 +369,7 @@ traefik_services:
     url: "http://{{ hostvars['carrie'].ansible_host }}"
   - name: ahl
     host: allanshomelab.com
-    url: "http://{{ hostvars['carrie'].ansible_host }}"
+    url: "http://{{ hostvars['carrie'].ansible_host }}:3007"
     authentik: true
 
 converge_docker_pihole: true
