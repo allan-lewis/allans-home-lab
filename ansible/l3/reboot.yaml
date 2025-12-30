@@ -1,0 +1,95 @@
+---
+- name: L3 OS Reboot
+  hosts: "{{ converge_group }}"
+  gather_facts: true
+  become: true
+
+  tasks:
+    # ----------------------------
+    # Reboot override (skip checks)
+    # ----------------------------
+    - name: Reboot | force override
+      ansible.builtin.set_fact:
+        reboot_required: true
+      when: force_reboot | default(false) | bool
+
+    # ----------------------------
+    # Ubuntu: detect reboot-needed
+    # ----------------------------
+    - name: Reboot check | Ubuntu | check /var/run/reboot-required
+      ansible.builtin.stat:
+        path: /var/run/reboot-required
+      register: ubuntu_reboot_required_file
+      when:
+        - reboot_required is not defined
+        - ansible_facts.os_family == "Debian"
+
+    - name: Reboot check | Ubuntu | set reboot_required fact
+      ansible.builtin.set_fact:
+        reboot_required: "{{ ubuntu_reboot_required_file.stat.exists }}"
+      when:
+        - reboot_required is not defined
+        - ansible_facts.os_family == "Debian"
+
+    # ----------------------------
+    # Arch: detect reboot-needed (kernel mismatch heuristic)
+    # ----------------------------
+    - name: Reboot check | Arch | get newest installed kernel version
+      ansible.builtin.shell: |
+        set -euo pipefail
+        ls -1 /usr/lib/modules 2>/dev/null | sort -V | tail -n 1
+      args:
+        executable: /bin/bash
+      register: arch_latest_kernel
+      changed_when: false
+      when:
+        - reboot_required is not defined
+        - ansible_facts.distribution == "Archlinux"
+
+    - name: Reboot check | Arch | set reboot_required fact
+      ansible.builtin.set_fact:
+        reboot_required: "{{ ansible_facts.kernel != (arch_latest_kernel.stdout | trim) }}"
+      when:
+        - reboot_required is not defined
+        - ansible_facts.distribution == "Archlinux"
+
+    # ----------------------------
+    # Default (avoid undefined)
+    # ----------------------------
+    - name: Reboot check | default reboot_required to false
+      ansible.builtin.set_fact:
+        reboot_required: false
+      when: reboot_required is not defined
+
+    # ----------------------------
+    # Dryrun: report which hosts would reboot
+    # ----------------------------
+    - name: Reboot | dryrun | would reboot
+      ansible.builtin.debug:
+        msg: "DRYRUN: would reboot {{ inventory_hostname }}"
+      when:
+        - reboot_action | default('check') == 'dryrun'
+        - reboot_required | bool
+
+    - name: Reboot | dryrun | no reboot required
+      ansible.builtin.debug:
+        msg: "DRYRUN: no reboot required on {{ inventory_hostname }}"
+      when:
+        - reboot_action | default('check') == 'dryrun'
+        - not reboot_required | bool
+
+    # ----------------------------
+    # Reboot: only when not dryrun
+    # ----------------------------
+    - name: Reboot | reboot host when required
+      ansible.builtin.reboot:
+        msg: "Reboot triggered by Ansible"
+        connect_timeout: 10
+        reboot_timeout: 1800
+        pre_reboot_delay: 3
+        post_reboot_delay: 10
+        test_command: "whoami"
+      become: true
+      when:
+        - reboot_action | default('check') != 'dryrun'
+        - reboot_required | bool

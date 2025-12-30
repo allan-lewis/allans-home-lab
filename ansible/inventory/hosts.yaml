@@ -76,8 +76,9 @@ all:
             arch_devops:
               hosts:
                 langolier:
-          hosts:
-            callahan:
+            arch_tinker:
+              hosts:
+                callahan:
 
     ubuntu:
       children: 
