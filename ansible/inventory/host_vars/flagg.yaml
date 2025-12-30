@@ -191,10 +191,6 @@ gatus_https_endpoints:
     url: "https://prowlarr.media.allanshomelab.com/ping"
     pattern: "*OK*"
   - name: Homepage
-    group: "Sites (K8s)"
-    url: "https://homepage.k8s.allanshomelab.com"
-    pattern: "*Homepage*"
-  - name: Homepage
     group: "Sites (Docker)"
     url: "https://homepage.docker.allanshomelab.com"
     pattern: "*Homepage*"
@@ -413,8 +409,6 @@ pihole_cname_records:
   - alias: "whoami.docker.allanshomelab.com"
     target: "docker.allanshomelab.com"
   - alias: "alerts.k8s.allanshomelab.com"
-    target: "k8s.allanshomelab.com"
-  - alias: "homepage.k8s.allanshomelab.com"
     target: "k8s.allanshomelab.com"
   - alias: "lidarr.k8s.allanshomelab.com"
     target: "k8s.allanshomelab.com"

@@ -294,3 +294,12 @@
         description: Secrets management
         server: carrie
         container: vaultwarden
+- Home Automation:
+    - Homeassistant:
+        icon: home-assistant.png
+        href: https://home.allanandvaia.com
+        description: Home automation server
+        widget:
+            type: homeassistant
+            url: https://home.allanandvaia.com
+            key: "{{ lookup('env', 'HOMEPAGE_VAR_HOMEASSIST_KEY') }}"
