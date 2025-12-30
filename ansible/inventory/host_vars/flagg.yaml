@@ -367,6 +367,10 @@ traefik_services:
   - name: nginx
     host: nginx.docker.allanshomelab.com
     url: "http://{{ hostvars['carrie'].ansible_host }}"
+  - name: ahl
+    host: allanshomelab.com
+    url: "http://{{ hostvars['carrie'].ansible_host }}"
+    authentik: true
 
 converge_docker_pihole: true
 pihole_data_dir: "/var/lib/pihole"
