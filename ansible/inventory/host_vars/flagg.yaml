@@ -95,7 +95,7 @@ gatus_https_endpoints:
     pattern: "*Proxmox*"
   - name: "Procyon"
     group: "Sites (Hosts)"
-    url: "http://procyon.hosts.allanshomelab.com/ui/"
+    url: "https://procyon.hosts.allanshomelab.com/ui/"
     pattern: "*ix-root*"
     check_cert: false
   - name: "Gilead"
