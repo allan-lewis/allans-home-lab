@@ -17,3 +17,17 @@ docker run --rm \
     --exit-on-error \
     /backups/authentik.dump
 ```
+
+## Run Node Exporter on Asustor NAS
+
+Cleanup any stale Docker containers
+
+```bash
+sudo docker rm node_exporter
+```
+
+Run Node Exporter
+
+```bash
+sudo docker run -d --name node_exporter -p 9100:9100 --restart unless-stopped prom/node-exporter
+```
