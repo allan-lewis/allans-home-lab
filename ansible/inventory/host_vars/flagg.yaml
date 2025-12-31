@@ -182,7 +182,7 @@ gatus_https_endpoints:
     pattern: "*Homepage*"
   - name: Longhorn
     group: "Sites (K8s)"
-    url: "https://longhorn.k8s.allanshomelab.com"
+    url: "https://longhorn.docker.allanshomelab.com"
   - name: Portainer
     group: "Sites (Docker)"
     url: "https://portainer.docker.allanshomelab.com"
@@ -207,10 +207,6 @@ gatus_https_endpoints:
     group: "Sites (Media)"
     url: "https://tautulli.media.allanshomelab.com/api/v2?apikey={{ gatus_tautulli_api_key }}&cmd=status"
     pattern: "*Ok*"
-  - name: "Traefik"
-    group: "Sites (K8s)"
-    url: "https://traefik.k8s.allanshomelab.com/dashboard/#/"
-    pattern: "*Traefik*"
   - name: Transmission
     group: "Sites (Media)"
     url: "https://transmission.media.allanshomelab.com/transmission/web/"
@@ -233,10 +229,6 @@ gatus_https_endpoints:
     url: "https://authn.allanshomelab.com"
     pattern: "*authentik*"
 gatus_tcp_endpoints:
-  - name: "Traefik"
-    group: "K8s Load Balancer IPs"
-    url: "tcp://traefik.k8s.allanshomelab.com:443"
-    ip: "192.168.86.187"
   - name: "Prometheus"
     group: "K8s Load Balancer IPs"
     url: "tcp://192.168.86.186:9090"
@@ -383,6 +375,15 @@ traefik_services:
   - name: alertmanager
     host: alerts.docker.allanshomelab.com
     url: "http://192.168.86.184:9093"
+  - name: grafana
+    host: grafana.allanshomelab.com
+    url: "http://192.168.86.185"
+  - name: longhorn
+    host: longhorn.docker.allanshomelab.com
+    url: "http://192.168.86.183"
+  - name: argocd
+    host: gitops.allanshomelab.com
+    url: "https://192.168.86.182"
 
 converge_docker_pihole: true
 pihole_data_dir: "/var/lib/pihole"
@@ -399,8 +400,6 @@ pihole_a_records:
     address: "192.168.86.205" 
   - name: "media.allanshomelab.com"
     address: "192.168.86.205" 
-  - name: "k8s.allanshomelab.com"
-    address: "192.168.86.187" 
   - name: "kvm.allanshomelab.com"
     address: "192.168.86.205"
   - name: "postgres.k8s.allanshomelab.com"
@@ -428,11 +427,9 @@ pihole_cname_records:
     target: "docker.allanshomelab.com"
   - alias: "lidarr.k8s.allanshomelab.com"
     target: "k8s.allanshomelab.com"
-  - alias: "longhorn.k8s.allanshomelab.com"
-    target: "k8s.allanshomelab.com"
+  - alias: "longhorn.docker.allanshomelab.com"
+    target: "docker.allanshomelab.com"
   - alias: "dns.k8s.allanshomelab.com"
-    target: "k8s.allanshomelab.com"
-  - alias: "traefik.k8s.allanshomelab.com"
     target: "k8s.allanshomelab.com"
   - alias: "portainer.docker.allanshomelab.com"
     target: "docker.allanshomelab.com"
