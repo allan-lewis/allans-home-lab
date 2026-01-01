@@ -233,10 +233,6 @@ gatus_tcp_endpoints:
     group: "K8s Load Balancer IPs"
     url: "tcp://192.168.86.186:9090"
     ip: "192.168.86.186"
-  - name: "Grafana"
-    group: "K8s Load Balancer IPs"
-    url: "tcp://192.168.86.185:80"
-    ip: "192.168.86.185"
   - name: "Alertmanager"
     group: "K8s Load Balancer IPs"
     url: "tcp://192.168.86.184:9093"
@@ -385,7 +381,7 @@ traefik_services:
     url: "http://192.168.86.184:9093"
   - name: grafana
     host: grafana.allanshomelab.com
-    url: "http://192.168.86.185"
+    url: "http://{{ hostvars['carrie'].ansible_host }}:3071"
   - name: longhorn
     host: longhorn.docker.allanshomelab.com
     url: "http://192.168.86.183"

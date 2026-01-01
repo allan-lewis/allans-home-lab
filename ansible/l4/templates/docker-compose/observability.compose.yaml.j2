@@ -1,0 +1,15 @@
+---
+
+services:
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    restart: unless-stopped
+    ports:
+      - "3071:3000"
+    env_file:
+      - ./.env
+    volumes:
+      - {{ grafana_data_dir }}:/var/lib/grafana
+      - {{ grafana_provision_dir }}:/etc/grafana/provisioning:ro

@@ -1,4 +1,9 @@
 ---
+converge_docker_observability: true
+grafana_data_dir: "/var/lib/grafana"
+grafana_provision_dir: "/etc/grafana/provisioning"
+prometheus_host: "192.168.86.186"
+
 converge_docker_it_tools: true
 converge_docker_ngb: true
 converge_docker_memos: true
@@ -29,5 +34,13 @@ vaultwarden_data_dir: "/var/lib/vaultwarden"
   {
     "src": "{{ vaultwarden_data_dir }}",
     "dest": "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/vaultwarden" 
+  },
+  {
+    "src": "{{ grafana_data_dir }}",
+    "dest": "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/grafana/data" 
+  },
+  {
+    "src": "{{ grafana_provision_dir }}",
+    "dest": "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/grafana/provision" 
   }
 ]

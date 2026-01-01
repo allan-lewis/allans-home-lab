@@ -428,3 +428,11 @@
         name: all_docker_homepage
       when: converge_docker_homepage
       tags: [l4, step_docker_homepage, step_docker_homepage_all]
+
+    - name: L4 | All | observability
+      ansible.builtin.include_role:
+        name: all_docker_observability
+        apply:
+          tags: [l4, step_docker_observability]
+      when: converge_docker_observability
+      tags: [l4, step_docker_observability]
