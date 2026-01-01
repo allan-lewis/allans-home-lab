@@ -1,6 +1,21 @@
 ---
-
 services:
+
+  alertmanager:
+    image: prom/alertmanager:latest
+    container_name: alertmanager
+    restart: unless-stopped
+    ports:
+      - "3070:9093"
+    environment:
+      TZ: America/New_York
+    command:
+      - "--config.file={{ alertmanager_config_dir }}/alertmanager.yml"
+      - "--storage.path={{ alertmanager_data_dir }}"
+      - "--web.external-url=https://alertmanager.docker.allanshomelab.com"
+    volumes:
+      - {{ alertmanager_config_dir }}/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+      - {{ alertmanager_data_dir }}:/var/lib/alertmanager
 
   grafana:
     image: grafana/grafana:latest

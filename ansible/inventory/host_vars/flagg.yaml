@@ -168,9 +168,13 @@ gatus_https_endpoints:
     group: "Sites (Docker)"
     url: "https://tools.docker.allanshomelab.com"
     pattern: "*IT Tools*"
-  - name: "Alertmanager"
+  - name: "Alertmanager (Kubernetes)"
     group: "Sites (K8s)"
     url: "https://alerts.docker.allanshomelab.com"
+    pattern: "*Alertmanager*"
+  - name: "Alertmanager"
+    group: "Sites (Docker)"
+    url: "https://alertmanager.docker.allanshomelab.com"
     pattern: "*Alertmanager*"
   - name: Prowlarr
     group: "Sites (Media)"
@@ -379,6 +383,9 @@ traefik_services:
   - name: alertmanager
     host: alerts.docker.allanshomelab.com
     url: "http://192.168.86.184:9093"
+  - name: alertmanager2
+    host: alertmanager.docker.allanshomelab.com
+    url: "http://{{ hostvars['carrie'].ansible_host }}:3070"
   - name: grafana
     host: grafana.allanshomelab.com
     url: "http://{{ hostvars['carrie'].ansible_host }}:3071"
@@ -468,4 +475,6 @@ pihole_cname_records:
   - alias: "homepage.docker.allanshomelab.com"
     target: "docker.allanshomelab.com"
   - alias: "nginx.docker.allanshomelab.com"
+    target: "docker.allanshomelab.com"
+  - alias: "alertmanager.docker.allanshomelab.com"
     target: "docker.allanshomelab.com"
