@@ -1,0 +1,8 @@
+{
+  "created_at": "2026-01-01T15:19:18Z",
+  "description": "Arch base (BIOS) with qemu-guest-agent, cloud-init; custom autorun ISO",
+  "name": "arch-20260101",
+  "node": "shardik",
+  "storage": "ssd0",
+  "vmid": 110
+}
