@@ -1,0 +1,22 @@
+---
+- name: L3 OS Reboot
+  hosts: "{{ converge_group }}"
+  gather_facts: true
+  become: true
+
+  tasks:
+    - name: Shutdown | announce
+      ansible.builtin.debug:
+        msg: "Shutting down {{ inventory_hostname }} (shutdown_action={{ shutdown_action }})"
+      when: shutdown_action | default('') == 'now'
+      tags: [shutdown]
+
+    - name: Shutdown | power off host
+      ansible.builtin.command: shutdown -h now
+      become: true
+      async: 60
+      poll: 0
+      when: shutdown_action | default('') == 'now'
+      failed_when: false
+      changed_when: true
+      tags: [shutdown]

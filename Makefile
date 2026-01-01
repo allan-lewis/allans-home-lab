@@ -36,6 +36,7 @@ TF_DIR ?= terraform/l2
   l2-destroy-% \
   l3-converge-% \
   l3-reboot-% \
+  l3-shutdown-% \
   l4-converge-% \
   l4-converge-authentik-prod \
   l4-converge-authentik-tinker \
@@ -87,6 +88,10 @@ l3-converge-%: ## Converge a group of hosts (capabilities)
 l3-reboot-%: ## Reboot a group of hosts
 	@$(RUN) bash -lc 'set -euo pipefail; \
 	  scripts/l3/reboot.sh "$*"'
+
+l3-shutdown-%: ## Shut down a group of hosts
+	@$(RUN) bash -lc 'set -euo pipefail; \
+	  scripts/l3/shutdown.sh "$*"'
 
 l4-converge-%: ## Converge a group of hosts (workloads)
 	@$(RUN) bash -lc 'set -euo pipefail; \
