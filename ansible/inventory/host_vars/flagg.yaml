@@ -241,6 +241,14 @@ gatus_tcp_endpoints:
     group: "K8s Load Balancer IPs"
     url: "tcp://192.168.86.184:9093"
     ip: "192.168.86.184"
+  - name: "Longhorn"
+    group: "K8s Load Balancer IPs"
+    url: "tcp://192.168.86.183:80"
+    ip: "192.168.86.183"
+  - name: "Argo CD"
+    group: "K8s Load Balancer IPs"
+    url: "tcp://192.168.86.182:80"
+    ip: "192.168.86.182"
 
 traefik_services:
   - name: "derry"
