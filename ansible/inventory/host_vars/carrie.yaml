@@ -11,7 +11,6 @@ alertmanager_data_dir: "/var/lib/alertmanager"
 
 converge_docker_it_tools: true
 converge_docker_ngb: true
-converge_docker_memos: true
 converge_docker_portainer: true
 converge_docker_nginx: true
 converge_docker_vaultwarden: true
@@ -23,15 +22,10 @@ homepage_config_dir: "/etc/homepage"
 twingate_access_token: "{{ lookup('env', 'TWINGATE_MODEST_ANTEATER_ACCESS_TOKEN') }}"
 twingate_refresh_token: "{{ lookup('env', 'TWINGATE_MODEST_ANTEATER_REFRESH_TOKEN') }}"
 
-memos_data_dir: "/var/lib/memos"
 portainer_data_dir: "/var/lib/portainer"
 vaultwarden_data_dir: "/var/lib/vaultwarden"
 
 "backup_runner_volumes": [
-  { 
-    "src": "{{ memos_data_dir }}",
-    "dest": "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/memos" 
-  },
   { 
     "src": "{{ portainer_data_dir }}",
     "dest": "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/portainer"

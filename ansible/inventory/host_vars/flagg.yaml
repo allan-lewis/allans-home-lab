@@ -127,10 +127,6 @@ gatus_https_endpoints:
     group: "Sites (Allan & Vaia)"
     url: "https://photos.allanandvaia.com/api/server/ping"
     pattern: "*pong*"
-  - name: "Memos"
-    group: "Sites (Allan & Vaia)"
-    url: "https://memos.allanandvaia.com"
-    pattern: "*memos*"
   - name: "Trilium"
     group: "Sites (Allan's Home Lab)"
     url: "https://notes.allanshomelab.com"
@@ -359,10 +355,6 @@ traefik_services:
   - name: ngb2
     host: www.nogeeksbrewing.com
     url: "http://{{ hostvars['carrie'].ansible_host }}:8080"
-    scheme: http
-  - name: memos
-    host: memos.allanandvaia.com
-    url: "http://{{ hostvars['carrie'].ansible_host }}:5230"
     scheme: http
   - name: portainer
     host: portainer.docker.allanshomelab.com
