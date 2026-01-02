@@ -1,8 +1,89 @@
----
-global: {}
+global:
+  resolve_timeout: 5m
+  http_config:
+    follow_redirects: true
+    enable_http2: true
+  smtp_hello: localhost
+  smtp_require_tls: true
+  smtp_tls_config:
+    insecure_skip_verify: false
+  pagerduty_url: https://events.pagerduty.com/v2/enqueue
+  opsgenie_api_url: https://api.opsgenie.com/
+  wechat_api_url: https://qyapi.weixin.qq.com/cgi-bin/
+  victorops_api_url: https://alert.victorops.com/integrations/generic/20131114/alert/
+  telegram_api_url: https://api.telegram.org
+  webex_api_url: https://webexapis.com/v1/messages
+  rocketchat_api_url: https://open.rocket.chat/
 
 route:
-  receiver: default
+  receiver: "null"
+  group_by: ["namespace"]
+  continue: false
+  routes:
+    - receiver: black-hole
+      group_by: ["severity", "rulegroup"]
+      matchers:
+        - namespace="kube-prometheus-stack"
+      continue: true
+
+      routes:
+        - receiver: telegram
+          matchers:
+            - rulegroup="homelabRules"
+            - severity="critical"
+          continue: false
+
+      group_wait: 30s
+      group_interval: 5m
+      repeat_interval: 1h
+
+    - receiver: "null"
+      matchers:
+        - alertname="Watchdog"
+      continue: false
+
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 12h
+
+inhibit_rules:
+  - source_matchers:
+      - severity="critical"
+    target_matchers:
+      - severity=~"warning|info"
+    equal: ["namespace", "alertname"]
+
+  - source_matchers:
+      - severity="warning"
+    target_matchers:
+      - severity="info"
+    equal: ["namespace", "alertname"]
+
+  - source_matchers:
+      - alertname="InfoInhibitor"
+    target_matchers:
+      - severity="info"
+    equal: ["namespace"]
+
+  - target_matchers:
+      - alertname="InfoInhibitor"
 
 receivers:
-  - name: default
+  - name: "null"
+
+  - name: telegram
+    telegram_configs:
+      - send_resolved: true
+        http_config:
+          follow_redirects: true
+          enable_http2: true
+        api_url: https://api.telegram.org
+        bot_token: "{{ lookup('env', 'TELEGRAM_BOT_TOKEN') | trim }}"
+        chat_id: {{ lookup('env', 'TELEGRAM_CHAT_ID') | trim | int }}
+        message: '{{ "{{" }} template "telegram.default.message" . {{ "}}" }}'
+        parse_mode: HTML
+
+  - name: black-hole
+
+templates:
+  - /etc/alertmanager/config/*.tmpl

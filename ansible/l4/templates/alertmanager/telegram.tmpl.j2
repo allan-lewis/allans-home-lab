@@ -1,0 +1,32 @@
+{# 
+  This file is rendered by Ansible/Jinja,
+  but the OUTPUT is a Go template consumed by Alertmanager.
+  Do NOT introduce Jinja variables unless you escape them carefully.
+#}
+
+{{ "{{" }} define "telegram.default.message" -{{ "}}" }}
+<b>{{ "{{" }} .Status | toUpper {{ "}}" }}</b>
+{{ "{{" }} if .CommonLabels.alertname {{ "}}" }} — <b>{{ "{{" }} .CommonLabels.alertname {{ "}}" }}</b>{{ "{{" }} end {{ "}}" }}
+
+{{ "{{" }} if .CommonLabels.severity {{ "}}" }}
+Severity: <b>{{ "{{" }} .CommonLabels.severity {{ "}}" }}</b>
+{{ "{{" }} end {{ "}}" }}
+
+{{ "{{" }} if .CommonLabels.namespace {{ "}}" }}
+Namespace: <code>{{ "{{" }} .CommonLabels.namespace {{ "}}" }}</code>
+{{ "{{" }} end {{ "}}" }}
+
+{{ "{{" }} range .Alerts -{{ "}}" }}
+—
+<b>{{ "{{" }} .Labels.alertname {{ "}}" }}</b>
+{{ "{{" }} if .Labels.instance {{ "}}" }} on <code>{{ "{{" }} .Labels.instance {{ "}}" }}</code>{{ "{{" }} end {{ "}}" }}
+
+{{ "{{" }} if .Annotations.summary {{ "}}" }}
+{{ "{{" }} .Annotations.summary {{ "}}" }}
+{{ "{{" }} end {{ "}}" }}
+
+{{ "{{" }} if .Annotations.description {{ "}}" }}
+{{ "{{" }} .Annotations.description {{ "}}" }}
+{{ "{{" }} end {{ "}}" }}
+{{ "{{" }} end -{{ "}}" }}
+{{ "{{" }} end {{ "}}" }}

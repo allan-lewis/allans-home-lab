@@ -51,8 +51,10 @@
         gid: "472"
       - src: "templates/alertmanager/alertmanager.yaml.j2"
         dest: "{{ alertmanager_config_dir }}/alertmanager.yml"
+      - src: "templates/alertmanager/telegram.tmpl.j2"
+        dest: "{{ alertmanager_config_dir }}/config/telegram.tmpl"
     compose_paths:
-      - path: "{{ alertmanager_config_dir }}"
+      - path: "{{ alertmanager_config_dir }}/config"
         create: true
         mode: "0755"
       - path: "{{ alertmanager_data_dir }}"

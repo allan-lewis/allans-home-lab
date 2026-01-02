@@ -10,11 +10,12 @@ services:
     environment:
       TZ: America/New_York
     command:
-      - "--config.file={{ alertmanager_config_dir }}/alertmanager.yml"
-      - "--storage.path={{ alertmanager_data_dir }}"
+      - "--config.file=/etc/alertmanager/alertmanager.yml"
+      - "--storage.path=/var/lib/alertmanager"
       - "--web.external-url=https://alertmanager.docker.allanshomelab.com"
     volumes:
       - {{ alertmanager_config_dir }}/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+      - {{ alertmanager_config_dir }}/config:/etc/alertmanager/config:ro
       - {{ alertmanager_data_dir }}:/var/lib/alertmanager
 
   grafana:
