@@ -1,4 +1,7 @@
 ---
+converge_docker_trilium: true
+trilium_data_dir: "/var/lib/trilium"
+
 converge_docker_observability: true
 grafana_data_dir: "/var/lib/grafana"
 grafana_provision_dir: "/etc/grafana/provisioning"
@@ -52,5 +55,9 @@ vaultwarden_data_dir: "/var/lib/vaultwarden"
   {
     "src": "{{ alertmanager_data_dir }}",
     "dest": "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/alertmanager/data" 
+  },
+  {
+    "src": "{{ trilium_data_dir }}",
+    "dest": "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/trilium" 
   }
 ]

@@ -99,7 +99,6 @@ gatus_https_endpoints:
     group: "Sites (Hosts)"
     url: "https://procyon.hosts.allanshomelab.com/ui/"
     pattern: "*ix-root*"
-    check_cert: false
   - name: "Gilead"
     group: "Sites (Hosts)"
     url: "https://gilead.hosts.allanshomelab.com/ui/"
@@ -132,6 +131,10 @@ gatus_https_endpoints:
     group: "Sites (Allan & Vaia)"
     url: "https://memos.allanandvaia.com"
     pattern: "*memos*"
+  - name: "Trilium"
+    group: "Sites (Allan's Home Lab)"
+    url: "https://notes.allanshomelab.com"
+    pattern: "*Trilium*"
   - name: Grafana
     group: "Sites (Allan's Home Lab)"
     url: "https://grafana.allanshomelab.com"
@@ -395,6 +398,9 @@ traefik_services:
   - name: argocd
     host: gitops.allanshomelab.com
     url: "https://192.168.86.182"
+  - name: trilium
+    host: notes.allanshomelab.com
+    url: "http://{{ hostvars['carrie'].ansible_host }}:8376"
 
 converge_docker_pihole: true
 pihole_data_dir: "/var/lib/pihole"
