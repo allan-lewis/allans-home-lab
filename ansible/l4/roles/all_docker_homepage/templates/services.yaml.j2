@@ -58,7 +58,7 @@
 - Dev Ops:
     - Alertmanager:
         icon: alertmanager.png
-        href: https://alerts.docker.allanshomelab.com
+        href: https://alertmanager.docker.allanshomelab.com
         description: Monitoring system
     - Argo CD:
         icon: argo-cd.png
@@ -272,6 +272,16 @@
         description: Note-taking
         server: carrie
         container: memos
+    - Trilium:
+        icon: trilium.png
+        href: https://notes.allanshomelab.com
+        description: Personal knowledge base
+        server: carrie
+        container: trilium-trilium-1
+        widget:
+            type: trilium
+            url: https://notes.allanshomelab.com
+            key: "{{ lookup('env', 'TRILIUM_TOKEN') }}"
     - Vaultwarden:
         icon: bitwarden.png
         href: https://vault.allanshomelab.com
