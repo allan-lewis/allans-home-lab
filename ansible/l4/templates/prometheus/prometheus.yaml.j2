@@ -14,6 +14,15 @@ scrape_configs:
     static_configs:
         - targets:
           - "{{ hostvars['flagg'].ansible_host }}:8080"
+    relabel_configs:
+      - action: replace
+        source_labels: ['__address__']
+        target_label: target
+      - action: replace
+        source_labels: ['__address__']
+        regex: '^192\.168\.86\.205:.*$'
+        target_label: instance
+        replacement: 'flagg'
   - job_name: node-exporter
     static_configs:
 {% for h in groups['all'] | sort %}
@@ -26,8 +35,10 @@ scrape_configs:
 {% endfor %}
 {% endif %}
 {% endfor %}
-
     relabel_configs:
+      - action: replace
+        source_labels: ['__address__']
+        target_label: target
 {% for h in groups['all'] | sort %}
 {% set ports = hostvars[h].prometheus_targets | default([]) %}
 {% if ports | length > 0 %}

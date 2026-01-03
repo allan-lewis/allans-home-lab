@@ -12,12 +12,15 @@ all:
     barlow:
       ansible_host: 192.168.86.213
       gatus_slug: "(Ubuntu Sandbox)"
+      prometheus_targets: [9100, 9102]
     blaine:
       ansible_host: 192.168.86.223
       gatus_slug: "(OpenVPN Gateway)"
+      prometheus_targets: [9100]
     callahan:
       ansible_host: 192.168.86.214
       gatus_slug: "(Arch Sandbox, BTW)"
+      prometheus_targets: [9100, 9102]
     carrie:
       ansible_host: 192.168.86.228
       gatus_slug: "(Ubuntu Docker/Misc)"
@@ -28,6 +31,7 @@ all:
     cujo:
       ansible_host: 192.168.86.215
       gatus_slug: "(Ubuntu DevOps)"
+      prometheus_targets: [9100, 9102]
     derry:
       ansible_host: 192.168.86.210
       gatus_slug: "(Local Backup)"
@@ -45,12 +49,14 @@ all:
     gilead:
       ansible_host: 100.95.108.6
       gatus_slug: "(Remote Backup)"
+      prometheus_targets: [9100]
     jake:
       ansible_host: 192.168.86.153
       gatus_slug: "(K8s Worker)"
     langolier:
       ansible_host: 192.168.86.216
       gatus_slug: "(Arch DevOps, BTW)"
+      prometheus_targets: [9100, 9102]
     misery:
       ansible_host: 192.168.86.227
       gatus_slug: "(Ubuntu Docker/Media)"
@@ -58,6 +64,7 @@ all:
     patricia:
       ansible_host: 192.168.86.224
       gatus_slug: "(Ubuntu Docker/Media)"
+      prometheus_targets: [9100, 9102]
     shardik:
       ansible_host: 192.168.86.201
       gatus_slug: "(Proxmox Hypervisor)"
