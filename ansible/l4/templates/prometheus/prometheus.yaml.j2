@@ -9,7 +9,33 @@ alerting:
             - alertmanager:9093
 
 scrape_configs:
-  - job_name: prometheus
+  - job_name: gatus
+    scheme: http
     static_configs:
+        - targets:
+          - "{{ hostvars['flagg'].ansible_host }}:8080"
+  - job_name: node-exporter
+    static_configs:
+{% for h in groups['all'] | sort %}
+{% set ports = hostvars[h].prometheus_targets | default([]) %}
+{% if ports | length > 0 %}
+{% set ip = hostvars[h].ansible_host | default(h) %}
       - targets:
-          - localhost:9090
+{% for p in ports %}
+          - "{{ ip }}:{{ p }}"
+{% endfor %}
+{% endif %}
+{% endfor %}
+
+    relabel_configs:
+{% for h in groups['all'] | sort %}
+{% set ports = hostvars[h].prometheus_targets | default([]) %}
+{% if ports | length > 0 %}
+{% set ip = hostvars[h].ansible_host | default(h) %}
+      - action: replace
+        source_labels: ['__address__']
+        regex: '^{{ ip | regex_escape }}:.*$'
+        target_label: instance
+        replacement: '{{ h }}'
+{% endif %}
+{% endfor %}

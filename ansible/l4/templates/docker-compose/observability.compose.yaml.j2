@@ -41,7 +41,7 @@ services:
       - "--config.file={{ prometheus_config_dir }}/prometheus.yml"
       - "--storage.tsdb.path={{ prometheus_data_dir }}"
       - "--storage.tsdb.retention.time=14d"
-      - "--storage.tsdb.retention.size=64GB"
+      - "--storage.tsdb.retention.size=96GB"
       - "--web.external-url=https://prometheus2.docker.allanshomelab.com"
       - "--web.enable-lifecycle"
     volumes:

@@ -4,9 +4,11 @@ all:
     antares:
       ansible_host: 192.168.86.167
       gatus_slug: "(Retro Gaming)"
+      prometheus_targets: [9100]
     arcturus:
       ansible_host: 192.168.86.124
       gatus_slug: "(Home Automation)"
+      prometheus_targets: [9100]
     barlow:
       ansible_host: 192.168.86.213
       gatus_slug: "(Ubuntu Sandbox)"
@@ -19,6 +21,7 @@ all:
     carrie:
       ansible_host: 192.168.86.228
       gatus_slug: "(Ubuntu Docker/Misc)"
+      prometheus_targets: [9100, 9102]
     christine:
       ansible_host: 192.168.86.212
       gatus_slug: "(Windows 11)"
@@ -28,12 +31,14 @@ all:
     derry:
       ansible_host: 192.168.86.210
       gatus_slug: "(Local Backup)"
+      prometheus_targets: [9100]
     eddie:
       ansible_host: 192.168.86.152
       gatus_slug: "(K8s Worker)"
     flagg:
       ansible_host: 192.168.86.205
       gatus_slug: "(Ubuntu Docker/Core)"
+      prometheus_targets: [2000, 9100, 9102]
     gan:
       ansible_host: 192.168.86.211
       gatus_slug: "(MacOS)"
@@ -49,21 +54,25 @@ all:
     misery:
       ansible_host: 192.168.86.227
       gatus_slug: "(Ubuntu Docker/Media)"
+      prometheus_targets: [9100, 9102]
     patricia:
       ansible_host: 192.168.86.224
       gatus_slug: "(Ubuntu Docker/Media)"
     shardik:
       ansible_host: 192.168.86.201
       gatus_slug: "(Proxmox Hypervisor)"
+      prometheus_targets: [9100]
     procyon:
       ansible_host: 192.168.86.106
       gatus_slug: "(NAS)"
+      prometheus_targets: [9100]
     roland:
       ansible_host: 192.168.86.151
       gatus_slug: "(K8s Control Plane)"
     sirius:
       ansible_host: 192.168.86.105
       gatus_slug: "(Proxmox Hypervisor)"
+      prometheus_targets: [9100]
     susannah:
       ansible_host: 192.168.86.154
       gatus_slug: "(K8s Worker)"
