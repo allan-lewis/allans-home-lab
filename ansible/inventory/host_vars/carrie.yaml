@@ -2,13 +2,6 @@
 converge_docker_trilium: true
 trilium_data_dir: "/var/lib/trilium"
 
-converge_docker_observability: true
-grafana_data_dir: "/var/lib/grafana"
-grafana_provision_dir: "/etc/grafana/provisioning"
-prometheus_host: "192.168.86.186"
-alertmanager_config_dir: "/etc/alertmanager"
-alertmanager_data_dir: "/var/lib/alertmanager"
-
 converge_docker_it_tools: true
 converge_docker_ngb: true
 converge_docker_portainer: true
@@ -33,22 +26,6 @@ vaultwarden_data_dir: "/var/lib/vaultwarden"
   {
     "src": "{{ vaultwarden_data_dir }}",
     "dest": "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/vaultwarden" 
-  },
-  {
-    "src": "{{ grafana_data_dir }}",
-    "dest": "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/grafana/data" 
-  },
-  {
-    "src": "{{ grafana_provision_dir }}",
-    "dest": "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/grafana/provision" 
-  },
-  {
-    "src": "{{ alertmanager_config_dir }}",
-    "dest": "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/alertmanager/config" 
-  },
-  {
-    "src": "{{ alertmanager_data_dir }}",
-    "dest": "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/alertmanager/data" 
   },
   {
     "src": "{{ trilium_data_dir }}",

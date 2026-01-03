@@ -1,4 +1,13 @@
 ---
+converge_docker_observability: true
+grafana_data_dir: "/var/lib/grafana"
+grafana_provision_dir: "/etc/grafana/provisioning"
+prometheus_host: "192.168.86.186"
+alertmanager_config_dir: "/etc/alertmanager"
+alertmanager_data_dir: "/var/lib/alertmanager"
+prometheus_config_dir: "/etc/prometheus"
+prometheus_data_dir: "/var/lib/prometheus"
+
 gatus_tautulli_api_key: "{{ lookup('env', 'HOMEPAGE_VAR_TAUTULLI_KEY') }}"
 
 converge_postgres_dump: true
@@ -44,6 +53,26 @@ homelab_metrics_forward_url: "http://{{hostvars['gilead'].ansible_host}}:9100"
   { 
     src: "{{ postgres_db_backup_dir }}",
     dest: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/authentik/db-dumps" 
+  },
+  {
+    "src": "{{ prometheus_config_dir }}",
+    "dest": "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/prometheus/config" 
+  },
+  {
+    "src": "{{ grafana_data_dir }}",
+    "dest": "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/grafana/data" 
+  },
+  {
+    "src": "{{ grafana_provision_dir }}",
+    "dest": "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/grafana/provision" 
+  },
+  {
+    "src": "{{ alertmanager_config_dir }}",
+    "dest": "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/alertmanager/config" 
+  },
+  {
+    "src": "{{ alertmanager_data_dir }}",
+    "dest": "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/alertmanager/data" 
   }
 ]
 
@@ -193,6 +222,10 @@ gatus_https_endpoints:
   - name: Prometheus
     group: "Sites (K8s)"
     url: "https://prometheus.docker.allanshomelab.com"
+    pattern: "*Prometheus*"
+  - name: Prometheus
+    group: "Sites (Docker)"
+    url: "https://prometheus2.docker.allanshomelab.com"
     pattern: "*Prometheus*"
   - name: Sonarr
     group: "Sites (Media)"
@@ -380,10 +413,13 @@ traefik_services:
     url: "http://192.168.86.184:9093"
   - name: alertmanager2
     host: alertmanager.docker.allanshomelab.com
-    url: "http://{{ hostvars['carrie'].ansible_host }}:3070"
+    url: "http://{{ hostvars['flagg'].ansible_host }}:3070"
   - name: grafana
     host: grafana.allanshomelab.com
-    url: "http://{{ hostvars['carrie'].ansible_host }}:3071"
+    url: "http://{{ hostvars['flagg'].ansible_host }}:3071"
+  - name: prometheus2
+    host: prometheus2.docker.allanshomelab.com
+    url: "http://{{ hostvars['flagg'].ansible_host }}:3072"
   - name: longhorn
     host: longhorn.docker.allanshomelab.com
     url: "http://192.168.86.183"
@@ -475,4 +511,6 @@ pihole_cname_records:
   - alias: "nginx.docker.allanshomelab.com"
     target: "docker.allanshomelab.com"
   - alias: "alertmanager.docker.allanshomelab.com"
+    target: "docker.allanshomelab.com"
+  - alias: "prometheus2.docker.allanshomelab.com"
     target: "docker.allanshomelab.com"

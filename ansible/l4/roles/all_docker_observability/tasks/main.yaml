@@ -53,6 +53,8 @@
         dest: "{{ alertmanager_config_dir }}/alertmanager.yml"
       - src: "templates/alertmanager/telegram.tmpl.j2"
         dest: "{{ alertmanager_config_dir }}/config/telegram.tmpl"
+      - src: "templates/prometheus/prometheus.yaml.j2"
+        dest: "{{ prometheus_config_dir }}/prometheus.yml"
     compose_paths:
       - path: "{{ alertmanager_config_dir }}/config"
         create: true
@@ -72,3 +74,11 @@
         uid: "472"
         gid: "472"
         mode: "0755"
+      - path: "{{ prometheus_config_dir }}"
+        create: true
+        mode: "0755"
+      - path: "{{ prometheus_data_dir }}"
+        create: true
+        mode: "0755"
+        uid: "{{ gitops_uid }}"
+        gid: "{{ gitops_gid }}"
