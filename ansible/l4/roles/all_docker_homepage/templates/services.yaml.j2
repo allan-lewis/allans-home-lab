@@ -60,6 +60,8 @@
         icon: alertmanager.png
         href: https://alertmanager.docker.allanshomelab.com
         description: Monitoring system
+        server: flagg
+        container: alertmanager
     - Argo CD:
         icon: argo-cd.png
         href: "{{ lookup('env', 'HOMEPAGE_VAR_ARGO_CD_URL') }}"
@@ -82,6 +84,8 @@
         icon: grafana.png
         href: https://grafana.allanshomelab.com
         description: Operational dashboards
+        server: flagg
+        container: grafana
         widget:
             type: grafana
             url: https://grafana.allanshomelab.com
@@ -100,6 +104,8 @@
         icon: prometheus.png
         href: https://prometheus.docker.allanshomelab.com
         description: Monitoring/alerting toolkit
+        server: flagg
+        container: prometheus
         widget:
             type: prometheus
             url: https://prometheus.docker.allanshomelab.com
