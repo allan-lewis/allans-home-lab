@@ -46,4 +46,5 @@ services:
       - "--web.enable-lifecycle"
     volumes:
       - {{ prometheus_config_dir }}/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - {{ prometheus_config_dir }}/rules.yml:/etc/prometheus/rules.yml:ro
       - {{ prometheus_data_dir }}:/var/lib/prometheus

@@ -1,0 +1,119 @@
+{% raw %}
+groups:
+  - name: homelab.rules
+    rules:
+      - alert: Watchdog
+        expr: vector(1)
+        for: 0m
+        labels:
+          severity: info
+          rulegroup: homelabRules
+        annotations:
+          summary: "Watchdog"
+          description: "This alert is always firing to verify Prometheus → Alertmanager delivery."
+
+      - alert: WatchdogMissing
+        expr: absent(ALERTS{alertname="Watchdog", alertstate="firing"})
+        for: 5m
+        labels:
+          severity: critical
+          rulegroup: homelabRules
+        annotations:
+          summary: "Watchdog is NOT firing"
+          description: "Prometheus is not observing the Watchdog alert firing (rules not loaded/evaluating, config issue, or Prometheus trouble)."
+
+      - alert: HomelabPublicIPPatternInvalid
+        expr: |
+          count(count_values("ip", homelab_public_ip_numeric)) != 2
+          or
+          min(count_values("ip", homelab_public_ip_numeric)) != 1
+        for: 5m
+        labels:
+          severity: critical
+          rulegroup: homelabRules
+        annotations:
+          summary: "Unexpected public IP distribution across homelab nodes"
+          description: |
+            Expected exactly one node to report a different public IP address.
+            This alert fires when all nodes agree or when multiple nodes disagree,
+            and persists in that state for at least 10 minutes.
+
+      - alert: HomelabPublicIPMetricStale
+        expr: time() - homelab_public_ip_last_success_unix > 1200
+        for: 5m
+        labels:
+          severity: critical
+          rulegroup: homelabRules
+        annotations:
+          summary: "Public IP update metric is stale"
+          description: |
+            The public IP update metric has not refreshed in over 20 minutes.
+
+      - alert: HomelabGatusFailures
+        expr: |
+          increase(gatus_results_total{success="false"}[5m]) > 0
+        for: 5m
+        labels:
+          severity: critical
+          rulegroup: homelabRules
+        annotations:
+          summary: "Gatus check failure: {{ $labels.name }}"
+          description: |
+            The Gatus endpoint "{{ $labels.name }}" has been failing for more than 5 minutes.
+
+      - alert: HomelabHighCPUUsage
+        expr: 100 - (avg by(instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 80
+        for: 5m
+        labels:
+          severity: critical
+          rulegroup: homelabRules
+        annotations:
+          summary: "High CPU usage detected on {{ $labels.instance }}"
+          description: |
+            Host {{ $labels.instance }} has had CPU usage over 80% for more than 5 minutes. Current usage: {{ $value | printf "%.2f" }}%
+
+      - alert: HomelabHighTemperature
+        expr: |
+          max by(instance) (
+            node_hwmon_temp_celsius{chip=~"platform_coretemp_0|pci0000:00_0000:00:18_3"}
+          ) > 80
+        for: 5m
+        labels:
+          severity: critical
+          rulegroup: homelabRules
+        annotations:
+          summary: "High temperature detected on {{ $labels.instance }}"
+          description: |
+            Host {{ $labels.instance }} has had a sensor reporting temperature over 80°C for more than 5 minutes.
+            Current temperature: {{ $value | printf "%.1f" }}°C
+
+      - alert: HomelabHighMemoryUsage
+        expr: |
+          100 - (
+            (node_memory_MemAvailable_bytes{job="node-exporter", instance!~"procyon|gilead"} * 100)
+            / node_memory_MemTotal_bytes{job="node-exporter", instance!~"procyon|gilead"}
+          ) > 90
+        for: 5m
+        labels:
+          severity: critical
+          rulegroup: homelabRules
+        annotations:
+          summary: "High memory usage detected on {{ $labels.instance }}"
+          description: |
+            Host {{ $labels.instance }} has had memory usage above 90% for more than 5 minutes.
+            Current usage: {{ $value | printf "%.1f" }}%
+
+      - alert: PrometheusTargetDown
+        expr: |
+          max_over_time(up[5m]) == 0
+        for: 5m
+        labels:
+          severity: critical
+          rulegroup: homelabRules
+        annotations:
+          summary: "Prometheus scrape target down: {{ $labels.job }} / {{ $labels.instance }}"
+          description: |
+            Prometheus has been unable to scrape the target
+            job="{{ $labels.job }}", instance="{{ $labels.instance }}"
+            for at least 5 minutes.
+{% endraw %}
