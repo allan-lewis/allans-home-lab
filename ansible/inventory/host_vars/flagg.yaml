@@ -193,10 +193,6 @@ gatus_https_endpoints:
     group: "Sites (Docker)"
     url: "https://tools.docker.allanshomelab.com"
     pattern: "*IT Tools*"
-  - name: "Alertmanager (Kubernetes)"
-    group: "Sites (K8s)"
-    url: "https://alerts.docker.allanshomelab.com"
-    pattern: "*Alertmanager*"
   - name: "Alertmanager"
     group: "Sites (Docker)"
     url: "https://alertmanager.docker.allanshomelab.com"
@@ -217,12 +213,8 @@ gatus_https_endpoints:
     url: "https://portainer.docker.allanshomelab.com"
     pattern: "*Portainer*"
   - name: Prometheus
-    group: "Sites (K8s)"
-    url: "https://prometheus.docker.allanshomelab.com"
-    pattern: "*Prometheus*"
-  - name: Prometheus
     group: "Sites (Docker)"
-    url: "https://prometheus2.docker.allanshomelab.com"
+    url: "https://prometheus.docker.allanshomelab.com"
     pattern: "*Prometheus*"
   - name: Sonarr
     group: "Sites (Media)"
@@ -262,14 +254,6 @@ gatus_https_endpoints:
     url: "https://authn.allanshomelab.com"
     pattern: "*authentik*"
 gatus_tcp_endpoints:
-  - name: "Prometheus"
-    group: "K8s Load Balancer IPs"
-    url: "tcp://192.168.86.186:9090"
-    ip: "192.168.86.186"
-  - name: "Alertmanager"
-    group: "K8s Load Balancer IPs"
-    url: "tcp://192.168.86.184:9093"
-    ip: "192.168.86.184"
   - name: "Longhorn"
     group: "K8s Load Balancer IPs"
     url: "tcp://192.168.86.183:80"
@@ -402,20 +386,14 @@ traefik_services:
     host: allanshomelab.com
     url: "http://{{ hostvars['carrie'].ansible_host }}:3007"
     authentik: true
-  - name: prometheus
-    host: prometheus.docker.allanshomelab.com
-    url: "http://192.168.86.186:9090"
   - name: alertmanager
-    host: alerts.docker.allanshomelab.com
-    url: "http://192.168.86.184:9093"
-  - name: alertmanager2
     host: alertmanager.docker.allanshomelab.com
     url: "http://{{ hostvars['flagg'].ansible_host }}:3070"
   - name: grafana
     host: grafana.allanshomelab.com
     url: "http://{{ hostvars['flagg'].ansible_host }}:3071"
-  - name: prometheus2
-    host: prometheus2.docker.allanshomelab.com
+  - name: prometheus
+    host: prometheus.docker.allanshomelab.com
     url: "http://{{ hostvars['flagg'].ansible_host }}:3072"
   - name: longhorn
     host: longhorn.docker.allanshomelab.com
@@ -465,8 +443,6 @@ pihole_cname_records:
     target: "docker.allanshomelab.com"
   - alias: "whoami.docker.allanshomelab.com"
     target: "docker.allanshomelab.com"
-  - alias: "alerts.docker.allanshomelab.com"
-    target: "docker.allanshomelab.com"
   - alias: "lidarr.k8s.allanshomelab.com"
     target: "k8s.allanshomelab.com"
   - alias: "longhorn.docker.allanshomelab.com"
@@ -508,6 +484,4 @@ pihole_cname_records:
   - alias: "nginx.docker.allanshomelab.com"
     target: "docker.allanshomelab.com"
   - alias: "alertmanager.docker.allanshomelab.com"
-    target: "docker.allanshomelab.com"
-  - alias: "prometheus2.docker.allanshomelab.com"
     target: "docker.allanshomelab.com"
