@@ -379,6 +379,7 @@ traefik_services:
     url: "http://{{ hostvars['flagg'].ansible_host }}:3071"
   - name: prometheus
     host: prometheus.docker.allanshomelab.com
+    url: "http://{{ hostvars['flagg'].ansible_host }}:3072"
   - name: trilium
     host: notes.allanshomelab.com
     url: "http://{{ hostvars['carrie'].ansible_host }}:8376"
