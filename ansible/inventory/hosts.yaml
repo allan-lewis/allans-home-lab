@@ -36,9 +36,6 @@ all:
       ansible_host: 192.168.86.210
       gatus_slug: "(Local Backup)"
       prometheus_targets: [9100]
-    eddie:
-      ansible_host: 192.168.86.152
-      gatus_slug: "(K8s Worker)"
     flagg:
       ansible_host: 192.168.86.205
       gatus_slug: "(Ubuntu Docker/Core)"
@@ -50,9 +47,6 @@ all:
       ansible_host: 100.95.108.6
       gatus_slug: "(Remote Backup)"
       prometheus_targets: [9100]
-    jake:
-      ansible_host: 192.168.86.153
-      gatus_slug: "(K8s Worker)"
     langolier:
       ansible_host: 192.168.86.216
       gatus_slug: "(Arch DevOps, BTW)"
@@ -73,16 +67,10 @@ all:
       ansible_host: 192.168.86.106
       gatus_slug: "(NAS)"
       prometheus_targets: [9100]
-    roland:
-      ansible_host: 192.168.86.151
-      gatus_slug: "(K8s Control Plane)"
     sirius:
       ansible_host: 192.168.86.105
       gatus_slug: "(Proxmox Hypervisor)"
       prometheus_targets: [9100]
-    susannah:
-      ansible_host: 192.168.86.154
-      gatus_slug: "(K8s Worker)"
 
   children:
     arch:

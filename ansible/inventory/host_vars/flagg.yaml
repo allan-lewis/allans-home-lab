@@ -161,10 +161,6 @@ gatus_https_endpoints:
     group: "Sites (Allan's Home Lab)"
     url: "https://grafana.allanshomelab.com"
     pattern: "*Grafana*"
-  - name: Argo CD
-    group: "Sites (Allan's Home Lab)"
-    url: "https://gitops.allanshomelab.com"
-    pattern: "*Argo CD*"
   - name: "Vaultwarden (Allan's Home Lab)"
     group: "Sites (Allan's Home Lab)"
     url: "https://vault.allanshomelab.com"
@@ -205,9 +201,6 @@ gatus_https_endpoints:
     group: "Sites (Docker)"
     url: "https://homepage.docker.allanshomelab.com"
     pattern: "*Homepage*"
-  - name: Longhorn
-    group: "Sites (K8s)"
-    url: "https://longhorn.docker.allanshomelab.com"
   - name: Portainer
     group: "Sites (Docker)"
     url: "https://portainer.docker.allanshomelab.com"
@@ -253,15 +246,7 @@ gatus_https_endpoints:
     group: "Sites (Allan's Home Lab)"
     url: "https://authn.allanshomelab.com"
     pattern: "*authentik*"
-gatus_tcp_endpoints:
-  - name: "Longhorn"
-    group: "K8s Load Balancer IPs"
-    url: "tcp://192.168.86.183:80"
-    ip: "192.168.86.183"
-  - name: "Argo CD"
-    group: "K8s Load Balancer IPs"
-    url: "tcp://192.168.86.182:80"
-    ip: "192.168.86.182"
+gatus_tcp_endpoints: []
 
 traefik_services:
   - name: "derry"
@@ -394,13 +379,6 @@ traefik_services:
     url: "http://{{ hostvars['flagg'].ansible_host }}:3071"
   - name: prometheus
     host: prometheus.docker.allanshomelab.com
-    url: "http://{{ hostvars['flagg'].ansible_host }}:3072"
-  - name: longhorn
-    host: longhorn.docker.allanshomelab.com
-    url: "http://192.168.86.183"
-  - name: argocd
-    host: gitops.allanshomelab.com
-    url: "https://192.168.86.182"
   - name: trilium
     host: notes.allanshomelab.com
     url: "http://{{ hostvars['carrie'].ansible_host }}:8376"
@@ -445,8 +423,6 @@ pihole_cname_records:
     target: "docker.allanshomelab.com"
   - alias: "lidarr.k8s.allanshomelab.com"
     target: "k8s.allanshomelab.com"
-  - alias: "longhorn.docker.allanshomelab.com"
-    target: "docker.allanshomelab.com"
   - alias: "dns.k8s.allanshomelab.com"
     target: "k8s.allanshomelab.com"
   - alias: "portainer.docker.allanshomelab.com"

@@ -16,10 +16,6 @@
         icon: asustor.png
         href: https://derry.hosts.allanshomelab.com
         description: NAS (local backup)
-    - Longhorn:
-        icon: longhorn.png
-        href: https://longhorn.docker.allanshomelab.com
-        description: Distributed k8s storage
     - Portainer:
         icon: portainer.png
         href: https://portainer.docker.allanshomelab.com
@@ -62,15 +58,6 @@
         description: Monitoring system
         server: flagg
         container: alertmanager
-    - Argo CD:
-        icon: argo-cd.png
-        href: "{{ lookup('env', 'HOMEPAGE_VAR_ARGO_CD_URL') }}"
-        description: CD tool for Kubernetes
-        widget:
-            type: argocd
-            url: "{{ lookup('env', 'HOMEPAGE_VAR_ARGO_CD_URL') }}"
-            key: "{{ lookup('env', 'HOMEPAGE_VAR_ARGO_CD_KEY') }}"
-            fields: ['apps', 'healthy', 'synced']
     - Gatus:
         icon: gatus.png
         href: https://gatus.docker.allanshomelab.com
