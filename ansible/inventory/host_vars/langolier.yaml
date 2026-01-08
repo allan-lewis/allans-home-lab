@@ -1,4 +1,4 @@
-doppler_service_token: "{{ lookup('env', 'DOPPLER_SERVICE_TOKEN_PRODUCTION') }}"
+doppler_service_token: "{{ lookup('env', 'DOPPLER_SERVICE_TOKEN_ORCHESTRATOR') }}"
 doppler_config: "dev"
 doppler_project: "orchestrator"
 
@@ -23,5 +23,5 @@ backup_runner_volumes: [
 
 source_code_repos:
   - repo: git@github.com:allan-lewis/allans-home-lab.git
-    dest: gitops-homelab
+    dest: allans-home-lab
     version: main
