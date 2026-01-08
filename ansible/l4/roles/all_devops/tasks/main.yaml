@@ -159,57 +159,12 @@
   failed_when: aws_cli_version.rc != 0
   when: aws_creds_available
 
-- name: AWS | Create AWS config dir
-  become: true
-  ansible.builtin.file:
-    path: "{{ aws_cli_home }}/.aws"
-    state: directory
-    owner: "{{ aws_cli_user }}"
-    group: "{{ aws_cli_user }}"
-    mode: "0700"
+- name: AWS | Configure AWS CLI for users
   when: aws_creds_available or (aws_creds_required | default(false) | bool)
-
-- name: AWS | Ensure AWS config and credentials files exist
-  become: true
-  ansible.builtin.file:
-    path: "{{ aws_cli_home }}/.aws/{{ item }}"
-    state: touch
-    owner: "{{ aws_cli_user }}"
-    group: "{{ aws_cli_user }}"
-    mode: "0600"
-  loop:
-    - config
-    - credentials
-  when: aws_creds_available or (aws_creds_required | default(false) | bool)
-
-- name: AWS | Configure default AWS profile in config
-  become: true
-  ansible.builtin.ini_file:
-    path: "{{ aws_cli_home }}/.aws/config"
-    section: default
-    option: "{{ item.key }}"
-    value: "{{ item.value }}"
-    owner: "{{ aws_cli_user }}"
-    group: "{{ aws_cli_user }}"
-    mode: "0600"
-  loop:
-    - { key: "region",    value: "{{ aws_default_region }}" }
-    - { key: "output",    value: "json" }
-    - { key: "cli_pager", value: "" }
-  when: aws_creds_available or (aws_creds_required | default(false) | bool)
-
-- name: AWS | Configure default AWS credentials (no_log)
-  become: true
-  no_log: true
-  ansible.builtin.ini_file:
-    path: "{{ aws_cli_home }}/.aws/credentials"
-    section: default
-    option: "{{ item.key }}"
-    value: "{{ item.value }}"
-    owner: "{{ aws_cli_user }}"
-    group: "{{ aws_cli_user }}"
-    mode: "0600"
-  loop:
-    - { key: "aws_access_key_id",     value: "{{ aws_access_key_id }}" }
-    - { key: "aws_secret_access_key", value: "{{ aws_secret_access_key }}" }
-  when: aws_creds_available
+  ansible.builtin.include_tasks: aws_cli_user.yaml
+  loop: "{{ aws_cli_targets }}"
+  loop_control:
+    label: "{{ item.user }}"
+  vars:
+    aws_target_user: "{{ item.user }}"
+    aws_target_home: "{{ item.home }}"

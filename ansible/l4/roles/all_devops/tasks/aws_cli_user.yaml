@@ -1,0 +1,62 @@
+---
+# Expects:
+#   aws_target_user
+#   aws_target_home
+
+- name: AWS | Create AWS config dir
+  become: true
+  ansible.builtin.file:
+    path: "{{ aws_target_home }}/.aws"
+    state: directory
+    owner: "{{ aws_target_user }}"
+    group: "{{ aws_target_user }}"
+    mode: "0700"
+
+- name: AWS | Ensure AWS config and credentials files exist
+  become: true
+  ansible.builtin.file:
+    path: "{{ aws_target_home }}/.aws/{{ aws_file }}"
+    state: touch
+    owner: "{{ aws_target_user }}"
+    group: "{{ aws_target_user }}"
+    mode: "0600"
+  loop:
+    - config
+    - credentials
+  loop_control:
+    loop_var: aws_file
+
+- name: AWS | Configure default AWS profile in config
+  become: true
+  ansible.builtin.ini_file:
+    path: "{{ aws_target_home }}/.aws/config"
+    section: default
+    option: "{{ aws_opt.key }}"
+    value: "{{ aws_opt.value }}"
+    owner: "{{ aws_target_user }}"
+    group: "{{ aws_target_user }}"
+    mode: "0600"
+  loop:
+    - { key: "region",    value: "{{ aws_default_region }}" }
+    - { key: "output",    value: "json" }
+    - { key: "cli_pager", value: "" }
+  loop_control:
+    loop_var: aws_opt
+
+- name: AWS | Configure default AWS credentials (no_log)
+  become: true
+  no_log: true
+  when: aws_creds_available
+  ansible.builtin.ini_file:
+    path: "{{ aws_target_home }}/.aws/credentials"
+    section: default
+    option: "{{ aws_cred.key }}"
+    value: "{{ aws_cred.value }}"
+    owner: "{{ aws_target_user }}"
+    group: "{{ aws_target_user }}"
+    mode: "0600"
+  loop:
+    - { key: "aws_access_key_id",     value: "{{ aws_access_key_id }}" }
+    - { key: "aws_secret_access_key", value: "{{ aws_secret_access_key }}" }
+  loop_control:
+    loop_var: aws_cred

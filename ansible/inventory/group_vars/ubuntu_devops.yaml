@@ -1,6 +1,9 @@
 ---
 converge_devops: true
 converge_s3_mirror: true
+s3_mirror_buckets: [
+  "gitops-homelab-orchestrator-tf"
+]
 
 all_devops_packages:
   - ansible
