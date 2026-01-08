@@ -1,5 +1,4 @@
 # Storage & schedule
-postgres_db_backup_enabled: false
 postgres_db_backup_dir: /var/lib/postgres-db-dumps
 postgres_db_backup_log_path: /var/log/postgres-db-backup.log
 postgres_db_backup_keep_days: 14
