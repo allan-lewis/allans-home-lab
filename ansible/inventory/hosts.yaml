@@ -4,73 +4,99 @@ all:
     antares:
       ansible_host: 192.168.86.167
       gatus_slug: "(Retro Gaming)"
-      prometheus_targets: [9100]
+      prometheus_scrape_jobs:
+        node-exporter: [9100]
     arcturus:
       ansible_host: 192.168.86.124
       gatus_slug: "(Home Automation)"
-      prometheus_targets: [9100]
+      prometheus_scrape_jobs:
+        node-exporter: [9100]
     barlow:
       ansible_host: 192.168.86.213
       gatus_slug: "(Ubuntu Sandbox)"
-      prometheus_targets: [9100, 9102]
+      prometheus_scrape_jobs:
+        node-exporter: [9100]
+        homelab-metrics: [9102]
     blaine:
       ansible_host: 192.168.86.223
       gatus_slug: "(OpenVPN Gateway)"
-      prometheus_targets: [9100]
+      prometheus_scrape_jobs:
+        node-exporter: [9100]
     callahan:
       ansible_host: 192.168.86.214
       gatus_slug: "(Arch Sandbox, BTW)"
-      prometheus_targets: [9100, 9102]
+      prometheus_scrape_jobs:
+        node-exporter: [9100]
+        homelab-metrics: [9102]
     carrie:
       ansible_host: 192.168.86.228
       gatus_slug: "(Ubuntu Docker/Misc)"
-      prometheus_targets: [9100, 9102]
+      prometheus_scrape_jobs:
+        node-exporter: [9100]
+        homelab-metrics: [9102]
     christine:
       ansible_host: 192.168.86.212
       gatus_slug: "(Windows 11)"
     cujo:
       ansible_host: 192.168.86.215
       gatus_slug: "(Ubuntu DevOps)"
-      prometheus_targets: [9100, 9102]
+      prometheus_scrape_jobs:
+        node-exporter: [9100]
+        homelab-metrics: [9102]
     derry:
       ansible_host: 192.168.86.210
       gatus_slug: "(Local Backup)"
-      prometheus_targets: [9100]
+      prometheus_scrape_jobs:
+        node-exporter: [9100]
     flagg:
       ansible_host: 192.168.86.205
       gatus_slug: "(Ubuntu Docker/Core)"
-      prometheus_targets: [2000, 9100, 9102]
+      prometheus_scrape_jobs:
+        cloudflare: [2000]
+        gatus: [8080]
+        node-exporter: [9100]
+        homelab-metrics: [9102]
     gan:
       ansible_host: 192.168.86.211
       gatus_slug: "(MacOS)"
     gilead:
       ansible_host: 100.95.108.6
       gatus_slug: "(Remote Backup)"
-      prometheus_targets: [9100]
+      prometheus_scrape_jobs:
+        node-exporter: [9100]
     langolier:
       ansible_host: 192.168.86.216
       gatus_slug: "(Arch DevOps, BTW)"
-      prometheus_targets: [9100, 9102]
+      prometheus_scrape_jobs:
+        node-exporter: [9100]
+        homelab-metrics: [9102]
     misery:
       ansible_host: 192.168.86.227
       gatus_slug: "(Ubuntu Docker/Media)"
-      prometheus_targets: [9100, 9102]
+      prometheus_scrape_jobs:
+        node-exporter: [9100]
+        homelab-metrics: [9102]
     patricia:
       ansible_host: 192.168.86.224
       gatus_slug: "(Ubuntu Docker/Media)"
-      prometheus_targets: [9100, 9102]
+      prometheus_scrape_jobs:
+        node-exporter: [9100]
+        homelab-metrics: [9102]
     shardik:
       ansible_host: 192.168.86.201
       gatus_slug: "(Proxmox Hypervisor)"
-      prometheus_targets: [9100]
+      prometheus_scrape_jobs:
+        node-exporter: [9100]
     procyon:
       ansible_host: 192.168.86.106
       gatus_slug: "(NAS)"
-      prometheus_targets: [9100]
+      prometheus_scrape_jobs:
+        node-exporter: [9100]
     sirius:
       ansible_host: 192.168.86.105
       gatus_slug: "(Proxmox Hypervisor)"
-      prometheus_targets: [9100]
+      prometheus_scrape_jobs:
+        node-exporter: [9100]
 
   children:
     arch:

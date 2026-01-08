@@ -9,46 +9,76 @@ alerting:
             - alertmanager:9093
 
 scrape_configs:
-  - job_name: gatus
-    scheme: http
-    static_configs:
-        - targets:
-          - "{{ hostvars['flagg'].ansible_host }}:8080"
-    relabel_configs:
-      - action: replace
-        source_labels: ['__address__']
-        target_label: target
-      - action: replace
-        source_labels: ['__address__']
-        regex: '^192\.168\.86\.205:.*$'
-        target_label: instance
-        replacement: 'flagg'
+  # ---------------------------------------------------------------------------
+  # NODE-EXPORTER (single job)
+  # Merges:
+  #   - legacy prometheus_targets
+  #   - new prometheus_scrape_jobs.node-exporter
+  # ---------------------------------------------------------------------------
   - job_name: node-exporter
     static_configs:
 {% for h in groups['all'] | sort %}
-{% set ports = hostvars[h].prometheus_targets | default([]) %}
-{% if ports | length > 0 %}
 {% set ip = hostvars[h].ansible_host | default(h) %}
+
+{% set legacy_ports = hostvars[h].prometheus_targets | default([]) %}
+{% set host_jobs = hostvars[h].prometheus_scrape_jobs | default({}) %}
+{% set new_ports = host_jobs.get('node-exporter', []) | default([]) %}
+{% set ports = (legacy_ports + new_ports) | unique | list %}
+
+{% if ports | length > 0 %}
       - targets:
 {% for p in ports %}
           - "{{ ip }}:{{ p }}"
 {% endfor %}
+        labels:
+          __meta_friendly_instance: "{{ h }}"
 {% endif %}
 {% endfor %}
     relabel_configs:
       - action: replace
         source_labels: ['__address__']
         target_label: target
+      - action: replace
+        source_labels: ['__meta_friendly_instance']
+        target_label: instance
+
+  # ---------------------------------------------------------------------------
+  # OTHER JOBS (dynamic)
+  # Driven by prometheus_scrape_jobs, excluding node-exporter
+  # ---------------------------------------------------------------------------
+{% set jobs = {} %}
+
 {% for h in groups['all'] | sort %}
-{% set ports = hostvars[h].prometheus_targets | default([]) %}
-{% if ports | length > 0 %}
 {% set ip = hostvars[h].ansible_host | default(h) %}
+{% set host_jobs = hostvars[h].prometheus_scrape_jobs | default({}) %}
+{% for job_name, ports in host_jobs.items() %}
+{% if job_name != 'node-exporter' %}
+{% if job_name not in jobs %}
+{% set _ = jobs.update({job_name: []}) %}
+{% endif %}
+{% for p in ports | default([]) %}
+{% set _ = jobs[job_name].append({'host': h, 'ip': ip, 'port': p}) %}
+{% endfor %}
+{% endif %}
+{% endfor %}
+{% endfor %}
+
+{% for job_name, entries in jobs | dictsort %}
+  - job_name: {{ job_name }}
+    static_configs:
+{% for e in entries %}
+      - targets:
+          - "{{ e.ip }}:{{ e.port }}"
+        labels:
+          __meta_friendly_instance: "{{ e.host }}"
+{% endfor %}
+    relabel_configs:
       - action: replace
         source_labels: ['__address__']
-        regex: '^{{ ip | regex_escape }}:.*$'
+        target_label: target
+      - action: replace
+        source_labels: ['__meta_friendly_instance']
         target_label: instance
-        replacement: '{{ h }}'
-{% endif %}
 {% endfor %}
 
 rule_files:
