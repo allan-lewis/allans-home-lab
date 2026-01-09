@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# If someone accidentally sources this script, bail (prevents scope weirdness).
+if [[ "${BASH_SOURCE[0]}" != "$0" ]]; then
+  echo "ERROR: Do not source this script; run it directly." >&2
+  return 1
+fi
+
 GROUP="${1:?Usage: $0 <group>}"
 
 # Read desired behavior from env; default to dryrun
@@ -37,7 +43,10 @@ LIMIT="${LIMIT:-}"
 # Map env action -> ansible vars / flags
 force_reboot="false"
 reboot_action="check"
-extra_flags=()
+
+# IMPORTANT: declare arrays explicitly (nounset-safe)
+declare -a extra_flags=()
+declare -a extra=()
 
 case "${reboot_action_norm}" in
   dryrun)
@@ -58,10 +67,9 @@ case "${reboot_action_norm}" in
 esac
 
 # Build extra args safely
-extra=()
-extra+=(-e converge_group="${GROUP}")
-extra+=(-e reboot_action="${reboot_action}")
-extra+=(-e force_reboot="${force_reboot}")
+extra+=(-e "converge_group=${GROUP}")
+extra+=(-e "reboot_action=${reboot_action}")
+extra+=(-e "force_reboot=${force_reboot}")
 
 if [[ -n "${TAGS}" ]]; then
   extra+=(--tags "${TAGS}")
@@ -80,12 +88,20 @@ echo "force_reboot   : ${force_reboot}"
 echo "Tags           : ${TAGS:-<none>}"
 echo "Limit          : ${LIMIT:-<none>}"
 echo "Flags          : ${extra_flags[*]:-<none>}"
-echo "Command        : ansible-playbook -i \"${INVENTORY}\" \"${PLAYBOOK}\" ${extra_flags[*]} ${extra[*]}"
 
+# Build a printable representation (shell-escaped) without tripping nounset if arrays are unset.
+# (The ${arr[@]+...} form is the key: it expands to nothing if arr is unset.)
+printf 'Command        :'
+printf ' %q' ansible-playbook -i "${INVENTORY}" "${PLAYBOOK}" \
+  ${extra_flags[@]+"${extra_flags[@]}"} \
+  ${extra[@]+"${extra[@]}"}
+printf '\n'
+
+# Execute (same safe expansion)
 ansible-playbook \
   -i "${INVENTORY}" \
   "${PLAYBOOK}" \
-  "${extra_flags[@]}" \
-  "${extra[@]}"
+  ${extra_flags[@]+"${extra_flags[@]}"} \
+  ${extra[@]+"${extra[@]}"}
 
 echo "=== [l3] Reboot complete ==="
