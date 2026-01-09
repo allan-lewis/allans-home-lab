@@ -1,5 +1,6 @@
 ---
 converge_devops: true
+converge_s3_mirror: true
 
 all_devops_packages:
   - ansible
