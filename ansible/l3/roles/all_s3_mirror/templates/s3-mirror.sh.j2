@@ -5,6 +5,8 @@ set -euo pipefail
 # You can override with: S3_BUCKETS_FILE=/path/to/file
 S3_BUCKETS_FILE="${S3_BUCKETS_FILE:-/etc/gitops-homelab/s3-buckets.conf}"
 
+AWS_BIN="/usr/local/bin/aws"
+
 ts(){ date '+%F %T'; }
 log(){ echo "$(ts) | $*"; }
 
@@ -44,9 +46,19 @@ if (( ${#BUCKETS[@]} == 0 )); then
   exit 0
 fi
 
-# ---- pre-flight: ensure AWS credentials are present and valid ----
-if ! aws sts get-caller-identity >/dev/null 2>&1; then
-  log "ERROR: AWS credentials not configured or expired (run 'aws configure' or login via SSO)."
+echo "whoami=$(whoami)"
+echo "uid=$(id -u)"
+echo "HOME=${HOME:-<unset>}"
+echo "PATH=${PATH:-<unset>}"
+echo "AWS_PROFILE=${AWS_PROFILE:-<unset>}"
+echo "AWS_CONFIG_FILE=${AWS_CONFIG_FILE:-<unset>}"
+echo "AWS_SHARED_CREDENTIALS_FILE=${AWS_SHARED_CREDENTIALS_FILE:-<unset>}"
+
+command -v "${AWS_BIN}" || echo "aws not found in PATH"
+"${AWS_BIN}" --version 2>&1
+
+if ! out="$("${AWS_BIN}" sts get-caller-identity 2>&1)"; then
+  echo "AWS sts failed: ${out}"
   exit 1
 fi
 {% endraw %}
@@ -64,7 +76,7 @@ for bucket in "${BUCKETS[@]}"; do
   dest="$BASE/$bucket"
   mkdir -p "$dest"
   log "SYNC  s3://$bucket -> $dest"
-  if aws s3 sync "s3://$bucket" "$dest" $FLAGS; then
+  if "${AWS_BIN}" s3 sync "s3://$bucket" "$dest" $FLAGS; then
     log "OK    $bucket"
   else
     log "ERROR $bucket"
