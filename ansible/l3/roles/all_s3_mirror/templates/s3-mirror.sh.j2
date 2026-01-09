@@ -1,12 +1,6 @@
 {% raw %}#!/usr/bin/env bash
 set -euo pipefail
 
-# Use "lab" user's AWS config/credentials even when running as root
-export AWS_SHARED_CREDENTIALS_FILE="/home/lab/.aws/credentials"
-export AWS_CONFIG_FILE="/home/lab/.aws/config"
-export AWS_PROFILE="default"
-export AWS_PAGER=""
-
 # External bucket list (one bucket per line; blank lines and # comments allowed).
 # You can override with: S3_BUCKETS_FILE=/path/to/file
 S3_BUCKETS_FILE="${S3_BUCKETS_FILE:-/etc/gitops-homelab/s3-buckets.conf}"
