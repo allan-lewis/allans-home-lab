@@ -12,6 +12,11 @@ s3_mirror_base_dir: "/var/lib/s3-mirror"
 s3_mirror_buckets: [
   "gitops-homelab-orchestrator-tf"
 ]
+s3_mirror_cron:
+  enabled: true
+  minute: "5"
+  hour: "2"
+  weekday: "6"
 
 backup_runner_cron_minute: "8"
 backup_runner_volumes: [
