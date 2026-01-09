@@ -14,9 +14,9 @@ s3_mirror_buckets: [
 ]
 s3_mirror_cron:
   enabled: true
-  minute: "0"
+  minute: "15"
   hour: "8"
-  weekday: "15"
+  weekday: "5"
 
 backup_runner_cron_minute: "10"
 backup_runner_volumes: [
