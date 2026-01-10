@@ -1,4 +1,6 @@
 ---
+converge_restore: true
+
 converge_docker_observability: true
 grafana_data_dir: "/var/lib/grafana"
 grafana_provision_dir: "/etc/grafana/provisioning"
