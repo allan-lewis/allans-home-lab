@@ -1,5 +1,5 @@
 backup_runner_cron_hour: "*"
-backup_runner_cron_minute: "35"
+backup_runner_cron_minute: "40"
 backup_runner_healthchecks_url: "https://hc-ping.com/700f0972-2de8-40af-8561-703d0ef7910d"
 backup_runner_healthchecks_status: "https://healthchecks.io/b/2/9f976a0d-58e9-4093-a41c-ca0e40981d36.json"
 
@@ -29,23 +29,28 @@ immich_upload_mount_nfs_path: "/mnt/pool1/immich"
 "backup_runner_volumes": [
   { 
     src: "{{ plex_config_dir }}",
-    dest: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/plex/config" 
+    dest: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/plex/config",
+    owner: "lab"
   },
   { 
     src: "{{ tautulli_config_dir }}",
-    dest: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/tautulli/config" 
+    dest: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/tautulli/config",
+    owner: "lab"
   },
   { 
     src: "{{ jellyfin_config_dir }}",
-    dest: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/jellyfin/config" 
+    dest: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/jellyfin/config",
+    owner: "lab"
   },
   { 
     src: "{{ immich_postgres_dir }}",
-    dest: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/immich/postgres-volume" 
+    dest: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/immich/postgres-volume",
+    owner: "lab"
   },
   { 
     src: "{{ postgres_db_backup_dir }}",
-    dest: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/immich/db-dumps" 
+    dest: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/immich/db-dumps",
+    owner: "root"
   }
 ]
 

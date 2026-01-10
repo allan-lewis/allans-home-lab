@@ -24,54 +24,65 @@ twingate_access_token: "{{ lookup('env', 'TWINGATE_VALIANT_STINGRAY_ACCESS_TOKEN
 twingate_refresh_token: "{{ lookup('env', 'TWINGATE_VALIANT_STINGRAY_REFRESH_TOKEN') }}"
 
 backup_runner_cron_hour: "*"
-backup_runner_cron_minute: "15"
+backup_runner_cron_minute: "30"
 backup_runner_healthchecks_url: "https://hc-ping.com/fc7034f6-cb5d-4965-91ae-017aeb4591da"
 backup_runner_healthchecks_status: "https://healthchecks.io/b/2/125505b2-327a-40e1-91e2-f5e5dd3152db.json"
 
 "backup_runner_volumes": [
   { 
-    "src": "/var/lib/gatus",
-    "dest": "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/gatus_lib" 
+    src: "/var/lib/gatus",
+    dest: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/gatus_lib",
+    owner: "root"
   },
   { 
-    "src": "/etc/gatus",
-    "dest": "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/gatus_config" 
+    src: "/etc/gatus",
+    dest: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/gatus_config",
+    owner: "lab"
   },
   { 
-    "src": "/var/lib/pihole",
-    "dest": "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/pihole_lib" 
+    src: "/var/lib/pihole",
+    dest: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/pihole_lib",
+    owner: "lab"
   },
   { 
-    "src": "/etc/traefik",
-    "dest": "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/traefik_config" 
+    src: "/etc/traefik",
+    dest: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/traefik_config",
+    owner: "lab"
   },
   { 
-    "src": "/var/lib/traefik/acme",
-    "dest": "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/traefik_acme" 
+    src: "/var/lib/traefik/acme",
+    dest: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/traefik_acme",
+    owner: "root"
   },
   { 
     src: "{{ postgres_db_backup_dir }}",
-    dest: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/authentik/db-dumps" 
+    dest: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/authentik/db-dumps",
+    owner: "root"
   },
   {
-    "src": "{{ prometheus_config_dir }}",
-    "dest": "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/prometheus/config" 
+    src: "{{ prometheus_config_dir }}",
+    dest: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/prometheus/config",
+    owner: "root"
   },
   {
-    "src": "{{ grafana_data_dir }}",
-    "dest": "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/grafana/data" 
+    src: "{{ grafana_data_dir }}",
+    dest: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/grafana/data",
+    owner: "472"
   },
   {
-    "src": "{{ grafana_provision_dir }}",
-    "dest": "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/grafana/provision" 
+    src: "{{ grafana_provision_dir }}",
+    dest: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/grafana/provision",
+    owner: "472"
   },
   {
-    "src": "{{ alertmanager_config_dir }}",
-    "dest": "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/alertmanager/config" 
+    src: "{{ alertmanager_config_dir }}",
+    dest: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/alertmanager/config",
+    owner: "root"
   },
   {
-    "src": "{{ alertmanager_data_dir }}",
-    "dest": "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/alertmanager/data" 
+    src: "{{ alertmanager_data_dir }}",
+    dest: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/alertmanager/data",
+    owner: "65534"
   }
 ]
 
