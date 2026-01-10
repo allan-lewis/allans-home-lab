@@ -18,17 +18,21 @@ twingate_refresh_token: "{{ lookup('env', 'TWINGATE_MODEST_ANTEATER_REFRESH_TOKE
 portainer_data_dir: "/var/lib/portainer"
 vaultwarden_data_dir: "/var/lib/vaultwarden"
 
-"backup_runner_volumes": [
+backup_runner_cron_minute: "10"
+backup_runner_volumes: [
   { 
-    "src": "{{ portainer_data_dir }}",
-    "dest": "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/portainer"
+    src: "{{ portainer_data_dir }}",
+    dest: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/portainer",
+    owner: "lab"
   },
   {
-    "src": "{{ vaultwarden_data_dir }}",
-    "dest": "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/vaultwarden" 
+    src: "{{ vaultwarden_data_dir }}",
+    dest: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/vaultwarden",
+    owner: "lab"
   },
   {
-    "src": "{{ trilium_data_dir }}",
-    "dest": "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/trilium" 
+    src: "{{ trilium_data_dir }}",
+    dest: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/trilium",
+    owner: "lab"
   }
 ]
