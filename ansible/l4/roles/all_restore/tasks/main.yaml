@@ -122,16 +122,13 @@
 - name: Fix ownership on newly restored volumes
   ansible.builtin.file:
     path: "{{ item.item.src }}"
-    owner: "{{ backup_restore_owner | default(omit) }}"
-    group: "{{ backup_restore_group | default(omit) }}"
+    owner: "{{ item.item.owner }}"
+    group: "{{ item.item.group | default(item.item.owner, true) }}"
     recurse: true
   loop: "{{ backup_restore_results.results | default([]) }}"
   loop_control:
     label: "{{ item.item.src | default('UNKNOWN') }}"
   when:
-    # Only if caller wants us to manage ownership
-    - (backup_restore_owner is defined) or
-      (backup_restore_group is defined)
     # Skip items where the restore task was skipped entirely
     - not (item.skipped | default(false))
     # Only when rsync actually ran and succeeded

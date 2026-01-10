@@ -56,6 +56,4 @@ backup_runner_user: "allan"
 backup_runner_remote_host: "{{ default_remote_nas_ip }}"
 
 default_remote_nas_per_host_backup_volume: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}"
-backup_restore_owner: "lab"
-backup_restore_group: "lab"
 
