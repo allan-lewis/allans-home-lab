@@ -20,10 +20,11 @@ s3_mirror_cron:
   hour: "2"
   weekday: "6"
 
-backup_runner_cron_minute: "24"
+backup_runner_cron_minute: "20"
 backup_runner_volumes: [
   { 
     src: "{{ s3_mirror_base_dir }}",
-    dest: "{{ default_remote_nas_per_host_backup_volume }}/s3-mirror" 
+    dest: "{{ default_remote_nas_per_host_backup_volume }}/s3-mirror",
+    owner: "root"
   }
 ]

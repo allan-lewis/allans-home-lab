@@ -1,6 +1,7 @@
 ---
 converge_restore: true
 
+backup_runner_cron_minute: "0"
 backup_runner_volumes: [
   {
     src: "/home/lab/backup-restore/lab",
