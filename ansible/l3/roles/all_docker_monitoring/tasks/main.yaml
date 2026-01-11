@@ -1,5 +1,5 @@
 ---
-- name: Monitorign | Deploy Docker compose app
+- name: Monitoring | Deploy Docker compose app
   ansible.builtin.include_role:
     name: all_docker_compose
     apply:

@@ -31,7 +31,7 @@
       ansible.builtin.include_role:
         name: all_backups
         apply:
-          tags: [l4, step_backups]
+          tags: [l4, step_backup]
       when: converge_ubuntu or converge_arch
       tags: [l4, step_backups]
 
