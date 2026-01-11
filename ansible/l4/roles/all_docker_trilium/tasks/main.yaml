@@ -1,0 +1,16 @@
+---
+- name: Trilium | Deploy docker compose app
+  ansible.builtin.include_role:
+    name: all_docker_compose
+    apply:
+      tags: [l4, step_docker_trilium]
+  when: converge_docker_trilium
+  tags: [l4, step_docker_trilium]
+  vars:
+    compose_app_name: trilium
+    compose_source_type: template
+    compose_template_src: "templates/trilium.compose.yaml.j2"
+    compose_paths:
+      - path: "{{ trilium_data_dir }}"
+        create: true
+        mode: "0755"

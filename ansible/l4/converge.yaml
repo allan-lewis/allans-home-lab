@@ -192,19 +192,9 @@
 
     - name: L4 | All | docker twingate
       ansible.builtin.include_role:
-        name: all_docker_compose
-        apply:
-          tags: [l4, step_docker_twingate]
+        name: all_docker_twingate
       when: converge_docker_twingate
       tags: [l4, step_docker_twingate]
-      vars:
-        compose_app_name: twingate
-        compose_source_type: template
-        compose_template_src: "templates/docker-compose/twingate.compose.yaml.j2"
-        compose_env:
-          TWINGATE_NETWORK_NAME: "{{ lookup('env', 'TWINGATE_NETWORK_NAME') }}"
-          TWINGATE_ACCESS_TOKEN: "{{ twingate_access_token }}"
-          TWINGATE_REFRESH_TOKEN: "{{ twingate_refresh_token }}"
 
     - name: L4 | All | docker cloudflare
       ansible.builtin.include_role:
@@ -240,17 +230,8 @@
 
     - name: L4 | All | docker trilium
       ansible.builtin.include_role:
-        name: all_docker_compose
+        name: all_docker_trilium
         apply:
           tags: [l4, step_docker_trilium]
       when: converge_docker_trilium
       tags: [l4, step_docker_trilium]
-      vars:
-        compose_app_name: trilium
-        compose_source_type: template
-        compose_template_src: "templates/docker-compose/trilium.compose.yaml.j2"
-        compose_paths:
-          - path: "{{ trilium_data_dir }}"
-            create: true
-            mode: "0755"
-
