@@ -11,7 +11,7 @@
   vars:
     compose_app_name: "pihole"
     compose_source_type: "template"
-    compose_template_src: "templates/docker-compose/pihole.compose.yaml.j2"
+    compose_template_src: "templates/pihole.compose.yaml.j2"
     compose_paths:
       - path: "{{ pihole_data_dir }}"
         create: true

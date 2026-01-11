@@ -12,7 +12,7 @@
   vars:
     compose_app_name: gatus
     compose_source_type: template
-    compose_template_src: "templates/docker-compose/gatus.compose.yaml.j2"
+    compose_template_src: "templates/gatus.compose.yaml.j2"
     compose_paths:
       - path: "{{ gatus_data_dir }}" # /var/lib/gatus
         create: true

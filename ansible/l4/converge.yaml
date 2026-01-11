@@ -124,34 +124,9 @@
 
     - name: L4 | All | docker traefik
       ansible.builtin.include_role:
-        name: all_docker_compose
-        apply:
-          tags: [l4, step_docker_traefik]
+        name: all_docker_traefik
       when: converge_docker_traefik
       tags: [l4, step_docker_traefik]
-      vars:
-        compose_app_name: traefik
-        compose_source_type: template
-        compose_template_src: "templates/docker-compose/traefik.compose.yaml.j2"
-        compose_env:
-          CLOUDFLARE_EMAIL: "allan.e.lewis@gmail.com"
-          CLOUDFLARE_API_KEY: "{{ lookup('env', 'TRAEFIK_CF_API_KEY') }}"
-        compose_extra_templates:
-          - src: "templates/traefik/traefik.config.yaml.j2"
-            dest: "{{ traefik_config_dir }}/traefik.yaml"
-            uid: "{{ gitops_uid }}"
-            gid: "{{ gitops_gid }}"
-        compose_paths:
-          - path: "{{ traefik_acme_dir }}"
-            create: true
-            uid: "{{ gitops_uid }}"
-            gid: "{{ gitops_gid }}"
-            mode: "0755"
-          - path: "{{ traefik_config_dir }}"
-            create: true
-            uid: "{{ gitops_uid }}"
-            gid: "{{ gitops_gid }}"
-            mode: "0755"
 
     - name: L4 | All | docker plex
       ansible.builtin.include_role:

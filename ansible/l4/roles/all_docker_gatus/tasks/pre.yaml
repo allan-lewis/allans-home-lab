@@ -1,7 +1,7 @@
 ---
 - name: Gatus | Render configuration YAML
   ansible.builtin.template:
-    src: "templates/gatus/gatus.config.yaml.j2"
+    src: "templates/gatus.config.yaml.j2"
     dest: "{{ gatus_config_dir }}/config.yaml"
     owner: "{{ gitops_uid }}"
     group: "{{ gitops_gid }}"
