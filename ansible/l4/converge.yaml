@@ -76,39 +76,15 @@
 
     - name: L4 | All | docker memos
       ansible.builtin.include_role:
-        name: all_docker_compose
-        apply:
-          tags: [l4, step_docker_memos]
+        name: all_docker_memos
       when: converge_docker_memos
       tags: [l4, step_docker_memos]
-      vars:
-        compose_app_name: memos
-        compose_source_type: template
-        compose_template_src: "templates/docker-compose/memos.compose.yaml.j2"
-        compose_paths:
-          - path: "{{ memos_data_dir }}"
-            create: true
-            uid: "{{ gitops_uid }}"
-            gid: "{{ gitops_gid }}"
-            mode: "0755"
 
     - name: L4 | All | docker portainer
       ansible.builtin.include_role:
-        name: all_docker_compose
-        apply:
-          tags: [l4, step_docker_portainer]
+        name: all_docker_portainer
       when: converge_docker_portainer
       tags: [l4, step_docker_portainer]
-      vars:
-        compose_app_name: portainer
-        compose_source_type: template
-        compose_template_src: "templates/docker-compose/portainer.compose.yaml.j2"
-        compose_paths:
-          - path: "{{ portainer_data_dir }}"
-            create: true
-            uid: "{{ gitops_uid }}"
-            gid: "{{ gitops_gid }}"
-            mode: "0755"
 
     - name: L4 | All | docker nginx
       ansible.builtin.include_role:
@@ -118,40 +94,15 @@
 
     - name: L4 | All | docker vaultwarden
       ansible.builtin.include_role:
-        name: all_docker_compose
-        apply:
-          tags: [l4, step_docker_vaultwarden]
+        name: all_docker_vaultwarden
       when: converge_docker_vaultwarden
       tags: [l4, step_docker_vaultwarden]
-      vars:
-        compose_app_name: vaultwarden
-        compose_source_type: template
-        compose_template_src: templates/docker-compose/vaultwarden.compose.yaml.j2
-        compose_env: 
-          ADMIN_TOKEN:  "{{ lookup('env', 'VAULTWARDEN_ADMIN_TOKEN') }}"
-          SIGNUPS_ALLOWED: "false"
-        compose_paths:
-          - path: "/var/lib/vaultwarden"
-            create: true
-            mode: "0755"
 
     - name: L4 | All | docker tautulli
       ansible.builtin.include_role:
-        name: all_docker_compose
-        apply:
-          tags: [l4, step_docker_tautulli]
+        name: all_docker_tautulli
       when: converge_docker_tautulli
       tags: [l4, step_docker_tautulli]
-      vars:  
-        compose_app_name: tautulli
-        compose_source_type: template
-        compose_template_src: templates/docker-compose/tautulli.compose.yaml.j2
-        compose_paths:
-          - path: "{{ tautulli_config_dir}}"
-            create: true
-            uid: "{{ gitops_uid }}"
-            gid: "{{ gitops_gid }}"
-            mode: "0755"
 
     - name: L4 | All | docker authentik
       ansible.builtin.include_role:

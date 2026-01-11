@@ -1,0 +1,18 @@
+---
+- name: Tautulli | Deploy docker compose app
+  ansible.builtin.include_role:
+    name: all_docker_compose
+    apply:
+      tags: [l4, step_docker_tautulli]
+  when: converge_docker_tautulli
+  tags: [l4, step_docker_tautulli]
+  vars:  
+    compose_app_name: tautulli
+    compose_source_type: template
+    compose_template_src: templates/tautulli.compose.yaml.j2
+    compose_paths:
+      - path: "{{ tautulli_config_dir}}"
+        create: true
+        uid: "{{ gitops_uid }}"
+        gid: "{{ gitops_gid }}"
+        mode: "0755"
