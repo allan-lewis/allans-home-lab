@@ -130,67 +130,15 @@
 
     - name: L4 | All | docker plex
       ansible.builtin.include_role:
-        name: all_docker_compose
-        apply:
-          tags: [l4, step_docker_plex]
+        name: all_docker_plex
       when: converge_docker_plex
       tags: [l4, step_docker_plex]
-      vars:  
-        compose_app_name: plex
-        compose_source_type: template
-        compose_template_src: templates/docker-compose/plex.compose.yaml.j2
-        compose_env:
-          PLEX_TZ: "{{ gitops_tz }}"
-          PLEX_PUID: "{{ gitops_uid }}"
-          PLEX_PGID: "{{ gitops_gid }}"
-        compose_paths:
-          - path: "{{ plex_config_dir }}"
-            create: true
-            uid: "{{ gitops_uid }}"
-            gid: "{{ gitops_gid }}"
-            mode: "0755"
-          - path: "{{ plex_transcode_dir }}"
-            create: true
-            uid: "{{ gitops_uid }}"
-            gid: "{{ gitops_gid }}"
-            mode: "0755"
-          - path: "{{ plex_media_library }}"
-            nfs: true
-            nfs_server: "{{ hostvars['procyon'].ansible_host }}"
-            nfs_path: "/mnt/pool1/media-library"
-            nfs_opts: "ro"
 
     - name: L4 | All | docker jellyfin
       ansible.builtin.include_role:
-        name: all_docker_compose
-        apply:
-          tags: [l4, step_docker_jellyfin]
+        name: all_docker_jellyfin
       when: converge_docker_jellyfin
       tags: [l4, step_docker_jellyfin]
-      vars:   
-        compose_app_name: jellyfin
-        compose_source_type: template
-        compose_template_src: templates/docker-compose/jellyfin.compose.yaml.j2
-        compose_env:
-          JELLYFIN_PUBLISHED_URL: "https://jellyfin.media.allanshomelab.com"
-          JELLYFIN_USER_UID: "{{ gitops_uid }}"
-          JELLYFIN_GROUP_GID: "{{ gitops_gid }}"
-        compose_paths:
-          - path: "{{ jellyfin_config_dir }}"
-            create: true
-            uid: "{{ gitops_uid }}"
-            gid: "{{ gitops_gid }}"
-            mode: "0755"
-          - path: "{{ jellyfin_cache_dir }}"
-            create: true
-            uid: "{{ gitops_uid }}"
-            gid: "{{ gitops_gid }}"
-            mode: "0755"
-          - path: "{{ jellyfin_media_library }}"
-            nfs: true
-            nfs_server: "{{ hostvars['procyon'].ansible_host }}"
-            nfs_path: "/mnt/pool1/media-library"
-            nfs_opts: "ro"
 
     - name: L4 | All | docker immich
       ansible.builtin.include_role:
@@ -238,51 +186,9 @@
 
     - name: L4 | All | docker media acquisition
       ansible.builtin.include_role:
-        name: all_docker_compose
-        apply:
-          tags: [l4, step_docker_media_acquisition]
+        name: all_docker_media_acquisition
       when: converge_docker_media_acquisition
       tags: [l4, step_docker_media_acquisition]
-      vars:
-        compose_app_name: media_acquisition
-        compose_source_type: template
-        compose_template_src: templates/docker-compose/media_acquisition.compose.yaml.j2
-        compose_paths:
-          - path: "{{ lidarr_config_dir }}"
-            create: true
-            uid: "{{ gitops_uid }}"
-            gid: "{{ gitops_gid }}"
-            mode: "0755"
-          - path: "{{ radarr_config_dir }}"
-            create: true
-            uid: "{{ gitops_uid }}"
-            gid: "{{ gitops_gid }}"
-            mode: "0755"
-          - path: "{{ sonarr_config_dir }}"
-            create: true
-            uid: "{{ gitops_uid }}"
-            gid: "{{ gitops_gid }}"
-            mode: "0755"
-          - path: "{{ transmission_config_dir }}"
-            create: true
-            uid: "{{ gitops_uid }}"
-            gid: "{{ gitops_gid }}"
-            mode: "0755"
-          - path: "{{ prowlarr_config_dir }}"
-            create: true
-            uid: "{{ gitops_uid }}"
-            gid: "{{ gitops_gid }}"
-            mode: "0755"
-          - path: "{{ transmission_watch_dir }}"
-            create: true
-            uid: "{{ gitops_uid }}"
-            gid: "{{ gitops_gid }}"
-            mode: "0755"
-          - path: "{{ media_acquisition_mount }}"
-            nfs: true
-            nfs_server: "{{ media_acquisition_nfs_server }}"
-            nfs_path: "/mnt/pool1/media-acquisition"
-            nfs_opts: "rw"
 
     - name: L4 | All | docker twingate
       ansible.builtin.include_role:
