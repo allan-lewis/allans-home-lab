@@ -20,7 +20,7 @@ module "factory" {
   storage = var.storage
   scsihw  = var.scsihw
   bridge  = var.bridge
-  agent_enabled = var.agent_enabled
+  agent_enabled = false
 
   # Cloud-init settings
   ci_user             = var.ci_user

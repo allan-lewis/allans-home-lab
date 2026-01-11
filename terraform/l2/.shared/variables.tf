@@ -56,9 +56,3 @@ variable "proxmox_vm_public_key" {
   description = "SSH public key to inject for the default user"
   type        = string
 }
-
-variable "agent_enabled" {
-  description = "Whether to enable the QEMU guest agent for VMs in this environment"
-  type        = bool
-  default     = false
-}
