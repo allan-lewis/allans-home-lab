@@ -1,0 +1,11 @@
+---
+- name: Install Tailscale
+  ansible.builtin.include_role:
+    name: artis3n.tailscale.machine
+    apply:
+      tags: [l3, step_tailscale]
+  when: converge_tailscale
+  tags: [l3, step_tailscale]
+  vars:
+    tailscale_authkey: "{{ lookup('env', 'TAILSCALE_AUTHKEY') }}"
+
