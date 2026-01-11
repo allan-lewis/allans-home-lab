@@ -1,5 +1,5 @@
 ---
-- name: Pi-hole | Deploy docker compose app
+- name: Observability | Deploy docker compose app
   ansible.builtin.include_role:
     name: all_docker_compose
     apply:
@@ -7,7 +7,7 @@
   vars:
     compose_app_name: observability
     compose_source_type: template
-    compose_template_src: templates/docker-compose/observability.compose.yaml.j2
+    compose_template_src: templates/observability.compose.yaml.j2
     compose_env:
       GF_SERVER_DOMAIN: "grafana.allanshomelab.com"
       GF_SERVER_ROOT_URL: "https://grafana.allanshomelab.com"
@@ -45,17 +45,17 @@
       GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET: "{{ lookup('env', 'GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET') }}"
     # 472 is the default user id for the grafana container
     compose_extra_templates:
-      - src: "templates/grafana/prometheus.yaml.j2"
+      - src: "templates/grafana-datasource.yaml.j2"
         dest: "{{ grafana_provision_dir }}/datasources/prometheus.yaml"
         uid: "472"
         gid: "472"
-      - src: "templates/alertmanager/alertmanager.yaml.j2"
+      - src: "templates/alertmanager.yaml.j2"
         dest: "{{ alertmanager_config_dir }}/alertmanager.yml"
-      - src: "templates/alertmanager/telegram.tmpl.j2"
+      - src: "templates/telegram.tmpl.j2"
         dest: "{{ alertmanager_config_dir }}/config/telegram.tmpl"
-      - src: "templates/prometheus/prometheus.yaml.j2"
+      - src: "templates/prometheus.yaml.j2"
         dest: "{{ prometheus_config_dir }}/prometheus.yml"
-      - src: "templates/prometheus/rules.yaml.j2"
+      - src: "templates/rules.yaml.j2"
         dest: "{{ prometheus_config_dir }}/rules.yml"
     compose_paths:
       - path: "{{ alertmanager_config_dir }}/config"

@@ -15,7 +15,7 @@
   vars:
     compose_app_name: homepage
     compose_source_type: template
-    compose_template_src: "templates/docker-compose/homepage.compose.yaml.j2"
+    compose_template_src: "templates/homepage.compose.yaml.j2"
     compose_paths:
       - path: "{{ homepage_config_dir }}"
         create: true
