@@ -1,0 +1,12 @@
+---
+- name: IT Tools | Deploy docker compose app
+  ansible.builtin.include_role:
+    name: all_docker_compose
+    apply:
+      tags: [l4, step_docker_it_tools]
+  when: converge_docker_it_tools
+  tags: [l4, step_docker_it_tools]
+  vars:
+    compose_app_name: tools
+    compose_source_type: file
+    compose_file_src: files/it-tools.compose.yaml

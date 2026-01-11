@@ -59,37 +59,20 @@
       when: converge_postgres_dump
       tags: [l4, step_db_dump]
 
+    # -----------------
+    # Docker steps for all OS
+    # -----------------
     - name: L4 | All | docker it tools
       ansible.builtin.include_role:
-        name: all_docker_compose
-        apply:
-          tags: [l4, step_docker_it_tools]
+        name: all_docker_it_tools
       when: converge_docker_it_tools
       tags: [l4, step_docker_it_tools]
-      vars:
-        compose_app_name: tools
-        compose_source_type: file
-        compose_file_src: files/docker-compose/it-tools.compose.yaml
 
     - name: L4 | All | docker no geeks brewing
       ansible.builtin.include_role:
-        name: all_docker_compose
-        apply:
-          tags: [l4, step_docker_ngb]
+        name: all_docker_no_geeks_brewing
       when: converge_docker_ngb
       tags: [l4, step_docker_ngb]
-      vars:
-        compose_app_name: no_geeks_brewing
-        compose_source_type: file
-        compose_file_src: files/docker-compose/no_geeks_brewing.compose.yaml
-        compose_env:
-          NO_GEEKS_BREWING_AUTHENTIK_CLIENT_ID:  "{{ lookup('env', 'NO_GEEKS_BREWING_AUTHENTIK_CLIENT_ID') }}"
-          NO_GEEKS_BREWING_AUTHENTIK_CLIENT_SECRET: "{{ lookup('env', 'NO_GEEKS_BREWING_AUTHENTIK_CLIENT_SECRET') }}"
-          NO_GEEKS_BREWING_AUTHENTIK_ISSUER_URL: "{{ lookup('env', 'NO_GEEKS_BREWING_AUTHENTIK_ISSUER_URL') }}"
-          NO_GEEKS_BREWING_BREWFATHER_AUTH_TOKEN: "{{ lookup('env', 'NO_GEEKS_BREWING_BREWFATHER_AUTH_TOKEN') }}"
-          NO_GEEKS_BREWING_POST_LOGOUT_REDIRECT_URI: "{{ lookup('env', 'NO_GEEKS_BREWING_POST_LOGOUT_REDIRECT_URI') }}"
-          NO_GEEKS_BREWING_AUTHENTIK_LOGOUT_URI: "{{ lookup('env', 'NO_GEEKS_BREWING_AUTHENTIK_LOGOUT_URI') }}"
-          NO_GEEKS_BREWING_REDIRECT_URI: "{{ lookup('env', 'NO_GEEKS_BREWING_REDIRECT_URI') }}"
 
     - name: L4 | All | docker memos
       ansible.builtin.include_role:
@@ -129,15 +112,9 @@
 
     - name: L4 | All | docker nginx
       ansible.builtin.include_role:
-        name: all_docker_compose
-        apply:
-          tags: [l4, step_docker_nginx]
+        name: all_docker_nginx
       when: converge_docker_nginx
       tags: [l4, step_docker_nginx]
-      vars:
-        compose_app_name: nginx
-        compose_source_type: file
-        compose_file_src: files/docker-compose/nginx.compose.yaml
 
     - name: L4 | All | docker vaultwarden
       ansible.builtin.include_role:
@@ -399,17 +376,9 @@
 
     - name: L4 | All | docker cloudflare
       ansible.builtin.include_role:
-        name: all_docker_compose
-        apply:
-          tags: [l4, step_docker_cloudflare]
+        name: all_docker_cloudflare
       when: converge_docker_cloudflare
       tags: [l4, step_docker_cloudflare]
-      vars:
-        compose_app_name: cloudflare
-        compose_source_type: file
-        compose_file_src: files/docker-compose/cloudflare.compose.yaml
-        compose_env:
-          CLOUDFLARE_TUNNEL_TOKEN: "{{ lookup('env','CLOUDFLARE_TUNNEL_TOKEN') }}"
 
     - name: L4 | All | docker pihole
       ansible.builtin.include_role:

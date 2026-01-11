@@ -1,0 +1,12 @@
+---
+- name: Nginx | Deploy docker compose app
+  ansible.builtin.include_role:
+    name: all_docker_compose
+    apply:
+      tags: [l4, step_docker_nginx]
+  when: converge_docker_nginx
+  tags: [l4, step_docker_nginx]
+  vars:
+    compose_app_name: nginx
+    compose_source_type: file
+    compose_file_src: files/nginx.compose.yaml

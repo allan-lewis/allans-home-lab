@@ -1,0 +1,14 @@
+---
+- name: Cloudflare Tunnels | Deploy docker compose app
+  ansible.builtin.include_role:
+    name: all_docker_compose
+    apply:
+      tags: [l4, step_docker_cloudflare]
+  when: converge_docker_cloudflare
+  tags: [l4, step_docker_cloudflare]
+  vars:
+    compose_app_name: cloudflare
+    compose_source_type: file
+    compose_file_src: files/cloudflare.compose.yaml
+    compose_env:
+      CLOUDFLARE_TUNNEL_TOKEN: "{{ lookup('env','CLOUDFLARE_TUNNEL_TOKEN') }}"

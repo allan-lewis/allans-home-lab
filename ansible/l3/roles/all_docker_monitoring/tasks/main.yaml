@@ -7,7 +7,7 @@
   vars:
     compose_app_name: monitoring
     compose_source_type: template
-    compose_template_src: "templates/docker-compose/monitoring.compose.yaml.j2"
+    compose_template_src: "templates/monitoring.compose.yaml.j2"
   when: converge_docker_monitoring
   tags: [l3, step_docker_monitoring]
 
