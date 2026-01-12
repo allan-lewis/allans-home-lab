@@ -1,0 +1,18 @@
+---
+- name: Authentik | Deploy docker compose app
+  ansible.builtin.include_role:
+    name: all_docker_compose
+    apply:
+      tags: [l4, step_docker_authentik]
+  when: converge_docker_authentik
+  tags: [l4, step_docker_authentik]
+  vars:
+    compose_app_name: authentik
+    compose_source_type: url
+    compose_url: "https://docs.goauthentik.io/docker-compose.yml"
+    compose_env:
+      AUTHENTIK_TAG: "{{ authentik_version }}"
+      COMPOSE_PORT_HTTP: 9180
+      COMPOSE_PORT_HTTPS: 9143
+      PG_PASS: "{{ lookup('env', 'DOCKER_AUTHENTIK_PG_PASS') }}"
+      AUTHENTIK_SECRET_KEY: "{{ lookup('env', 'DOCKER_AUTHENTIK_SECRET_KEY') }}"
