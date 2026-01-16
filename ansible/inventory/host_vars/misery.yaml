@@ -29,27 +29,27 @@ immich_upload_mount_nfs_path: "/mnt/pool1/immich"
 "backup_runner_volumes": [
   { 
     src: "{{ plex_config_dir }}",
-    dest: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/plex/config",
+    dest: "{{ default_remote_nas_per_host_backup_volume }}/plex/config",
     owner: "lab"
   },
   { 
     src: "{{ tautulli_config_dir }}",
-    dest: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/tautulli/config",
+    dest: "{{ default_remote_nas_per_host_backup_volume }}/tautulli/config",
     owner: "lab"
   },
   { 
     src: "{{ jellyfin_config_dir }}",
-    dest: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/jellyfin/config",
+    dest: "{{ default_remote_nas_per_host_backup_volume }}/jellyfin/config",
     owner: "lab"
   },
   { 
     src: "{{ immich_postgres_dir }}",
-    dest: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/immich/postgres-volume",
+    dest: "{{ default_remote_nas_per_host_backup_volume }}/immich/postgres-volume",
     owner: "lab"
   },
   { 
     src: "{{ postgres_db_backup_dir }}",
-    dest: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/immich/db-dumps",
+    dest: "{{ default_remote_nas_per_host_backup_volume }}/immich/db-dumps",
     owner: "root"
   }
 ]

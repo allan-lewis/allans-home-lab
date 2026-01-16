@@ -12,32 +12,32 @@ media_acquisition_mount: "/mnt/media-acquisition"
 "backup_runner_volumes": [
   { 
     src: "{{ lidarr_config_dir }}",
-    dest: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/lidarr/config",
+    dest: "{{ default_remote_nas_per_host_backup_volume }}/lidarr/config",
     owner: "lab"
   },
   { 
     src: "{{ prowlarr_config_dir }}",
-    dest: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/prowlarr/config",
+    dest: "{{ default_remote_nas_per_host_backup_volume }}/prowlarr/config",
     owner: "lab"
   },
   { 
     src: "{{ radarr_config_dir }}",
-    dest: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/radarr/config",
+    dest: "{{ default_remote_nas_per_host_backup_volume }}/radarr/config",
     owner: "lab"
   },
   { 
     src: "{{ sonarr_config_dir }}",
-    dest: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/sonarr/config",
+    dest: "{{ default_remote_nas_per_host_backup_volume }}/sonarr/config",
     owner: "lab"
   },
   { 
     src: "{{ transmission_config_dir }}",
-    dest: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/transmission/config",
+    dest: "{{ default_remote_nas_per_host_backup_volume }}/transmission/config",
     owner: "lab"
   },
   { 
     src: "{{ transmission_watch_dir }}",
-    dest: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/transmission/watch",
+    dest: "{{ default_remote_nas_per_host_backup_volume }}/transmission/watch",
     owner: "lab"
   }
 ]

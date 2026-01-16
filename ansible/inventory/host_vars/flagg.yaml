@@ -31,57 +31,57 @@ backup_runner_healthchecks_status: "https://healthchecks.io/b/2/125505b2-327a-40
 "backup_runner_volumes": [
   { 
     src: "/var/lib/gatus",
-    dest: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/gatus_lib",
+    dest: "{{ default_remote_nas_per_host_backup_volume }}/gatus_lib",
     owner: "root"
   },
   { 
     src: "/etc/gatus",
-    dest: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/gatus_config",
+    dest: "{{ default_remote_nas_per_host_backup_volume }}/gatus_config",
     owner: "lab"
   },
   { 
     src: "/var/lib/pihole",
-    dest: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/pihole_lib",
+    dest: "{{ default_remote_nas_per_host_backup_volume }}/pihole_lib",
     owner: "lab"
   },
   { 
     src: "/etc/traefik",
-    dest: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/traefik_config",
+    dest: "{{ default_remote_nas_per_host_backup_volume }}/traefik_config",
     owner: "lab"
   },
   { 
     src: "/var/lib/traefik/acme",
-    dest: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/traefik_acme",
+    dest: "{{ default_remote_nas_per_host_backup_volume }}/traefik_acme",
     owner: "root"
   },
   { 
     src: "{{ postgres_db_backup_dir }}",
-    dest: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/authentik/db-dumps",
+    dest: "{{ default_remote_nas_per_host_backup_volume }}/authentik/db-dumps",
     owner: "root"
   },
   {
     src: "{{ prometheus_config_dir }}",
-    dest: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/prometheus/config",
+    dest: "{{ default_remote_nas_per_host_backup_volume }}/prometheus/config",
     owner: "root"
   },
   {
     src: "{{ grafana_data_dir }}",
-    dest: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/grafana/data",
+    dest: "{{ default_remote_nas_per_host_backup_volume }}/grafana/data",
     owner: "472"
   },
   {
     src: "{{ grafana_provision_dir }}",
-    dest: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/grafana/provision",
+    dest: "{{ default_remote_nas_per_host_backup_volume }}/grafana/provision",
     owner: "472"
   },
   {
     src: "{{ alertmanager_config_dir }}",
-    dest: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/alertmanager/config",
+    dest: "{{ default_remote_nas_per_host_backup_volume }}/alertmanager/config",
     owner: "root"
   },
   {
     src: "{{ alertmanager_data_dir }}",
-    dest: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}/alertmanager/data",
+    dest: "{{ default_remote_nas_per_host_backup_volume }}/alertmanager/data",
     owner: "65534"
   }
 ]

@@ -50,10 +50,9 @@ default_remote_nas_ip: "{{ hostvars['procyon'].ansible_host }}"
 git_author_name: "Allan Lewis"
 git_author_email: "allan@allanshomelab.com"
 
-backup_runner_remote_base_path: "/mnt/pool1/gitops-homelab/backup-runner/{{ inventory_hostname }}"
+backup_runner_remote_base_path: "/mnt/pool1/allans-home-lab/backups-automated/{{ inventory_hostname }}"
 backup_runner_cron_hour: "*"
 backup_runner_user: "allan"
 backup_runner_remote_host: "{{ default_remote_nas_ip }}"
 
 default_remote_nas_per_host_backup_volume: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}"
-
