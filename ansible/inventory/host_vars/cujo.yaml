@@ -1,8 +1,8 @@
 ---
 converge_restore: true
 
-doppler_service_token: "{{ lookup('env', 'DOPPLER_SERVICE_TOKEN_ORCHESTRATOR') }}"
-doppler_config: "dev"
+doppler_service_token: "{{ lookup('env', 'DOPPLER_SERVICE_TOKEN_MATURIN') }}"
+doppler_config: "mat"
 doppler_project: "orchestrator"
 
 source_code_repos:
@@ -12,6 +12,7 @@ source_code_repos:
 
 s3_mirror_base_dir: "/var/lib/s3-mirror"
 s3_mirror_buckets: [
+  "gitops-homelab-orchestrator-disks",
   "gitops-homelab-orchestrator-tf"
 ]
 s3_mirror_cron:
