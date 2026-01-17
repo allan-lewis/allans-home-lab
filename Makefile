@@ -148,3 +148,7 @@ l4-converge-vaultwarden: ## Converge the entire Vaultwarden stack
 l4-converge-twingate: ## Converge the entire Twingate stack
 	@$(RUN) bash -lc 'set -euo pipefail; \
 	  TAGS=step_docker_twingate scripts/converge.sh "ubuntu_docker_twingate" l4'
+
+l4-converge-observability: ## Converge the entire Prometheus/Grafana/Alertmanager stack
+	@$(RUN) bash -lc 'set -euo pipefail; \
+	  TAGS=step_docker_observability scripts/converge.sh "flagg" l4'
