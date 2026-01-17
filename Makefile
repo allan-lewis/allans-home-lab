@@ -31,6 +31,7 @@ TF_DIR ?= terraform/l2
   l0-runway \
   l1-arch-iso \
   l1-arch-template \
+	l1-capture-% \
   l1-ubuntu-template \
   l2-apply-% \
   l2-destroy-% \
@@ -46,6 +47,7 @@ TF_DIR ?= terraform/l2
   l4-converge-homepage-config \
   l4-converge-immich-tinker \
   l4-converge-immich-tinker \
+	l4-converge-observability \
   l4-converge-pihole-dns \
   l4-converge-pihole \
   l4-converge-traefik \
@@ -68,6 +70,10 @@ l1-arch-iso: ## Put a custom, bootable Arch ISO onto Proxmox
 l1-arch-template: ## Prepare a Proxmox VM template suitable for Arch installations
 	@$(RUN) bash -lc 'set -euo pipefail; \
 	  scripts/l1/arch-template.sh packer/l1/arch'
+
+l1-capture-%: ## Export a Proxmox VM's boot disk to an S3 bucket
+	@$(RUN) bash -lc 'set -euo pipefail; \
+	  S3_BUCKET=gitops-homelab-orchestrator-disks S3_PREFIX=proxmox-images scripts/l1/capture-boot-disk.sh "$$PVE_SSH_IP" "$*" /home/lab/disk-export'
 
 l1-ubuntu-template: ## Prepare a Proxmox VM template suitable for Ubuntu installations
 	@$(RUN) bash -lc 'set -euo pipefail; \
