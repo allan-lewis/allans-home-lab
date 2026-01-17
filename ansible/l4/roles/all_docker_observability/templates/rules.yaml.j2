@@ -49,17 +49,18 @@ groups:
           description: |
             The public IP update metric has not refreshed in over 20 minutes.
 
-      - alert: HomelabGatusFailures
-        expr: |
-          increase(gatus_results_total{success="false"}[5m]) > 0
-        for: 5m
-        labels:
-          severity: critical
-          rulegroup: homelabRules
-        annotations:
-          summary: "Gatus check failure: {{ $labels.name }}"
-          description: |
-            The Gatus endpoint "{{ $labels.name }}" has been failing for more than 5 minutes.
+    - alert: HomelabGatusFailures
+      expr: |
+        increase(gatus_results_total{success="true"}[5m]) == 0
+      for: 5m
+      labels:
+        severity: critical
+        rulegroup: homelabRules
+      annotations:
+        summary: "Gatus check failure: {{ $labels.name }}"
+        description: |
+          The Gatus endpoint "{{ $labels.name }}" has been continuously failing
+          for at least 5 minutes.
 
       - alert: HomelabHighCPUUsage
         expr: 100 - (avg by(instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 80
