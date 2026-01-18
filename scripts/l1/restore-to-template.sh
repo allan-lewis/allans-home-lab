@@ -153,6 +153,15 @@ ssh ${PROXMOX_SSH_OPTS} "${REMOTE}" "
   qm set ${VMID} --scsi0 \"\${IMPORTED_VOL}\"
   qm set ${VMID} --boot order=scsi0
 
+  # --- UEFI (OVMF) + EFI vars disk (Secure Boot OFF) ---
+  qm set ${VMID} --bios ovmf --machine q35
+
+  # Ensure we don't accidentally keep an existing efidisk0 (safe if it doesn't exist)
+  qm set ${VMID} --delete efidisk0 2>/dev/null || true
+
+  # Add EFI vars disk with Secure Boot disabled
+  qm set ${VMID} --efidisk0 '${STORAGE}':1,format=raw,efitype=4m,pre-enrolled-keys=0
+
   # Remove the unusedX entry if present (optional cosmetic cleanup)
   # Proxmox may leave the disk as unused0 even after attaching; harmless if it remains.
   # (No-op if none)
