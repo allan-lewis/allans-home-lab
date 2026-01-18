@@ -55,16 +55,19 @@ resource "proxmox_virtual_environment_vm" "vm" {
   }
 
   # --- Cloud-Init (static IPs) ---
-  initialization {
-    user_account {
-      username = var.ci_user
-      keys     = var.ssh_authorized_keys
-    }
+  dynamic "initialization" {
+    for_each = var.enable_initialization ? [1] : []
+    content {
+      user_account {
+        username = var.ci_user
+        keys     = var.ssh_authorized_keys
+      }
 
-    ip_config {
-      ipv4 {
-        address = local.ipv4_address  # e.g. "10.0.0.21/24"
-        gateway = local.ipv4_gateway  # e.g. "10.0.0.1"
+      ip_config {
+        ipv4 {
+          address = local.ipv4_address
+          gateway = local.ipv4_gateway
+        }
       }
     }
   }

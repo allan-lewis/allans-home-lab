@@ -1,3 +1,8 @@
+variable "enable_initialization" {
+  type    = bool
+  default = true
+}
+
 variable "name" {
   description = "VM hostname/name"
   type        = string

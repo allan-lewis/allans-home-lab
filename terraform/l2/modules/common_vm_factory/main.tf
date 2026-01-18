@@ -38,6 +38,8 @@ locals {
       # ipconfig string is already in the right format for cloudinit
       ipconfig0 = host.terraform.ipconfig
 
+     enable_initialization = !can(regex("(^|/)haos($|/)", host.terraform.template_ref)) 
+
       # Decode the chosen template manifest (same as before, just
       # using template_manifests from a variable instead of hard-coding paths)
       manifest = jsondecode(file(local.template_manifests[host.terraform.template_ref]))
@@ -58,6 +60,8 @@ module "cloudinit" {
 
   # Guest agent
   agent_enabled = var.agent_enabled
+
+  enable_initialization = each.value.enable_initialization
 
   # Identity / placement
   name       = each.key
