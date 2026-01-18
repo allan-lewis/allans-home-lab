@@ -4,7 +4,7 @@ set -euo pipefail
 # Restore a captured QCOW2 from S3 and convert it into a Proxmox template.
 #
 # Usage:
-#   restore-to-template.sh <proxmox-node> <hostname> <storage> [filename]
+#   restore-to-template.sh <proxmox-node> <hostname> <storage> <os> [filename]
 #
 # Examples:
 #   # Use latest qcow2 under s3://$S3_BUCKET/$S3_PREFIX/langolier/
@@ -27,10 +27,11 @@ set -euo pipefail
 #   TEMPLATE_SCSIHw      default: virtio-scsi-single
 #   KEEP_LOCAL_QCOW2     default: 0 (set to 1 to keep local downloaded qcow2)
 
-PROXMOX_NODE="${1:?Usage: $0 <proxmox-node> <hostname> <storage> [filename]}"
-HOSTNAME="${2:?Usage: $0 <proxmox-node> <hostname> <storage> [filename]}"
-STORAGE="${3:?Usage: $0 <proxmox-node> <hostname> <storage> [filename]}"
-FILENAME="${4:-}"
+PROXMOX_NODE="${1:?Usage: $0 <proxmox-node> <hostname> <storage> <os> [filename]}"
+HOSTNAME="${2:?Usage: $0 <proxmox-node> <hostname> <storage> <os> [filename]}"
+STORAGE="${3:?Usage: $0 <proxmox-node> <hostname> <storage> <os> [filename]}"
+OS="${4:?Usage: $0 <proxmox-node> <hostname> <storage> <os> [filename]}"
+FILENAME="${5:-}"
 
 S3_BUCKET="${S3_BUCKET:?Set S3_BUCKET (e.g. export S3_BUCKET=gitops-homelab-orchestrator-disks)}"
 S3_PREFIX="${S3_PREFIX:-proxmox-images}"
@@ -170,6 +171,39 @@ if [ "${KEEP_LOCAL_QCOW2}" = "1" ]; then
 else
   rm -f "${LOCAL_QCOW2}" || true
 fi
+
+# --- Write L1 template manifest for L2 consumption ----------------------------
+
+# Required: OS (you said you'll add it as an argument)
+# Example: OS="haos"
+: "${OS:?OS argument is required (e.g. haos)}"
+
+# Timestamp used for filename + metadata
+ts_utc="$(date -u +%Y%m%dT%H%M%SZ)"
+created_at="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+
+artifacts_dir="infra/os/${OS}/artifacts"
+manifest_path="${artifacts_dir}/vm-template-${ts_utc}.json"
+
+mkdir -p "${artifacts_dir}"
+
+# You can adjust description as you like; keeping it simple/default.
+description="${DESCRIPTION:-Proxmox template created from restored QCOW2}"
+
+cat >"${manifest_path}" <<EOF
+{
+  "created_at": "${created_at}",
+  "description": "${description}",
+  "name": "${TEMPLATE_NAME}",
+  "node": "${PROXMOX_NODE}",
+  "storage": "${STORAGE}",
+  "vmid": ${VMID}
+}
+EOF
+
+echo "==> Manifest written: ${manifest_path}"
+
+# --- end manifest ------------------------------------------------------------
 
 echo "==> Done."
 echo "Template created:"
