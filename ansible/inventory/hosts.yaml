@@ -70,6 +70,11 @@ all:
       prometheus_scrape_jobs:
         node-exporter: [9100]
         homelab-metrics: [9102]
+    overlook:
+      ansible_host: 192.168.86.229
+      gatus_slug: "(Home Automation)"
+      prometheus_scrape_jobs:
+        node-exporter: [9100]
     patricia:
       ansible_host: 192.168.86.224
       gatus_slug: "(Ubuntu Docker/Media)"
