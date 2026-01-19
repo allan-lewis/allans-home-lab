@@ -15,3 +15,4 @@ output "ip_addresses" {
     name => module.cloudinit[name].ip_address
   }
 }
+

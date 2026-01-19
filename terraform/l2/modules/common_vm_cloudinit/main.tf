@@ -52,6 +52,8 @@ resource "proxmox_virtual_environment_vm" "vm" {
     bridge  = var.bridge
     model   = "virtio"
     vlan_id = 0
+
+    mac_address = var.mac_address
   }
 
   # --- Cloud-Init (static IPs) ---

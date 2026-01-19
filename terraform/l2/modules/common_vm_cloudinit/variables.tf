@@ -1,3 +1,8 @@
+variable "mac_address" {
+  type    = string
+  default = null
+}
+
 variable "enable_initialization" {
   type    = bool
   default = true
