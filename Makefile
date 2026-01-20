@@ -87,6 +87,9 @@ l2-destroy-%: ## Destroy Terraform resources for an OS/persona pair
 	@$(RUN) bash -lc 'set -euo pipefail; \
 	  scripts/l2/terraform.sh "$(TF_DIR)/$*" destroy'
 
+l3-homeassistant: ## Restore a HA host from an S3 backup
+	@$(RUN) bash -lc 'scripts/l3/haos.sh'
+
 l3-converge-%: ## Converge a group of hosts (capabilities)
 	@$(RUN) bash -lc 'set -euo pipefail; \
 	  scripts/converge.sh "$*" l3'

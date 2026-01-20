@@ -1,0 +1,27 @@
+---
+# Target HAOS / HA endpoint
+haos_restore_host: ""
+haos_restore_port: 8123
+haos_restore_scheme: "http"        # "https" if you terminate TLS on HA
+
+# Auth: Long-lived access token (recommended to store in Doppler)
+haos_restore_token: "" 
+
+# S3 location for HA backups (full backups .tar)
+haos_restore_s3_bucket: ""
+haos_restore_backup_key: ""        # optional full key under bucket; if empty -> latest under prefix
+
+# Local staging
+haos_restore_local_dir: "/tmp/haos_restore"
+haos_restore_local_file: ""        # optional override; default derived from S3 key basename
+
+# Restore behavior
+haos_restore_wait_timeout_seconds: 900
+haos_restore_wait_poll_seconds: 5
+
+# Optional: if your backup is encrypted, HA may prompt for password.
+# Many setups do NOT encrypt HA backups; leave blank if not used.
+haos_restore_backup_password: ""
+
+# Safety: set true if you really want to restore (useful for dry runs)
+haos_restore_execute: true

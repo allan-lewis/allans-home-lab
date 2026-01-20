@@ -13,6 +13,7 @@ source_code_repos:
 s3_mirror_base_dir: "/var/lib/s3-mirror"
 s3_mirror_buckets: [
   "gitops-homelab-orchestrator-disks",
+  "gitops-homelab-orchestrator-haos",
   "gitops-homelab-orchestrator-tf"
 ]
 s3_mirror_cron:

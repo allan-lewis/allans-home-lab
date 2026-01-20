@@ -1,0 +1,9 @@
+---
+- hosts: localhost
+  gather_facts: false
+  roles:
+    - role: haos_converge
+      vars:
+        haos_restore_host: "{{ lookup('env', 'HAOS_RESTORE_HOST') }}"
+        haos_restore_token: "{{ lookup('env', 'HAOS_RESTORE_TOKEN') }}"
+        haos_restore_s3_bucket: "{{ lookup('env', 'HAOS_RESTORE_S3_BUCKET') }}"

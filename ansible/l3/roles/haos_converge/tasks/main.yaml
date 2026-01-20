@@ -1,0 +1,195 @@
+---
+- name: Fail if required vars are missing
+  ansible.builtin.assert:
+    that:
+      - haos_restore_host | length > 0
+      - haos_restore_token | length > 0
+      - haos_restore_s3_bucket | length > 0
+    fail_msg: >
+      Missing required vars. Need haos_restore_host, haos_restore_token,
+      and haos_restore_s3_bucket.
+
+- name: Ensure local staging dir exists
+  ansible.builtin.file:
+    path: "{{ haos_restore_local_dir }}"
+    state: directory
+    mode: "0700"
+
+# --- Resolve backup key (latest by default) ---
+- name: Resolve S3 backup key (latest under prefix) when not provided
+  ansible.builtin.shell: |
+    set -euo pipefail
+    aws s3api list-objects-v2 \
+      --bucket "{{ haos_restore_s3_bucket }}" \
+      --prefix "" \
+      --query "reverse(sort_by(Contents,&LastModified))[0].Key" \
+      --output text
+  args:
+    executable: /bin/bash
+  register: _haos_latest_key
+  changed_when: false
+  when: haos_restore_backup_key | length == 0
+
+- name: Set resolved backup key fact
+  ansible.builtin.set_fact:
+    haos_restore_effective_backup_key: >-
+      {{
+        (haos_restore_backup_key | length > 0)
+          | ternary(haos_restore_backup_key, _haos_latest_key.stdout | trim)
+      }}
+
+- name: Fail if no backup key was found
+  ansible.builtin.assert:
+    that:
+      - haos_restore_effective_backup_key is defined
+      - haos_restore_effective_backup_key | length > 0
+      - haos_restore_effective_backup_key != "None"
+    fail_msg: >
+      No backup found in s3://{{ haos_restore_s3_bucket }}
+
+- name: Derive local backup filename if not provided
+  ansible.builtin.set_fact:
+    haos_restore_effective_local_file: >-
+      {{
+        (haos_restore_local_file | length > 0)
+          | ternary(haos_restore_local_file,
+                    haos_restore_local_dir ~ '/' ~ (haos_restore_effective_backup_key | basename))
+      }}
+
+- name: Show HAOS restore inputs
+  ansible.builtin.debug:
+    msg:
+      - "S3 backup: s3://{{ haos_restore_s3_bucket }}/{{ haos_restore_effective_backup_key }}"
+      - "Local file: {{ haos_restore_effective_local_file }}"
+
+# --- Download backup tar (skip if already present and non-empty) ---
+- name: Check if local backup already exists
+  ansible.builtin.stat:
+    path: "{{ haos_restore_effective_local_file }}"
+  register: _haos_backup_stat
+
+- name: Download HA backup from S3 (if not already present)
+  ansible.builtin.shell: |
+    set -euo pipefail
+    aws s3 cp --only-show-errors \
+      "s3://{{ haos_restore_s3_bucket }}/{{ haos_restore_effective_backup_key }}" \
+      "{{ haos_restore_effective_local_file }}"
+  args:
+    executable: /bin/bash
+  when:
+    - haos_restore_execute
+    - not (_haos_backup_stat.stat.exists and (_haos_backup_stat.stat.size | int) > 0)
+
+# # --- Wait for HA API readiness (before upload) ---
+- name: Wait for Home Assistant API to respond
+  ansible.builtin.uri:
+    url: "{{ haos_restore_scheme }}://{{ haos_restore_host }}:{{ haos_restore_port }}/api/"
+    method: GET
+    headers:
+      Authorization: "Bearer {{ haos_restore_token }}"
+    status_code: 200
+    return_content: false
+    validate_certs: false
+  register: _haos_api_ready
+  until: _haos_api_ready.status == 200
+  retries: "{{ (haos_restore_wait_timeout_seconds // haos_restore_wait_poll_seconds) | int }}"
+  delay: "{{ haos_restore_wait_poll_seconds }}"
+  when: haos_restore_execute
+
+# --- Upload backup ---
+- name: Upload backup tar to Supervisor (stream via curl)
+  ansible.builtin.shell: |
+    set -euo pipefail
+    curl -sS -X POST \
+      -H "Authorization: Bearer {{ haos_restore_token }}" \
+      -F "file=@{{ haos_restore_effective_local_file }}" \
+      "{{ haos_restore_scheme }}://{{ haos_restore_host }}:{{ haos_restore_port }}/api/hassio/backups/new/upload"
+  args:
+    executable: /bin/bash
+  register: _haos_upload_raw
+  changed_when: true
+  when: haos_restore_execute
+
+- name: Parse upload response JSON
+  ansible.builtin.set_fact:
+    _haos_upload_json: "{{ _haos_upload_raw.stdout | from_json }}"
+  when: haos_restore_execute
+
+- name: Extract backup slug
+  ansible.builtin.set_fact:
+    haos_restore_backup_slug: "{{ _haos_upload_json.data.slug | default('') }}"
+  when: haos_restore_execute
+
+- name: Preflight confirm token can access Supervisor API
+  ansible.builtin.uri:
+    url: "{{ haos_restore_scheme }}://{{ haos_restore_host }}:{{ haos_restore_port }}/api/hassio/info"
+    method: GET
+    headers:
+      Authorization: "Bearer {{ haos_restore_token }}"
+    status_code: 200
+    validate_certs: false
+  changed_when: false
+  when: haos_restore_execute
+
+# --- Trigger restore ---
+- name: Trigger full restore of uploaded backup (Supervisor /api/hassio)
+  ansible.builtin.uri:
+    url: "{{ haos_restore_scheme }}://{{ haos_restore_host }}:{{ haos_restore_port }}/api/hassio/backups/{{ haos_restore_backup_slug }}/restore"
+    method: POST
+    headers:
+      Authorization: "Bearer {{ haos_restore_token }}"
+      Content-Type: "application/json"
+    body_format: json
+    body: >-
+      {{
+        {
+          "homeassistant": true,
+          "addons": true,
+          "folders": ["homeassistant", "ssl", "share", "media", "addons/local"]
+        }
+        | combine(
+            (haos_restore_backup_password | default('') | length > 0)
+              | ternary({"password": haos_restore_backup_password}, {})
+          )
+      }}
+    status_code: [200, 201]
+    validate_certs: false
+  register: _haos_restore_trigger
+  when: haos_restore_execute
+
+# Restore usually restarts HA; API will go away. Wait for it to come back.
+- name: Wait for HA API to go down (expected during restore)
+  ansible.builtin.uri:
+    url: "{{ haos_restore_scheme }}://{{ haos_restore_host }}:{{ haos_restore_port }}/api/"
+    method: GET
+    headers:
+      Authorization: "Bearer {{ haos_restore_token }}"
+    status_code: 200
+    validate_certs: false
+  register: _haos_api_down
+  until: _haos_api_down is failed
+  retries: 60
+  delay: 2
+  when: haos_restore_execute
+
+- name: Wait for Home Assistant API to come back after restore
+  ansible.builtin.uri:
+    url: "{{ haos_restore_scheme }}://{{ haos_restore_host }}:{{ haos_restore_port }}/api/"
+    method: GET
+    headers:
+      Authorization: "Bearer {{ haos_restore_token }}"
+    status_code: 200
+    validate_certs: false
+  register: _haos_api_back
+  until: _haos_api_back.status == 200
+  retries: "{{ (haos_restore_wait_timeout_seconds // haos_restore_wait_poll_seconds) | int }}"
+  delay: "{{ haos_restore_wait_poll_seconds }}"
+  when: haos_restore_execute
+
+- name: Done
+  ansible.builtin.debug:
+    msg:
+      - "Restored HAOS backup:"
+      - "  s3://{{ haos_restore_s3_bucket }}/{{ haos_restore_effective_backup_key }}"
+      - "  slug={{ haos_restore_backup_slug }}"
+      - "HA API is back at {{ haos_restore_scheme }}://{{ haos_restore_host }}:{{ haos_restore_port }}/"
