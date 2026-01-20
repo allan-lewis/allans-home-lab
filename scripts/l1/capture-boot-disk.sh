@@ -15,9 +15,11 @@ set -euo pipefail
 #   - Proxmox node must have: qm, pvesm, qemu-img.
 #   - VM must be powered OFF (script enforces this).
 
-PROXMOX_NODE="${1:?Usage: $0 <proxmox-node> <vmid> <local-output-dir>}"
-VMID="${2:?Usage: $0 <proxmox-node> <vmid> <local-output-dir>}"
-LOCAL_OUT_DIR="${3:?Usage: $0 <proxmox-node> <vmid> <local-output-dir>}"
+PROXMOX_NODE="${PVE_SSH_IP}"
+OS="${1:?Usage: $0 <os> <vmid>}"
+VMID="${2:?Usage: $0 <os> <vmid>}"
+LOCAL_OUT_DIR="${LOCAL_OUT_DIR:-/home/lab/.appliances/capture}"
+KEEP_LOCAL_QCOW2="${KEEP_LOCAL_QCOW2:-0}"
 
 # Optional: override these via env vars if you want non-root access or extra ssh options.
 PROXMOX_USER="${PROXMOX_USER:-root}"
@@ -98,7 +100,7 @@ echo "==> Boot disk path on Proxmox node: ${REMOTE_DISK_PATH}"
 # 4) Convert disk to QCOW2 on the Proxmox node
 REMOTE_TMP_DIR="/var/tmp"
 REMOTE_TS="$(timestamp)"
-REMOTE_QCOW2="${REMOTE_TMP_DIR}/boot-disk-export-${VM_NAME_RAW}-${REMOTE_TS}.qcow2"
+REMOTE_QCOW2="${REMOTE_TMP_DIR}/boot-disk-export-${VMID}-${REMOTE_TS}.qcow2"
 
 echo "==> Converting disk to QCOW2 on Proxmox node..."
 ssh ${PROXMOX_SSH_OPTS} "${REMOTE}" "
@@ -113,7 +115,7 @@ ssh ${PROXMOX_SSH_OPTS} "${REMOTE}" "
 
 # 5) Copy QCOW2 back to local host
 LOCAL_TS="$(timestamp)"
-LOCAL_QCOW2="${LOCAL_OUT_DIR}/boot-disk-export-${VM_NAME_RAW}-${LOCAL_TS}.qcow2"
+LOCAL_QCOW2="${LOCAL_OUT_DIR}/boot-disk-export-${VMID}-${LOCAL_TS}.qcow2"
 
 echo "==> Copying QCOW2 to local host: ${LOCAL_QCOW2}"
 scp ${PROXMOX_SSH_OPTS} "${REMOTE}:${REMOTE_QCOW2}" "${LOCAL_QCOW2}"
@@ -143,7 +145,7 @@ S3_BUCKET="${S3_BUCKET:?Set S3_BUCKET (e.g. export S3_BUCKET=my-bucket)}"
 S3_PREFIX="${S3_PREFIX:-appliance-backups}"
 
 # Sanitize for S3 key prefix safety: lower, keep [a-z0-9._-], replace others with '-'
-HOST_FOLDER="$(printf '%s' "${VM_NAME_RAW}" |
+HOST_FOLDER="$(printf '%s' "${OS}" |
   tr '[:upper:]' '[:lower:]' |
   sed -E 's/[^a-z0-9._-]+/-/g; s/^-+//; s/-+$//')"
 
@@ -197,3 +199,9 @@ else
 fi
 
 # --- end S3 upload + retention ------------------------------------------------
+
+if [ "${KEEP_LOCAL_QCOW2}" = "1" ]; then
+  echo "==> Keeping local qcow2: ${LOCAL_QCOW2}"
+else
+  rm -f "${LOCAL_QCOW2}" || true
+fi

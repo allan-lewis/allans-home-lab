@@ -31,7 +31,7 @@ TF_DIR ?= terraform/l2
   l0-runway \
   l1-arch-iso \
   l1-arch-template \
-	l1-capture-% \
+	l1-capture-haos-% \
   l1-ubuntu-template \
   l2-apply-% \
   l2-destroy-% \
@@ -71,10 +71,11 @@ l1-arch-template: ## Prepare a Proxmox VM template suitable for Arch installatio
 	@$(RUN) bash -lc 'set -euo pipefail; \
 	  scripts/l1/arch-template.sh packer/l1/arch'
 
-l1-capture-%: ## Export a Proxmox VM's boot disk to an S3 bucket
+l1-capture-haos-%: ## Export a Proxmox VM's boot disk to an S3 bucket
 	@$(RUN) bash -lc 'set -euo pipefail; \
-	  S3_BUCKET=gitops-homelab-orchestrator-disks S3_PREFIX=proxmox-images \
-		scripts/l1/capture-boot-disk.sh "$$PVE_SSH_IP" "$*" /home/lab/disk-export'
+	  S3_BUCKET=gitops-homelab-orchestrator-disks \
+	  S3_PREFIX=proxmox-images \
+    scripts/l1/capture-boot-disk.sh haos "$*"'
 
 # S3_BUCKET=gitops-homelab-orchestrator-disks ./scripts/l1/disk-to-template.sh 192.168.86.105 haos ssd0 haos
 
