@@ -26,7 +26,10 @@ set -euo pipefail
 
 OS="${1:?Usage: $0 <os>}"
 
-need_cmd() { command -v "$1" >/dev/null 2>&1 || { echo "ERROR: missing required command: $1" >&2; exit 1; }; }
+need_cmd() { command -v "$1" >/dev/null 2>&1 || {
+  echo "ERROR: missing required command: $1" >&2
+  exit 1
+}; }
 need_cmd jq
 need_cmd aws
 need_cmd ssh
@@ -44,6 +47,7 @@ repo_root="$(
 os_root="${repo_root}/infra/os/${OS}"
 
 PROXMOX_NODE="${PVE_SSH_IP}"
+UPDATE_STABLE="${UPDATE_STABLE:-yes}"
 
 # Allow override *under* infra/os/<os>/
 CAPTURE_MANIFEST_REL="${CAPTURE_MANIFEST_REL:-spec/disk-capture-stable.json}"
@@ -70,9 +74,18 @@ s3_uri="$(jq -r '.s3_uri // empty' "${capture_manifest}")"
 
 # Validate
 err=0
-[[ -n "${manifest_os}" ]] || { echo "ERROR: manifest missing .os" >&2; err=1; }
-[[ -n "${s3_uri}" ]]      || { echo "ERROR: manifest missing .s3_uri" >&2; err=1; }
-[[ "${manifest_os}" = "${OS}" ]] || { echo "ERROR: manifest .os (${manifest_os}) does not match arg OS (${OS})" >&2; err=1; }
+[[ -n "${manifest_os}" ]] || {
+  echo "ERROR: manifest missing .os" >&2
+  err=1
+}
+[[ -n "${s3_uri}" ]] || {
+  echo "ERROR: manifest missing .s3_uri" >&2
+  err=1
+}
+[[ "${manifest_os}" = "${OS}" ]] || {
+  echo "ERROR: manifest .os (${manifest_os}) does not match arg OS (${OS})" >&2
+  err=1
+}
 [[ "${err}" -eq 0 ]] || exit 1
 
 PROXMOX_USER="${PROXMOX_USER:-root}"
@@ -103,8 +116,6 @@ echo "==> S3 URI:             ${s3_uri}"
 echo "==> SSH opts:           ${PROXMOX_SSH_OPTS}"
 echo
 
-exit 0;
-
 # 1) Determine local filename from s3_uri
 BASE_NAME="$(basename "${s3_uri}")"
 if [[ -z "${BASE_NAME}" ]] || [[ "${BASE_NAME}" = "/" ]]; then
@@ -113,7 +124,7 @@ if [[ -z "${BASE_NAME}" ]] || [[ "${BASE_NAME}" = "/" ]]; then
 fi
 
 # 2) Download qcow2 locally (ops host)
-LOCAL_TMP_DIR="${TMPDIR:-/home/lab/restore-template}"
+LOCAL_TMP_DIR="${TMPDIR:-/home/lab/.appliances/template}"
 mkdir -p "${LOCAL_TMP_DIR}"
 LOCAL_QCOW2="${LOCAL_TMP_DIR}/${BASE_NAME}"
 
@@ -155,6 +166,7 @@ ssh ${PROXMOX_SSH_OPTS} "${REMOTE}" "
     --ostype l26 \
     --scsihw ${TEMPLATE_SCSIHw} \
     --agent 0 \
+    --tags "orchestrator,template,${OS}" \
     --onboot 0
 
   qm importdisk ${VMID} '${REMOTE_TMP}' '${STORAGE}'
@@ -192,11 +204,11 @@ else
 fi
 
 # 7) Write L1 template manifest for L2 consumption + update stable pointer
-ts_utc="$(date -u +%Y%m%dT%H%M%SZ)"
+ts="$(date -u +"%Y%m%d-%H%M%S")"
 template_created_at="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 
 artifacts_dir="${os_root}/artifacts"
-manifest_path="${artifacts_dir}/vm-template-${ts_utc}.json"
+manifest_path="${artifacts_dir}/vm-template-${ts}.json"
 stable_path="${artifacts_dir}/vm-template-stable.json"
 
 mkdir -p "${artifacts_dir}"
@@ -208,20 +220,24 @@ cat >"${manifest_path}" <<EOF
   "created_at": "${template_created_at}",
   "description": "${description}",
   "name": "${TEMPLATE_NAME}",
-  "os": "${OS}",
   "node": "${PROXMOX_NODE}",
   "storage": "${STORAGE}",
   "vmid": ${VMID},
-  "source_capture_manifest": "${CAPTURE_MANIFEST_REL}",
   "source_s3_uri": "${s3_uri}"
 }
 EOF
 
-ln -sf "$(basename "${manifest_path}")" "${stable_path}"
+if [[ "${UPDATE_STABLE}" == "yes" ]]; then
+  spec_dir="infra/os/${OS}/spec"
+  mkdir -p "${spec_dir}"
+  ln -sf "../artifacts/${manifest_path##*/}" "${spec_dir}/vm-template-stable.json"
+  echo "Updated stable symlink -> ${spec_dir}/vm-template-stable.json"
+else
+  echo "Skipping stable symlink update (UPDATE_STABLE=${UPDATE_STABLE})"
+fi
 
 echo
 echo "==> Template manifest written: ${manifest_path}"
-echo "==> Stable manifest updated:   ${stable_path}"
 echo
 echo "==> Done."
 echo "Template created:"

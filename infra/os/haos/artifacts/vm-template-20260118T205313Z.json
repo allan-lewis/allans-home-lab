@@ -1,8 +1,0 @@
-{
-  "created_at": "2026-01-18T20:53:13Z",
-  "description": "Proxmox template created from restored QCOW2",
-  "name": "tmpl-arcturus-20260118-154613",
-  "node": "192.168.86.105",
-  "storage": "ssd0",
-  "vmid": 102
-}
