@@ -20,6 +20,7 @@ OS="${1:?Usage: $0 <os> <vmid>}"
 VMID="${2:?Usage: $0 <os> <vmid>}"
 LOCAL_OUT_DIR="${LOCAL_OUT_DIR:-/home/lab/.appliances/capture}"
 KEEP_LOCAL_QCOW2="${KEEP_LOCAL_QCOW2:-0}"
+UPDATE_STABLE="${UPDATE_STABLE:-yes}"
 
 # Optional: override these via env vars if you want non-root access or extra ssh options.
 PROXMOX_USER="${PROXMOX_USER:-root}"
@@ -235,3 +236,12 @@ EOF
 echo "==> Manifest written: ${manifest_path}"
 
 # --- end manifest ------------------------------------------------------------
+
+if [[ "${UPDATE_STABLE}" == "yes" ]]; then
+  spec_dir="infra/os/${OS}/spec"
+  mkdir -p "${spec_dir}"
+  ln -sf "../artifacts/${manifest_path##*/}" "${spec_dir}/disk-capture-stable.json"
+  echo "Updated stable symlink -> ${spec_dir}/disk-capture-stable.json"
+else
+  echo "Skipping stable symlink update (UPDATE_STABLE=${UPDATE_STABLE})"
+fi
