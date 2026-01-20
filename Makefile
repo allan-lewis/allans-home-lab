@@ -31,7 +31,7 @@ TF_DIR ?= terraform/l2
   l0-runway \
   l1-arch-iso \
   l1-arch-template \
-	l1-capture-haos-% \
+  l1-capture-haos-% \
   l1-ubuntu-template \
   l2-apply-% \
   l2-destroy-% \
@@ -47,7 +47,7 @@ TF_DIR ?= terraform/l2
   l4-converge-homepage-config \
   l4-converge-immich-tinker \
   l4-converge-immich-tinker \
-	l4-converge-observability \
+  l4-converge-observability \
   l4-converge-pihole-dns \
   l4-converge-pihole \
   l4-converge-traefik \
