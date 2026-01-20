@@ -49,7 +49,7 @@ KEEP_LOCAL_QCOW2="${KEEP_LOCAL_QCOW2:-0}"
 
 REMOTE="${PROXMOX_USER}@${PROXMOX_NODE}"
 
-timestamp() { date +"%Y%m%d-%H%M%S"; }
+timestamp() { date +"%Y%m%d"; }
 
 echo "==> Restore-to-template"
 echo "==> Proxmox node: ${PROXMOX_NODE}"
@@ -115,7 +115,7 @@ fi
 echo "==> Allocated VMID: ${VMID}"
 
 # 5) Create VM + import disk + attach + boot order
-TEMPLATE_NAME="tmpl-${HOSTNAME}-$(timestamp)"
+TEMPLATE_NAME="${OS}-$(timestamp)"
 echo "==> Creating VM shell and importing disk (this will become a template): ${TEMPLATE_NAME}"
 
 ssh ${PROXMOX_SSH_OPTS} "${REMOTE}" "

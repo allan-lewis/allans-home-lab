@@ -1,0 +1,8 @@
+{
+  "created_at": "2026-01-20T02:05:49Z",
+  "description": "Proxmox template created from restored QCOW2",
+  "name": "haos-20260119",
+  "node": "192.168.86.105",
+  "storage": "ssd0",
+  "vmid": 102
+}
