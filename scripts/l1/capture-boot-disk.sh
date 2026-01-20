@@ -205,3 +205,33 @@ if [ "${KEEP_LOCAL_QCOW2}" = "1" ]; then
 else
   rm -f "${LOCAL_QCOW2}" || true
 fi
+
+# --- Write L1 template manifest for L2 consumption ----------------------------
+
+# Timestamp used for filename + metadata
+ts="$(date -u +"%Y%m%d-%H%M%S")"
+created_at="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+
+artifacts_dir="infra/os/${OS}/artifacts"
+manifest_path="${artifacts_dir}/disk-capture-${ts}.json"
+
+mkdir -p "${artifacts_dir}"
+
+# You can adjust description as you like; keeping it simple/default.
+description="${DESCRIPTION:-Proxmox VM disk captured and exported to S3}"
+
+cat >"${manifest_path}" <<EOF
+{
+  "created_at": "${created_at}",
+  "description": "${description}",
+  "os": "${OS}",
+  "node": "${PROXMOX_NODE}",
+  "vmid": ${VMID},
+  "hostname": "${VM_NAME_RAW}",
+  "s3_uri": "${S3_URI}"
+}
+EOF
+
+echo "==> Manifest written: ${manifest_path}"
+
+# --- end manifest ------------------------------------------------------------
