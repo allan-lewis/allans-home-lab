@@ -6,11 +6,11 @@ all:
       gatus_slug: "(Retro Gaming)"
       prometheus_scrape_jobs:
         node-exporter: [9100]
-    arcturus:
-      ansible_host: 192.168.86.124
-      gatus_slug: "(Home Automation)"
-      prometheus_scrape_jobs:
-        node-exporter: [9100]
+    # arcturus:
+    #   ansible_host: 192.168.86.124
+    #   gatus_slug: "(Home Automation)"
+    #   prometheus_scrape_jobs:
+    #     node-exporter: [9100]
     barlow:
       ansible_host: 192.168.86.213
       gatus_slug: "(Ubuntu Sandbox)"
