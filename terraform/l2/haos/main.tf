@@ -4,7 +4,7 @@ locals {
 
   # Logical template refs → manifest JSON files for this persona
   template_manifest_map = {
-    "haos/homeassistant/stable" = "${path.module}/../../../infra/os/haos/artifacts/vm-template-20260118T211015Z.json"
+    "haos/homeassistant/stable" = "${path.module}/../../../infra/os/haos/spec/vm-template-stable.json"
     # Add canary/etc here later if needed
   }
 }

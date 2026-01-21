@@ -322,15 +322,15 @@ traefik_services:
     scheme: http
   - name: homeassistant1
     host: home.allanandvaia.com
-    url: "http://{{ hostvars['arcturus'].ansible_host }}:8123"
+    url: "http://{{ hostvars['overlook'].ansible_host }}:8123"
     scheme: http
   - name: homeassistant2
     host: allanandvaia.com
-    url: "http://{{ hostvars['arcturus'].ansible_host }}:8123"
+    url: "http://{{ hostvars['overlook'].ansible_host }}:8123"
     scheme: http
   - name: homeassistant3
     host: www.allanandvaia.com
-    url: "http://{{ hostvars['arcturus'].ansible_host }}:8123"
+    url: "http://{{ hostvars['overlook'].ansible_host }}:8123"
     scheme: http
   - name: kvm1
     host: one.kvm.allanshomelab.com
