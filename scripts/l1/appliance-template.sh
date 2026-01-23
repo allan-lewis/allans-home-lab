@@ -187,9 +187,12 @@ ssh ${PROXMOX_SSH_OPTS} "${REMOTE}" "
   qm set ${VMID} --boot order=scsi0
 
   # --- UEFI (OVMF) + EFI vars disk (Secure Boot OFF) ---
-  qm set ${VMID} --bios ovmf --machine q35
-  qm set ${VMID} --delete efidisk0 2>/dev/null || true
-  qm set ${VMID} --efidisk0 '${STORAGE}':1,format=raw,efitype=4m,pre-enrolled-keys=0
+  if [[ "${OS}" == "haos" ]]; then
+    echo "[INFO] Applying HAOS UEFI config for VM ${VMID}"
+    qm set ${VMID} --bios ovmf --machine q35
+    qm set ${VMID} --delete efidisk0 2>/dev/null || true
+    qm set ${VMID} --efidisk0 '${STORAGE}':1,format=raw,efitype=4m,pre-enrolled-keys=0
+  fi
 
   qm template ${VMID}
 

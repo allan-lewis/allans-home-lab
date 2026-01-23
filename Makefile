@@ -33,6 +33,8 @@ TF_DIR ?= terraform/l2
   l1-arch-template \
   l1-haos-capture-% \
   l1-haos-template \
+	l1-truenas-capture-% \
+	l1-truenas-template \
   l1-ubuntu-template \
   l2-apply-% \
   l2-destroy-% \
@@ -78,9 +80,19 @@ l1-haos-capture-%: ## Export a Proxmox VM's boot disk to an S3 bucket
 	  S3_PREFIX=proxmox-images \
     scripts/l1/appliance-capture.sh haos "$*"'
 
+l1-truenas-capture-%: ## Export a Proxmox VM's boot disk to an S3 bucket
+	@$(RUN) bash -lc 'set -euo pipefail; \
+	  S3_BUCKET=gitops-homelab-orchestrator-disks \
+	  S3_PREFIX=proxmox-images \
+    scripts/l1/appliance-capture.sh truenas "$*"'
+
 l1-haos-template: ## Prepare a Proxmox VM template suitable for HAOS installations
 	@$(RUN) bash -lc 'set -euo pipefail; \
 	  scripts/l1/appliance-template.sh haos'
+
+l1-truenas-template: ## Prepare a Proxmox VM template suitable for TrueNAS installations
+	@$(RUN) bash -lc 'set -euo pipefail; \
+	  scripts/l1/appliance-template.sh truenas'
 
 l1-ubuntu-template: ## Prepare a Proxmox VM template suitable for Ubuntu installations
 	@$(RUN) bash -lc 'set -euo pipefail; \
