@@ -25,7 +25,7 @@ variable "bridge" {
 
 variable "storage_vm" {
   type    = string
-  default = "ssd0"
+  default = "local-lvm"
 }
 
 variable "storage_iso" {
