@@ -18,18 +18,18 @@
           "scsihw": "virtio-scsi-single",
           "devices": [
             {
-              "slot": 5,
+              "slot": 3,
               "by_id": "ata-T-FORCE_1TB_TPBF2212050020101174",
               "opts": { "cache": "none", "format": "raw", "iothread": 1 }
             },
             {
-              "slot": 6,
+              "slot": 4,
               "by_id": "ata-T-FORCE_1TB_TPBF2212050020101597",
               "opts": { "cache": "none", "format": "raw", "iothread": 1 }
             }
           ],
           "pools": [
-            { "name": "pool0", "layout": "mirror", "slots": [5, 6] }
+            { "name": "pool0", "layout": "mirror", "slots": [3, 4] }
           ]
         }
       }

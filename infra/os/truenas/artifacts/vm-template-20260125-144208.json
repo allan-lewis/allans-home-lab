@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-01-25T14:42:08Z",
+  "description": "Proxmox template created from restored QCOW2 (disk capture)",
+  "name": "truenas-20260125",
+  "node": "192.168.86.105",
+  "storage": "local-lvm",
+  "vmid": 106,
+  "source_s3_uri": "s3://gitops-homelab-orchestrator-disks/proxmox-images/truenas/boot-disk-export-106-20260125-093855.qcow2"
+}

@@ -121,6 +121,14 @@ l3-shutdown-%: ## Shut down a group of hosts
 	@$(RUN) bash -lc 'set -euo pipefail; \
 	  scripts/l3/shutdown.sh "$*"'
 
+l3-truenas-%: ## Attach disks to a TrueNAS host
+	@$(RUN) bash -lc 'set -euo pipefail; \
+    : "$${PVE_SSH_IP:?Set PVE_SSH_IP}"; \
+    scripts/l3/proxmox-disks.sh \
+      "$${PVE_SSH_IP}" \
+      "$*" \
+      "infra/os/truenas/personas/nas/spec/terraform.json";'
+
 l4-converge-%: ## Converge a group of hosts (workloads)
 	@$(RUN) bash -lc 'set -euo pipefail; \
 	  scripts/converge.sh "$*" l4'
