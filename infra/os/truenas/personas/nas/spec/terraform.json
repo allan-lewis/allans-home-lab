@@ -12,6 +12,26 @@
         "node": "sirius",
         "ipconfig": "ip=192.168.86.226/24,gw=192.168.86.1",
         "mac_address": "02:42:AC:11:00:04"
+      },
+      "proxmox": {
+        "disks": {
+          "scsihw": "virtio-scsi-single",
+          "devices": [
+            {
+              "slot": 5,
+              "by_id": "ata-T-FORCE_1TB_TPBF2212050020101174",
+              "opts": { "cache": "none", "format": "raw", "iothread": 1 }
+            },
+            {
+              "slot": 6,
+              "by_id": "ata-T-FORCE_1TB_TPBF2212050020101597",
+              "opts": { "cache": "none", "format": "raw", "iothread": 1 }
+            }
+          ],
+          "pools": [
+            { "name": "pool0", "layout": "mirror", "slots": [5, 6] }
+          ]
+        }
       }
     }
   }
