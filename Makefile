@@ -41,6 +41,7 @@ TF_DIR ?= terraform/l2
   l3-converge-% \
   l3-reboot-% \
   l3-shutdown-% \
+	l3-truenas-% \
   l4-converge-% \
   l4-converge-authentik-prod \
   l4-converge-authentik-tinker \
