@@ -2,7 +2,7 @@
   "hosts": {
     "pennywise": {
       "terraform": {
-        "ip": "192.168.86.200",
+        "ip": "192.168.86.220",
         "ssh_user": "lab",
         "tags": ["orchestrator", "terraform", "truenas"],
         "cpu": 8,
@@ -10,7 +10,7 @@
         "disk_gb": 16,
         "template_ref": "truenas/nas/stable",
         "node": "sirius",
-        "ipconfig": "ip=192.168.86.200/24,gw=192.168.86.1",
+        "ipconfig": "ip=192.168.86.220/24,gw=192.168.86.1",
         "mac_address": "02:42:AC:11:00:04"
       },
       "proxmox": {
