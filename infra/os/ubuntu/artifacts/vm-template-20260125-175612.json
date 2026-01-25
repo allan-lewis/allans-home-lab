@@ -1,0 +1,10 @@
+{
+  "created_at": "2026-01-25T17:56:12Z",
+  "description": "Ubuntu cloud-image base with qemu-guest-agent and cloud-init drive",
+  "name": "ubuntu-noble-20260125",
+  "node": "sirius",
+  "storage": "local-lvm",
+  "vmid": 109,
+  "cloud_image_url": "https://cloud-images.ubuntu.com/noble/current/noble-server-cloudimg-amd64.img",
+  "cloud_image_sha256": "00786c0936a7dd91a6b07941ca60bb56652975e0e72f9dacf73c887ada420966"
+}
