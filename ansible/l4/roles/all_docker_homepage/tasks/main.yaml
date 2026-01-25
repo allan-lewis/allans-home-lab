@@ -1,4 +1,11 @@
 ---
+- name: "Ensure dotfiles destination directory exists"
+  ansible.builtin.file:
+    path: "{{ homepage_config_dir }}"
+    state: directory
+    mode: "0755"
+  tags: [l4, step_docker_homepage_all, step_docker_homepage]
+
 - name: Homepage | Render configuration YAML
   ansible.builtin.template:
     src: "{{ item.src }}"
