@@ -14,7 +14,7 @@ pacman -Sy --noconfirm archlinux-keyring
 
 # --- Pick target disk ---
 pick_disk() {
-  for d in /dev/vda /dev/sda /dev/nvme0n1; do
+  for d in /dev/nvme0n1 /dev/vda /dev/sda; do
     [ -b "$d" ] && echo "$d" && return 0
   done
   log "No suitable disk found"; exit 1
