@@ -1,0 +1,15 @@
+{% if not cloud_init_write_network_config %}
+# network-config intentionally omitted (cloud_init_write_network_config=false)
+{% else %}
+version: 2
+ethernets:
+  eth0:
+    match:
+      name: "{{ cloud_init_network_interface_match }}"
+{% if cloud_init_network_dhcp | default(true) %}
+    dhcp4: true
+{% else %}
+    dhcp4: false
+{% endif %}
+{% endif %}
+

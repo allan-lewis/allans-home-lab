@@ -8,3 +8,5 @@ all_devops_packages:
   - talosctl
   - helm
   - kustomize
+  - xorriso
+

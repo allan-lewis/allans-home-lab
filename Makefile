@@ -29,6 +29,7 @@ TF_DIR ?= terraform/l2
   help \
   clean \
   l0-runway \
+	l1-arch-cloud-init-% \
   l1-arch-iso \
   l1-arch-template \
   l1-haos-capture-% \
@@ -66,6 +67,9 @@ clean: ## Remove all non-versioned build artifacts and temporary files
 
 l0-runway: ## Runway checks (OS/persona independent)
 	@$(RUN) bash -lc 'scripts/l0/runway.sh'
+
+l1-arch-cloud-init-%: ## Prepare a cloud-init seed ISO for use on bare metal Arch installations
+	@$(RUN) bash -lc 'set -euo pipefail; scripts/l1/cloud-init-seed.sh "$*"'
 
 l1-arch-iso: ## Put a custom, bootable Arch ISO onto Proxmox
 	@$(RUN) bash -lc 'set -euo pipefail; \

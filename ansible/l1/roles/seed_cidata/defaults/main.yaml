@@ -1,0 +1,18 @@
+---
+cloud_init_seed_out_dir: "{{ playbook_dir }}/../../artifacts/cidata"
+cloud_init_seed_volume_id: "cidata"
+
+cloud_init_default_user:
+  name: "lab"
+  gecos: "Lab User"
+  groups: ["wheel", "users"]
+  sudo: ["ALL=(ALL) NOPASSWD:ALL"]
+  shell: "/bin/bash"
+
+cloud_init_ssh_authorized_keys:
+  - "{{ lookup('env', 'TF_VAR_PROXMOX_VM_PUBLIC_KEY') }}"
+
+cloud_init_write_network_config: false
+cloud_init_network_dhcp: true
+cloud_init_network_interface_match: "en* eth* ens* enp*"
+

@@ -1,0 +1,89 @@
+---
+- name: Seed | Validate target_host exists in inventory
+  ansible.builtin.assert:
+    that:
+      - target_host is defined
+      - target_host | length > 0
+      - hostvars[target_host] is defined
+    fail_msg: >
+      target_host is missing or not found in inventory.
+      Provide --extra-vars "target_host=<hostname>".
+
+- name: Ensure SSH_PUBLIC_KEY is set
+  ansible.builtin.assert:
+    that:
+      - lookup('env', 'SSH_PUBLIC_KEY') | length > 0
+    fail_msg: "SSH_PUBLIC_KEY environment variable must be set"
+
+- name: Seed | Compute output paths
+  ansible.builtin.set_fact:
+    seed_host_dir: "{{ cloud_init_seed_out_dir }}/{{ target_host }}"
+    seed_work_dir: "{{ cloud_init_seed_out_dir }}/{{ target_host }}/work"
+    seed_iso_path: "{{ cloud_init_seed_out_dir }}/{{ target_host }}/cidata.iso"
+
+- name: Seed | Ensure output directories exist
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: "0755"
+  loop:
+    - "{{ seed_host_dir }}"
+    - "{{ seed_work_dir }}"
+
+# Pull “source of truth” values from the inventory record for target_host.
+# You can rename these mappings to match your existing conventions.
+- name: Seed | Set derived seed facts from inventory
+  ansible.builtin.set_fact:
+    seed_instance_id: "{{ hostvars[target_host].cloud_init_instance_id | default(target_host) }}"
+    seed_local_hostname: "{{ hostvars[target_host].cloud_init_local_hostname | default(target_host) }}"
+    seed_ssh_keys: "{{ hostvars[target_host].cloud_init_ssh_authorized_keys | default([]) }}"
+    seed_default_user: "{{ hostvars[target_host].cloud_init_default_user | default(cloud_init_default_user) }}"
+    seed_write_network_config: "{{ hostvars[target_host].cloud_init_write_network_config | default(cloud_init_write_network_config) }}"
+    seed_network_dhcp: "{{ hostvars[target_host].cloud_init_network_dhcp | default(cloud_init_network_dhcp) }}"
+    seed_network_match: "{{ hostvars[target_host].cloud_init_network_interface_match | default(cloud_init_network_interface_match) }}"
+
+- name: Seed | Render meta-data
+  ansible.builtin.template:
+    src: meta-data.j2
+    dest: "{{ seed_work_dir }}/meta-data"
+    mode: "0644"
+  vars:
+    instance_id: "{{ seed_instance_id }}"
+    local_hostname: "{{ seed_local_hostname }}"
+
+- name: Seed | Render user-data
+  ansible.builtin.template:
+    src: user-data.j2
+    dest: "{{ seed_work_dir }}/user-data"
+    mode: "0644"
+  vars:
+    local_hostname: "{{ seed_local_hostname }}"
+    default_user: "{{ seed_default_user }}"
+    ssh_authorized_keys: "{{ seed_ssh_keys }}"
+
+- name: Seed | Optionally render network-config
+  ansible.builtin.template:
+    src: network-config.j2
+    dest: "{{ seed_work_dir }}/network-config"
+    mode: "0644"
+  when: seed_write_network_config | bool
+  vars:
+    dhcp4: "{{ seed_network_dhcp }}"
+    iface_match: "{{ seed_network_match }}"
+
+- name: Seed | Check for xorriso
+  ansible.builtin.command: xorriso -version
+  register: xorriso_check
+  changed_when: false
+  failed_when: xorriso_check.rc != 0
+
+- name: Seed | Build cidata ISO
+  ansible.builtin.command: >
+    xorriso -as mkisofs
+    -output {{ seed_iso_path }}
+    -volid {{ cloud_init_seed_volume_id }}
+    -joliet -rock
+    {{ seed_work_dir }}/user-data
+    {{ seed_work_dir }}/meta-data
+    {% if seed_write_network_config | bool %}{{ seed_work_dir }}/network-config{% endif %}
+
