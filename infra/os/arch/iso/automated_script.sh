@@ -22,6 +22,11 @@ pick_disk() {
 DISK="$(pick_disk)"
 log "Using disk: $DISK"
 
+if [[ "$(cat /sys/block/$(basename "$DISK")/removable 2>/dev/null || echo 0)" == "1" ]]; then
+  log "Refusing to install to removable disk: $DISK"
+  exit 1
+fi
+
 # --- Partition + filesystem ---
 swapoff -a || true
 umount -R /mnt || true
