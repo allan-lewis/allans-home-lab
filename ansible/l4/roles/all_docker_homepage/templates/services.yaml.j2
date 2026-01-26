@@ -31,16 +31,6 @@
             url: https://procyon.hosts.allanshomelab.com
             username: truenas_admin
             password: "{{ lookup('env', 'HOMEPAGE_VAR_TRUENAS_PASSWORD') }}"
-    - Shardik:
-        icon: proxmox.png
-        href: https://shardik.hosts.allanshomelab.com
-        description: Hypervisor
-        widget:
-            type: proxmox
-            url: https://shardik.hosts.allanshomelab.com
-            username: "{{ lookup('env', 'HOMEPAGE_VAR_SHARDIK_USERNAME') }}"
-            password: "{{ lookup('env', 'HOMEPAGE_VAR_SHARDIK_PASSWORD') }}"
-            fields: ['vms', 'resources.cpu', 'resources.mem']
     - Sirius:
         icon: proxmox.png
         href: https://sirius.hosts.allanshomelab.com

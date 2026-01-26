@@ -126,10 +126,6 @@ gatus_https_endpoints:
     group: "Sites (Hosts)"
     url: "https://derry.hosts.allanshomelab.com"
     pattern: "*portal*"
-  - name: "Shardik"
-    group: "Sites (Hosts)"
-    url: "https://shardik.hosts.allanshomelab.com"
-    pattern: "*Proxmox*"
   - name: "Sirius"
     group: "Sites (Hosts)"
     url: "https://sirius.hosts.allanshomelab.com"
@@ -315,10 +311,6 @@ traefik_services:
     host: sirius.hosts.allanshomelab.com
     url: "https://{{ hostvars['sirius'].ansible_host }}:8006"
     scheme: https
-  - name: shardik
-    host: shardik.hosts.allanshomelab.com
-    url: "https://{{ hostvars['shardik'].ansible_host }}:8006"
-    scheme: https
   - name: immich
     host: photos.allanandvaia.com
     url: "http://{{ hostvars['misery'].ansible_host }}:2283"
@@ -431,8 +423,6 @@ pihole_cname_records:
   - alias: "derry.hosts.allanshomelab.com"
     target: "hosts.allanshomelab.com"
   - alias: "gilead.hosts.allanshomelab.com"
-    target: "hosts.allanshomelab.com"
-  - alias: "shardik.hosts.allanshomelab.com"
     target: "hosts.allanshomelab.com"
   - alias: "procyon.hosts.allanshomelab.com"
     target: "hosts.allanshomelab.com"
