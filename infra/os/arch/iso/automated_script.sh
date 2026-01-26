@@ -93,9 +93,9 @@ systemctl enable sshd.service qemu-guest-agent.service
 systemctl enable cloud-init-local.service cloud-init-main.service cloud-config.service cloud-final.service
 
 # Install GRUB (BIOS mode)
-if [[ -b /dev/vda ]]; then grub-install --target=i386-pc /dev/vda
+if [[ -b /dev/nvme0n1 ]]; then grub-install --target=i386-pc /dev/nvme0n1
 elif [[ -b /dev/sda ]]; then grub-install --target=i386-pc /dev/sda
-elif [[ -b /dev/nvme0n1 ]]; then grub-install --target=i386-pc /dev/nvme0n1
+elif [[ -b /dev/vda ]]; then grub-install --target=i386-pc /dev/vda
 else echo "No disk for grub-install" >&2; exit 1; fi
 
 # --- Ensure GRUB boots a pacman-managed kernel ---
