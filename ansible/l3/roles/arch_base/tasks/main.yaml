@@ -20,6 +20,7 @@
     name: qemu-guest-agent
     state: present
   become: true
+  when: arch_qga | default(true)
 
 - name: QGA | enable & start service
   ansible.builtin.systemd:
@@ -27,6 +28,7 @@
     enabled: true
     state: started
   become: true
+  when: arch_qga | default(true)
 
 - name: Time | set timezone (idempotent)
   ansible.builtin.command: "timedatectl set-timezone {{ arch_base_timezone }}"

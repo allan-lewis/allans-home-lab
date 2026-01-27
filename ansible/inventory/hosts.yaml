@@ -105,6 +105,7 @@ all:
             arch_devops:
               hosts:
                 cujo:
+                roland:
             arch_tinker:
               hosts:
                 callahan:

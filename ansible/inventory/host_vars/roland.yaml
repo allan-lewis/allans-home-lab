@@ -1,0 +1,11 @@
+---
+arch_qga: false
+
+doppler_service_token: "{{ lookup('env', 'DOPPLER_SERVICE_TOKEN_MATURIN') }}"
+doppler_config: "mat"
+doppler_project: "orchestrator"
+
+source_code_repos:
+  - repo: git@github.com:allan-lewis/allans-home-lab.git
+    dest: allans-home-lab
+    version: main
