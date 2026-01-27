@@ -242,13 +242,9 @@ gatus_https_endpoints:
     group: "Sites (Media)"
     url: "https://transmission.media.allanshomelab.com/transmission/web/"
     pattern: "*Transmission*"
-  - name: KVM (Shardik)
+  - name: KVM (Maturin)
     group: "Sites (KVM)"
-    url: "https://one.kvm.allanshomelab.com"
-    pattern: "*JetKVM*"
-  - name: KVM (Sirius)
-    group: "Sites (KVM)"
-    url: "https://two.kvm.allanshomelab.com"
+    url: "https://maturin.kvm.allanshomelab.com"
     pattern: "*JetKVM*"
   - name: "Nginx"
     group: "Sites (Docker)"
@@ -331,12 +327,8 @@ traefik_services:
     host: www.allanandvaia.com
     url: "http://{{ hostvars['overlook'].ansible_host }}:8123"
     scheme: http
-  - name: kvm1
-    host: one.kvm.allanshomelab.com
-    url: "http://192.168.86.247"
-    scheme: http
-  - name: kvm2
-    host: two.kvm.allanshomelab.com
+  - name: kvm
+    host: maturin.kvm.allanshomelab.com
     url: "http://192.168.86.248"
     scheme: http
   - name: tools
@@ -446,9 +438,7 @@ pihole_cname_records:
     target: "k8s.allanshomelab.com"
   - alias: "sonarr.k8s.allanshomelab.com"
     target: "k8s.allanshomelab.com"
-  - alias: "one.kvm.allanshomelab.com"
-    target: "kvm.allanshomelab.com"
-  - alias: "two.kvm.allanshomelab.com"
+  - alias: "maturin.kvm.allanshomelab.com"
     target: "kvm.allanshomelab.com"
   - alias: "prowlarr.media.allanshomelab.com"
     target: "media.allanshomelab.com"
