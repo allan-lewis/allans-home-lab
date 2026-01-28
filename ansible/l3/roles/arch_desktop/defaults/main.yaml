@@ -19,3 +19,7 @@ arch_desktop_extra_fonts:
 arch_desktop_extra_packages: []   # e.g., ["firefox", "alacritty", "gnome-disk-utility"]
 
 # For XFCE you likely want network-manager-applet in session; we just enable NetworkManager system-wide
+
+# GPU handling mode
+# auto | nvidia | amd | intel | none
+arch_desktop_gpu_mode: auto

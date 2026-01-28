@@ -1,0 +1,79 @@
+---
+- name: all_users | No-op when list is empty
+  ansible.builtin.meta: end_host
+  when: (all_users_users | default([]) | length) == 0
+
+- name: all_users | Validate default SSH key is present when users are requested
+  ansible.builtin.assert:
+    that:
+      - (all_users_ssh_public_key | default('') | trim) != ''
+    fail_msg: >
+      all_users_ssh_public_key is empty. Set TF_VAR_PROXMOX_VM_PUBLIC_KEY (preferred)
+      or override all_users_ssh_public_key.
+  when: (all_users_users | length) > 0
+
+# Normalize list items so downstream tasks can assume dicts.
+# Strings become: {name: "<string>"}
+- name: all_users | Normalize user specs
+  ansible.builtin.set_fact:
+    all_users_normalized: "{{ (all_users_normalized | default([])) + [normalized] }}"
+  vars:
+    normalized: >-
+      {{
+        item if (item is mapping)
+        else {'name': item}
+      }}
+  loop: "{{ all_users_users }}"
+
+- name: all_users | Validate user specs
+  ansible.builtin.assert:
+    that:
+      - (item.name | default('') | trim) != ''
+    fail_msg: "Invalid user spec (missing name): {{ item | to_nice_yaml }}"
+  loop: "{{ all_users_normalized }}"
+  loop_control:
+    label: "{{ item.name | default('MISSING_NAME') }}"
+
+- name: all_users | Fail if forbidden admin groups are requested
+  ansible.builtin.assert:
+    that:
+      - ((item.groups | default([])) | intersect(all_users_forbidden_groups)) | length == 0
+    fail_msg: >
+      User {{ item.name }} requests forbidden groups: {{
+        (item.groups | default([])) | intersect(all_users_forbidden_groups)
+      }}. Refusing to create an admin-capable account.
+  loop: "{{ all_users_normalized }}"
+  loop_control:
+    label: "{{ item.name }}"
+
+- name: all_users | Create users (password set or locked by convention)
+  ansible.builtin.user:
+    name: "{{ item.name }}"
+    state: "{{ item.state | default('present') }}"
+    shell: "{{ item.shell | default(all_users_default_shell) }}"
+    create_home: "{{ item.create_home | default(true) }}"
+    groups: "{{ item.groups | default(omit) }}"
+    append: "{{ (item.groups is defined) | ternary(item.append | default(true), omit) }}"
+    # Password logic:
+    # - if env var ALL_USERS_PASSWORD_HASH_<USER> exists: set password + ensure unlocked
+    # - else: lock password (disables password auth)
+    password: "{{ pw_hash if (pw_hash | length > 0) else omit }}"
+    password_lock: "{{ (pw_hash | length == 0) }}"
+    update_password: always
+  vars:
+    env_key: "{{ all_users_password_env_prefix ~ (item.name | upper) }}"
+    pw_hash: "{{ lookup('env', env_key) | default('', true) | trim }}"
+  loop: "{{ all_users_normalized }}"
+  loop_control:
+    label: "{{ item.name }}"
+
+- name: all_users | Ensure SSH authorized key present
+  ansible.posix.authorized_key:
+    user: "{{ item.name }}"
+    state: present
+    key: "{{ item.ssh_key | default(all_users_ssh_public_key) }}"
+    manage_dir: true
+  when: (item.state | default('present')) == 'present'
+  loop: "{{ all_users_normalized }}"
+  loop_control:
+    label: "{{ item.name }}"

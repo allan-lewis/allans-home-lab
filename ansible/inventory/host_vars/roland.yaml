@@ -1,4 +1,7 @@
 ---
+all_users_users:
+  - allan
+
 arch_qga: false
 
 doppler_service_token: "{{ lookup('env', 'DOPPLER_SERVICE_TOKEN_MATURIN') }}"
@@ -9,3 +12,9 @@ source_code_repos:
   - repo: git@github.com:allan-lewis/allans-home-lab.git
     dest: allans-home-lab
     version: main
+
+converge_arch_desktop: true
+arch_desktop_env: plasma
+arch_desktop_gpu_mode: nvidia
+arch_desktop_extra_packages:
+  - ghostty

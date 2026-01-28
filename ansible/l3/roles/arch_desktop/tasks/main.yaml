@@ -13,7 +13,7 @@
       {{
         {
           'gnome':  ['gnome', 'gnome-terminal', 'gnome-tweaks', 'network-manager-applet'],
-          'plasma': ['plasma-desktop', 'kde-systemsettings', 'konsole', 'plasma-nm'],
+          'plasma': ['plasma-desktop', 'systemsettings', 'konsole', 'plasma-nm'],
           'xfce':   ['xfce4', 'xfce4-goodies', 'network-manager-applet', 'lightdm-gtk-greeter'],
           'sway':   ['sway', 'alacritty', 'waybar', 'grim', 'slurp', 'swaybg', 'xdg-desktop-portal-wlr']
         }[arch_desktop_env]
@@ -80,13 +80,33 @@
   become: true
   tags: ['arch_desktop']
 
+- name: Desktop | Disable other known display managers
+  ansible.builtin.service:
+    name: "{{ item }}"
+    enabled: false
+    state: stopped
+  loop:
+    - gdm
+    - sddm
+    - lightdm
+  become: true
+  failed_when: false
+  tags: ['arch_desktop']
+
+- name: Desktop | Remove systemd display-manager alias (so we can switch DMs)
+  ansible.builtin.file:
+    path: /etc/systemd/system/display-manager.service
+    state: absent
+  become: true
+  tags: ['arch_desktop']
+
 - name: Desktop | Enable display manager (if any)
-  ansible.builtin.systemd:
-    name: "{{ _dm }}"
+  ansible.builtin.service:
+    name: "{{ _default_dm }}"
     enabled: true
     state: started
+  when: _default_dm != 'none'
   become: true
-  when: _dm != 'none'
   tags: ['arch_desktop']
 
 # Optional features: Bluetooth
@@ -140,4 +160,22 @@
     state: present
   become: true
   when: arch_desktop_extra_packages | length > 0
+  tags: ['arch_desktop']
+
+# GPU handling
+- name: Desktop | Configure NVIDIA GPU
+  ansible.builtin.import_tasks: gpu_nvidia.yml
+  when: arch_desktop_gpu_mode == 'nvidia'
+  tags: ['arch_desktop', 'gpu']
+
+- name: Desktop | Mark reboot required (NVIDIA)
+  ansible.builtin.set_fact:
+    arch_desktop_reboot_required: true
+  when: arch_desktop_gpu_mode == 'nvidia'
+  
+- name: Desktop | Reboot if required
+  ansible.builtin.reboot:
+    reboot_timeout: 600
+  when: arch_desktop_reboot_required | default(false)
+  become: true
   tags: ['arch_desktop']

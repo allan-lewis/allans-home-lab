@@ -170,3 +170,10 @@
       when: converge_tailscale
       tags: [l3, step_tailscale]
 
+    - name: L3 | All | users
+      ansible.builtin.include_role:
+        name: all_users
+        apply:
+          tags: [l3, step_users]
+      when: converge_arch or converge_ubuntu
+      tags: [l3, step_users]

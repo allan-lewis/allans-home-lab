@@ -1,0 +1,21 @@
+---
+# List of users to manage. Each item can be either:
+# - "allan"
+# - { name: "allan", shell: "/bin/bash", groups: ["audio"], ssh_key: "ssh-ed25519 AAA..." }
+all_users_users: []
+
+# Default shell if not specified per-user.
+all_users_default_shell: /bin/bash
+
+# Default SSH public key used for all users unless overridden.
+# Pulled from env var by default, per your convention.
+all_users_ssh_public_key: "{{ lookup('env', 'TF_VAR_PROXMOX_VM_PUBLIC_KEY') | default('', true) }}"
+
+# Password hash env var convention:
+#   ALL_USERS_PASSWORD_HASH_<USERNAME_UPPER>
+all_users_password_env_prefix: "ALL_USERS_PASSWORD_HASH_"
+
+# Safety rail: forbid accidentally granting admin groups
+all_users_forbidden_groups:
+  - wheel
+  - sudo
