@@ -26,14 +26,34 @@
               "slot": 4,
               "by_id": "ata-T-FORCE_1TB_TPBF2212050020101597",
               "opts": { "cache": "none", "format": "raw", "iothread": 1 }
+            },
+            {
+              "slot": 5,
+              "by_id": "ata-ST8000VN004-2M2101_WSD74XFX",
+              "opts": { "cache": "none", "format": "raw", "iothread": 1 }
+            },
+            {
+              "slot": 6,
+              "by_id": "ata-ST8000VN004-2M2101_WSD929FL",
+              "opts": { "cache": "none", "format": "raw", "iothread": 1 }
+            },
+            {
+              "slot": 7,
+              "by_id": "ata-ST8000VN004-2M2101_WSD92C4L",
+              "opts": { "cache": "none", "format": "raw", "iothread": 1 }
+            },
+            {
+              "slot": 8,
+              "by_id": "ata-ST8000VN004-2M2101_WSD92E7L",
+              "opts": { "cache": "none", "format": "raw", "iothread": 1 }
             }
           ],
           "pools": [
-            { "name": "pool0", "layout": "mirror", "slots": [3, 4] }
+            { "name": "pool0", "layout": "mirror", "slots": [3, 4] },
+            { "name": "pool1", "layout": "raidz1", "slots": [5, 6, 7, 8] }
           ]
         }
       }
     }
   }
 }
-
