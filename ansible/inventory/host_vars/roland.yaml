@@ -1,6 +1,8 @@
 ---
+desktop_interactive_user: allan
+
 all_users_users:
-  - allan
+  - "{{ desktop_interactive_user }}"
 
 arch_qga: false
 
@@ -26,3 +28,12 @@ arch_aur_packages:
 
 arch_desktop_flatpak_apps:
   - app.zen_browser.zen
+
+dotfiles_users:
+  - "{{ gitops_user }}"
+  - "{{ desktop_interactive_user }}"
+
+ssh_keys_users:
+  - root
+  - "{{ gitops_user }}"
+  - "{{ desktop_interactive_user }}"

@@ -1,7 +1,10 @@
 # ansible/roles/dotfiles/defaults/main.yml
 
-# User whose dotfiles we are managing
-dotfiles_user: "lab"   # or override per-host/group
+# Default: keep current behavior (single user)
+dotfiles_user: "lab"
+
+# New: multi-user support (if set, takes precedence)
+dotfiles_users: []
 
 # Compute the home directory for that user
 dotfiles_home: >-
