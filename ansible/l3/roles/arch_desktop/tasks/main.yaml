@@ -162,6 +162,10 @@
   when: arch_desktop_extra_packages | length > 0
   tags: ['arch_desktop']
 
+- name: Desktop | Flatpak apps
+  ansible.builtin.import_tasks: flatpak.yml
+  tags: ['arch_desktop', 'flatpak']
+
 # GPU handling
 - name: Desktop | Configure NVIDIA GPU
   ansible.builtin.import_tasks: gpu_nvidia.yml

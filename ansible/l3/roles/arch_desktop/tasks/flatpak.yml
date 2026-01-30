@@ -1,0 +1,31 @@
+---
+# Ensure Flatpak is available and Flathub is configured, then install requested Flatpak apps.
+
+- name: Flatpak | Ensure flatpak is installed (Arch)
+  community.general.pacman:
+    name: flatpak
+    state: present
+    update_cache: true
+  become: true
+  when: ansible_facts.os_family == "Archlinux"
+
+# Add Flathub remote (idempotent)
+- name: Flatpak | Add Flathub remote if missing
+  ansible.builtin.command: >
+    flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+  changed_when: false
+  become: true
+
+# Optional: refresh appstream metadata (nice-to-have; not strictly required)
+- name: Flatpak | Update remotes (best effort)
+  ansible.builtin.command: flatpak update --appstream -y
+  changed_when: false
+  failed_when: false
+  become: true
+
+- name: Flatpak | Install requested Flatpak apps (if any)
+  ansible.builtin.command: >
+    flatpak install -y flathub {{ item }}
+  loop: "{{ arch_desktop_flatpak_apps | default([]) }}"
+  when: (arch_desktop_flatpak_apps | default([])) | length > 0
+  become: true

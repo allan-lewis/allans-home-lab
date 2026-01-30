@@ -10,45 +10,86 @@
   become: true
 
 # -------------------------------------------------------------------
-# Install AUR helper (paru-bin by default) for the regular user
+# Install / Repair AUR helper (paru-bin by default)
+# If helper exists but is broken (e.g. libalpm SONAME mismatch), rebuild from source.
 # -------------------------------------------------------------------
 
-- name: AUR | Check if helper is already installed
+- name: AUR | Check if helper is installed and runnable
   ansible.builtin.command: "{{ arch_aur_helper }} --version"
-  register: _aur_helper_version
+  register: _aur_helper_health
   changed_when: false
   failed_when: false
 
-- name: AUR | Create temp build dir
+# If helper is broken or missing, decide what we will build.
+# For paru, prefer building 'paru' from source for repair (paru-bin can break across libalpm bumps).
+- name: AUR | Choose helper package for build (repair uses source package)
+  ansible.builtin.set_fact:
+    _aur_helper_build_pkg: >-
+      {{
+        (arch_aur_helper == 'paru' and (arch_aur_helper_pkg | default('paru-bin')) == 'paru-bin')
+        | ternary('paru', arch_aur_helper_pkg | default('paru'))
+      }}
+  when: _aur_helper_health.rc != 0
+
+# paru (source) needs rust/cargo; paru-bin does not.
+- name: AUR | Ensure Rust toolchain exists (only when building paru from source)
+  community.general.pacman:
+    name:
+      - rust
+      - cargo
+    state: present
+  become: true
+  when:
+    - _aur_helper_health.rc != 0
+    - _aur_helper_build_pkg == 'paru'
+
+- name: AUR | Create temp build dir (helper)
   ansible.builtin.file:
     path: "/tmp/aur-helper-build"
     state: directory
     mode: "0755"
     owner: "{{ arch_aur_user }}"
     group: "{{ arch_aur_user }}"
-  when: _aur_helper_version.rc != 0
+  when: _aur_helper_health.rc != 0
   become: true
 
-- name: AUR | Clone helper ({{ arch_aur_helper_pkg }}) if missing
+- name: AUR | Clone helper ({{ _aur_helper_build_pkg }}) if missing/broken
   ansible.builtin.git:
-    repo: "https://aur.archlinux.org/{{ arch_aur_helper_pkg }}.git"
-    dest: "/tmp/aur-helper-build/{{ arch_aur_helper_pkg }}"
+    repo: "https://aur.archlinux.org/{{ _aur_helper_build_pkg }}.git"
+    dest: "/tmp/aur-helper-build/{{ _aur_helper_build_pkg }}"
     version: HEAD
     update: yes
   become: true
   become_user: "{{ arch_aur_user }}"
-  when: _aur_helper_version.rc != 0
+  when: _aur_helper_health.rc != 0
+
+- name: AUR | Remove conflicting paru-bin packages when repairing to source paru
+  community.general.pacman:
+    name:
+      - paru-bin
+      - paru-bin-debug
+    state: absent
+  become: true
+  when:
+    - _aur_helper_health.rc != 0
+    - _aur_helper_build_pkg == 'paru'
 
 - name: AUR | Build & install helper non-interactively
   ansible.builtin.command: "makepkg -si --noconfirm --needed"
   args:
-    chdir: "/tmp/aur-helper-build/{{ arch_aur_helper_pkg }}"
+    chdir: "/tmp/aur-helper-build/{{ _aur_helper_build_pkg }}"
   become: true
   become_user: "{{ arch_aur_user }}"
   environment:
     # Prevent editor/review prompts from helper toolchains
     MAKEPKG: "1"
-  when: _aur_helper_version.rc != 0
+  when: _aur_helper_health.rc != 0
+
+- name: AUR | Verify helper works after install/repair
+  ansible.builtin.command: "{{ arch_aur_helper }} --version"
+  register: _aur_helper_post
+  changed_when: false
+  failed_when: _aur_helper_post.rc != 0
 
 # -------------------------------------------------------------------
 # Prepare GPG for AUR usage + robust key pre-import (valid Ansible)
@@ -138,7 +179,6 @@
         exit 0
       fi
     done
-    # Fallback: pull armored key over HTTPS and import
     curl -fsSL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x${key}" | gpg --import
   args:
     executable: /bin/bash

@@ -18,3 +18,11 @@ arch_desktop_env: plasma
 arch_desktop_gpu_mode: nvidia
 arch_desktop_extra_packages:
   - ghostty
+
+converge_arch_aur: true
+# AUR packages to install
+arch_aur_packages:
+- vscodium-bin
+
+arch_desktop_flatpak_apps:
+  - app.zen_browser.zen

@@ -23,3 +23,8 @@ arch_desktop_extra_packages: []   # e.g., ["firefox", "alacritty", "gnome-disk-u
 # GPU handling mode
 # auto | nvidia | amd | intel | none
 arch_desktop_gpu_mode: auto
+
+arch_desktop_flatpak_apps: []
+# e.g.
+# arch_desktop_flatpak_apps:
+#   - app.zen_browser.zen
