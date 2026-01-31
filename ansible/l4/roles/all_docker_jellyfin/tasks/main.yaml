@@ -27,6 +27,6 @@
         mode: "0755"
       - path: "{{ jellyfin_media_library }}"
         nfs: true
-        nfs_server: "{{ hostvars['procyon'].ansible_host }}"
+        nfs_server: "{{ hostvars['pennywise'].ansible_host }}"
         nfs_path: "/mnt/pool1/media-library"
         nfs_opts: "ro"

@@ -45,7 +45,7 @@ converge_docker_observability: false
 converge_docker_trilium: false
 
 ## HOMELAB-WIDE VARIABLES
-default_remote_nas_ip: "{{ hostvars['procyon'].ansible_host }}"
+default_remote_nas_ip: "{{ hostvars['pennywise'].ansible_host }}"
 
 git_author_name: "Allan Lewis"
 git_author_email: "allan@allanshomelab.com"

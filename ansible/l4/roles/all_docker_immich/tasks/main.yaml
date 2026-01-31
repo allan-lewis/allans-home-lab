@@ -27,7 +27,7 @@
       # NFS uploads (do not chown from client; role will verify it's NFS-mounted)
       - path: "{{ immich_upload_mount }}"
         nfs: true
-        nfs_server: "{{ hostvars['procyon'].ansible_host }}"
+        nfs_server: "{{ hostvars['pennywise'].ansible_host }}"
         nfs_path: "{{ immich_upload_mount_nfs_path }}"
         nfs_opts: "rw"
       # Postgres data (local; container will chown on first init)
