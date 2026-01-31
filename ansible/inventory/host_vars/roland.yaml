@@ -25,6 +25,7 @@ converge_arch_aur: true
 # AUR packages to install
 arch_aur_packages:
 - vscodium-bin
+- google-chrome
 
 arch_desktop_flatpak_apps:
   - app.zen_browser.zen
