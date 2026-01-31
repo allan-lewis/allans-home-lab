@@ -81,11 +81,6 @@ all:
       gatus_slug: "(NAS)"
       prometheus_scrape_jobs:
         node-exporter: [9100]
-    procyon:
-      ansible_host: 192.168.86.106
-      gatus_slug: "(NAS)"
-      prometheus_scrape_jobs:
-        node-exporter: [9100]
     roland:
       ansible_host: 192.168.86.207
       gatus_slug: "(Arch Desktop, BTW)"

@@ -130,10 +130,6 @@ gatus_https_endpoints:
     group: "Sites (Hosts)"
     url: "https://sirius.hosts.allanshomelab.com"
     pattern: "*Proxmox*"
-  - name: "Procyon"
-    group: "Sites (Hosts)"
-    url: "https://procyon.hosts.allanshomelab.com/ui/"
-    pattern: "*ix-root*"
   - name: "Pennywise"
     group: "Sites (Hosts)"
     url: "https://pennywise.hosts.allanshomelab.com/ui/"
@@ -264,9 +260,6 @@ traefik_services:
   - name: "gilead"
     host: gilead.hosts.allanshomelab.com
     url: "http://{{hostvars['gilead'].ansible_host}}:80"
-  - name: "procyon"
-    host: procyon.hosts.allanshomelab.com
-    url: "http://{{hostvars['procyon'].ansible_host}}:80"
   - name: "pennywise"
     host: pennywise.hosts.allanshomelab.com
     url: "http://{{hostvars['pennywise'].ansible_host}}:80"
@@ -415,8 +408,6 @@ pihole_cname_records:
   - alias: "derry.hosts.allanshomelab.com"
     target: "hosts.allanshomelab.com"
   - alias: "gilead.hosts.allanshomelab.com"
-    target: "hosts.allanshomelab.com"
-  - alias: "procyon.hosts.allanshomelab.com"
     target: "hosts.allanshomelab.com"
   - alias: "pennywise.hosts.allanshomelab.com"
     target: "hosts.allanshomelab.com"
