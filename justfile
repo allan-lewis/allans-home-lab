@@ -23,13 +23,45 @@ run_prefix := if doppler == "0" {
 
 # Remove all non-versioned build artifacts and temporary files
 clean:
-  {{run_prefix}} bash -lc 'scripts/clean.sh'
+  {{run_prefix}} scripts/clean.sh
 
 # Runway checks (OS/persona independent)
 l0-runway:
-  {{run_prefix}} bash -lc 'scripts/l0/runway.sh'
+  {{run_prefix}} scripts/l0/runway.sh
 
 # Prepare a cloud-init seed ISO for use on bare metal Arch installations
 l1-arch-cloud-init host:
-  {{run_prefix}} bash -lc 'set -euo pipefail; scripts/l1/cloud-init-seed.sh "{{host}}"'
+  {{run_prefix}} scripts/l1/cloud-init-seed.sh "{{host}}"
+
+# Put a custom, bootable Arch ISO onto Proxmox
+l1-arch-iso:
+  {{run_prefix}} scripts/l1/arch-iso.sh
+
+# Prepare a Proxmox VM template suitable for Arch installations
+l1-arch-template:
+  {{run_prefix}} scripts/l1/arch-template.sh packer/l1/arch
+
+# Export a HAOS Proxmox VM's boot disk to an S3 bucket
+l1-haos-capture vmid:
+  S3_BUCKET=gitops-homelab-orchestrator-disks \
+  S3_PREFIX=proxmox-images \
+  {{run_prefix}} scripts/l1/appliance-capture.sh haos "{{vmid}}"
+
+# Prepare a Proxmox VM template suitable for HAOS installations
+l1-haos-template:
+  {{run_prefix}} scripts/l1/appliance-template.sh haos
+
+# Export a TrueNAS Proxmox VM's boot disk to an S3 bucket
+l1-truenas-capture vmid:
+  S3_BUCKET=gitops-homelab-orchestrator-disks \
+  S3_PREFIX=proxmox-images \
+  {{run_prefix}} scripts/l1/appliance-capture.sh truenas "{{vmid}}"
+
+# Prepare a Proxmox VM template suitable for TrueNAS installations
+l1-truenas-template:
+  {{run_prefix}} scripts/l1/appliance-template.sh truenas
+
+# Prepare a Proxmox VM template suitable for Ubuntu installations
+l1-ubuntu-template:
+  {{run_prefix}} scripts/l1/ubuntu-template.sh
 
