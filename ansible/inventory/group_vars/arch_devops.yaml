@@ -9,4 +9,5 @@ all_devops_packages:
   - helm
   - kustomize
   - xorriso
+  - just
 

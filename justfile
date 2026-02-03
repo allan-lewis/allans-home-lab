@@ -28,3 +28,8 @@ clean:
 # Runway checks (OS/persona independent)
 l0-runway:
   {{run_prefix}} bash -lc 'scripts/l0/runway.sh'
+
+# Prepare a cloud-init seed ISO for use on bare metal Arch installations
+l1-arch-cloud-init host:
+  {{run_prefix}} bash -lc 'set -euo pipefail; scripts/l1/cloud-init-seed.sh "{{host}}"'
+
