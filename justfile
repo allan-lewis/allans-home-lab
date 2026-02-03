@@ -41,6 +41,10 @@ l1-arch-iso:
 l1-arch-template:
   {{run_prefix}} scripts/l1/arch-template.sh packer/l1/arch
 
+# Write cloud-init ISOs to removable USB drives
+l1-cloud-init-usbs os_iso ci_iso:
+  {{run_prefix}} scripts/l1/write-arch-usbs.sh "{{os_iso}}" "{{ci_iso}}"
+
 # Export a HAOS Proxmox VM's boot disk to an S3 bucket
 l1-haos-capture vmid:
   S3_BUCKET=gitops-homelab-orchestrator-disks \
