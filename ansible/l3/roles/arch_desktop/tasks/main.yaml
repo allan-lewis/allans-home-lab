@@ -12,12 +12,53 @@
     _desktop_pkgs: >-
       {{
         {
-          'gnome':  ['gnome', 'gnome-terminal', 'gnome-tweaks', 'network-manager-applet'],
-          'plasma': ['plasma-desktop', 'systemsettings', 'konsole', 'plasma-nm'],
-          'xfce':   ['xfce4', 'xfce4-goodies', 'network-manager-applet', 'lightdm-gtk-greeter'],
-          'sway':   ['sway', 'alacritty', 'waybar', 'grim', 'slurp', 'swaybg', 'xdg-desktop-portal-wlr']
+          'gnome': [
+            'gnome',
+            'gnome-terminal',
+            'gnome-tweaks',
+            'network-manager-applet',
+            'xdg-desktop-portal-gnome'
+          ],
+
+          'plasma': [
+            'plasma-desktop',
+            'systemsettings',
+            'konsole',
+            'plasma-nm',
+            'sddm',
+            'sddm-kcm',
+            'plasma-x11-session',
+            'kwin-x11',
+            'xorg-server',
+            'xorg-xinit',
+            'xorg-xrandr',
+            'kde-gtk-config',
+            'breeze-gtk',
+            'xdg-desktop-portal',
+            'xdg-desktop-portal-kde'
+          ],
+
+          'xfce': [
+            'xfce4',
+            'xfce4-goodies',
+            'network-manager-applet',
+            'lightdm',
+            'lightdm-gtk-greeter'
+          ],
+
+          'sway': [
+            'sway',
+            'alacritty',
+            'waybar',
+            'grim',
+            'slurp',
+            'swaybg',
+            'xdg-desktop-portal-wlr',
+            'xdg-desktop-portal'
+          ]
         }[arch_desktop_env]
       }}
+
     _default_dm: >-
       {{
         {
