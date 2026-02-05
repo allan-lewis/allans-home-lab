@@ -1,0 +1,182 @@
+---
+# NVIDIA GPU setup for Arch + X11 (hybrid iGPU + dGPU)
+# XFCE-friendly, automation-safe, reboot-aware
+
+########################################################################
+# Reboot flag defaults (safe when role runs standalone)
+########################################################################
+
+- name: GPU | Initialize reboot flags
+  ansible.builtin.set_fact:
+    arch_reboot_required: "{{ arch_reboot_required | default(false) }}"
+    arch_reboot_reasons: "{{ arch_reboot_reasons | default([]) }}"
+  tags: ['arch_nvidia']
+
+########################################################################
+# Driver packages
+########################################################################
+
+- name: GPU | Install NVIDIA driver packages
+  community.general.pacman:
+    name:
+      - nvidia-open
+      - nvidia-utils
+      - nvidia-settings
+      - opencl-nvidia
+    state: present
+  become: true
+  register: nvidia_pkgs
+  tags: ['arch_nvidia']
+
+########################################################################
+# Discover BusID (robust, no Jinja parsing)
+########################################################################
+
+- name: GPU | Discover NVIDIA BusID for Xorg (PCI:D:B:F)
+  ansible.builtin.shell: |
+    set -euo pipefail
+
+    # Find NVIDIA VGA controller first, fall back to 3D controller
+    addr="$(lspci -Dnnd ::0300 | awk 'NR==1{print $1; exit}' || true)"
+
+    if [[ -z "${addr}" ]]; then
+      addr="$(lspci -Dnnd ::0302 | awk 'NR==1{print $1; exit}' || true)"
+    fi
+
+    [[ -n "${addr}" ]] || { echo "NO_NVIDIA_FOUND" >&2; exit 2; }
+
+    # Normalize: strip domain if present (0000:)
+    addr="${addr#0000:}"
+
+    # addr now: 01:00.0
+    bus="${addr%%:*}"        # 01
+    devfunc="${addr#*:}"     # 00.0
+    dev="${devfunc%%.*}"     # 00
+    func="${devfunc##*.}"    # 0
+
+    # Convert hex → decimal for Xorg
+    printf 'PCI:%d:%d:%d\n' "0x${bus}" "0x${dev}" "0x${func}"
+  args:
+    executable: /bin/bash
+  register: nvidia_busid_cmd
+  changed_when: false
+  tags: ['arch_nvidia']
+
+- name: GPU | Set NVIDIA BusID fact
+  ansible.builtin.set_fact:
+    nvidia_busid: "{{ nvidia_busid_cmd.stdout | trim }}"
+  tags: ['arch_nvidia']
+
+- name: GPU | Validate NVIDIA BusID
+  ansible.builtin.assert:
+    that:
+      - nvidia_busid is match('^PCI:[0-9]+:[0-9]+:[0-9]+$')
+    fail_msg: "Invalid NVIDIA BusID computed: '{{ nvidia_busid }}'"
+  tags: ['arch_nvidia']
+
+########################################################################
+# Kernel / module configuration
+########################################################################
+
+- name: GPU | Blacklist nouveau
+  ansible.builtin.copy:
+    dest: /etc/modprobe.d/blacklist-nouveau.conf
+    content: |
+      blacklist nouveau
+      options nouveau modeset=0
+    owner: root
+    group: root
+    mode: '0644'
+  become: true
+  register: blacklist_nouveau
+  tags: ['arch_nvidia']
+
+- name: GPU | Ensure NVIDIA modules load early
+  ansible.builtin.copy:
+    dest: /etc/modules-load.d/nvidia.conf
+    content: |
+      nvidia
+      nvidia_modeset
+      nvidia_uvm
+      nvidia_drm
+    owner: root
+    group: root
+    mode: '0644'
+  become: true
+  register: nvidia_modules_load
+  tags: ['arch_nvidia']
+
+########################################################################
+# Xorg configuration
+########################################################################
+
+- name: GPU | Ensure Xorg config directory exists
+  ansible.builtin.file:
+    path: /etc/X11/xorg.conf.d
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+  become: true
+  tags: ['arch_nvidia']
+
+- name: GPU | Force NVIDIA as primary Xorg GPU
+  ansible.builtin.copy:
+    dest: /etc/X11/xorg.conf.d/10-nvidia-primary.conf
+    content: |
+      Section "Device"
+          Identifier  "Nvidia Card"
+          Driver      "nvidia"
+          BusID       "{{ nvidia_busid }}"
+          Option      "AllowEmptyInitialConfiguration"
+          Option      "PrimaryGPU" "yes"
+      EndSection
+    owner: root
+    group: root
+    mode: '0644'
+  become: true
+  register: nvidia_xorg_conf
+  tags: ['arch_nvidia']
+
+########################################################################
+# Initramfs rebuild (only when needed)
+########################################################################
+
+- name: GPU | Rebuild initramfs if GPU config changed
+  ansible.builtin.command: mkinitcpio -P
+  become: true
+  register: mkinitcpio_run
+  changed_when: true
+  when:
+    - blacklist_nouveau.changed or
+      nvidia_modules_load.changed or
+      nvidia_xorg_conf.changed
+  tags: ['arch_nvidia']
+
+########################################################################
+# Reboot flagging (aggregated, no forced reboot)
+########################################################################
+
+- name: GPU | Mark reboot required when needed
+  ansible.builtin.set_fact:
+    arch_reboot_required: true
+    arch_reboot_reasons: >-
+      {{
+        arch_reboot_reasons +
+        (
+          (nvidia_pkgs.changed | default(false))
+          | ternary(['nvidia: driver packages changed'], [])
+        ) +
+        (
+          (blacklist_nouveau.changed or
+           nvidia_modules_load.changed or
+           nvidia_xorg_conf.changed)
+          | ternary(['nvidia: boot-impacting config changed'], [])
+        )
+      }}
+  when:
+    - (nvidia_pkgs.changed | default(false)) or
+      (blacklist_nouveau.changed or
+       nvidia_modules_load.changed or
+       nvidia_xorg_conf.changed)
+  tags: ['arch_nvidia']

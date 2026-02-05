@@ -1,79 +1,18 @@
 ---
-- name: Desktop | Validate selection
-  ansible.builtin.assert:
-    that:
-      - arch_desktop_env in ['gnome', 'plasma', 'xfce', 'sway']
-    fail_msg: "arch_desktop_env must be one of: gnome|plasma|xfce|sway"
+# XFCE-only desktop convergence for Arch Linux (no reboot inside role)
+
+- name: Desktop | Reboot flag defaults
+  ansible.builtin.set_fact:
+    arch_reboot_required: "{{ arch_reboot_required | default(false) }}"
+    arch_reboot_reasons: "{{ arch_reboot_reasons | default([]) }}"
   tags: ['arch_desktop']
 
-# Map env -> package list (lean but functional) and default DM
-- name: Desktop | Compute package set and default DM
-  ansible.builtin.set_fact:
-    _desktop_pkgs: >-
-      {{
-        {
-          'gnome': [
-            'gnome',
-            'gnome-terminal',
-            'gnome-tweaks',
-            'network-manager-applet',
-            'xdg-desktop-portal-gnome'
-          ],
-
-          'plasma': [
-            'plasma-desktop',
-            'systemsettings',
-            'konsole',
-            'plasma-nm',
-            'sddm',
-            'sddm-kcm',
-            'plasma-x11-session',
-            'kwin-x11',
-            'xorg-server',
-            'xorg-xinit',
-            'xorg-xrandr',
-            'kde-gtk-config',
-            'breeze-gtk',
-            'xdg-desktop-portal',
-            'xdg-desktop-portal-kde'
-          ],
-
-          'xfce': [
-            'xfce4',
-            'xfce4-goodies',
-            'network-manager-applet',
-            'lightdm',
-            'lightdm-gtk-greeter'
-          ],
-
-          'sway': [
-            'sway',
-            'alacritty',
-            'waybar',
-            'grim',
-            'slurp',
-            'swaybg',
-            'xdg-desktop-portal-wlr',
-            'xdg-desktop-portal'
-          ]
-        }[arch_desktop_env]
-      }}
-
-    _default_dm: >-
-      {{
-        {
-          'gnome': 'gdm',
-          'plasma': 'sddm',
-          'xfce': 'lightdm',
-          'sway': 'none'
-        }[arch_desktop_env]
-      }}
-  tags: ['arch_desktop']
-
-# Resolve final DM choice
-- name: Desktop | Resolve display manager
-  ansible.builtin.set_fact:
-    _dm: "{{ (arch_desktop_display_manager == 'auto') | ternary(_default_dm, arch_desktop_display_manager) }}"
+# Strongly recommended on Arch: avoid partial-upgrade conflicts during big installs
+- name: Desktop | Full system upgrade (avoid partial upgrade conflicts)
+  community.general.pacman:
+    update_cache: true
+    upgrade: true
+  become: true
   tags: ['arch_desktop']
 
 # Base services everyone needs on a desktop
@@ -86,30 +25,27 @@
       - pipewire-pulse
       - wireplumber
     state: present
-    update_cache: true
   become: true
   tags: ['arch_desktop']
 
-# Desktop environment packages
-- name: Desktop | Install DE packages
+# XFCE + LightDM packages
+- name: Desktop | Install XFCE packages
   community.general.pacman:
-    name: "{{ _desktop_pkgs }}"
+    name:
+      - xfce4
+      - xfce4-goodies
+      - network-manager-applet
     state: present
   become: true
   tags: ['arch_desktop']
 
-# Display manager packages (if chosen)
-- name: Desktop | Install display manager packages
+- name: Desktop | Install LightDM packages
   community.general.pacman:
-    name: >-
-      {{
-        (_dm == 'gdm') | ternary(['gdm'], []) +
-        (_dm == 'sddm') | ternary(['sddm'], []) +
-        (_dm == 'lightdm') | ternary(['lightdm','lightdm-gtk-greeter'], [])
-      }}
+    name:
+      - lightdm
+      - lightdm-gtk-greeter
     state: present
   become: true
-  when: _dm != 'none'
   tags: ['arch_desktop']
 
 # Enable the right services
@@ -121,32 +57,24 @@
   become: true
   tags: ['arch_desktop']
 
-- name: Desktop | Disable other known display managers
-  ansible.builtin.service:
+# Safety: ensure other DMs don't "win" if installed
+- name: Desktop | Disable other known display managers (safety)
+  ansible.builtin.systemd:
     name: "{{ item }}"
     enabled: false
     state: stopped
   loop:
-    - gdm
     - sddm
-    - lightdm
+    - gdm
   become: true
   failed_when: false
   tags: ['arch_desktop']
 
-- name: Desktop | Remove systemd display-manager alias (so we can switch DMs)
-  ansible.builtin.file:
-    path: /etc/systemd/system/display-manager.service
-    state: absent
-  become: true
-  tags: ['arch_desktop']
-
-- name: Desktop | Enable display manager (if any)
-  ansible.builtin.service:
-    name: "{{ _default_dm }}"
+- name: Desktop | Enable LightDM
+  ansible.builtin.systemd:
+    name: lightdm
     enabled: true
     state: started
-  when: _default_dm != 'none'
   become: true
   tags: ['arch_desktop']
 
@@ -203,24 +131,9 @@
   when: arch_desktop_extra_packages | length > 0
   tags: ['arch_desktop']
 
-- name: Desktop | Flatpak apps
-  ansible.builtin.import_tasks: flatpak.yml
-  tags: ['arch_desktop', 'flatpak']
-
-# GPU handling
-- name: Desktop | Configure NVIDIA GPU
-  ansible.builtin.import_tasks: gpu_nvidia.yml
-  when: arch_desktop_gpu_mode == 'nvidia'
-  tags: ['arch_desktop', 'gpu']
-
-- name: Desktop | Mark reboot required (NVIDIA)
-  ansible.builtin.set_fact:
-    arch_desktop_reboot_required: true
-  when: arch_desktop_gpu_mode == 'nvidia'
-  
-- name: Desktop | Reboot if required
-  ansible.builtin.reboot:
-    reboot_timeout: 600
-  when: arch_desktop_reboot_required | default(false)
+- name: Flatpak | Install requested Flatpak apps (if any)
+  ansible.builtin.command: >
+    flatpak install -y flathub {{ item }}
+  loop: "{{ arch_desktop_flatpak_apps | default([]) }}"
+  when: (arch_desktop_flatpak_apps | default([])) | length > 0
   become: true
-  tags: ['arch_desktop']

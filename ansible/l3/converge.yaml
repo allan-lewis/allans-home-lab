@@ -48,6 +48,14 @@
       when: converge_arch_aur
       tags: [l3, os_arch, step_aur]
 
+    - name: L3 | Arch | nvidia
+      ansible.builtin.include_role:
+        name: arch_nvidia
+        apply:
+          tags: [l3, os_arch, step_nvidia]
+      when: converge_arch_nvidia
+      tags: [l3, os_arch, step_nvidia]
+
     - name: L3 | Arch | desktop
       ansible.builtin.include_role:
         name: arch_desktop 
@@ -55,6 +63,13 @@
           tags: [l3, os_arch, step_desktop]
       when: converge_arch_desktop
       tags: [l3, os_arch, step_desktop]
+
+    - name: Reboot if required (aggregated)
+      ansible.builtin.reboot:
+        reboot_timeout: 600
+      when: arch_reboot_required | default(false)
+      become: true
+      tags: [l3, os_arch, step_desktop, step_nvidia]
 
     - name: L3 | Arch | docker
       ansible.builtin.include_role:
@@ -102,6 +117,14 @@
     # -----------------
     # Steps for all OS
     # -----------------
+    - name: L3 | All | users
+      ansible.builtin.include_role:
+        name: all_users
+        apply:
+          tags: [l3, step_users]
+      when: converge_arch or converge_ubuntu
+      tags: [l3, step_users]
+
     - name: L3 | All | shell
       ansible.builtin.include_role:
         name: all_shell
@@ -169,11 +192,3 @@
         name: all_tailscale
       when: converge_tailscale
       tags: [l3, step_tailscale]
-
-    - name: L3 | All | users
-      ansible.builtin.include_role:
-        name: all_users
-        apply:
-          tags: [l3, step_users]
-      when: converge_arch or converge_ubuntu
-      tags: [l3, step_users]

@@ -6,6 +6,17 @@
 
   tasks:
     # -----------------
+    # Arch steps
+    # -----------------
+    - name: L4 | Arch | desktop
+      ansible.builtin.include_role:
+        name: arch_desktop 
+        apply:
+          tags: [l4, os_arch, step_desktop]
+      when: converge_arch_desktop
+      tags: [l4, os_arch, step_desktop]
+
+    # -----------------
     # Ubuntu steps
     # -----------------
     - name: L4 | Ubuntu | openvpn

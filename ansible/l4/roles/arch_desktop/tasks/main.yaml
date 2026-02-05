@@ -1,0 +1,18 @@
+---
+- name: Lookup home directories for desktop users
+  ansible.builtin.getent:
+    database: passwd
+    key: "{{ item }}"
+  loop: "{{ arch_desktop_users | default([]) }}"
+  register: desktop_users_passwd
+  tags: ['arch_desktop']
+
+- name: Apply stow package
+  become: true
+  become_user: "{{ item.item }}"
+  ansible.builtin.command:
+    cmd: "stow --restow arch-desktop"
+    chdir: "{{ item.ansible_facts.getent_passwd[item.item][4] }}/.dotfiles"
+  loop: "{{ desktop_users_passwd.results }}"
+  changed_when: false
+  tags: ['arch_desktop']

@@ -16,8 +16,7 @@ source_code_repos:
     version: main
 
 converge_arch_desktop: true
-arch_desktop_env: plasma
-arch_desktop_gpu_mode: nvidia
+converge_arch_nvidia: true
 arch_desktop_extra_packages:
   - ghostty
 
@@ -27,8 +26,7 @@ arch_aur_packages:
 - vscodium-bin
 - google-chrome
 
-arch_desktop_flatpak_apps:
-  - app.zen_browser.zen
+arch_desktop_flatpak_apps: []
 
 dotfiles_users:
   - "{{ gitops_user }}"

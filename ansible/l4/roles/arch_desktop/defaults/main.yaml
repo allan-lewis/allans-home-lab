@@ -1,0 +1,2 @@
+arch_desktop_users:
+  - "{{ desktop_interactive_user }}"
