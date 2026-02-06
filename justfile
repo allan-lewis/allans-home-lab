@@ -21,6 +21,8 @@ run_prefix := if doppler == "0" {
   "doppler run --"
 }
 
+tf_base_dir := env_var_or_default("TF_BASE_DIR", "terraform/l2")
+
 # Remove all non-versioned build artifacts and temporary files
 clean:
   {{run_prefix}} scripts/clean.sh
@@ -68,4 +70,14 @@ l1-truenas-template:
 # Prepare a Proxmox VM template suitable for Ubuntu installations
 l1-ubuntu-template:
   {{run_prefix}} scripts/l1/ubuntu-template.sh
+
+# Apply Terraform resources for an OS/persona pair
+l2-apply tfdir apply_flag="0":
+  APPLY="{{apply_flag}}" \
+  {{run_prefix}} scripts/l2/terraform.sh "{{tf_base_dir}}/{{tfdir}}" apply
+
+# Destroy Terraform resources for an OS/persona pair
+l2-destroy tfdir apply_flag="0":
+  APPLY="{{apply_flag}}" \
+  {{run_prefix}} scripts/l2/terraform.sh "{{tf_base_dir}}/{{tfdir}}" destroy
 
