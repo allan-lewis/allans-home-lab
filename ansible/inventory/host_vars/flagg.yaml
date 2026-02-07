@@ -126,9 +126,9 @@ gatus_https_endpoints:
     group: "Sites (Hosts)"
     url: "https://derry.hosts.allanshomelab.com"
     pattern: "*portal*"
-  - name: "Sirius"
+  - name: "Maturin"
     group: "Sites (Hosts)"
-    url: "https://sirius.hosts.allanshomelab.com"
+    url: "https://maturin.hosts.allanshomelab.com"
     pattern: "*Proxmox*"
   - name: "Pennywise"
     group: "Sites (Hosts)"
@@ -296,9 +296,9 @@ traefik_services:
   - name: transmission
     host: transmission.media.allanshomelab.com
     url: "http://{{ hostvars['patricia'].ansible_host }}:9091"
-  - name: sirius
-    host: sirius.hosts.allanshomelab.com
-    url: "https://{{ hostvars['sirius'].ansible_host }}:8006"
+  - name: maturin
+    host: maturin.hosts.allanshomelab.com
+    url: "https://{{ hostvars['maturin'].ansible_host }}:8006"
     scheme: https
   - name: immich
     host: photos.allanandvaia.com
@@ -411,7 +411,7 @@ pihole_cname_records:
     target: "hosts.allanshomelab.com"
   - alias: "pennywise.hosts.allanshomelab.com"
     target: "hosts.allanshomelab.com"
-  - alias: "sirius.hosts.allanshomelab.com"
+  - alias: "maturin.hosts.allanshomelab.com"
     target: "hosts.allanshomelab.com"
   - alias: "traefik.docker.allanshomelab.com"
     target: "docker.allanshomelab.com"

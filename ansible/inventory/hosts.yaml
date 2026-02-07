@@ -59,6 +59,11 @@ all:
       gatus_slug: "(Remote Backup)"
       prometheus_scrape_jobs:
         node-exporter: [9100]
+    maturin:
+      ansible_host: 192.168.86.200
+      gatus_slug: "(Proxmox Hypervisor)"
+      prometheus_scrape_jobs:
+        node-exporter: [9100]
     misery:
       ansible_host: 192.168.86.227
       gatus_slug: "(Ubuntu Docker/Media)"
@@ -84,11 +89,6 @@ all:
     roland:
       ansible_host: 192.168.86.207
       gatus_slug: "(Arch Desktop, BTW)"
-      prometheus_scrape_jobs:
-        node-exporter: [9100]
-    sirius:
-      ansible_host: 192.168.86.105
-      gatus_slug: "(Proxmox Hypervisor)"
       prometheus_scrape_jobs:
         node-exporter: [9100]
 
