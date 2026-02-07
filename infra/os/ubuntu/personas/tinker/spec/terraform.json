@@ -9,7 +9,7 @@
         "memory_mb": 4096,
         "disk_gb": 32,
         "template_ref": "ubuntu/tinker/stable",
-        "node": "sirius",
+        "node": "maturin",
         "ipconfig": "ip=192.168.86.213/24,gw=192.168.86.1"
       }
     }

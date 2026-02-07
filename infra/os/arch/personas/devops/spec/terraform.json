@@ -9,7 +9,7 @@
         "memory_mb": 4096,
         "disk_gb": 96,
         "template_ref": "arch/devops/stable",
-        "node": "sirius",
+        "node": "maturin",
         "ipconfig": "ip=192.168.86.219/24,gw=192.168.86.1"
       }
     }
