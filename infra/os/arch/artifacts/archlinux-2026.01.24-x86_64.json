@@ -1,8 +1,0 @@
-{
-  "iso_name": "archlinux-2026.01.24-x86_64.iso",
-  "built_at": "2026-01-24T13:48:58Z",
-  "git_sha": "489c17f5c31edd18bbb5d0a751fc0d0495abccc8",
-  "proxmox_node": "sirius",
-  "proxmox_storage": "local",
-  "uploader_host": "cujo"
-}

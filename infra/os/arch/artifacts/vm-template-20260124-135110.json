@@ -1,8 +1,0 @@
-{
-  "created_at": "2026-01-24T13:49:11Z",
-  "description": "Arch base (BIOS) with qemu-guest-agent, cloud-init; custom autorun ISO",
-  "name": "arch-20260124",
-  "node": "sirius",
-  "storage": "ssd0",
-  "vmid": 108
-}

@@ -1,9 +1,0 @@
-{
-  "created_at": "2026-01-25T14:39:58Z",
-  "description": "Proxmox VM disk captured and exported to S3",
-  "os": "truenas",
-  "node": "192.168.86.105",
-  "vmid": 106,
-  "hostname": "pennywise",
-  "s3_uri": "s3://gitops-homelab-orchestrator-disks/proxmox-images/truenas/boot-disk-export-106-20260125-093855.qcow2"
-}
