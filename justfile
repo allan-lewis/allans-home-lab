@@ -81,3 +81,111 @@ l2-destroy tfdir apply_flag="0":
   APPLY="{{apply_flag}}" \
   {{run_prefix}} scripts/l2/terraform.sh "{{tf_base_dir}}/{{tfdir}}" destroy
 
+# Converge a group of hosts (capabilities)
+l3-converge group:
+  {{run_prefix}} scripts/converge.sh "{{group}}" l3
+
+# Download backups from S3 and upload to an HAOS host 
+l3-homeassistant-backups:
+  {{run_prefix}} scripts/l3/haos.sh
+
+# Reboot a group of hosts (default: dryrun)
+l3-reboot group action="dryrun":
+  REBOOT_ACTION="{{action}}" \
+  {{run_prefix}} scripts/l3/reboot.sh "{{group}}"
+
+# Shut down a group of hosts
+l3-shutdown group:
+  {{run_prefix}} scripts/l3/shutdown.sh "{{group}}"
+
+# Attach disks to a TrueNAS host
+l3-truenas vmid:
+  {{run_prefix}} scripts/l3/proxmox-disks.sh \
+    "$PVE_SSH_IP" \
+    "{{vmid}}" \
+    "infra/os/truenas/personas/nas/spec/terraform.json"
+
+# Converge a group of hosts (workloads)
+l4-converge group:
+  {{run_prefix}} scripts/converge.sh "{{group}}" l4
+
+# Full converge of Gatus
+l4-converge-gatus:
+  TAGS=step_docker_gatus_all \
+  {{run_prefix}} scripts/converge.sh flagg l4
+
+# Quick converge of Gatus (just config)
+l4-converge-gatus-config:
+  TAGS=step_docker_gatus \
+  {{run_prefix}} scripts/converge.sh flagg l4
+
+# Full converge of Traefik
+l4-converge-traefik:
+  TAGS=step_docker_traefik \
+  {{run_prefix}} scripts/converge.sh flagg l4
+
+# Full converge of Pi-hole
+l4-converge-pihole:
+  TAGS=step_docker_pihole_all \
+  {{run_prefix}} scripts/converge.sh flagg l4
+
+# Quick converge of Pi-hole (just DNS records)
+l4-converge-pihole-dns:
+  TAGS=step_docker_pihole \
+  {{run_prefix}} scripts/converge.sh flagg l4
+
+# Full converge of Authentik
+l4-converge-authentik-prod:
+  TAGS=step_docker_authentik \
+  {{run_prefix}} scripts/converge.sh flagg l4
+
+# Full converge of Immich
+l4-converge-immich-prod:
+  TAGS=step_docker_immich \
+  {{run_prefix}} scripts/converge.sh misery l4
+
+# Full converge of Homepage
+l4-converge-homepage:
+  TAGS=step_docker_homepage_all \
+  {{run_prefix}} scripts/converge.sh carrie l4
+
+# Quick converge of Homepage (just config)
+l4-converge-homepage-config:
+  TAGS=step_docker_homepage \
+  {{run_prefix}} scripts/converge.sh carrie l4
+
+# Full converge of Vaultwarden
+l4-converge-vaultwarden:
+  TAGS=step_docker_vaultwarden \
+  {{run_prefix}} scripts/converge.sh carrie l4
+
+# Full converge of Twingate
+l4-converge-twingate:
+  TAGS=step_docker_twingate \
+  {{run_prefix}} scripts/converge.sh ubuntu_docker_twingate l4
+
+# Full converge of Prometheus/Grafana/Alertmanager
+l4-converge-observability:
+  TAGS=step_docker_observability \
+  {{run_prefix}} scripts/converge.sh flagg l4
+
+# Full converge of Trilium
+l4-converge-trilium:
+  TAGS=step_docker_trilium \
+  {{run_prefix}} scripts/converge.sh carrie l4
+
+# Full converge of Cloudflare
+l4-converge-cloudflare:
+  TAGS=step_docker_cloudflare \
+  {{run_prefix}} scripts/converge.sh flagg l4
+
+# Full converge of Plex
+l4-converge-plex:
+  TAGS=step_docker_plex \
+  {{run_prefix}} scripts/converge.sh misery l4
+
+# Full converge of Jellyfin
+l4-converge-jellyfin:
+  TAGS=step_docker_jellyfin \
+  {{run_prefix}} scripts/converge.sh misery l4
+
