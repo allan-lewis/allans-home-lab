@@ -83,6 +83,7 @@
     state: present
     update_cache: true
   become: true
+  when: converge_arch_desktop
 
 # Add Flathub remote (idempotent)
 - name: Flatpak | Add Flathub remote if missing
@@ -90,6 +91,7 @@
     flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
   changed_when: false
   become: true
+  when: converge_arch_desktop
 
 # Optional: refresh appstream metadata (nice-to-have; not strictly required)
 - name: Flatpak | Update remotes (best effort)
@@ -97,3 +99,4 @@
   changed_when: false
   failed_when: false
   become: true
+  when: converge_arch_desktop

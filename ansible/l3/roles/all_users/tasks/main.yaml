@@ -1,8 +1,4 @@
 ---
-- name: all_users | No-op when list is empty
-  ansible.builtin.meta: end_host
-  when: (all_users_users | default([]) | length) == 0
-
 - name: all_users | Validate default SSH key is present when users are requested
   ansible.builtin.assert:
     that:
@@ -24,6 +20,7 @@
         else {'name': item}
       }}
   loop: "{{ all_users_users }}"
+  when: (all_users_users | length) > 0
 
 - name: all_users | Validate user specs
   ansible.builtin.assert:
@@ -33,6 +30,7 @@
   loop: "{{ all_users_normalized }}"
   loop_control:
     label: "{{ item.name | default('MISSING_NAME') }}"
+  when: (all_users_users | length) > 0
 
 - name: all_users | Fail if forbidden admin groups are requested
   ansible.builtin.assert:
@@ -45,6 +43,7 @@
   loop: "{{ all_users_normalized }}"
   loop_control:
     label: "{{ item.name }}"
+  when: (all_users_users | length) > 0
 
 - name: all_users | Create users (password set or locked by convention)
   ansible.builtin.user:
@@ -66,6 +65,7 @@
   loop: "{{ all_users_normalized }}"
   loop_control:
     label: "{{ item.name }}"
+  when: (all_users_users | length) > 0
 
 - name: all_users | Ensure SSH authorized key present
   ansible.posix.authorized_key:
@@ -77,3 +77,4 @@
   loop: "{{ all_users_normalized }}"
   loop_control:
     label: "{{ item.name }}"
+  when: (all_users_users | length) > 0
