@@ -201,3 +201,23 @@
 - name: Packer | Show version
   ansible.builtin.debug:
     msg: "{{ packer_version_out.stdout_lines | first }}"
+
+- name: Ensure /usr/local/bin exists
+  become: true
+  ansible.builtin.file:
+    path: /usr/local/bin
+    state: directory
+    mode: "0755"
+
+- name: Install air into /usr/local/bin via go install
+  become: true
+  ansible.builtin.shell: |
+    set -euo pipefail
+    GOBIN=/usr/local/bin go install github.com/air-verse/air@latest
+  args:
+    executable: /bin/bash
+
+- name: Verify air is available
+  ansible.builtin.command: /usr/local/bin/air -v
+  register: air_ver
+  changed_when: false

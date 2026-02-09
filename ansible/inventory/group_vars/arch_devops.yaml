@@ -10,4 +10,6 @@ all_devops_packages:
   - kustomize
   - xorriso
   - just
-
+  - go
+  - tree
+  - tmux
