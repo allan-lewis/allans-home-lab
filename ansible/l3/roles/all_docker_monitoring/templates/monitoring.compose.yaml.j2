@@ -4,17 +4,19 @@ services:
     container_name: "node-exporter"
     image: "quay.io/prometheus/node-exporter:latest"
     restart: "unless-stopped"
-    ports: 
+    ports:
       - "9100:9100/tcp"
-    volumes: 
+    volumes:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
       - /:/rootfs:ro
       - /:/host:ro,rslave
+      - /var/lib/node_exporter/textfile_collector:/textfile_collector:ro
     command:
       - '--path.rootfs=/host'
-      - '--path.procfs=/host/proc' 
+      - '--path.procfs=/host/proc'
       - '--path.sysfs=/host/sys'
+      - '--collector.textfile.directory=/textfile_collector'
       - --collector.filesystem.ignored-mount-points
       - "^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"
 
