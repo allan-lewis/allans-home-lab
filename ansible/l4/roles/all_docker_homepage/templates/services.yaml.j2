@@ -69,14 +69,6 @@
             username: "{{ lookup('env', 'HOMEPAGE_VAR_GRAFANA_USERNAME') }}"
             password: "{{ lookup('env', 'HOMEPAGE_VAR_GRAFANA_PASSWORD') }}"
             fields: ['dashboards', 'datasources']
-    - Healthchecks:
-        icon: healthchecks.png
-        href: https://healthchecks.io/projects/5f5c3869-90bf-4242-9174-76b5ecb3a357//checks/
-        description: Job minitoring service
-        widget:
-            type: healthchecks
-            url: https://healthchecks.io
-            key: "{{ lookup('env', 'HOMEPAGE_VAR_HEALTHCHECKS_KEY') }}"
     - Prometheus:
         icon: prometheus.png
         href: https://prometheus.docker.allanshomelab.com
