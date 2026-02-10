@@ -137,12 +137,12 @@ l4-converge-pihole-dns:
   {{run_prefix}} scripts/converge.sh flagg l4
 
 # Full converge of Authentik
-l4-converge-authentik-prod:
+l4-converge-authentik:
   TAGS=step_docker_authentik \
   {{run_prefix}} scripts/converge.sh flagg l4
 
 # Full converge of Immich
-l4-converge-immich-prod:
+l4-converge-immich:
   TAGS=step_docker_immich \
   {{run_prefix}} scripts/converge.sh misery l4
 
