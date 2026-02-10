@@ -23,14 +23,17 @@
     group: root
     mode: "0755"
 
-- name: Add cron job for Postgres DB dump
+- name: Add cron job for Postgres DB dump (with Prometheus wrapper)
   when: postgres_db_backup_cron.enabled
   ansible.builtin.cron:
     name: "postgres-db-backup"
     user: root
     minute: "{{ postgres_db_backup_cron.minute }}"
     hour: "{{ postgres_db_backup_cron.hour }}"
-    job: "/usr/local/bin/dump-postgres-db.sh >> {{ postgres_db_backup_log_path }} 2>&1"
+    job: >
+      /usr/local/bin/homelab-task-wrap.sh postgres_db_backup --
+      /usr/local/bin/dump-postgres-db.sh
+      >> {{ postgres_db_backup_log_path }} 2>&1
 
 - name: Remove cron job when disabled
   when: not postgres_db_backup_cron.enabled

@@ -23,7 +23,7 @@
     group: root
     mode: "0755"
 
-- name: Weekly cron for S3 mirror
+- name: Weekly cron for S3 mirror (with Prometheus wrapper)
   when: s3_mirror_cron.enabled
   ansible.builtin.cron:
     name: "s3-local-mirror"
@@ -31,7 +31,10 @@
     minute: "{{ s3_mirror_cron.minute }}"
     hour: "{{ s3_mirror_cron.hour }}"
     weekday: "{{ s3_mirror_cron.weekday }}"
-    job: "/usr/local/bin/s3-mirror.sh >> {{ s3_mirror_log_path }} 2>&1"
+    job: >
+      /usr/local/bin/homelab-task-wrap.sh s3_local_mirror --
+      /usr/local/bin/s3-mirror.sh
+      >> {{ s3_mirror_log_path }} 2>&1
 
 - name: Remove cron when disabled
   when: not s3_mirror_cron.enabled
