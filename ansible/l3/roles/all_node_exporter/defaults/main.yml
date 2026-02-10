@@ -24,7 +24,7 @@ common_node_exporter_group: "node_exporter"
 
 # Textfile collector directory (if you use it for custom metrics)
 common_node_exporter_manage_textfile_dir: true
-common_node_exporter_textfile_dir: "/var/lib/node_exporter/textfile"
+common_node_exporter_textfile_dir: "/var/lib/node_exporter/textfile_collector"
 
 # Listen address
 common_node_exporter_listen_address: "0.0.0.0:9100"

@@ -141,6 +141,14 @@
       when: converge_arch or converge_ubuntu
       tags: [l3, step_ssh_keys]
 
+    - name: L3 | All | metrics wrapper
+      ansible.builtin.include_role:
+        name: all_metrics_wrapper
+        apply:
+          tags: [l3, step_metrics_wrapper]
+      when: converge_arch or converge_ubuntu
+      tags: [l3, step_metrics_wrapper]
+
     - name: L3 | All | backup runner
       ansible.builtin.include_role:
         name: all_backup_runner

@@ -1,0 +1,9 @@
+---
+- name: Install homelab task wrapper script
+  become: true
+  ansible.builtin.copy:
+    src: files/homelab-task-wrap.sh
+    dest: "{{ homelab_task_wrap_path }}"
+    owner: root
+    group: root
+    mode: "0755"
