@@ -25,8 +25,6 @@ twingate_refresh_token: "{{ lookup('env', 'TWINGATE_VALIANT_STINGRAY_REFRESH_TOK
 
 backup_runner_cron_hour: "*"
 backup_runner_cron_minute: "30"
-backup_runner_healthchecks_url: "https://hc-ping.com/fc7034f6-cb5d-4965-91ae-017aeb4591da"
-backup_runner_healthchecks_status: "https://healthchecks.io/b/2/125505b2-327a-40e1-91e2-f5e5dd3152db.json"
 
 "backup_runner_volumes": [
   { 
