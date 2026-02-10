@@ -82,7 +82,8 @@ l2-destroy tfdir apply_flag="0":
   {{run_prefix}} scripts/l2/terraform.sh "{{tf_base_dir}}/{{tfdir}}" destroy
 
 # Converge a group of hosts (capabilities)
-l3-converge group:
+l3-converge group tags="":
+  TAGS="{{tags}}" \
   {{run_prefix}} scripts/converge.sh "{{group}}" l3
 
 # Download backups from S3 and upload to an HAOS host 
@@ -106,7 +107,8 @@ l3-truenas vmid:
     "infra/os/truenas/personas/nas/spec/terraform.json"
 
 # Converge a group of hosts (workloads)
-l4-converge group:
+l4-converge group tags="":
+  TAGS="{{tags}}" \
   {{run_prefix}} scripts/converge.sh "{{group}}" l4
 
 # Full converge of Gatus
