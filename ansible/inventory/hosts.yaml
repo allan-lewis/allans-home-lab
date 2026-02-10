@@ -1,11 +1,6 @@
 ---
 all:
   hosts:
-    antares:
-      ansible_host: 192.168.86.167
-      gatus_slug: "(Retro Gaming)"
-      prometheus_scrape_jobs:
-        node-exporter: [9100]
     barlow:
       ansible_host: 192.168.86.213
       gatus_slug: "(Ubuntu Sandbox)"
@@ -70,6 +65,11 @@ all:
       prometheus_scrape_jobs:
         node-exporter: [9100]
         homelab-metrics: [9102]
+    mordred:
+      ansible_host: 192.168.86.206
+      gatus_slug: "(Retro Gaming)"
+      prometheus_scrape_jobs:
+        node-exporter: [9100]
     overlook:
       ansible_host: 192.168.86.229
       gatus_slug: "(Home Automation)"
