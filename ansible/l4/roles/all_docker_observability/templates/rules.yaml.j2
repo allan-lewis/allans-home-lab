@@ -2,6 +2,13 @@
 groups:
   - name: homelab.rules
     rules:
+      - record: homelab_task_allowed_age_seconds
+        expr: |
+          label_replace(vector(3600), "task", "backup_runner", "", "")
+          or label_replace(vector(3600), "task", "media_sync", "", "")
+          or label_replace(vector(25 * 3600), "task", "postgres_db_backup", "", "")
+          or label_replace(vector(7 * 24 * 3600), "task", "s3_local_mirror", "", "")
+
       - alert: Watchdog
         expr: vector(1)
         for: 0m
@@ -117,4 +124,52 @@ groups:
             Prometheus has been unable to scrape the target
             job="{{ $labels.job }}", instance="{{ $labels.instance }}"
             for at least 5 minutes.
+
+      - alert: HomelabTaskMetricsCountMismatch
+        expr: |
+          count(homelab_task_last_run_unix) != 12
+        labels:
+          severity: critical
+          rulegroup: homelabRules
+        annotations:
+          summary: "Homelab task metric count mismatch (expected 12, got {{ $value }})"
+          description: |
+            The global count of published homelab task metrics does not match the expected value.
+            This usually indicates that one or more tasks are missing, duplicated, or misconfigured.
+            expected="12", observed="{{ $value }}"
+
+      - alert: HomelabTaskFailed
+        expr: |
+          homelab_task_last_exit_code != 0
+        labels:
+          severity: critical
+          rulegroup: homelabRules
+        annotations:
+          summary: "Homelab task failed: {{ $labels.instance }} / {{ $labels.task }}"
+          description: |
+            A homelab task reported a non-zero exit code on the latest run.
+            instance="{{ $labels.instance }}"
+            task="{{ $labels.task }}"
+            exit_code="{{ $value }}"
+
+- alert: HomelabTaskStaleSuccess
+  expr: |
+    (
+      (time() - homelab_task_last_success_unix)
+      /
+      on(task) group_left
+      homelab_task_allowed_age_seconds
+    ) > 1.15
+  labels:
+    severity: critical
+    rulegroup: homelabRules
+  annotations:
+    summary: "Homelab task overdue: {{ $labels.instance }} / {{ $labels.task }}"
+    description: |
+      Task has exceeded its allowed success window by more than 15%.
+
+      instance="{{ $labels.instance }}"
+      task="{{ $labels.task }}"
+      utilization="{{ printf "%.2f" $value }}"
+
 {% endraw %}
