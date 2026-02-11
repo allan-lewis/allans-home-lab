@@ -1,22 +1,12 @@
 ---
-# Preferred path (works on Ubuntu, etc.)
-- name: restart compose stack (module)
-  listen: restart compose stack
-  community.docker.docker_compose_v2:
-    project_src: "{{ compose_project_dir }}"
-    pull: "{{ compose_pull_recreate | ternary('always','policy') }}"
-    recreate: "{{ compose_pull_recreate | ternary('always','auto') }}"
-    remove_orphans: true
-    state: present
-  when: ansible_facts['os_family'] != 'Archlinux'
-
-# Arch fallback
-- name: restart compose stack (CLI fallback)
+- name: restart compose stack
   listen: restart compose stack
   ansible.builtin.command: >
-    docker compose up -d --remove-orphans
-    {{ compose_pull_recreate | ternary('--force-recreate', '') }}
+    docker compose up -d
+    --remove-orphans
+    --no-build
+    {{ compose_pull_recreate | ternary('--pull always --force-recreate', '--pull missing') }}
   args:
     chdir: "{{ compose_project_dir }}"
-  when: ansible_facts['os_family'] == 'Archlinux'
+  changed_when: false
 
