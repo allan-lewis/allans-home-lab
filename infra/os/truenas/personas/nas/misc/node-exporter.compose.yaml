@@ -1,0 +1,18 @@
+services:
+  node-exporter:
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--collector.textfile.directory=/textfile_collector'
+      - >-
+        --collector.filesystem.ignored-mount-points=^/(dev|proc|sys|var/lib/docker/.+)($|/)
+    container_name: node-exporter
+    image: prom/node-exporter:latest
+    network_mode: host
+    pid: host
+    restart: unless-stopped
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /var/lib/node_exporter/textfile_collector:/textfile_collector:ro
+
