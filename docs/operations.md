@@ -153,3 +153,106 @@ updated.
 This allows controlled promotion of templates without automatically
 advancing the stable reference.
 
+# Layer-Specific Operations
+
+This section documents the operational entry points for each layer of
+Allan's Home Lab.
+
+Only commands exposed through the Justfile are considered supported
+operational interfaces.
+
+------------------------------------------------------------------------
+
+# L0 -- Runway
+
+## Purpose
+
+L0 validates that the local execution environment and remote Proxmox
+configuration are safe and correctly configured before any
+infrastructure changes occur.
+
+L0 does not create, modify, or destroy infrastructure. It exists purely
+to fail fast when assumptions are incorrect.
+
+------------------------------------------------------------------------
+
+## `just l0-runway`
+
+### What It Validates
+
+Running:
+
+``` bash
+just l0-runway
+```
+
+performs early validation such as:
+
+-   Required environment variables are present
+-   API credentials are usable
+-   Proxmox endpoint is reachable
+-   Target node and storage identifiers are consistent
+-   Required tooling invoked by later layers is accessible
+
+No remote hosts are modified.
+
+------------------------------------------------------------------------
+
+### When to Run
+
+Run `just l0-runway`:
+
+-   Before executing any other layer
+-   After modifying environment variables or secrets
+-   After changing Proxmox credentials or tokens
+-   When debugging failures in L1 or L2
+
+If `l0-runway` succeeds, it is safe to proceed to subsequent layers.
+
+------------------------------------------------------------------------
+
+# Workspace Maintenance
+
+Workspace maintenance commands support local development hygiene but do
+not correspond to a numbered layer.
+
+------------------------------------------------------------------------
+
+## `just clean`
+
+### Purpose
+
+Return the repository to a fresh-checkout--equivalent state by removing
+locally generated artifacts and temporary files.
+
+------------------------------------------------------------------------
+
+### What It Removes
+
+Running:
+
+``` bash
+just clean
+```
+
+removes local-only state such as:
+
+-   Generated artifacts and manifests
+-   Rendered inventories and intermediate files
+-   Cached downloads
+-   Temporary working directories
+-   Build output from Packer, Terraform, and Ansible
+
+------------------------------------------------------------------------
+
+### What It Does Not Do
+
+`just clean` does **not**:
+
+-   Destroy infrastructure
+-   Modify remote systems
+-   Remove secrets or environment configuration
+
+It is safe to run at any time and only affects the local working
+directory.
+
