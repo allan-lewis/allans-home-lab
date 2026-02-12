@@ -10,11 +10,11 @@ responsibilities across infrastructure layers.
 
 The project combines:
 
--   **Proxmox VE** for virtualization\
--   **Terraform** for VM lifecycle management\
--   **Ansible** for operating system convergence\
--   **Docker Compose** for workload orchestration\
--   **Just** as the operational interface\
+-   **Proxmox VE** for virtualization
+-   **Terraform** for VM lifecycle management
+-   **Ansible** for operating system convergence
+-   **Docker Compose** for workload orchestration
+-   **Just** as the operational interface
 -   **Git** as the single source of truth
 
 The system is designed around one central idea:
@@ -28,11 +28,11 @@ The system is designed around one central idea:
 
 This repository defines:
 
--   A structured L0--L4 infrastructure layering model\
--   A persona-driven approach to defining infrastructure intent\
--   A repeatable process for creating OS templates and VMs\
+-   A structured L0--L4 infrastructure layering model
+-   A persona-driven approach to defining infrastructure intent
+-   A repeatable process for creating OS templates and VMs
 -   A clean separation between system configuration (L3) and workloads
-    (L4)\
+    (L4)
 -   A capture-and-restore model that treats rebuildability as a primary
     goal
 
@@ -46,20 +46,20 @@ manually mutating it.
 
 Most homelabs evolve organically:
 
--   Manual VM creation\
--   Drift between machines\
--   Snowflake configurations\
--   "I think I installed that at some point"\
+-   Manual VM creation
+-   Drift between machines
+-   Snowflake configurations
+-   "I think I installed that at some point"
 -   Backups that are an afterthought
 
 This project exists to eliminate that entropy.
 
 It enforces:
 
--   Clear responsibility boundaries between layers\
--   Declarative intent stored in Git\
--   Idempotent convergence of system state\
--   Rebuild-first thinking over mutation-first thinking\
+-   Clear responsibility boundaries between layers
+-   Declarative intent stored in Git
+-   Idempotent convergence of system state
+-   Rebuild-first thinking over mutation-first thinking
 -   Predictable operational workflows
 
 The goal is not just automation --- it is **controlled evolution of
@@ -71,17 +71,17 @@ infrastructure**.
 
 This project is intended for:
 
--   Experienced homelabbers comfortable with Proxmox\
--   Users familiar with Terraform and Ansible\
--   Engineers who value reproducibility and structured infrastructure\
--   People who prefer rebuilding over debugging snowflakes\
+-   Experienced homelabbers comfortable with Proxmox
+-   Users familiar with Terraform and Ansible
+-   Engineers who value reproducibility and structured infrastructure
+-   People who prefer rebuilding over debugging snowflakes
 -   Anyone interested in treating their homelab like real infrastructure
 
 It assumes familiarity with:
 
--   Linux administration\
--   SSH-based workflows\
--   Declarative infrastructure concepts\
+-   Linux administration
+-   SSH-based workflows
+-   Declarative infrastructure concepts
 -   Version-controlled configuration
 
 This is not a beginner-oriented homelab starter kit.
@@ -92,17 +92,17 @@ This is not a beginner-oriented homelab starter kit.
 
 This project is intentionally not:
 
--   A Kubernetes-first platform\
--   A highly available multi-site architecture\
--   A turnkey "click to deploy" system\
--   A UI-driven infrastructure solution\
+-   A Kubernetes-first platform
+-   A highly available multi-site architecture
+-   A turnkey "click to deploy" system
+-   A UI-driven infrastructure solution
 -   A generic infrastructure framework intended to fit all environments
 
 It is:
 
--   Optimized for a single-operator homelab\
--   Focused on reproducibility over convenience\
--   Opinionated about layering and separation of concerns\
+-   Optimized for a single-operator homelab
+-   Focused on reproducibility over convenience
+-   Opinionated about layering and separation of concerns
 -   Designed to scale within a home lab, not a production enterprise
 
 The constraints are deliberate. The architecture is shaped by clarity,
@@ -372,4 +372,249 @@ A typical lifecycle follows this progression:
 Each step depends on the previous one being correct, but no step
 collapses into another. This structure enables safe iteration,
 controlled rebuilds, and long-term maintainability.
+
+## Repository Structure
+
+The repository is organized to reflect the layered model and
+persona-driven design.
+
+### High-Level Directory Layout
+
+    infra/
+    artifacts/
+    scripts/
+    Justfile
+    docs/
+
+Each top-level directory serves a distinct purpose and maps to one or
+more layers in the system.
+
+------------------------------------------------------------------------
+
+### The `infra/` Directory
+
+The `infra/` directory encodes infrastructure intent.
+
+It is organized by operating system family and persona. Each persona
+defines the desired state of a host at the infrastructure level.
+
+Typical responsibilities include:
+
+-   VM resource definitions
+-   Disk layout specifications
+-   Network configuration intent
+-   OS-level convergence configuration
+-   Workload grouping definitions
+
+Personas are declarative. They describe what a machine should be, not
+how to manually construct it.
+
+------------------------------------------------------------------------
+
+### The `artifacts/` Directory
+
+The `artifacts/` directory contains generated or promoted outputs of the
+system.
+
+Examples include:
+
+-   Template metadata
+-   Captured disk images
+-   Build outputs
+-   Promotion state
+
+Artifacts are derived from declared intent. They are not the source of
+truth, but rather the result of applying it.
+
+------------------------------------------------------------------------
+
+### Scripts and Supporting Tooling
+
+Supporting scripts exist to:
+
+-   Validate environment assumptions
+-   Perform controlled image capture or restore
+-   Wrap Terraform or Ansible flows
+-   Enforce repeatable operational patterns
+
+Scripts are helpers. They do not replace the layered model --- they
+reinforce it.
+
+------------------------------------------------------------------------
+
+### The Justfile as the Operational Interface
+
+The Justfile serves as the primary operational interface.
+
+It exposes:
+
+-   Layer-specific operations (L0--L4)
+-   Group-based convergence
+-   Persona-targeted workflows
+-   Rebuild and promotion paths
+
+Rather than invoking Terraform, Ansible, or scripts directly, operations
+are routed through Just recipes to maintain consistency and reduce
+cognitive overhead.
+
+See `docs/operations.md` for a detailed breakdown of available commands
+and workflows.
+
+------------------------------------------------------------------------
+
+## Personas and Desired State
+
+### What Is a Persona?
+
+A persona represents a role-specific host definition.
+
+Examples might include:
+
+-   A monitoring node
+-   A media acquisition host
+-   A reverse proxy gateway
+-   A development workstation
+-   A storage-backed utility machine
+
+A persona encodes:
+
+-   Infrastructure characteristics (CPU, memory, disk)
+-   OS-level configuration intent
+-   Workload grouping
+-   Lifecycle expectations
+
+Personas are the primary abstraction in Allan's Home Lab.
+
+------------------------------------------------------------------------
+
+### Relationship Between Spec, Artifact, and Runtime
+
+The system distinguishes between:
+
+-   **Spec** --- The declarative definition stored in Git
+-   **Artifact** --- The generated template or captured image
+-   **Runtime** --- The currently running VM instance
+
+Spec defines intent.
+Artifacts accelerate rebuilds.
+Runtime reflects the result of applying convergence.
+
+This separation allows machines to be destroyed and recreated without
+losing design clarity.
+
+------------------------------------------------------------------------
+
+### Promotion, Capture, and Rebuild Concepts
+
+Templates can be promoted when base OS definitions change.
+
+Boot disks can be captured to preserve known-good states.
+
+VMs can be destroyed and recreated from spec alone.
+
+The system is designed so that rebuilding is routine, not catastrophic.
+
+------------------------------------------------------------------------
+
+## Typical End-to-End Workflow
+
+### Creating or Updating a Template
+
+1.  Modify base OS definition.
+2.  Build a new template (L1).
+3.  Promote or validate the template.
+
+------------------------------------------------------------------------
+
+### Instantiating or Modifying a Persona
+
+1.  Update persona specification.
+2.  Apply infrastructure changes (L2).
+3.  Converge system state (L3).
+4.  Converge workloads (L4).
+
+------------------------------------------------------------------------
+
+### Rebuilding a Host
+
+1.  Destroy existing VM (if required).
+2.  Recreate from template (L2).
+3.  Re-run OS convergence (L3).
+4.  Re-run workload convergence (L4).
+
+Rebuilds are expected and supported workflows.
+
+------------------------------------------------------------------------
+
+## Managing Infrastructure Changes
+
+Infrastructure changes fall into distinct categories.
+
+### Resource-Level Changes
+
+Adjustments to CPU, memory, disk, or networking occur at L2 and are
+applied through Terraform.
+
+------------------------------------------------------------------------
+
+### System-Level Changes
+
+Package updates, service configuration, and host-level changes occur at
+L3 and are applied via Ansible convergence.
+
+------------------------------------------------------------------------
+
+### Workload-Level Changes
+
+Application configuration and Docker Compose stacks are managed at L4.
+
+Each category has a clear operational entry point, preventing
+cross-layer drift.
+
+For detailed operational commands, see `docs/operations.md`.
+
+For persona lifecycle guidance, see `docs/personas.md`.
+
+------------------------------------------------------------------------
+
+## Disaster Recovery and Reproducibility
+
+Allan's Home Lab assumes that machines are replaceable.
+
+The system supports:
+
+-   Rebuilding from declarative spec alone
+-   Restoring from captured disk images
+-   Re-converging system and workload layers independently
+
+Infrastructure is disposable.
+Data is durable.
+
+The architecture ensures that a failed host can be recreated without
+reintroducing entropy.
+
+------------------------------------------------------------------------
+
+## Current Scope and Evolution
+
+This project continues to evolve.
+
+Some workflows may:
+
+-   Transition from manual to scripted
+-   Move between layers as boundaries sharpen
+-   Be refined for clarity or reproducibility
+
+Intentional structure matters more than rapid expansion.
+
+Operational notes, edge cases, and transitional procedures are
+documented in `docs/notes.md`.
+
+------------------------------------------------------------------------
+
+## Additional Documentation
+
+-   Operations Reference → `docs/operations.md`
+-   Personas & Lifecycle → `docs/personas.md`
+-   Notes & Operational Edge Cases → `docs/notes.md`
 
