@@ -214,3 +214,172 @@ restored.
 
 Infrastructure is treated as disposable. Data is treated as durable.
 
+## The Layer Model (L0--L4)
+
+Allan's Home Lab is organized around a strict layered model. Each layer
+has a clearly defined scope and exists to isolate responsibilities. The
+goal is not complexity --- it is clarity.
+
+The layers build on one another, but they do not overlap. A higher layer
+may depend on a lower one, but it should never reimplement or bypass it.
+
+------------------------------------------------------------------------
+
+### Why Layers Exist
+
+Without enforced boundaries, homelab infrastructure tends to drift:
+
+-   Hypervisor configuration bleeds into VM provisioning.
+-   OS setup logic mixes with application deployment.
+-   One-off fixes become permanent snowflakes.
+-   Recovery steps are undocumented and inconsistent.
+
+The layered model prevents that drift.
+
+Each layer answers a different question:
+
+-   Is the environment ready?
+-   Can we build a reusable base image?
+-   Can we instantiate infrastructure predictably?
+-   Is the operating system configured correctly?
+-   Are workloads deployed and healthy?
+
+By isolating these concerns, failures become easier to diagnose and
+rebuild workflows become predictable.
+
+------------------------------------------------------------------------
+
+### Layer Responsibilities at a Glance
+
+  ----------------------------------------------------------------------------
+  Layer       Name          Responsibility          Primary Tooling
+  ----------- ------------- ----------------------- --------------------------
+  L0          Runway        Validate and prepare    Shell / validation scripts
+                            Proxmox environment     
+
+  L1          Image         Build OS templates and  Packer / scripts
+                            golden images           
+
+  L2          Instantiate   Create VMs from         Terraform
+                            templates               
+
+  L3          Converge      Configure operating     Ansible
+              (System)      system state            
+
+  L4          Converge      Deploy and manage       Ansible + Docker Compose
+              (Workload)    applications            
+  ----------------------------------------------------------------------------
+
+------------------------------------------------------------------------
+
+### L0 -- Runway (Environment & Hypervisor Validation)
+
+L0 ensures that the hypervisor environment is ready before
+infrastructure changes occur.
+
+This includes validating:
+
+-   Proxmox connectivity
+-   Available storage
+-   Network configuration
+-   Required tokens and credentials
+-   Environmental prerequisites
+
+L0 does not create infrastructure. It confirms that the runway is clear
+before takeoff.
+
+------------------------------------------------------------------------
+
+### L1 -- Image & Template Creation
+
+L1 produces reusable operating system templates.
+
+Templates are built once and reused across multiple personas. This
+ensures:
+
+-   Consistent base OS configuration
+-   Faster VM provisioning
+-   Reduced duplication of OS bootstrap logic
+
+Templates are treated as versioned artifacts. When the base OS
+definition changes, a new template is created rather than mutating
+existing VMs.
+
+------------------------------------------------------------------------
+
+### L2 -- VM Instantiation
+
+L2 is responsible for creating virtual machines from templates.
+
+Terraform defines:
+
+-   CPU and memory allocations
+-   Disk layout
+-   Network configuration
+-   Tags and metadata
+-   Initial cloud-init parameters
+
+L2 answers the question:
+
+"Does this machine exist with the correct infrastructure definition?"
+
+It does not configure the OS beyond what is required for initial
+bootstrapping.
+
+------------------------------------------------------------------------
+
+### L3 -- OS Convergence
+
+L3 converges the operating system to its desired state.
+
+This includes:
+
+-   User management
+-   Package installation
+-   Service configuration
+-   Filesystem preparation
+-   Base monitoring agents
+-   Host-level utilities
+
+L3 ensures the machine is a properly configured system, independent of
+application workloads.
+
+If a host is rebuilt, L3 can be re-run to restore system-level
+configuration to its declared state.
+
+------------------------------------------------------------------------
+
+### L4 -- Workload Convergence
+
+L4 manages application workloads running on top of the host.
+
+This includes:
+
+-   Docker Compose stacks
+-   Monitoring services
+-   Media services
+-   Reverse proxies
+-   Identity providers
+-   Any service logically considered a workload
+
+L4 assumes the host is already properly configured by L3.
+
+By isolating workloads into L4, applications can evolve independently of
+base OS concerns, and hosts remain portable and reusable.
+
+------------------------------------------------------------------------
+
+### How the Layers Work Together
+
+A typical lifecycle follows this progression:
+
+1.  Validate environment (L0)
+2.  Build or update templates (L1)
+3.  Instantiate or modify VM infrastructure (L2)
+4.  Converge system configuration (L3)
+5.  Deploy or update workloads (L4)
+
+Each step depends on the previous one being correct, but no step
+collapses into another. This structure enables safe iteration,
+controlled rebuilds, and long-term maintainability.
+
