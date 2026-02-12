@@ -3,7 +3,7 @@
 ## Overview
 
 Allan's Home Lab is a layered, GitOps-driven infrastructure
-system for managing a Proxmox-based home lab. It provides a structured
+system for managing a (mostly) Proxmox-based home lab. It provides a structured
 model for building, instantiating, converging, and rebuilding virtual
 machines and their workloads using a clear separation of
 responsibilities across infrastructure layers.
@@ -15,7 +15,7 @@ The project combines:
 -   **Ansible** for operating system convergence\
 -   **Docker Compose** for workload orchestration\
 -   **Just** as the operational interface\
--   Git as the single source of truth
+-   **Git** as the single source of truth
 
 The system is designed around one central idea:
 
