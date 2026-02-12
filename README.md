@@ -251,24 +251,14 @@ rebuild workflows become predictable.
 
 ### Layer Responsibilities at a Glance
 
-  ----------------------------------------------------------------------------
-  Layer       Name          Responsibility          Primary Tooling
-  ----------- ------------- ----------------------- --------------------------
-  L0          Runway        Validate and prepare    Shell / validation scripts
-                            Proxmox environment     
+| Layer | Name        | Responsibility                                  | Primary Tooling                  |
+|-------|------------|--------------------------------------------------|-----------------------------------|
+| L0    | Runway     | Validate and prepare Proxmox environment         | Shell / validation scripts       |
+| L1    | Image      | Build OS templates and golden images             | Packer / build scripts           |
+| L2    | Instantiate| Create VMs from templates                        | Terraform                        |
+| L3    | Converge (System)   | Configure operating system state        | Ansible                          |
+| L4    | Converge (Workload) | Deploy and manage applications         | Ansible + Docker Compose         |
 
-  L1          Image         Build OS templates and  Packer / scripts
-                            golden images           
-
-  L2          Instantiate   Create VMs from         Terraform
-                            templates               
-
-  L3          Converge      Configure operating     Ansible
-              (System)      system state            
-
-  L4          Converge      Deploy and manage       Ansible + Docker Compose
-              (Workload)    applications            
-  ----------------------------------------------------------------------------
 
 ------------------------------------------------------------------------
 
