@@ -612,9 +612,21 @@ documented in `docs/notes.md`.
 
 ------------------------------------------------------------------------
 
-## Additional Documentation
+## Documentation
 
--   Operations Reference → `docs/operations.md`
--   Personas & Lifecycle → `docs/personas.md`
--   Notes & Operational Edge Cases → `docs/notes.md`
+The README provides architectural context and high-level guidance.
+
+For detailed operational and lifecycle documentation:
+
+- **Operations Reference** → [docs/operations.md](docs/operations.md)  
+  Layer-oriented command reference and workflow examples.
+
+- **Personas & Lifecycle** → [docs/personas.md](docs/personas.md)  
+  Detailed explanation of persona structure, lifecycle, and infrastructure evolution.
+
+- **Notes & Operational Edge Cases** → [docs/notes.md](docs/notes.md)  
+  Transitional procedures, sharp edges, and manual workflows.
+
+If you are new to the project, start with this README, then move to **Operations**.  
+If you are modifying infrastructure or evolving a persona, read **Personas & Lifecycle** next.
 
