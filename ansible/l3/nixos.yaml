@@ -1,0 +1,60 @@
+---
+- name: L3 converge NixOS (hostname + baseline + packages)
+  hosts: nixos_tinker
+  become: true
+  gather_facts: false
+
+  vars:
+    nixos_l3_dir: /etc/nixos-flakes
+    nixos_l3_flake: "{{ nixos_l3_dir }}/flake.nix"
+
+  tasks:
+    - name: Ensure /etc/nixos exists
+      ansible.builtin.file:
+        path: /etc/nixos
+        state: directory
+        mode: "0755"
+
+    - name: Check if hardware-configuration.nix exists
+      ansible.builtin.stat:
+        path: /etc/nixos/hardware-configuration.nix
+      register: hw_config
+
+    - name: Generate hardware-configuration.nix if missing
+      ansible.builtin.command: nixos-generate-config --dir /etc/nixos
+      when: not hw_config.stat.exists
+
+    - name: Ensure L3 flake directory exists
+      ansible.builtin.file:
+        path: "{{ nixos_l3_dir }}"
+        state: directory
+        mode: "0755"
+
+    - name: Render L3 flake.nix to host
+      ansible.builtin.template:
+        src: flake.nix.j2
+        dest: "{{ nixos_l3_flake }}"
+        mode: "0644"
+
+    - name: Apply L3 flake (nixos-rebuild switch)
+      ansible.builtin.command: >
+        nixos-rebuild switch --impure --flake {{ nixos_l3_dir }}#{{ inventory_hostname }}
+      register: rebuild
+      changed_when: true
+
+    - name: Get current hostname
+      ansible.builtin.command: hostname
+      register: current_hostname
+      changed_when: false
+
+    - name: Reboot if hostname does not match inventory name
+      ansible.builtin.command: systemctl reboot
+      async: 1
+      poll: 0
+      when: current_hostname.stdout != inventory_hostname
+
+    - name: Wait for SSH to come back
+      ansible.builtin.wait_for_connection:
+        timeout: 600
+      when: current_hostname.stdout != inventory_hostname
+

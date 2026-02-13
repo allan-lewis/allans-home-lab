@@ -1,0 +1,70 @@
+{
+  description = "Allan's Homelab - NixOS L3 converge (baseline + packages) for {{ inventory_hostname }}";
+
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
+  };
+
+  outputs = { self, nixpkgs }:
+  let
+    system = "x86_64-linux";
+  in
+  {
+    nixosConfigurations.{{ inventory_hostname }} = nixpkgs.lib.nixosSystem {
+      inherit system;
+
+      modules = [
+        # Pull in the host's disk + bootloader + hardware settings.
+        # Without this, NixOS asserts that '/' and bootloader aren't configured.
+        /etc/nixos/hardware-configuration.nix
+
+        ({ pkgs, ... }:
+          {
+            boot.loader.grub.enable = true;
+            boot.loader.grub.device = "/dev/sda";
+
+            # ---- Identity ----
+            networking.hostName = "{{ inventory_hostname }}";
+
+            # ---- Keep remote access working ----
+            services.openssh.enable = true;
+
+            # Keep Proxmox integration + cloud-init (so you don't regress networking/keys behavior)
+            services.qemuGuest.enable = true;
+            services.cloud-init.enable = true;
+            services.cloud-init.network.enable = true;
+
+            networking.useNetworkd = true;
+            networking.useDHCP = false;
+
+            # ---- Automation-friendly sudo (so Ansible can keep driving) ----
+            users.users.lab = {
+              isNormalUser = true;
+              extraGroups = [ "wheel" ];
+            };
+
+            security.sudo.enable = true;
+            security.sudo.wheelNeedsPassword = false;
+
+            # ---- Nix features ----
+            nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+            # ---- Packages ----
+            environment.systemPackages = with pkgs; [
+              cmatrix
+              curl
+              fastfetch
+              git
+              neovim
+              python3
+            ];
+
+            # Required (don’t change lightly)
+            #system.stateVersion = "24.05";
+          }
+        )
+      ];
+    };
+  };
+}
+

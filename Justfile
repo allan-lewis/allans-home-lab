@@ -90,6 +90,10 @@ l3-converge group tags="":
   TAGS="{{tags}}" \
   {{run_prefix}} scripts/converge.sh "{{group}}" l3
 
+# Converge a group of NixOS hosts (capabilities)
+l3-converge-nixos:
+  {{run_prefix}} scripts/l3/converge-nixos.sh
+
 # Download backups from S3 and upload to an HAOS host 
 l3-homeassistant-backups:
   {{run_prefix}} scripts/l3/haos.sh

@@ -26,6 +26,7 @@
   environment.systemPackages = with pkgs; [
     curl
     git
+    python3
   ];
 
   system.stateVersion = "24.05";
