@@ -57,6 +57,10 @@ l1-haos-capture vmid:
 l1-haos-template:
   {{run_prefix}} scripts/l1/appliance-template.sh haos
 
+# Prepare a Proxmox VM template suitable for NixOS installations
+l1-nixos-template:
+  {{run_prefix}} scripts/l1/nixos-template.sh
+
 # Export a TrueNAS Proxmox VM's boot disk to an S3 bucket
 l1-truenas-capture vmid:
   S3_BUCKET=gitops-homelab-orchestrator-disks \

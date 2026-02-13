@@ -1,0 +1,18 @@
+{
+  "hosts": {
+    "sheemie": {
+      "terraform": {
+        "ip": "192.168.86.57",
+        "ssh_user": "lab",
+        "cpu": 2,
+        "memory_mb": 2048,
+        "disk_gb": 32,
+        "template_ref": "nixos/tinker/stable",
+        "node": "maturin",
+        "ipconfig": "ip=192.168.86.57/24,gw=192.168.86.1",
+        "tags": ["orchestrator", "terraform", "nixos", "tinker"]
+      }
+    }
+  }
+}
+
