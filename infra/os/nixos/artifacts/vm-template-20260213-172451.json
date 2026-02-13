@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-02-13T17:24:51Z",
+  "description": "NixOS base qcow2 for Proxmox (ssh + qemu-guest-agent + cloud-init)",
+  "name": "nixos-20260213",
+  "node": "maturin",
+  "storage": "local-lvm",
+  "vmid": 115,
+
+  "artifact": {
+    "type": "qcow2",
+    "filename": "nixos-proxmox-base-20260213-172428.qcow2",
+    "sha256": "23487341f9a62fa72451de5d3279173b62ed739d95de247d37af9e0bd5c02c01",
+    "size_bytes": 2387935232
+  },
+
+  "source": {
+    "flake_dir": "infra/os/nixos",
+    "flake_output": ".#proxmox-base-qcow2",
+    "git_commit": "5c9fb37a92e50a616ec465f9a20c14b2d8081d60",
+    "git_dirty": true,
+    "nixpkgs_locked_rev": "6c5e707c6b5339359a9a9e215c5e66d6d802fd7a"
+  }
+}

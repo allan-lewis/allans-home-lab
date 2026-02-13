@@ -12,6 +12,15 @@
   networking.useNetworkd = true;
   networking.useDHCP = false;
 
+  # --- Automation-friendly sudo bootstrap ---
+  users.users.lab = {
+    isNormalUser = true;
+    extraGroups = [ "wheel" ];
+  };
+
+  security.sudo.enable = true;
+  security.sudo.wheelNeedsPassword = false;
+
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   environment.systemPackages = with pkgs; [
