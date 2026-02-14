@@ -152,24 +152,24 @@ groups:
             task="{{ $labels.task }}"
             exit_code="{{ $value }}"
 
-- alert: HomelabTaskStaleSuccess
-  expr: |
-    (
-      (time() - homelab_task_last_success_unix)
-      /
-      on(task) group_left
-      homelab_task_allowed_age_seconds
-    ) > 1.15
-  labels:
-    severity: critical
-    rulegroup: homelabRules
-  annotations:
-    summary: "Homelab task overdue: {{ $labels.instance }} / {{ $labels.task }}"
-    description: |
-      Task has exceeded its allowed success window by more than 15%.
+      - alert: HomelabTaskStaleSuccess
+        expr: |
+          (
+            (time() - homelab_task_last_success_unix)
+            /
+            on(task) group_left
+            homelab_task_allowed_age_seconds
+          ) > 1.15
+        labels:
+          severity: critical
+          rulegroup: homelabRules
+        annotations:
+          summary: "Homelab task overdue: {{ $labels.instance }} / {{ $labels.task }}"
+          description: |
+            Task has exceeded its allowed success window by more than 15%.
 
-      instance="{{ $labels.instance }}"
-      task="{{ $labels.task }}"
-      utilization="{{ printf "%.2f" $value }}"
+            instance="{{ $labels.instance }}"
+            task="{{ $labels.task }}"
+            utilization="{{ printf "%.2f" $value }}"
 
 {% endraw %}

@@ -93,6 +93,10 @@ all:
         node-exporter: [9100]
     todash:
       ansible_host: 192.168.86.216
+      gatus_slug: "(NixOS Sandbox)"
+      prometheus_scrape_jobs:
+        node-exporter: [9100]
+        homelab-metrics: [9102]
 
   children:
     arch:

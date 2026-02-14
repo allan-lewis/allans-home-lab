@@ -76,3 +76,8 @@
         timeout: 600
       when: current_hostname.stdout != inventory_hostname
 
+    - name: Monitoring (Docker)
+      ansible.builtin.include_role:
+        name: all_docker_monitoring
+      when: converge_docker_monitoring
+      tags: [l3, step_docker_monitoring]

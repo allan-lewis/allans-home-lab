@@ -1,6 +1,7 @@
 ansible_python_interpreter: /run/current-system/sw/bin/python3
 
 converge_docker: true
+converge_docker_monitoring: true
 
 dot_user: "lab"
 dotfiles_dest: "/home/lab/.dotfiles"

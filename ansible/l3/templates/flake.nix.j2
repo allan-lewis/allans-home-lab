@@ -135,6 +135,13 @@
             {% endfor %}
             };
 
+            systemd.tmpfiles.rules = [
+{% if converge_docker | default(false) %}
+              "d /opt/docker-compose 0750 root root -"
+{% endif %}
+              "d /var/lib/node_exporter/textfile_collector 0755 root root -"
+            ];
+
             # ---- Packages ----
             environment.systemPackages = with pkgs; [
               btop
