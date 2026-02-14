@@ -118,6 +118,23 @@
               ];
             };
 
+            # NFS mounts generated from Ansible inventory
+            fileSystems = {
+            {% for item in (all_nfs_mounts | default([])) if item.nfs_server and item.nfs_path %}
+              "{{ item.path }}" = {
+                device = "{{ item.nfs_server }}:{{ item.nfs_path }}";
+                fsType = "nfs";
+                options = [
+                  "{{ item.nfs_opts | default('ro') }}"
+                  "nofail"
+                  "_netdev"
+                  "x-systemd.requires=network-online.target"
+                  "x-systemd.after=network-online.target"
+                ];
+              };
+            {% endfor %}
+            };
+
             # ---- Packages ----
             environment.systemPackages = with pkgs; [
               btop
