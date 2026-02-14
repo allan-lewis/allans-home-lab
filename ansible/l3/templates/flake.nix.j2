@@ -29,6 +29,16 @@
             # ---- Keep remote access working ----
             services.openssh.enable = true;
 
+            services.openssh.settings = {
+              PermitRootLogin = "no";
+              PasswordAuthentication = false;
+              KbdInteractiveAuthentication = false;
+            };
+
+            services.openssh.extraConfig = ''
+              AllowUsers lab
+            '';
+
             # Keep Proxmox integration + cloud-init (so you don't regress networking/keys behavior)
             services.qemuGuest.enable = true;
             services.cloud-init.enable = true;
@@ -37,14 +47,23 @@
             networking.useNetworkd = true;
             networking.useDHCP = false;
 
+            virtualisation.docker.enable = {{ (converge_docker | default(false) | bool) | string | lower }};
+
+            programs.zsh.enable = true;
+
             # ---- Automation-friendly sudo (so Ansible can keep driving) ----
             users.users.lab = {
               isNormalUser = true;
-              extraGroups = [ "wheel" ];
+              extraGroups = [ "wheel" "docker" ];
+              shell = pkgs.zsh;
+              # lock password (SSH keys still work)
+              hashedPassword = "!";
             };
 
             security.sudo.enable = true;
             security.sudo.wheelNeedsPassword = false;
+
+            time.timeZone = "UTC";
 
             # ---- Nix features ----
             nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -54,14 +73,22 @@
               btop
               cmatrix
               curl
+{% if converge_docker | default(false) %}
+              docker-compose
+{% endif %}
               fastfetch
               git
               neovim
+              nfs-utils
               python3
+              starship
+              stow
+              unzip
+              zsh
             ];
 
             # Required (don’t change lightly)
-            #system.stateVersion = "24.05";
+            system.stateVersion = "25.11";
           }
         )
       ];
