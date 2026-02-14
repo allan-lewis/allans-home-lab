@@ -9,6 +9,24 @@
     nixos_l3_flake: "{{ nixos_l3_dir }}/flake.nix"
 
   tasks:
+    - name: "Ensure dotfiles destination directory exists for {{ dot_user }}"
+      become: true
+      become_user: "{{ dot_user }}"
+      ansible.builtin.file:
+        path: "{{ dotfiles_dest }}"
+        state: directory
+        mode: "0755"
+
+    - name: "Clone or update dotfiles repo (HTTPS) for {{ dot_user }}"
+      become: true
+      become_user: "{{ dot_user }}"
+      ansible.builtin.git:
+        repo: "{{ dotfiles_repo }}"
+        dest: "{{ dotfiles_dest }}"
+        version: "{{ dotfiles_version }}"
+        update: true
+        force: true
+
     - name: Ensure /etc/nixos exists
       ansible.builtin.file:
         path: /etc/nixos

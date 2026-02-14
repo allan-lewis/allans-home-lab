@@ -3,9 +3,13 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
+
+    # Home Manager (NixOS module)
+    home-manager.url = "github:nix-community/home-manager/release-25.11";
+    home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, nixpkgs }:
+  outputs = { self, nixpkgs, home-manager }:
   let
     system = "x86_64-linux";
   in
@@ -14,6 +18,9 @@
       inherit system;
 
       modules = [
+        # Enable Home Manager on NixOS
+        home-manager.nixosModules.home-manager
+
         # Pull in the host's disk + bootloader + hardware settings.
         # Without this, NixOS asserts that '/' and bootloader aren't configured.
         /etc/nixos/hardware-configuration.nix
@@ -68,6 +75,44 @@
             # ---- Nix features ----
             nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
+            # ---- Home Manager ----
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+
+            home-manager.users.lab = { pkgs, ... }: {
+              home.stateVersion = "25.11";
+
+              # Starship via HM; config sourced from your dotfiles clone
+              programs.starship.enable = true;
+              xdg.configFile."starship.toml".source = /home/lab/.dotfiles/common-starship/.config/starship.toml;
+
+              # Zsh plugins managed by HM (no stow / no plugin git clones needed)
+              programs.zsh = {
+                enable = true;
+                enableCompletion = true;
+
+                plugins = [
+                  { name = "zsh-autosuggestions"; src = pkgs.zsh-autosuggestions; }
+                  { name = "zsh-syntax-highlighting"; src = pkgs.zsh-syntax-highlighting; }
+                  { name = "zsh-history-substring-search"; src = pkgs.zsh-history-substring-search; }
+                ];
+
+                # Optional: if your dotfiles repo has a zsh entrypoint you want to source,
+                # set it here (adjust path to match your repo layout).
+                # initExtra = ''
+                #   source "$HOME/.dotfiles/zsh/.zshrc"
+                # '';
+              };
+
+              # User-scoped packages (anything that is "home environment" oriented)
+              home.packages = with pkgs; [
+                starship
+                zsh-autosuggestions
+                zsh-syntax-highlighting
+                zsh-history-substring-search
+              ];
+            };
+
             # ---- Packages ----
             environment.systemPackages = with pkgs; [
               btop
@@ -81,10 +126,7 @@
               neovim
               nfs-utils
               python3
-              starship
-              stow
               unzip
-              zsh
             ];
 
             # Required (don’t change lightly)
