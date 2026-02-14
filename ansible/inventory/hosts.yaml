@@ -91,8 +91,8 @@ all:
       gatus_slug: "(Arch Desktop, BTW)"
       prometheus_scrape_jobs:
         node-exporter: [9100]
-    sheemie:
-      ansible_host: 192.168.86.57
+    todash:
+      ansible_host: 192.168.86.216
 
   children:
     arch:
@@ -110,7 +110,7 @@ all:
       children:
         nixos_tinker:
           hosts:
-            sheemie:
+            todash:
 
     ubuntu:
       children: 
