@@ -129,6 +129,10 @@ l4-converge-gatus-config:
   TAGS=step_docker_gatus \
   {{run_prefix}} scripts/converge.sh flagg l4
 
+# Converge a group of NixOS hosts (workloads)
+l4-converge-nixos:
+  {{run_prefix}} scripts/l4/converge-nixos.sh
+
 # Full converge of Traefik
 l4-converge-traefik:
   TAGS=step_docker_traefik \

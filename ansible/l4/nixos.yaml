@@ -1,0 +1,18 @@
+---
+- name: L4 converge NixOS
+  hosts: nixos_tinker
+  become: true
+  gather_facts: false
+
+  tasks:
+    - name: L4 | All | docker it tools
+      ansible.builtin.include_role:
+        name: all_docker_it_tools
+      when: converge_docker_it_tools
+      tags: [l4, step_docker_it_tools]
+
+    - name: L4 | All | docker no geeks brewing
+      ansible.builtin.include_role:
+        name: all_docker_no_geeks_brewing
+      when: converge_docker_ngb
+      tags: [l4, step_docker_ngb]

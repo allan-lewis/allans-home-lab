@@ -81,3 +81,16 @@
         name: all_docker_monitoring
       when: converge_docker_monitoring
       tags: [l3, step_docker_monitoring]
+
+    ## TODO - MOVE TO L4
+    - name: L4 | All | docker it tools
+      ansible.builtin.include_role:
+        name: all_docker_it_tools
+      when: converge_docker_it_tools
+      tags: [l4, step_docker_it_tools]
+
+    - name: L4 | All | docker no geeks brewing
+      ansible.builtin.include_role:
+        name: all_docker_no_geeks_brewing
+      when: converge_docker_ngb
+      tags: [l4, step_docker_ngb]
