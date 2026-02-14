@@ -82,34 +82,39 @@
             home-manager.users.lab = { pkgs, ... }: {
               home.stateVersion = "25.11";
 
-              # Starship via HM; config sourced from your dotfiles clone
+              # --- Dotfiles wiring (XDG zsh + starship) ---
+              # ZDOTDIR is set by your .zshenv to ~/.config/zsh
+              home.file.".zshenv".source =
+                /home/lab/.dotfiles/common-zsh/.zshenv;
+
+              xdg.configFile."zsh/.zshrc".source =
+                /home/lab/.dotfiles/common-zsh/.config/zsh/.zshrc;
+
+              xdg.configFile."zsh/common.zsh".source =
+                /home/lab/.dotfiles/common-zsh/.config/zsh/common.zsh;
+
+              xdg.configFile."zsh/login-fastfetch.zsh".source =
+                /home/lab/.dotfiles/common-zsh/.config/zsh/login-fastfetch.zsh;
+
+              # Starship config lives in your repo at common-starship/.config/starship.toml
               programs.starship.enable = true;
-              xdg.configFile."starship.toml".source = /home/lab/.dotfiles/common-starship/.config/starship.toml;
+              xdg.configFile."starship.toml".source =
+                /home/lab/.dotfiles/common-starship/.config/starship.toml;
 
-              # Zsh plugins managed by HM (no stow / no plugin git clones needed)
-              programs.zsh = {
-                enable = true;
-                enableCompletion = true;
+              # Match your common.zsh expectations exactly:
+              xdg.configFile."zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh".source =
+                "${pkgs.zsh-autosuggestions}/share/zsh-autosuggestions/zsh-autosuggestions.zsh";
 
-                plugins = [
-                  { name = "zsh-autosuggestions"; src = pkgs.zsh-autosuggestions; }
-                  { name = "zsh-syntax-highlighting"; src = pkgs.zsh-syntax-highlighting; }
-                  { name = "zsh-history-substring-search"; src = pkgs.zsh-history-substring-search; }
-                ];
+              xdg.configFile."zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh".source =
+                "${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh";
 
-                # Optional: if your dotfiles repo has a zsh entrypoint you want to source,
-                # set it here (adjust path to match your repo layout).
-                # initExtra = ''
-                #   source "$HOME/.dotfiles/zsh/.zshrc"
-                # '';
-              };
 
-              # User-scoped packages (anything that is "home environment" oriented)
+              # If you later add more plugins to common.zsh, add more mappings like above.
+
+              # User-scoped packages used by your dotfiles (starship prompt, login fastfetch, etc.)
               home.packages = with pkgs; [
                 starship
-                zsh-autosuggestions
-                zsh-syntax-highlighting
-                zsh-history-substring-search
+                fastfetch
               ];
             };
 
@@ -121,7 +126,6 @@
 {% if converge_docker | default(false) %}
               docker-compose
 {% endif %}
-              fastfetch
               git
               neovim
               nfs-utils
