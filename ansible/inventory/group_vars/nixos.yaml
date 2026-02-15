@@ -10,3 +10,5 @@ dot_user: "lab"
 dotfiles_dest: "/home/lab/.dotfiles"
 dotfiles_repo: "https://github.com/allan-lewis/dotfiles.git"
 dotfiles_version: "main"
+
+backup_runner_rsync_flags: "-aHAX --numeric-ids --delete-delay --partial --partial-dir=.rsync-partial --human-readable --sparse --mkpath"

@@ -152,6 +152,7 @@
         group: root
         mode: "0644"
       loop:
+        - backup-runner.nix
         - homelab-hello.nix
         - homelab-tasks.nix
 

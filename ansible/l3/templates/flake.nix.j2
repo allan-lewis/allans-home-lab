@@ -32,6 +32,7 @@
         # Without this, NixOS asserts that '/' and bootloader aren't configured.
         /etc/nixos/hardware-configuration.nix
 
+        ./modules/backup-runner.nix
         ./modules/homelab-tasks.nix
         ./modules/homelab-hello.nix
 
@@ -212,10 +213,16 @@
               python3
               unzip
             ];
-            
+
             services.homelab.hello = {
               enable = true;
               intervalSeconds = 15;
+            };
+
+            services.homelab.backupRunner = {
+              enable = true;
+              schedule = "*-*-* *:50:00";
+              rsyncFlags = "{{ backup_runner_rsync_flags }}";
             };
 
             # Required (don’t change lightly)
