@@ -9,6 +9,96 @@
     nixos_l3_flake: "{{ nixos_l3_dir }}/flake.nix"
 
   tasks:
+    # --- SOPS-Nix host key bootstrap (remote) ---
+    - name: SOPS | Ensure sops-nix key directory exists
+      become: true
+      ansible.builtin.file:
+        path: /var/lib/sops-nix
+        state: directory
+        owner: root
+        group: root
+        mode: "0700"
+
+    - name: SOPS | Check if host age key exists
+      become: true
+      ansible.builtin.stat:
+        path: /var/lib/sops-nix/key.txt
+      register: sops_key
+
+    - name: SOPS | Generate host age key (first run only)
+      become: true
+      ansible.builtin.command: >
+        nix shell nixpkgs#age -c age-keygen -o /var/lib/sops-nix/key.txt
+      when: not sops_key.stat.exists
+      changed_when: true
+
+    - name: SOPS | Ensure correct permissions on host age key
+      become: true
+      ansible.builtin.file:
+        path: /var/lib/sops-nix/key.txt
+        owner: root
+        group: root
+        mode: "0600"
+
+    - name: SOPS | Read host age public key
+      become: true
+      ansible.builtin.command: >
+        nix shell nixpkgs#age -c age-keygen -y /var/lib/sops-nix/key.txt
+      register: age_public_key
+      changed_when: false
+
+    # --- Ensure secrets dir exists in host flake root ---
+    - name: SOPS | Ensure host flake secrets directory exists
+      become: true
+      ansible.builtin.file:
+        path: /etc/nixos-flakes/secrets
+        state: directory
+        owner: root
+        group: root
+        mode: "0750"
+
+    - name: SOPS | Generate + encrypt ssh.yaml on controller
+      delegate_to: localhost
+      become: false
+      no_log: true
+      ansible.builtin.shell: |
+        set -euo pipefail
+
+        priv_b64="$(doppler secrets get SSH_PRIVATE_KEY --plain)"
+        pub_b64="$(doppler secrets get SSH_PUBLIC_KEY  --plain)"
+
+        priv="$(printf '%s' "$priv_b64" | base64 --decode)"
+        pub="$(printf '%s' "$pub_b64"  | base64 --decode)"
+
+        tmp="$(mktemp)"
+        trap 'rm -f "$tmp"' EXIT
+
+        {
+          printf "root_ssh_private: |\n"
+          printf '%s\n' "$priv" | sed 's/^/  /'
+          printf "root_ssh_public: \"%s\"\n" "$(printf '%s' "$pub" | sed 's/"/\\"/g')"
+          printf "\n"
+          printf "lab_ssh_private: |\n"
+          printf '%s\n' "$priv" | sed 's/^/  /'
+          printf "lab_ssh_public: \"%s\"\n" "$(printf '%s' "$pub" | sed 's/"/\\"/g')"
+        } > "$tmp"
+
+        export SOPS_AGE_RECIPIENTS="{{ age_public_key.stdout | trim }}"
+        sops --input-type yaml -e "$tmp"
+      args:
+        executable: /bin/bash
+      register: encrypted_ssh_yaml
+      changed_when: true
+
+    - name: SOPS | Write encrypted ssh.yaml into host flake directory
+      become: true
+      ansible.builtin.copy:
+        content: "{{ encrypted_ssh_yaml.stdout | trim }}\n"
+        dest: /etc/nixos-flakes/secrets/ssh.yaml
+        owner: root
+        group: root
+        mode: "0640"
+
     - name: "Ensure dotfiles destination directory exists for {{ dot_user }}"
       become: true
       become_user: "{{ dot_user }}"
@@ -81,16 +171,3 @@
         name: all_docker_monitoring
       when: converge_docker_monitoring
       tags: [l3, step_docker_monitoring]
-
-    ## TODO - MOVE TO L4
-    - name: L4 | All | docker it tools
-      ansible.builtin.include_role:
-        name: all_docker_it_tools
-      when: converge_docker_it_tools
-      tags: [l4, step_docker_it_tools]
-
-    - name: L4 | All | docker no geeks brewing
-      ansible.builtin.include_role:
-        name: all_docker_no_geeks_brewing
-      when: converge_docker_ngb
-      tags: [l4, step_docker_ngb]

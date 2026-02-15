@@ -7,9 +7,13 @@
     # Home Manager (NixOS module)
     home-manager.url = "github:nix-community/home-manager/release-25.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
+
+    # SOPS-Nix (secrets management)
+    sops-nix.url = "github:Mic92/sops-nix";
+    sops-nix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, nixpkgs, home-manager }:
+  outputs = { self, nixpkgs, home-manager, sops-nix }:
   let
     system = "x86_64-linux";
   in
@@ -20,6 +24,9 @@
       modules = [
         # Enable Home Manager on NixOS
         home-manager.nixosModules.home-manager
+
+        # Enable SOPS-Nix on NixOS
+        sops-nix.nixosModules.sops
 
         # Pull in the host's disk + bootloader + hardware settings.
         # Without this, NixOS asserts that '/' and bootloader aren't configured.
@@ -58,9 +65,12 @@
 
             programs.zsh.enable = true;
 
+            users.groups.lab = {};
+
             # ---- Automation-friendly sudo (so Ansible can keep driving) ----
             users.users.lab = {
               isNormalUser = true;
+              group = "lab";
               extraGroups = [ "wheel" "docker" ];
               shell = pkgs.zsh;
               # lock password (SSH keys still work)
@@ -74,6 +84,46 @@
 
             # ---- Nix features ----
             nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+            # ---- SOPS-Nix configuration ----
+            # Encrypted file lives in your flake repo at ./secrets/ssh.yaml
+            # Host key is generated/managed by Ansible at /var/lib/sops-nix/key.txt
+            sops = {
+              defaultSopsFile = ./secrets/ssh.yaml;
+              age.keyFile = "/var/lib/sops-nix/key.txt";
+            };
+
+            # Root keypair (always)
+            sops.secrets.root_ssh_private = {
+              owner = "root";
+              group = "root";
+              mode = "0600";
+              path = "/root/.ssh/id_ed25519";
+            };
+
+            sops.secrets.root_ssh_public = {
+              owner = "root";
+              group = "root";
+              mode = "0644";
+              path = "/root/.ssh/id_ed25519.pub";
+            };
+
+{% if converge_devops | default(false) | bool %}
+            # Lab keypair (only when converge_devops=true)
+            sops.secrets.lab_ssh_private = {
+              owner = "lab";
+              group = "lab";
+              mode = "0600";
+              path = "/home/lab/.ssh/id_ed25519";
+            };
+
+            sops.secrets.lab_ssh_public = {
+              owner = "lab";
+              group = "lab";
+              mode = "0644";
+              path = "/home/lab/.ssh/id_ed25519.pub";
+            };
+{% endif %}
 
             # ---- Home Manager ----
             home-manager.useGlobalPkgs = true;
@@ -108,9 +158,6 @@
               xdg.configFile."zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh".source =
                 "${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh";
 
-
-              # If you later add more plugins to common.zsh, add more mappings like above.
-
               # User-scoped packages used by your dotfiles (starship prompt, login fastfetch, etc.)
               home.packages = with pkgs; [
                 starship
@@ -140,6 +187,12 @@
               "d /opt/docker-compose 0750 root root -"
 {% endif %}
               "d /var/lib/node_exporter/textfile_collector 0755 root root -"
+
+              # Ensure SSH dirs exist for sops-nix secret placement
+              "d /root/.ssh 0700 root root -"
+{% if converge_devops | default(false) | bool %}
+              "d /home/lab/.ssh 0700 lab lab -"
+{% endif %}
             ];
 
             # ---- Packages ----
@@ -165,4 +218,3 @@
     };
   };
 }
-
