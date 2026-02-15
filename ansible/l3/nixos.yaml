@@ -134,7 +134,7 @@
 
     - name: Ensure L3 flake directory exists
       ansible.builtin.file:
-        path: "{{ nixos_l3_dir }}"
+        path: "{{ nixos_l3_dir }}/modules"
         state: directory
         mode: "0755"
 
@@ -143,6 +143,17 @@
         src: flake.nix.j2
         dest: "{{ nixos_l3_flake }}"
         mode: "0644"
+
+    - name: Copy NixOS modules (homelab-hello + homelab-tasks) to remote modules dir
+      ansible.builtin.copy:
+        src: "files/{{ item }}"
+        dest: "{{ nixos_l3_dir }}/modules/{{ item }}"
+        owner: root
+        group: root
+        mode: "0644"
+      loop:
+        - homelab-hello.nix
+        - homelab-tasks.nix
 
     - name: Apply L3 flake (nixos-rebuild switch)
       ansible.builtin.command: >

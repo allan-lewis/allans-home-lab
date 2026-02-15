@@ -32,6 +32,9 @@
         # Without this, NixOS asserts that '/' and bootloader aren't configured.
         /etc/nixos/hardware-configuration.nix
 
+        ./modules/homelab-tasks.nix
+        ./modules/homelab-hello.nix
+
         ({ pkgs, ... }:
           {
             boot.loader.grub.enable = true;
@@ -209,6 +212,11 @@
               python3
               unzip
             ];
+            
+            services.homelab.hello = {
+              enable = true;
+              intervalSeconds = 15;
+            };
 
             # Required (don’t change lightly)
             system.stateVersion = "25.11";
