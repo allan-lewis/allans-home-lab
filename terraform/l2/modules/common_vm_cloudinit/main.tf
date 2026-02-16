@@ -33,7 +33,7 @@ resource "proxmox_virtual_environment_vm" "vm" {
     enabled = var.agent_enabled
   }
 
-  on_boot = true
+  on_boot = false
   # (no 'numa' attribute here; bpg exposes NUMA differently—omit for now)
 
   # --- Disk ---
