@@ -4,6 +4,7 @@ all:
     barlow:
       ansible_host: 192.168.86.213
       gatus_slug: "(Ubuntu Sandbox)"
+      observability: false
       prometheus_scrape_jobs:
         node-exporter: [9100]
         homelab-metrics: [9102]
@@ -15,6 +16,7 @@ all:
     callahan:
       ansible_host: 192.168.86.214
       gatus_slug: "(Arch Sandbox, BTW)"
+      observability: false
       prometheus_scrape_jobs:
         node-exporter: [9100]
         homelab-metrics: [9102]
@@ -94,6 +96,7 @@ all:
     todash:
       ansible_host: 192.168.86.216
       gatus_slug: "(NixOS Sandbox)"
+      observability: false
       prometheus_scrape_jobs:
         node-exporter: [9100]
         homelab-metrics: [9102]

@@ -17,7 +17,7 @@ scrape_configs:
   # ---------------------------------------------------------------------------
   - job_name: node-exporter
     static_configs:
-{% for h in groups['all'] | sort %}
+{% for h in groups['all'] | sort if hostvars[h].observability | default(true) %}
 {% set ip = hostvars[h].ansible_host | default(h) %}
 
 {% set legacy_ports = hostvars[h].prometheus_targets | default([]) %}
@@ -48,7 +48,7 @@ scrape_configs:
   # ---------------------------------------------------------------------------
 {% set jobs = {} %}
 
-{% for h in groups['all'] | sort %}
+{% for h in groups['all'] | sort if hostvars[h].observability | default(true) %}
 {% set ip = hostvars[h].ansible_host | default(h) %}
 {% set host_jobs = hostvars[h].prometheus_scrape_jobs | default({}) %}
 {% for job_name, ports in host_jobs.items() %}

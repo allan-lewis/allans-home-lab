@@ -9,7 +9,7 @@ endpoints:
 {% if hostvars[host].ansible_host is defined %}
   - name: "{{ host  | capitalize }} {{ hostvars[host].gatus_slug | default('') }}"
     group: "Hosts"
-    enabled: {{ hostvars[host].gatus_enabled | default(true) }}
+    enabled: {{ hostvars[host].observability | default(true) }}
     url: "icmp://{{ hostvars[host].ansible_host }}"
     conditions:
       - "[CONNECTED] == true"
