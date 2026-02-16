@@ -127,7 +127,7 @@ groups:
 
       - alert: HomelabTaskMetricsCountMismatch
         expr: |
-          count(homelab_task_last_run_unix) != 12
+          count(homelab_task_last_run_unix{task!="hello"}) != 13
         labels:
           severity: critical
           rulegroup: homelabRules
@@ -136,7 +136,7 @@ groups:
           description: |
             The global count of published homelab task metrics does not match the expected value.
             This usually indicates that one or more tasks are missing, duplicated, or misconfigured.
-            expected="12", observed="{{ $value }}"
+            expected="13", observed="{{ $value }}"
 
       - alert: HomelabTaskFailed
         expr: |
