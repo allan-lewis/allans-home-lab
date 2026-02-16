@@ -91,6 +91,7 @@ all:
     roland:
       ansible_host: 192.168.86.207
       gatus_slug: "(Arch Desktop, BTW)"
+      observability: false
       prometheus_scrape_jobs:
         node-exporter: [9100]
     todash:
