@@ -11,5 +11,6 @@ all_devops_packages:
   - xorriso
   - just
   - go
+  - sops
   - tree
   - tmux

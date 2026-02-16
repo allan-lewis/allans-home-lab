@@ -203,28 +203,32 @@
             nixpkgs.config.allowUnfree = true;
             
             environment.systemPackages = with pkgs; [
-{% if converge_devops | default(false)%}
+{% if converge_devops | default(false) %}
+              air
               ansible
               awscli2
 {% endif %}
               btop
               cmatrix
               curl
-{% if converge_devops | default(false)%}
+{% if converge_devops | default(false) %}
               doppler
 {% endif %}
 {% if converge_docker | default(false) %}
               docker-compose
 {% endif %}
               git
-{% if converge_devops | default(false)%}
+{% if converge_devops | default(false) %}
               go
               just
 {% endif %}
               neovim
               nfs-utils
+{% if converge_devops | default(false) %}
+              packer
+{% endif %}
               python3
-{% if converge_devops | default(false)%}
+{% if converge_devops | default(false) %}
               terraform
 {% endif %}
               tmux
@@ -242,6 +246,14 @@
               schedule = "*-*-* *:50:00";
               rsyncFlags = "{{ backup_runner_rsync_flags }}";
             };
+
+{% if converge_node_exporter | default(false) %}
+            services.prometheus.exporters.node = {
+              enable = true;
+              enabledCollectors = [ "textfile" ];
+              textfileDirectory = "/var/lib/node_exporter/textfile_collector";
+            };
+{% endif %}
 
             # Required (don’t change lightly)
             system.stateVersion = "25.11";
