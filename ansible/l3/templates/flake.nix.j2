@@ -200,17 +200,35 @@
             ];
 
             # ---- Packages ----
+            nixpkgs.config.allowUnfree = true;
+            
             environment.systemPackages = with pkgs; [
+{% if converge_devops | default(false)%}
+              ansible
+              awscli2
+{% endif %}
               btop
               cmatrix
               curl
+{% if converge_devops | default(false)%}
+              doppler
+{% endif %}
 {% if converge_docker | default(false) %}
               docker-compose
 {% endif %}
               git
+{% if converge_devops | default(false)%}
+              go
+              just
+{% endif %}
               neovim
               nfs-utils
               python3
+{% if converge_devops | default(false)%}
+              terraform
+{% endif %}
+              tmux
+              tree
               unzip
             ];
 
