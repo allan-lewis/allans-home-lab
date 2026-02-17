@@ -150,6 +150,15 @@
         group: root
         mode: "0644"
 
+    - name: Render tmux.conf into flake assets dir
+      become: true
+      ansible.builtin.template:
+        src: tmux.conf.j2
+        dest: "{{ nixos_l3_dir }}/assets/tmux.conf"
+        owner: root
+        group: root
+        mode: "0644"
+
     - name: Render L3 flake.nix to host
       ansible.builtin.template:
         src: flake.nix.j2

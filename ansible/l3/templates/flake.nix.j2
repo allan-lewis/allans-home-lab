@@ -36,7 +36,7 @@
         ./modules/homelab-tasks.nix
         ./modules/homelab-hello.nix
 
-        ({ pkgs, ... }:
+        ({ pkgs, lib, ... }:
           {
             boot.loader.grub.enable = true;
             boot.loader.grub.device = "/dev/sda";
@@ -189,7 +189,8 @@
                 "${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh";
 
               xdg.configFile."nvim".source =
-                config.lib.file.mkOutOfStoreSymlink /home/lab/.dotfiles/common-lazyvim/.config/nvim;
+                config.lib.file.mkOutOfStoreSymlink
+                  "${config.home.homeDirectory}/.dotfiles/common-lazyvim/.config/nvim";
 
               # User-scoped packages used by your dotfiles (starship prompt, login fastfetch, etc.)
               home.packages = with pkgs; [
@@ -215,6 +216,16 @@
             {% endfor %}
             };
 
+            # ---- Tmux ----
+            # Make tmux deterministic:
+            # 1) Force /etc/tmux.conf to be empty so no system defaults can cause the mouse/selection weirdness.
+            # 2) Write a REAL /home/lab/.tmux.conf (not a /nix/store symlink) from ./assets/tmux.conf on every switch.
+            environment.etc."tmux.conf".text = lib.mkForce "";
+
+            system.activationScripts.labTmuxConf.text = ''
+              install -m 0644 -o lab -g lab ${./assets/tmux.conf} /home/lab/.tmux.conf
+            '';
+
             systemd.tmpfiles.rules = [
 {% if converge_devops | default(false) | bool %}
               "d /home/lab/src 0755 lab lab -"
@@ -230,11 +241,13 @@
 {% if converge_devops | default(false) | bool %}
               "d /home/lab/.ssh 0700 lab lab -"
 {% endif %}
+              # Ensure tmux user config exists as a regular file (activation script writes contents)
+              "f /home/lab/.tmux.conf 0644 lab lab -"
             ];
 
             # ---- Packages ----
             nixpkgs.config.allowUnfree = true;
-            
+
             environment.systemPackages = with pkgs; [
 {% if converge_devops | default(false) %}
               air
