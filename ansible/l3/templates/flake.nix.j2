@@ -98,38 +98,6 @@
               age.keyFile = "/var/lib/sops-nix/key.txt";
             };
 
-            # Root keypair (always)
-            sops.secrets.root_ssh_private = {
-              owner = "root";
-              group = "root";
-              mode = "0600";
-              path = "/root/.ssh/id_ed25519";
-            };
-
-            sops.secrets.root_ssh_public = {
-              owner = "root";
-              group = "root";
-              mode = "0644";
-              path = "/root/.ssh/id_ed25519.pub";
-            };
-
-{% if converge_devops | default(false) | bool %}
-            # Lab keypair (only when converge_devops=true)
-            sops.secrets.lab_ssh_private = {
-              owner = "lab";
-              group = "lab";
-              mode = "0600";
-              path = "/home/lab/.ssh/id_ed25519";
-            };
-
-            sops.secrets.lab_ssh_public = {
-              owner = "lab";
-              group = "lab";
-              mode = "0644";
-              path = "/home/lab/.ssh/id_ed25519.pub";
-            };
-{% endif %}
-
             # ---- Home Manager ----
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
@@ -244,6 +212,12 @@
               "d /root/.aws 0700 root root -"
               "L+ /root/.aws/config - - - - /var/lib/homelab-secrets/aws/config"
               "L+ /root/.aws/credentials - - - - /var/lib/homelab-secrets/aws/credentials"
+
+              "d /var/lib/homelab-secrets/ssh/lab 0700 lab lab -"
+              "f /var/lib/homelab-secrets/ssh/lab/id_ed25519 0600 lab lab -"
+              "f /var/lib/homelab-secrets/ssh/lab/id_ed25519.pub 0644 lab lab -"
+              "L+ /home/lab/.ssh/id_ed25519 - - - - /var/lib/homelab-secrets/ssh/lab/id_ed25519"
+              "L+ /home/lab/.ssh/id_ed25519.pub - - - - /var/lib/homelab-secrets/ssh/lab/id_ed25519.pub"
 {% endif %}
 {% if converge_docker | default(false) %}
               "d /opt/docker-compose 0750 root root -"
@@ -253,6 +227,14 @@
 {% endif%}
               # Ensure SSH dirs exist for sops-nix secret placement
               "d /root/.ssh 0700 root root -"
+
+              # Ensure host secret dirs exist (non-secret to declare)
+              "d /var/lib/homelab-secrets/ssh/root 0700 root root -"
+              "f /var/lib/homelab-secrets/ssh/root/id_ed25519 0600 root root -"
+              "f /var/lib/homelab-secrets/ssh/root/id_ed25519.pub 0644 root root -"
+              # Symlink “real” SSH key paths to the rendered files
+              "L+ /root/.ssh/id_ed25519 - - - - /var/lib/homelab-secrets/ssh/root/id_ed25519"
+              "L+ /root/.ssh/id_ed25519.pub - - - - /var/lib/homelab-secrets/ssh/root/id_ed25519.pub"
 
               # Ensure tmux user config exists as a regular file (activation script writes contents)
               "f /home/lab/.tmux.conf 0644 lab lab -"

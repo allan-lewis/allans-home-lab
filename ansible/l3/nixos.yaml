@@ -210,6 +210,50 @@
           aws_secret_access_key = {{ aws_secret_access_key }}
       when: aws_creds_available
 
+    - name: SSH Keys | Load keys from environment (b64)
+      ansible.builtin.set_fact:
+        _ssh_private_key_b64: "{{ lookup('env', 'SSH_PRIVATE_KEY') | default('', true) }}"
+        _ssh_public_key_b64:  "{{ lookup('env', 'SSH_PUBLIC_KEY')  | default('', true) }}"
+      no_log: true
+
+    - name: SSH Keys | Ensure secret directories exist
+      become: true
+      ansible.builtin.file:
+        path: "/var/lib/homelab-secrets/ssh/{{ item.user }}"
+        state: directory
+        owner: "{{ item.user }}"
+        group: "{{ item.group }}"
+        mode: "0700"
+      loop:
+        - { user: "root", group: "root" }
+        - { user: "lab",  group: "lab"  }
+
+    - name: SSH Keys | Write private keys
+      become: true
+      no_log: true
+      ansible.builtin.copy:
+        dest: "/var/lib/homelab-secrets/ssh/{{ item.user }}/id_ed25519"
+        content: "{{ _ssh_private_key_b64 | b64decode }}"
+        owner: "{{ item.user }}"
+        group: "{{ item.group }}"
+        mode: "0600"
+      loop:
+        - { user: "root", group: "root" }
+        - { user: "lab",  group: "lab"  }
+
+    - name: SSH Keys | Write public keys
+      become: true
+      no_log: true
+      ansible.builtin.copy:
+        dest: "/var/lib/homelab-secrets/ssh/{{ item.user }}/id_ed25519.pub"
+        content: "{{ _ssh_public_key_b64 | b64decode }}"
+        owner: "{{ item.user }}"
+        group: "{{ item.group }}"
+        mode: "0644"
+      loop:
+        - { user: "root", group: "root" }
+        - { user: "lab",  group: "lab"  }
+
     - name: Render L3 flake.nix to host
       ansible.builtin.template:
         src: flake.nix.j2
