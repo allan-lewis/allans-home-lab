@@ -18,6 +18,37 @@
       loop: "{{ source_code_repos }}"
       when: source_code_repos | default([]) | length > 0
 
+    - name: Doppler | Determine whether token is available
+      ansible.builtin.set_fact:
+        doppler_token_available: "{{ doppler_service_token | default('') | length > 0 }}"
+
+    - name: Doppler | Configure service token for scoped directory (safe /bin/sh)
+      become: true
+      become_user: "{{ doppler_user }}"
+      no_log: true
+      ansible.builtin.shell: |
+        printf %s "$DOPPLER_SERVICE_TOKEN" | doppler configure set token --scope /home/lab/src
+      args:
+        executable: /bin/sh
+      environment:
+        DOPPLER_SERVICE_TOKEN: "{{ doppler_service_token | trim }}"
+      changed_when: false
+      when: doppler_token_available
+
+    - name: Doppler | Configure project/config for scoped directory
+      become: true
+      become_user: "{{ doppler_user }}"
+      no_log: true
+      ansible.builtin.command:
+        cmd: >
+          doppler setup
+          --project {{ doppler_project }}
+          --config {{ doppler_config }}
+          --scope /home/lab/src
+          --no-interactive
+      changed_when: false
+      when: doppler_token_available
+
     # - name: L4 | All | docker it tools
     #   ansible.builtin.include_role:
     #     name: all_docker_it_tools
