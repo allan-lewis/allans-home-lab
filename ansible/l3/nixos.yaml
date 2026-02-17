@@ -1,8 +1,8 @@
 ---
-- name: L3 converge NixOS (hostname + baseline + packages)
-  hosts: nixos_tinker
+- name: L3 NixOS host convergence
+  hosts: "{{ converge_group }}"
   become: true
-  gather_facts: false
+  gather_facts: true
 
   vars:
     nixos_l3_dir: /etc/nixos-flakes

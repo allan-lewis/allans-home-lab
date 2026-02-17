@@ -1,0 +1,11 @@
+---
+converge_docker: true
+converge_docker_monitoring: true
+converge_devops: true
+converge_node_exporter: true
+
+dot_user: "lab"
+dotfiles_dest: "/home/lab/.dotfiles"
+dotfiles_repo: "https://github.com/allan-lewis/dotfiles.git"
+dotfiles_version: "main"
+

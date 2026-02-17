@@ -91,8 +91,9 @@ l3-converge group tags="":
   {{run_prefix}} scripts/converge.sh "{{group}}" l3
 
 # Converge a group of NixOS hosts (capabilities)
-l3-converge-nixos:
-  {{run_prefix}} scripts/l3/converge-nixos.sh
+l3-converge-nixos group tags="":
+  TAGS="{{tags}}" \
+  {{run_prefix}} scripts/l3/converge-nixos.sh "{{group}}"
 
 # Download backups from S3 and upload to an HAOS host 
 l3-homeassistant-backups:
@@ -130,8 +131,9 @@ l4-converge-gatus-config:
   {{run_prefix}} scripts/converge.sh flagg l4
 
 # Converge a group of NixOS hosts (workloads)
-l4-converge-nixos:
-  {{run_prefix}} scripts/l4/converge-nixos.sh
+l4-converge-nixos group tags="":
+  TAGS="{{tags}}" \
+  {{run_prefix}} scripts/l4/converge-nixos.sh "{{group}}"
 
 # Full converge of Traefik
 l4-converge-traefik:

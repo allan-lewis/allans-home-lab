@@ -1,14 +1,4 @@
 ansible_python_interpreter: /run/current-system/sw/bin/python3
 
-converge_devops: true
-converge_docker: true
-converge_docker_it_tools: true
-converge_docker_monitoring: true
-converge_docker_ngb: true
-
-dot_user: "lab"
-dotfiles_dest: "/home/lab/.dotfiles"
-dotfiles_repo: "https://github.com/allan-lewis/dotfiles.git"
-dotfiles_version: "main"
-
 backup_runner_rsync_flags: "-aHAX --numeric-ids --delete-delay --partial --partial-dir=.rsync-partial --human-readable --sparse --mkpath"
+

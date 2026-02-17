@@ -1,5 +1,6 @@
 services:
 
+{% if ansible_facts['distribution'] != 'NixOS' %}
   node_exporter:
     container_name: "node-exporter"
     image: "quay.io/prometheus/node-exporter:latest"
@@ -19,6 +20,7 @@ services:
       - '--collector.textfile.directory=/textfile_collector'
       - --collector.filesystem.ignored-mount-points
       - "^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"
+{% endif %}
 
   cadvisor:
     container_name: "cadvisor"

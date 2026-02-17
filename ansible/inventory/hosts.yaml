@@ -31,7 +31,7 @@ all:
       gatus_slug: "(Windows 11)"
     cujo:
       ansible_host: 192.168.86.219
-      gatus_slug: "(Arch DevOps, BTW)"
+      gatus_slug: "(NixOS DevOps)"
       prometheus_scrape_jobs:
         node-exporter: [9100]
         homelab-metrics: [9102]
@@ -109,13 +109,15 @@ all:
           children:
             arch_devops:
               hosts:
-                cujo:
                 roland:
             arch_tinker:
               hosts:
                 callahan:
     nixos:
       children:
+        nixos_devops:
+          hosts:
+            cujo:
         nixos_tinker:
           hosts:
             todash:

@@ -1,18 +1,31 @@
 ---
 - name: L4 converge NixOS
-  hosts: nixos_tinker
+  hosts: "{{ converge_group }}"
   become: true
-  gather_facts: false
+  gather_facts: true
 
   tasks:
-    - name: L4 | All | docker it tools
-      ansible.builtin.include_role:
-        name: all_docker_it_tools
-      when: converge_docker_it_tools
-      tags: [l4, step_docker_it_tools]
+    - name: DevOps | Clone/update repositories into /home/lab/src
+      become: true
+      become_user: lab
+      ansible.builtin.git:
+        repo: "{{ item.repo }}"
+        dest: "/home/lab/src/{{ item.dest | default(item.repo | basename | regex_replace('\\.git$', '')) }}"
+        version: "{{ item.version | default('main') }}"
+        update: true
+        force: false
+        accept_hostkey: true
+      loop: "{{ source_code_repos }}"
+      when: source_code_repos | default([]) | length > 0
 
-    - name: L4 | All | docker no geeks brewing
-      ansible.builtin.include_role:
-        name: all_docker_no_geeks_brewing
-      when: converge_docker_ngb
-      tags: [l4, step_docker_ngb]
+    # - name: L4 | All | docker it tools
+    #   ansible.builtin.include_role:
+    #     name: all_docker_it_tools
+    #   when: converge_docker_it_tools
+    #   tags: [l4, step_docker_it_tools]
+    #
+    # - name: L4 | All | docker no geeks brewing
+    #   ansible.builtin.include_role:
+    #     name: all_docker_no_geeks_brewing
+    #   when: converge_docker_ngb
+    #   tags: [l4, step_docker_ngb]

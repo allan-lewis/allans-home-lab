@@ -150,6 +150,33 @@
               xdg.configFile."zsh/login-fastfetch.zsh".source =
                 /home/lab/.dotfiles/common-zsh/.config/zsh/login-fastfetch.zsh;
 
+              home.file.".ssh/known_hosts_github".text = ''
+                github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl
+              '';
+
+{% if converge_devops | default(false) %}
+              programs.git = {
+                enable = true;
+                userName  = "{{ git_author_name }}";
+                userEmail = "{{ git_author_email }}";
+              };
+
+              programs.ssh = {
+                enable = true;
+
+                # Apply to all hosts: consult BOTH known_hosts files (space-separated string!)
+                matchBlocks."*" = {
+                  userKnownHostsFile = "~/.ssh/known_hosts ~/.ssh/known_hosts_github";
+                };
+
+                # Optional: ensure GitHub uses your lab key
+                matchBlocks."github.com" = {
+                  identitiesOnly = true;
+                  identityFile = "~/.ssh/id_ed25519";
+                };
+              };
+{% endif %}
+
               # Starship config lives in your repo at common-starship/.config/starship.toml
               programs.starship.enable = true;
               xdg.configFile."starship.toml".source =
@@ -187,11 +214,15 @@
             };
 
             systemd.tmpfiles.rules = [
+{% if converge_devops | default(false) | bool %}
+              "d /home/lab/src 0755 lab lab -"
+{% endif %}
 {% if converge_docker | default(false) %}
               "d /opt/docker-compose 0750 root root -"
 {% endif %}
+{% if converge_node_exporter | default(false) %}
               "d /var/lib/node_exporter/textfile_collector 0755 root root -"
-
+{% endif%}
               # Ensure SSH dirs exist for sops-nix secret placement
               "d /root/.ssh 0700 root root -"
 {% if converge_devops | default(false) | bool %}
@@ -217,12 +248,12 @@
 {% if converge_docker | default(false) %}
               docker-compose
 {% endif %}
-              git
 {% if converge_devops | default(false) %}
               go
               just
 {% endif %}
               neovim
+              net-tools
               nfs-utils
 {% if converge_devops | default(false) %}
               packer
@@ -243,15 +274,20 @@
 
             services.homelab.backupRunner = {
               enable = true;
-              schedule = "*-*-* *:50:00";
+              schedule = "*-*-* *:30:00";
               rsyncFlags = "{{ backup_runner_rsync_flags }}";
             };
 
 {% if converge_node_exporter | default(false) %}
             services.prometheus.exporters.node = {
               enable = true;
+              listenAddress = "0.0.0.0";
+              port = 9100;
+              openFirewall = true;
               enabledCollectors = [ "textfile" ];
-              textfileDirectory = "/var/lib/node_exporter/textfile_collector";
+              extraFlags = [
+                "--collector.textfile.directory=/var/lib/node_exporter/textfile_collector"
+              ];
             };
 {% endif %}
 
