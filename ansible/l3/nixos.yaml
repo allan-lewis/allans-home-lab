@@ -132,11 +132,23 @@
       ansible.builtin.command: nixos-generate-config --dir /etc/nixos
       when: not hw_config.stat.exists
 
-    - name: Ensure L3 flake directory exists
+    - name: Ensure that remote directories exist
       ansible.builtin.file:
-        path: "{{ nixos_l3_dir }}/modules"
+        path: "{{ item }}"
         state: directory
         mode: "0755"
+      with_items:
+        - "{{ nixos_l3_dir }}/modules"
+        - "{{ nixos_l3_dir }}/assets"
+
+    - name: Render Starship config (TOML) into flake assets dir
+      become: true
+      ansible.builtin.template:
+        src: starship.toml.j2
+        dest: "{{ nixos_l3_dir }}/assets/starship.toml"
+        owner: root
+        group: root
+        mode: "0644"
 
     - name: Render L3 flake.nix to host
       ansible.builtin.template:

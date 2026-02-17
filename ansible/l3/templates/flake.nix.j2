@@ -179,8 +179,7 @@
 
               # Starship config lives in your repo at common-starship/.config/starship.toml
               programs.starship.enable = true;
-              xdg.configFile."starship.toml".source =
-                /home/lab/.dotfiles/common-starship/.config/starship.toml;
+              xdg.configFile."starship.toml".source = ./assets/starship.toml;
 
               # Match your common.zsh expectations exactly:
               xdg.configFile."zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh".source =
@@ -188,6 +187,8 @@
 
               xdg.configFile."zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh".source =
                 "${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh";
+
+              xdg.configFile."nvim".source = /home/lab/.dotfiles/common-lazyvim/.config/nvim;
 
               # User-scoped packages used by your dotfiles (starship prompt, login fastfetch, etc.)
               home.packages = with pkgs; [
