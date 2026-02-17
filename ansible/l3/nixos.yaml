@@ -159,6 +159,57 @@
         group: root
         mode: "0644"
 
+    - name: AWS | Determine whether credentials are available
+      ansible.builtin.set_fact:
+        aws_creds_available: >-
+          {{
+            (aws_access_key_id | default('') | length > 0) and
+            (aws_secret_access_key | default('') | length > 0)
+          }}
+
+    - name: AWS | Ensure shared aws secrets directory exists
+      become: true
+      ansible.builtin.file:
+        path: /var/lib/homelab-secrets/aws
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+
+    - name: AWS | Ensure aws group exists
+      become: true
+      ansible.builtin.group:
+        name: aws
+        state: present
+
+    - name: AWS | Write shared config (non-secret)
+      become: true
+      ansible.builtin.copy:
+        dest: /var/lib/homelab-secrets/aws/config
+        owner: root
+        group: root
+        mode: "0644"
+        content: |
+          [default]
+          region = {{ aws_default_region }}
+          output = json
+          cli_pager =
+      when: aws_creds_available  # or remove this if you want config always
+
+    - name: AWS | Write shared credentials (root:aws 0640)
+      become: true
+      no_log: true
+      ansible.builtin.copy:
+        dest: /var/lib/homelab-secrets/aws/credentials
+        owner: root
+        group: aws
+        mode: "0640"
+        content: |
+          [default]
+          aws_access_key_id = {{ aws_access_key_id }}
+          aws_secret_access_key = {{ aws_secret_access_key }}
+      when: aws_creds_available
+
     - name: Render L3 flake.nix to host
       ansible.builtin.template:
         src: flake.nix.j2

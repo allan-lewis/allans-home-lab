@@ -70,12 +70,13 @@
             programs.zsh.enable = true;
 
             users.groups.lab = {};
+            users.groups.aws = {};
 
             # ---- Automation-friendly sudo (so Ansible can keep driving) ----
             users.users.lab = {
               isNormalUser = true;
               group = "lab";
-              extraGroups = [ "wheel" "docker" ];
+              extraGroups = [ "wheel" "docker" "aws" ];
               shell = pkgs.zsh;
               # lock password (SSH keys still work)
               hashedPassword = "!";
@@ -229,6 +230,20 @@
             systemd.tmpfiles.rules = [
 {% if converge_devops | default(false) | bool %}
               "d /home/lab/src 0755 lab lab -"
+              "d /home/lab/.ssh 0700 lab lab -"
+
+              # Persistent AWS secret location (Ansible renders files here)
+              "d /var/lib/homelab-secrets/aws 0755 root root -"
+
+              # lab AWS symlinks
+              "d /home/lab/.aws 0700 lab lab -"
+              "L+ /home/lab/.aws/config - - - - /var/lib/homelab-secrets/aws/config"
+              "L+ /home/lab/.aws/credentials - - - - /var/lib/homelab-secrets/aws/credentials"
+
+              # root AWS symlinks
+              "d /root/.aws 0700 root root -"
+              "L+ /root/.aws/config - - - - /var/lib/homelab-secrets/aws/config"
+              "L+ /root/.aws/credentials - - - - /var/lib/homelab-secrets/aws/credentials"
 {% endif %}
 {% if converge_docker | default(false) %}
               "d /opt/docker-compose 0750 root root -"
@@ -238,9 +253,7 @@
 {% endif%}
               # Ensure SSH dirs exist for sops-nix secret placement
               "d /root/.ssh 0700 root root -"
-{% if converge_devops | default(false) | bool %}
-              "d /home/lab/.ssh 0700 lab lab -"
-{% endif %}
+
               # Ensure tmux user config exists as a regular file (activation script writes contents)
               "f /home/lab/.tmux.conf 0644 lab lab -"
             ];
