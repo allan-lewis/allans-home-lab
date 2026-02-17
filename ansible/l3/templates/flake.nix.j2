@@ -133,7 +133,7 @@
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
 
-            home-manager.users.lab = { pkgs, ... }: {
+            home-manager.users.lab = { pkgs, config, ... }: {
               home.stateVersion = "25.11";
 
               # --- Dotfiles wiring (XDG zsh + starship) ---
@@ -188,7 +188,8 @@
               xdg.configFile."zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh".source =
                 "${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh";
 
-              xdg.configFile."nvim".source = /home/lab/.dotfiles/common-lazyvim/.config/nvim;
+              xdg.configFile."nvim".source =
+                config.lib.file.mkOutOfStoreSymlink /home/lab/.dotfiles/common-lazyvim/.config/nvim;
 
               # User-scoped packages used by your dotfiles (starship prompt, login fastfetch, etc.)
               home.packages = with pkgs; [
@@ -241,6 +242,7 @@
               awscli2
 {% endif %}
               btop
+              clang
               cmatrix
               curl
 {% if converge_devops | default(false) %}
@@ -249,9 +251,14 @@
 {% if converge_docker | default(false) %}
               docker-compose
 {% endif %}
+              fd
+              fzf
+              gcc
+              gnumake
 {% if converge_devops | default(false) %}
               go
               just
+              lazygit
 {% endif %}
               neovim
               net-tools
@@ -260,11 +267,14 @@
               packer
 {% endif %}
               python3
+              ripgrep
 {% if converge_devops | default(false) %}
               terraform
 {% endif %}
               tmux
+              trash-cli
               tree
+              tree-sitter
               unzip
             ];
 
