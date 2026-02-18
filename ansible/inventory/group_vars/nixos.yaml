@@ -21,10 +21,10 @@ nixos_converge_dirs_all:
   - path: "/home/lab/.dotfiles"
   - path: "{{ nixos_dir }}/hosts/{{ inventory_hostname }}"
   - path: "/home/lab/.dotfiles"
-    user: "lab"
+    owner: "lab"
     group: "lab"
   - path: "/var/lib/homelab-secrets/ssh/root"
-    user: "root"
+    owner: "root"
     group: "root"
     mode: "0700"
 
