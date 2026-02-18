@@ -42,14 +42,14 @@
     #     state: directory
     #     mode: "0755"
 
-    - name: Check if hardware-configuration.nix exists
-      ansible.builtin.stat:
-        path: /etc/nixos/hardware-configuration.nix
-      register: hw_config
+    # - name: Check if hardware-configuration.nix exists
+    #   ansible.builtin.stat:
+    #     path: /etc/nixos/hardware-configuration.nix
+    #   register: hw_config
 
-    - name: Generate hardware-configuration.nix if missing
-      ansible.builtin.command: nixos-generate-config --dir /etc/nixos
-      when: not hw_config.stat.exists
+    # - name: Generate hardware-configuration.nix if missing
+    #   ansible.builtin.command: nixos-generate-config --dir /etc/nixos
+    #   when: not hw_config.stat.exists
 
     # - name: Ensure that remote directories exist
     #   ansible.builtin.file:
@@ -60,23 +60,23 @@
     #     - "{{ nixos_l3_dir }}/modules"
     #     - "{{ nixos_l3_dir }}/assets"
 
-    - name: Render Starship config (TOML) into flake assets dir
-      become: true
-      ansible.builtin.template:
-        src: starship.toml.j2
-        dest: "{{ nixos_l3_dir }}/assets/starship.toml"
-        owner: root
-        group: root
-        mode: "0644"
+    # - name: Render Starship config (TOML) into flake assets dir
+    #   become: true
+    #   ansible.builtin.template:
+    #     src: starship.toml.j2
+    #     dest: "{{ nixos_l3_dir }}/assets/starship.toml"
+    #     owner: root
+    #     group: root
+    #     mode: "0644"
 
-    - name: Render tmux.conf into flake assets dir
-      become: true
-      ansible.builtin.template:
-        src: tmux.conf.j2
-        dest: "{{ nixos_l3_dir }}/assets/tmux.conf"
-        owner: root
-        group: root
-        mode: "0644"
+    # - name: Render tmux.conf into flake assets dir
+    #   become: true
+    #   ansible.builtin.template:
+    #     src: tmux.conf.j2
+    #     dest: "{{ nixos_l3_dir }}/assets/tmux.conf"
+    #     owner: root
+    #     group: root
+    #     mode: "0644"
 
     - name: AWS | Determine whether credentials are available
       ansible.builtin.set_fact:
@@ -129,17 +129,17 @@
         _ssh_public_key_b64:  "{{ lookup('env', 'SSH_PUBLIC_KEY')  | default('', true) }}"
       no_log: true
 
-    - name: SSH Keys | Ensure secret directories exist
-      become: true
-      ansible.builtin.file:
-        path: "/var/lib/homelab-secrets/ssh/{{ item.user }}"
-        state: directory
-        owner: "{{ item.user }}"
-        group: "{{ item.group }}"
-        mode: "0700"
-      loop:
-        - { user: "root", group: "root" }
-        - { user: "lab",  group: "lab"  }
+    # - name: SSH Keys | Ensure secret directories exist
+    #   become: true
+    #   ansible.builtin.file:
+    #     path: "/var/lib/homelab-secrets/ssh/{{ item.user }}"
+    #     state: directory
+    #     owner: "{{ item.user }}"
+    #     group: "{{ item.group }}"
+    #     mode: "0700"
+    #   loop:
+    #     - { user: "root", group: "root" }
+    #     - { user: "lab",  group: "lab"  }
 
     - name: SSH Keys | Write private keys
       become: true

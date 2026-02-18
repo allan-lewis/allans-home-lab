@@ -10,6 +10,7 @@ ansible_python_interpreter: "/usr/bin/python3"
 ansible_user: "{{ gitops_user }}"
 
 ## CONVERGENCE FEATURE FLAGS
+converge_nixos: false
 converge_arch: false
 converge_arch_aur: false
 converge_arch_desktop: false

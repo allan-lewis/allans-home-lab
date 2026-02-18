@@ -16,6 +16,16 @@ nixos_converge_dirs:
   - path: "/home/lab/.dotfiles"
     user: "lab"
     group: "lab"
+  - path: "/var/lib/homelab-secrets/ssh/root"
+    user: "root"
+    group: "root"
+    mode: "0700"
+# TODO: Conditionally enable based on devops
+  # - path: "/var/lib/homelab-secrets/ssh/lab"
+  #   user: "lab"
+  #   group: "lab"
+  #   mode: "0700"
+
+converge_nixos: true
 
 nixos_converge_groups: ["aws", "lab"]
-

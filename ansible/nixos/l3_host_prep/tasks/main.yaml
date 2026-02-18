@@ -1,0 +1,64 @@
+---
+- name: Ensure that groups exist for rebuild
+  become: true
+  ansible.builtin.group:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ nixos_converge_groups }}"
+
+- name: Ensure that remote directories exist
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: directory
+    owner: "{{ item.owner | default(omit) }}"
+    group: "{{ item.group | default(omit) }}"
+    mode: "{{ item.mode | default('0755') }}"
+  with_items: "{{ nixos_converge_dirs }}"
+
+# TODO: Move next to switch/rebuild
+- name: Check if host-local hardware config exists in flake dir
+  ansible.builtin.stat:
+    path: "/etc/nixos-flakes/hosts/{{ inventory_hostname }}/hardware-configuration.nix"
+  register: hw_in_flake
+  changed_when: false
+
+- name: Generate hardware-configuration.nix into flake dir (only if missing)
+  ansible.builtin.command: >
+    /run/current-system/sw/bin/nixos-generate-config
+    --show-hardware-config
+  register: hw_out
+  when: not hw_in_flake.stat.exists
+  changed_when: true
+
+- name: Write hardware-configuration.nix into flake dir (only if missing)
+  ansible.builtin.copy:
+    dest: "/etc/nixos-flakes/hosts/{{ inventory_hostname }}/hardware-configuration.nix"
+    content: "{{ hw_out.stdout }}\n"
+    owner: root
+    group: root
+    mode: "0644"
+  when: not hw_in_flake.stat.exists
+
+- name: Render config files from templates
+  become: true
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: "0644"
+  with_items:
+    - src: "tmux.conf.j2"
+      dest: "{{ nixos_dir }}/assets/starship.toml"
+    - src: "starship.toml.j2"
+      dest: "{{ nixos_dir }}/assets/tmux.conf"
+
+- name: Clone the legacy/external dotfiles repo
+  become: true
+  become_user: "lab"
+  ansible.builtin.git:
+    repo: "https://github.com/allan-lewis/dotfiles.git"
+    dest: "/home/lab/.dotfiles"
+    version: "main"
+    update: true
+    force: true
