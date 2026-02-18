@@ -5,15 +5,15 @@
   gather_facts: true
 
   tasks:
-    ## PREREQ ROLE 
-    - name: PREREQ | Ensure minimal groups exist for rebuild
+    - name: Host Prep | Ensure that groups exist for rebuild
       become: true
       ansible.builtin.group:
         name: "{{ item }}"
         state: present
       with_items: "{{ nixos_converge_groups }}"
+      tags: [l3, host_prep]
 
-    - name: PREREQ | Ensure that remote directories exist
+    - name: Host Prep | Ensure that remote directories exist
       ansible.builtin.file:
         path: "{{ item.path }}"
         state: directory
@@ -21,4 +21,15 @@
         group: "{{ item.group | default(omit) }}"
         mode: "{{ item.mode | default('0755') }}"
       with_items: "{{ nixos_converge_dirs }}"
+      tags: [l3, host_prep]
+
+    - name: "DotFiles (Legacy) | Clone dotfiles repo"
+      become: true
+      become_user: "lab"
+      ansible.builtin.git:
+        repo: "https://github.com/allan-lewis/dotfiles.git"
+        dest: "/home/lab/.dotfiles"
+        version: "main"
+        update: true
+        force: true
 

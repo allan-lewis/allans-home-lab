@@ -18,23 +18,23 @@
     #     - aws
     #     - lab
 
-    - name: "Ensure dotfiles destination directory exists for {{ dot_user }}"
-      become: true
-      become_user: "{{ dot_user }}"
-      ansible.builtin.file:
-        path: "{{ dotfiles_dest }}"
-        state: directory
-        mode: "0755"
+    # - name: "Ensure dotfiles destination directory exists for {{ dot_user }}"
+    #   become: true
+    #   become_user: "{{ dot_user }}"
+    #   ansible.builtin.file:
+    #     path: "{{ dotfiles_dest }}"
+    #     state: directory
+    #     mode: "0755"
 
-    - name: "Clone or update dotfiles repo (HTTPS) for {{ dot_user }}"
-      become: true
-      become_user: "{{ dot_user }}"
-      ansible.builtin.git:
-        repo: "{{ dotfiles_repo }}"
-        dest: "{{ dotfiles_dest }}"
-        version: "{{ dotfiles_version }}"
-        update: true
-        force: true
+    # - name: "Clone or update dotfiles repo (HTTPS) for {{ dot_user }}"
+    #   become: true
+    #   become_user: "{{ dot_user }}"
+    #   ansible.builtin.git:
+    #     repo: "{{ dotfiles_repo }}"
+    #     dest: "{{ dotfiles_dest }}"
+    #     version: "{{ dotfiles_version }}"
+    #     update: true
+    #     force: true
 
     # - name: Ensure /etc/nixos exists
     #   ansible.builtin.file:
@@ -86,14 +86,14 @@
             (aws_secret_access_key | default('') | length > 0)
           }}
 
-    - name: AWS | Ensure shared aws secrets directory exists
-      become: true
-      ansible.builtin.file:
-        path: /var/lib/homelab-secrets/aws
-        state: directory
-        owner: root
-        group: root
-        mode: "0755"
+    # - name: AWS | Ensure shared aws secrets directory exists
+    #   become: true
+    #   ansible.builtin.file:
+    #     path: /var/lib/homelab-secrets/aws
+    #     state: directory
+    #     owner: root
+    #     group: root
+    #     mode: "0755"
 
     - name: AWS | Write shared config (non-secret)
       become: true

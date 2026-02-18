@@ -10,6 +10,12 @@ nixos_converge_dirs:
   - path: "/etc/nixos/"
   - path: "{{ nixos_dir }}/modules"
   - path: "{{ nixos_dir }}/assets"
+  - path: "/var/lib/homelab-secrets/aws"
+  - path: "/home/lab/.dotfiles"
+  - path: "{{ nixos_dir }}/hosts/{{ inventory_hostname }}"
+  - path: "/home/lab/.dotfiles"
+    user: "lab"
+    group: "lab"
 
 nixos_converge_groups: ["aws", "lab"]
 
