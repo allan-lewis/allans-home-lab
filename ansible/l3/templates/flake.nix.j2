@@ -198,6 +198,8 @@
               "L+ /root/.aws/config - - - - /var/lib/homelab-secrets/aws/config"
               "L+ /root/.aws/credentials - - - - /var/lib/homelab-secrets/aws/credentials"
 
+              "d /var/lib/homelab-secrets 0711 root root -"
+              "d /var/lib/homelab-secrets/ssh 0711 root root -"
               "d /var/lib/homelab-secrets/ssh/lab 0700 lab lab -"
               "f /var/lib/homelab-secrets/ssh/lab/id_ed25519 0600 lab lab -"
               "f /var/lib/homelab-secrets/ssh/lab/id_ed25519.pub 0644 lab lab -"

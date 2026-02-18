@@ -9,6 +9,15 @@
     nixos_l3_flake: "{{ nixos_l3_dir }}/flake.nix"
 
   tasks:
+    - name: Ensure groups exist
+      become: true
+      ansible.builtin.group:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - aws
+        - lab
+
     - name: "Ensure dotfiles destination directory exists for {{ dot_user }}"
       become: true
       become_user: "{{ dot_user }}"
@@ -86,12 +95,6 @@
         group: root
         mode: "0755"
 
-    - name: AWS | Ensure aws group exists
-      become: true
-      ansible.builtin.group:
-        name: aws
-        state: present
-
     - name: AWS | Write shared config (non-secret)
       become: true
       ansible.builtin.copy:
@@ -164,6 +167,50 @@
         - { user: "root", group: "root" }
         - { user: "lab",  group: "lab"  }
 
+    - name: DevOps | Clone/update repositories into /home/lab/src
+      become: true
+      become_user: lab
+      ansible.builtin.git:
+        repo: "{{ item.repo }}"
+        dest: "/home/lab/src/{{ item.dest | default(item.repo | basename | regex_replace('\\.git$', '')) }}"
+        version: "{{ item.version | default('main') }}"
+        update: true
+        force: false
+        accept_hostkey: true
+      loop: "{{ source_code_repos }}"
+      when: source_code_repos | default([]) | length > 0
+
+    - name: Doppler | Determine whether token is available
+      ansible.builtin.set_fact:
+        doppler_token_available: "{{ doppler_service_token | default('') | length > 0 }}"
+
+    - name: Doppler | Configure service token for scoped directory (safe /bin/sh)
+      become: true
+      become_user: "{{ doppler_user }}"
+      no_log: true
+      ansible.builtin.shell: |
+        printf %s "$DOPPLER_SERVICE_TOKEN" | doppler configure set token --scope /home/lab/src
+      args:
+        executable: /bin/sh
+      environment:
+        DOPPLER_SERVICE_TOKEN: "{{ doppler_service_token | trim }}"
+      changed_when: false
+      when: doppler_token_available
+
+    - name: Doppler | Configure project/config for scoped directory
+      become: true
+      become_user: "{{ doppler_user }}"
+      no_log: true
+      ansible.builtin.command:
+        cmd: >
+          doppler setup
+          --project {{ doppler_project }}
+          --config {{ doppler_config }}
+          --scope /home/lab/src
+          --no-interactive
+      changed_when: false
+      when: doppler_token_available
+
     - name: Render L3 flake.nix to host
       ansible.builtin.template:
         src: flake.nix.j2
@@ -193,19 +240,26 @@
       register: current_hostname
       changed_when: false
 
-    - name: Reboot if hostname does not match inventory name
-      ansible.builtin.command: systemctl reboot
-      async: 1
-      poll: 0
-      when: current_hostname.stdout != inventory_hostname
-
-    - name: Wait for SSH to come back
-      ansible.builtin.wait_for_connection:
-        timeout: 600
-      when: current_hostname.stdout != inventory_hostname
-
     - name: Monitoring (Docker)
       ansible.builtin.include_role:
         name: all_docker_monitoring
       when: converge_docker_monitoring
       tags: [l3, step_docker_monitoring]
+
+    - name: Reboot | reboot host when required
+      ansible.builtin.reboot:
+        msg: "Reboot triggered after NixOS rebuild"
+        connect_timeout: 10
+        reboot_timeout: 1800
+        pre_reboot_delay: 3
+        post_reboot_delay: 10
+        test_command: "whoami"
+        search_paths:
+          - /run/current-system/sw/bin
+          - /run/wrappers/bin
+          - /sbin
+          - /bin
+          - /usr/sbin
+          - /usr/bin
+          - /usr/local/sbin
+      when: current_hostname.stdout != inventory_hostname
