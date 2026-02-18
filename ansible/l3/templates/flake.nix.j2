@@ -29,6 +29,7 @@
         ./modules/homelab-tasks.nix
         ./modules/homelab-hello.nix
         ./modules/s3-local-mirror.nix
+        ./modules/postgres-db-backup.nix
 
         ({ pkgs, lib, ... }:
           {
@@ -294,6 +295,15 @@
               # DO NOT CHANGE semantics
               syncFlags = "--delete --only-show-errors";
             };
+{% endif %}
+
+{% if converge_postgres_dump | default(false) %}
+              services.homelab.postgresDbBackup = {
+                enable = true;
+
+                # Daily at 05:00
+                schedule = "*-*-* 05:00:00";
+              };
 {% endif %}
 
 {% if converge_node_exporter | default(false) %}
