@@ -1,0 +1,24 @@
+---
+- name: Full NixOS host convergence for a group of hosts
+  hosts: "{{ converge_group }}"
+  become: true
+  gather_facts: true
+
+  tasks:
+    ## PREREQ ROLE 
+    - name: PREREQ | Ensure minimal groups exist for rebuild
+      become: true
+      ansible.builtin.group:
+        name: "{{ item }}"
+        state: present
+      with_items: "{{ nixos_converge_groups }}"
+
+    - name: PREREQ | Ensure that remote directories exist
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: directory
+        owner: "{{ item.owner | default(omit) }}"
+        group: "{{ item.group | default(omit) }}"
+        mode: "{{ item.mode | default('0755') }}"
+      with_items: "{{ nixos_converge_dirs }}"
+

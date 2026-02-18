@@ -57,10 +57,6 @@ l1-haos-capture vmid:
 l1-haos-template:
   {{run_prefix}} scripts/l1/appliance-template.sh haos
 
-# Prepare a Proxmox VM template suitable for NixOS installations
-l1-nixos-template:
-  {{run_prefix}} scripts/l1/nixos-template.sh
-
 # Export a TrueNAS Proxmox VM's boot disk to an S3 bucket
 l1-truenas-capture vmid:
   S3_BUCKET=gitops-homelab-orchestrator-disks \
@@ -205,7 +201,11 @@ l4-converge-jellyfin:
   TAGS=step_docker_jellyfin \
   {{run_prefix}} scripts/converge.sh misery l4
 
-# Prepare a Proxmox VM template that can be cloned to make NixOS hosts
+# Prepare a Proxmox VM template for cloning NixOS VMs
 nixos-vm-template update_stable="yes":
-  {{run_prefix}} scripts/l1/nixos-template.sh {{update_stable}}
+  {{run_prefix}} scripts/nixos/vm-template.sh {{update_stable}}
+
+# Fully converge a group of NixOS hosts
+nixos-converge group tags="" limit="":
+  {{run_prefix}} scripts/nixos/full-converge.sh "{{group}}" "{{tags}}" "{{limit}}" 
 

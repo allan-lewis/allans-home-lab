@@ -1,4 +1,15 @@
+---
 ansible_python_interpreter: /run/current-system/sw/bin/python3
 
 backup_runner_rsync_flags: "-aHAX --numeric-ids --delete-delay --partial --partial-dir=.rsync-partial --human-readable --sparse --mkpath"
+
+nixos_dir: /etc/nixos-flakes
+nixos_flake: "{{ nixos_dir }}/flake.nix"
+
+nixos_converge_dirs: 
+  - path: "/etc/nixos/"
+  - path: "{{ nixos_dir }}/modules"
+  - path: "{{ nixos_dir }}/assets"
+
+nixos_converge_groups: ["aws", "lab"]
 
