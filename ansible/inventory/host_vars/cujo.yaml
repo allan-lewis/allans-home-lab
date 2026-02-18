@@ -17,17 +17,12 @@ source_code_repos:
     dest: homelab-metrics 
     version: main
 
-s3_mirror_base_dir: "/var/lib/s3-mirror"
+converge_s3_mirror: true
 s3_mirror_buckets: [
   "gitops-homelab-orchestrator-disks",
   "gitops-homelab-orchestrator-haos",
   "gitops-homelab-orchestrator-tf"
 ]
-s3_mirror_cron:
-  enabled: true
-  minute: "30"
-  hour: "2"
-  weekday: "6"
 
 backup_runner_cron_minute: "20"
 backup_runner_volumes: [

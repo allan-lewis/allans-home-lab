@@ -184,6 +184,7 @@
         - backup-runner.nix
         - homelab-hello.nix
         - homelab-tasks.nix
+        - s3-local-mirror.nix
 
     - name: Apply L3 flake (nixos-rebuild switch)
       ansible.builtin.command: >

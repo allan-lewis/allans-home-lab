@@ -28,6 +28,7 @@
         ./modules/backup-runner.nix
         ./modules/homelab-tasks.nix
         ./modules/homelab-hello.nix
+        ./modules/s3-local-mirror.nix
 
         ({ pkgs, lib, ... }:
           {
@@ -282,6 +283,18 @@
               schedule = "*-*-* *:30:00";
               rsyncFlags = "{{ backup_runner_rsync_flags }}";
             };
+
+{% if converge_s3_mirror | default(false) %}
+            services.homelab.s3LocalMirror = {
+              enable = true;
+
+              # Weekly, Saturday at 07:00
+              schedule = "Sat *-*-* 07:00:00";
+
+              # DO NOT CHANGE semantics
+              syncFlags = "--delete --only-show-errors";
+            };
+{% endif %}
 
 {% if converge_node_exporter | default(false) %}
             services.prometheus.exporters.node = {
