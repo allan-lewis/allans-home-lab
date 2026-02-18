@@ -185,6 +185,7 @@
         - homelab-hello.nix
         - homelab-tasks.nix
         - s3-local-mirror.nix
+        - postgres-db-backup.nix
 
     - name: Apply L3 flake (nixos-rebuild switch)
       ansible.builtin.command: >
