@@ -167,6 +167,59 @@
         - { user: "root", group: "root" }
         - { user: "lab",  group: "lab"  }
 
+    - name: Render L3 flake.nix to host
+      ansible.builtin.template:
+        src: flake.nix.j2
+        dest: "{{ nixos_l3_flake }}"
+        mode: "0644"
+
+    - name: Copy NixOS modules (homelab-hello + homelab-tasks) to remote modules dir
+      ansible.builtin.copy:
+        src: "files/{{ item }}"
+        dest: "{{ nixos_l3_dir }}/modules/{{ item }}"
+        owner: root
+        group: root
+        mode: "0644"
+      loop:
+        - backup-runner.nix
+        - homelab-hello.nix
+        - homelab-tasks.nix
+
+    - name: Apply L3 flake (nixos-rebuild switch)
+      ansible.builtin.command: >
+        nixos-rebuild switch --impure --flake {{ nixos_l3_dir }}#{{ inventory_hostname }}
+      register: rebuild
+      changed_when: true
+
+    - name: Get current hostname
+      ansible.builtin.command: hostname
+      register: current_hostname
+      changed_when: false
+      
+    - name: Reboot | reboot host when required
+      ansible.builtin.reboot:
+        msg: "Reboot triggered after NixOS rebuild"
+        connect_timeout: 10
+        reboot_timeout: 1800
+        pre_reboot_delay: 3
+        post_reboot_delay: 10
+        test_command: "whoami"
+        search_paths:
+          - /run/current-system/sw/bin
+          - /run/wrappers/bin
+          - /sbin
+          - /bin
+          - /usr/sbin
+          - /usr/bin
+          - /usr/local/sbin
+      when: current_hostname.stdout != inventory_hostname
+
+    - name: Monitoring (Docker)
+      ansible.builtin.include_role:
+        name: all_docker_monitoring
+      when: converge_docker_monitoring
+      tags: [l3, step_docker_monitoring]
+
     - name: DevOps | Clone/update repositories into /home/lab/src
       become: true
       become_user: lab
@@ -210,56 +263,3 @@
           --no-interactive
       changed_when: false
       when: doppler_token_available
-
-    - name: Render L3 flake.nix to host
-      ansible.builtin.template:
-        src: flake.nix.j2
-        dest: "{{ nixos_l3_flake }}"
-        mode: "0644"
-
-    - name: Copy NixOS modules (homelab-hello + homelab-tasks) to remote modules dir
-      ansible.builtin.copy:
-        src: "files/{{ item }}"
-        dest: "{{ nixos_l3_dir }}/modules/{{ item }}"
-        owner: root
-        group: root
-        mode: "0644"
-      loop:
-        - backup-runner.nix
-        - homelab-hello.nix
-        - homelab-tasks.nix
-
-    - name: Apply L3 flake (nixos-rebuild switch)
-      ansible.builtin.command: >
-        nixos-rebuild switch --impure --flake {{ nixos_l3_dir }}#{{ inventory_hostname }}
-      register: rebuild
-      changed_when: true
-
-    - name: Get current hostname
-      ansible.builtin.command: hostname
-      register: current_hostname
-      changed_when: false
-
-    - name: Monitoring (Docker)
-      ansible.builtin.include_role:
-        name: all_docker_monitoring
-      when: converge_docker_monitoring
-      tags: [l3, step_docker_monitoring]
-
-    - name: Reboot | reboot host when required
-      ansible.builtin.reboot:
-        msg: "Reboot triggered after NixOS rebuild"
-        connect_timeout: 10
-        reboot_timeout: 1800
-        pre_reboot_delay: 3
-        post_reboot_delay: 10
-        test_command: "whoami"
-        search_paths:
-          - /run/current-system/sw/bin
-          - /run/wrappers/bin
-          - /sbin
-          - /bin
-          - /usr/sbin
-          - /usr/bin
-          - /usr/local/sbin
-      when: current_hostname.stdout != inventory_hostname
