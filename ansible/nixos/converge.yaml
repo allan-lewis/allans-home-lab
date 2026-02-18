@@ -12,3 +12,11 @@
           tags: [l3, host_prep]
       when: converge_nixos
       tags: [l3, host_prep]
+
+    - name: L3 | NixOS switch/rebuild
+      ansible.builtin.include_role:
+        name: l3_host_rebuild
+        apply:
+          tags: [l3, host_rebuild]
+      when: converge_nixos
+      tags: [l3, host_rebuild]

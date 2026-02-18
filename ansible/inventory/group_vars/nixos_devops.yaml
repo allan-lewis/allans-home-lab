@@ -6,3 +6,8 @@ converge_node_exporter: true
 
 doppler_user: "lab"
 
+nixos_converge_dirs_devops:
+  - path: "/var/lib/homelab-secrets/ssh/lab"
+    user: "lab"
+    group: "lab"
+    mode: "0700"

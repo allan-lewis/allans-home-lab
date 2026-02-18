@@ -193,28 +193,28 @@
       register: rebuild
       changed_when: true
 
-    - name: Get current hostname
-      ansible.builtin.command: hostname
-      register: current_hostname
-      changed_when: false
+    # - name: Get current hostname
+    #   ansible.builtin.command: hostname
+    #   register: current_hostname
+    #   changed_when: false
       
-    - name: Reboot | reboot host when required
-      ansible.builtin.reboot:
-        msg: "Reboot triggered after NixOS rebuild"
-        connect_timeout: 10
-        reboot_timeout: 1800
-        pre_reboot_delay: 3
-        post_reboot_delay: 10
-        test_command: "whoami"
-        search_paths:
-          - /run/current-system/sw/bin
-          - /run/wrappers/bin
-          - /sbin
-          - /bin
-          - /usr/sbin
-          - /usr/bin
-          - /usr/local/sbin
-      when: current_hostname.stdout != inventory_hostname
+    # - name: Reboot | reboot host when required
+    #   ansible.builtin.reboot:
+    #     msg: "Reboot triggered after NixOS rebuild"
+    #     connect_timeout: 10
+    #     reboot_timeout: 1800
+    #     pre_reboot_delay: 3
+    #     post_reboot_delay: 10
+    #     test_command: "whoami"
+    #     search_paths:
+    #       - /run/current-system/sw/bin
+    #       - /run/wrappers/bin
+    #       - /sbin
+    #       - /bin
+    #       - /usr/sbin
+    #       - /usr/bin
+    #       - /usr/local/sbin
+    #   when: current_hostname.stdout != inventory_hostname
 
     - name: Monitoring (Docker)
       ansible.builtin.include_role:
