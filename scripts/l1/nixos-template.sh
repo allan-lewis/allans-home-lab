@@ -35,7 +35,7 @@ set -euo pipefail
 : "${PVE_SSH_USER:?Missing PVE_SSH_USER}"
 : "${PVE_SSH_IP:?Missing PVE_SSH_IP}"
 
-UPDATE_STABLE="${UPDATE_STABLE:-yes}"
+UPDATE_STABLE="$1"
 NIXOS_TEMPLATE_NAME="${NIXOS_TEMPLATE_NAME:-nixos-$(date -u +"%Y%m%d")}"
 
 NIXOS_MEM_MB="${NIXOS_MEM_MB:-2048}"

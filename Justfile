@@ -205,3 +205,7 @@ l4-converge-jellyfin:
   TAGS=step_docker_jellyfin \
   {{run_prefix}} scripts/converge.sh misery l4
 
+# Prepare a Proxmox VM template that can be cloned to make NixOS hosts
+nixos-vm-template update_stable="yes":
+  {{run_prefix}} scripts/l1/nixos-template.sh {{update_stable}}
+
