@@ -1,0 +1,56 @@
+---
+- name: Ensure that remote directories exist
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: directory
+    owner: "{{ item.owner | default(omit) }}"
+    group: "{{ item.group | default(omit) }}"
+    mode: "{{ item.mode | default('0755') }}"
+  with_items:
+    - path: "/var/lib/homelab-secrets/aws"
+    - path: "/var/lib/homelab-secrets/ssh/lab"
+      owner: "lab"
+      group: "lab"
+      mode: "0700"
+
+- name: AWS | Determine whether credentials are available
+  ansible.builtin.set_fact:
+    aws_creds_available: >-
+      {{
+        (aws_access_key_id | default('') | length > 0) and
+        (aws_secret_access_key | default('') | length > 0)
+      }}
+
+- name: AWS | Write shared config (non-secret)
+  become: true
+  ansible.builtin.copy:
+    dest: /var/lib/homelab-secrets/aws/config
+    owner: root
+    group: root
+    mode: "0644"
+    content: |
+      [default]
+      region = {{ aws_default_region }}
+      output = json
+      cli_pager =
+  when: aws_creds_available
+
+- name: AWS | Write shared credentials (root:aws 0640)
+  become: true
+  no_log: true
+  ansible.builtin.copy:
+    dest: /var/lib/homelab-secrets/aws/credentials
+    owner: root
+    group: aws
+    mode: "0640"
+    content: |
+      [default]
+      aws_access_key_id = {{ aws_access_key_id }}
+      aws_secret_access_key = {{ aws_secret_access_key }}
+  when: aws_creds_available
+
+- name: Install ssh keys for the lab user
+  ansible.builtin.include_role:
+    name: ssh_keypair
+  vars:
+    ssh_keypair_owner: "lab"

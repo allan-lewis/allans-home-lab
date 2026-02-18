@@ -23,7 +23,7 @@
 
         # Pull in the host's disk + bootloader + hardware settings.
         # Without this, NixOS asserts that '/' and bootloader aren't configured.
-        /etc/nixos/hardware-configuration.nix
+        ./hosts/{{ inventory_hostname }}/hardware-configuration.nix
 
         ./modules/backup-runner.nix
         ./modules/homelab-tasks.nix
@@ -92,19 +92,15 @@
             home-manager.users.lab = { pkgs, config, ... }: {
               home.stateVersion = "25.11";
 
-              # --- Dotfiles wiring (XDG zsh + starship) ---
-              # ZDOTDIR is set by your .zshenv to ~/.config/zsh
-              home.file.".zshenv".source =
-                /home/lab/.dotfiles/common-zsh/.zshenv;
-
-              xdg.configFile."zsh/.zshrc".source =
-                /home/lab/.dotfiles/common-zsh/.config/zsh/.zshrc;
-
-              xdg.configFile."zsh/common.zsh".source =
-                /home/lab/.dotfiles/common-zsh/.config/zsh/common.zsh;
-
-              xdg.configFile."zsh/login-fastfetch.zsh".source =
-                /home/lab/.dotfiles/common-zsh/.config/zsh/login-fastfetch.zsh;
+              # NOTE:
+              # We intentionally do NOT do:
+              #   home.file/xdg.configFile = { source = /home/...; }
+              # or mkOutOfStoreSymlink to /home/...
+              #
+              # Those force `--impure` because pure evaluation forbids reading absolute paths like /home.
+              #
+              # Instead, we keep Home Manager for packages/programs/settings and wire dotfiles via
+              # systemd-tmpfiles symlinks at runtime (see systemd.tmpfiles.rules below).
 
               home.file.".ssh/known_hosts_github".text = ''
                 github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl
@@ -133,7 +129,7 @@
               };
 {% endif %}
 
-              # Starship config lives in your repo at common-starship/.config/starship.toml
+              # Starship is managed via Nix, but the config is from the flake (pure)
               programs.starship.enable = true;
               xdg.configFile."starship.toml".source = ./assets/starship.toml;
 
@@ -143,10 +139,6 @@
 
               xdg.configFile."zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh".source =
                 "${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh";
-
-              xdg.configFile."nvim".source =
-                config.lib.file.mkOutOfStoreSymlink
-                  "${config.home.homeDirectory}/.dotfiles/common-lazyvim/.config/nvim";
 
               # User-scoped packages used by your dotfiles (starship prompt, login fastfetch, etc.)
               home.packages = with pkgs; [
@@ -184,8 +176,21 @@
 
             systemd.tmpfiles.rules = [
 {% if converge_devops | default(false) | bool %}
+              # ---- DevOps home scaffolding ----
               "d /home/lab/src 0755 lab lab -"
               "d /home/lab/.ssh 0700 lab lab -"
+              "d /home/lab/.config 0755 lab lab -"
+              "d /home/lab/.config/zsh 0755 lab lab -"
+
+              # ---- Dotfiles wiring (runtime symlinks; keeps flake eval pure) ----
+              # ZDOTDIR expectations: ~/.config/zsh
+              "L+ /home/lab/.zshenv - - - - /home/lab/.dotfiles/common-zsh/.zshenv"
+              "L+ /home/lab/.config/zsh/.zshrc - - - - /home/lab/.dotfiles/common-zsh/.config/zsh/.zshrc"
+              "L+ /home/lab/.config/zsh/common.zsh - - - - /home/lab/.dotfiles/common-zsh/.config/zsh/common.zsh"
+              "L+ /home/lab/.config/zsh/login-fastfetch.zsh - - - - /home/lab/.dotfiles/common-zsh/.config/zsh/login-fastfetch.zsh"
+
+              # Neovim config wired from dotfiles
+              "L+ /home/lab/.config/nvim - - - - /home/lab/.dotfiles/common-lazyvim/.config/nvim"
 
               # Persistent AWS secret location (Ansible renders files here)
               "d /var/lib/homelab-secrets/aws 0755 root root -"
@@ -213,7 +218,7 @@
 {% endif %}
 {% if converge_node_exporter | default(false) %}
               "d /var/lib/node_exporter/textfile_collector 0755 root root -"
-{% endif%}
+{% endif %}
               "d /root/.ssh 0700 root root -"
 
               # Ensure host secret dirs exist (non-secret to declare)
@@ -298,12 +303,12 @@
 {% endif %}
 
 {% if converge_postgres_dump | default(false) %}
-              services.homelab.postgresDbBackup = {
-                enable = true;
+            services.homelab.postgresDbBackup = {
+              enable = true;
 
-                # Daily at 05:00
-                schedule = "*-*-* 05:00:00";
-              };
+              # Daily at 05:00
+              schedule = "*-*-* 05:00:00";
+            };
 {% endif %}
 
 {% if converge_node_exporter | default(false) %}

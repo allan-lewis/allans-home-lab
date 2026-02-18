@@ -78,13 +78,13 @@
     #     group: root
     #     mode: "0644"
 
-    - name: AWS | Determine whether credentials are available
-      ansible.builtin.set_fact:
-        aws_creds_available: >-
-          {{
-            (aws_access_key_id | default('') | length > 0) and
-            (aws_secret_access_key | default('') | length > 0)
-          }}
+    # - name: AWS | Determine whether credentials are available
+    #   ansible.builtin.set_fact:
+    #     aws_creds_available: >-
+    #       {{
+    #         (aws_access_key_id | default('') | length > 0) and
+    #         (aws_secret_access_key | default('') | length > 0)
+    #       }}
 
     # - name: AWS | Ensure shared aws secrets directory exists
     #   become: true
@@ -95,39 +95,39 @@
     #     group: root
     #     mode: "0755"
 
-    - name: AWS | Write shared config (non-secret)
-      become: true
-      ansible.builtin.copy:
-        dest: /var/lib/homelab-secrets/aws/config
-        owner: root
-        group: root
-        mode: "0644"
-        content: |
-          [default]
-          region = {{ aws_default_region }}
-          output = json
-          cli_pager =
-      when: aws_creds_available  # or remove this if you want config always
+    # - name: AWS | Write shared config (non-secret)
+    #   become: true
+    #   ansible.builtin.copy:
+    #     dest: /var/lib/homelab-secrets/aws/config
+    #     owner: root
+    #     group: root
+    #     mode: "0644"
+    #     content: |
+    #       [default]
+    #       region = {{ aws_default_region }}
+    #       output = json
+    #       cli_pager =
+    #   when: aws_creds_available  # or remove this if you want config always
 
-    - name: AWS | Write shared credentials (root:aws 0640)
-      become: true
-      no_log: true
-      ansible.builtin.copy:
-        dest: /var/lib/homelab-secrets/aws/credentials
-        owner: root
-        group: aws
-        mode: "0640"
-        content: |
-          [default]
-          aws_access_key_id = {{ aws_access_key_id }}
-          aws_secret_access_key = {{ aws_secret_access_key }}
-      when: aws_creds_available
+    # - name: AWS | Write shared credentials (root:aws 0640)
+    #   become: true
+    #   no_log: true
+    #   ansible.builtin.copy:
+    #     dest: /var/lib/homelab-secrets/aws/credentials
+    #     owner: root
+    #     group: aws
+    #     mode: "0640"
+    #     content: |
+    #       [default]
+    #       aws_access_key_id = {{ aws_access_key_id }}
+    #       aws_secret_access_key = {{ aws_secret_access_key }}
+    #   when: aws_creds_available
 
-    - name: SSH Keys | Load keys from environment (b64)
-      ansible.builtin.set_fact:
-        _ssh_private_key_b64: "{{ lookup('env', 'SSH_PRIVATE_KEY') | default('', true) }}"
-        _ssh_public_key_b64:  "{{ lookup('env', 'SSH_PUBLIC_KEY')  | default('', true) }}"
-      no_log: true
+    # - name: SSH Keys | Load keys from environment (b64)
+    #   ansible.builtin.set_fact:
+    #     _ssh_private_key_b64: "{{ lookup('env', 'SSH_PRIVATE_KEY') | default('', true) }}"
+    #     _ssh_public_key_b64:  "{{ lookup('env', 'SSH_PUBLIC_KEY')  | default('', true) }}"
+    #   no_log: true
 
     # - name: SSH Keys | Ensure secret directories exist
     #   become: true
@@ -141,31 +141,31 @@
     #     - { user: "root", group: "root" }
     #     - { user: "lab",  group: "lab"  }
 
-    - name: SSH Keys | Write private keys
-      become: true
-      no_log: true
-      ansible.builtin.copy:
-        dest: "/var/lib/homelab-secrets/ssh/{{ item.user }}/id_ed25519"
-        content: "{{ _ssh_private_key_b64 | b64decode }}"
-        owner: "{{ item.user }}"
-        group: "{{ item.group }}"
-        mode: "0600"
-      loop:
-        - { user: "root", group: "root" }
-        - { user: "lab",  group: "lab"  }
+    # - name: SSH Keys | Write private keys
+    #   become: true
+    #   no_log: true
+    #   ansible.builtin.copy:
+    #     dest: "/var/lib/homelab-secrets/ssh/{{ item.user }}/id_ed25519"
+    #     content: "{{ _ssh_private_key_b64 | b64decode }}"
+    #     owner: "{{ item.user }}"
+    #     group: "{{ item.group }}"
+    #     mode: "0600"
+    #   loop:
+    #     - { user: "root", group: "root" }
+    #     - { user: "lab",  group: "lab"  }
 
-    - name: SSH Keys | Write public keys
-      become: true
-      no_log: true
-      ansible.builtin.copy:
-        dest: "/var/lib/homelab-secrets/ssh/{{ item.user }}/id_ed25519.pub"
-        content: "{{ _ssh_public_key_b64 | b64decode }}"
-        owner: "{{ item.user }}"
-        group: "{{ item.group }}"
-        mode: "0644"
-      loop:
-        - { user: "root", group: "root" }
-        - { user: "lab",  group: "lab"  }
+    # - name: SSH Keys | Write public keys
+    #   become: true
+    #   no_log: true
+    #   ansible.builtin.copy:
+    #     dest: "/var/lib/homelab-secrets/ssh/{{ item.user }}/id_ed25519.pub"
+    #     content: "{{ _ssh_public_key_b64 | b64decode }}"
+    #     owner: "{{ item.user }}"
+    #     group: "{{ item.group }}"
+    #     mode: "0644"
+    #   loop:
+    #     - { user: "root", group: "root" }
+    #     - { user: "lab",  group: "lab"  }
 
     # - name: Render L3 flake.nix to host
     #   ansible.builtin.template:
@@ -187,11 +187,11 @@
     #     - s3-local-mirror.nix
     #     - postgres-db-backup.nix
 
-    - name: Apply L3 flake (nixos-rebuild switch)
-      ansible.builtin.command: >
-        nixos-rebuild switch --impure --flake {{ nixos_l3_dir }}#{{ inventory_hostname }}
-      register: rebuild
-      changed_when: true
+    # - name: Apply L3 flake (nixos-rebuild switch)
+    #   ansible.builtin.command: >
+    #     nixos-rebuild switch --impure --flake {{ nixos_l3_dir }}#{{ inventory_hostname }}
+    #   register: rebuild
+    #   changed_when: true
 
     # - name: Get current hostname
     #   ansible.builtin.command: hostname

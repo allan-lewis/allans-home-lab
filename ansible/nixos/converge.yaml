@@ -4,6 +4,10 @@
   become: true
   gather_facts: true
 
+  vars:
+    nixos_dir: /etc/nixos-flakes
+    nixos_flake: "{{ nixos_dir }}/flake.nix"
+
   tasks:
     - name: L3 | Host preparation
       ansible.builtin.include_role:
@@ -12,6 +16,14 @@
           tags: [l3, host_prep]
       when: converge_nixos
       tags: [l3, host_prep]
+
+    - name: L3 | DevOps
+      ansible.builtin.include_role:
+        name: l3_devops
+        apply:
+          tags: [l3, devops]
+      when: converge_nixos and converge_devops
+      tags: [l3, devops]
 
     - name: L3 | NixOS switch/rebuild
       ansible.builtin.include_role:

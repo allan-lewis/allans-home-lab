@@ -1,0 +1,26 @@
+---
+- name: Load keys from environment (b64)
+  ansible.builtin.set_fact:
+    _ssh_private_key_b64: "{{ lookup('env', 'SSH_PRIVATE_KEY') | default('', true) }}"
+    _ssh_public_key_b64:  "{{ lookup('env', 'SSH_PUBLIC_KEY')  | default('', true) }}"
+  no_log: true
+
+- name: Write private key
+  become: true
+  no_log: true
+  ansible.builtin.copy:
+    dest: "/var/lib/homelab-secrets/ssh/{{ ssh_keypair_owner }}/id_ed25519"
+    content: "{{ _ssh_private_key_b64 | b64decode }}"
+    owner: "{{ ssh_keypair_owner }}"
+    group: "{{ ssh_keypair_group | default(ssh_keypair_owner) }}"
+    mode: "0600"
+
+- name: Write public key
+  become: true
+  no_log: true
+  ansible.builtin.copy:
+    dest: "/var/lib/homelab-secrets/ssh/{{ ssh_keypair_owner }}/id_ed25519.pub"
+    content: "{{ _ssh_public_key_b64 | b64decode }}"
+    owner: "{{ ssh_keypair_owner }}"
+    group: "{{ ssh_keypair_group | default(ssh_keypair_owner) }}"
+    mode: "0644"

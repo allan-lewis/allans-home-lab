@@ -3,31 +3,4 @@ ansible_python_interpreter: /run/current-system/sw/bin/python3
 
 backup_runner_rsync_flags: "-aHAX --numeric-ids --delete-delay --partial --partial-dir=.rsync-partial --human-readable --sparse --mkpath"
 
-nixos_dir: /etc/nixos-flakes
-nixos_flake: "{{ nixos_dir }}/flake.nix"
-
-nixos_converge_dirs: >-
-  {{
-    (nixos_converge_dirs_all    | default([]))
-    +
-    (nixos_converge_dirs_devops | default([]))
-  }}
-
-nixos_converge_dirs_all: 
-  - path: "/etc/nixos/"
-  - path: "{{ nixos_dir }}/modules"
-  - path: "{{ nixos_dir }}/assets"
-  - path: "/var/lib/homelab-secrets/aws"
-  - path: "/home/lab/.dotfiles"
-  - path: "{{ nixos_dir }}/hosts/{{ inventory_hostname }}"
-  - path: "/home/lab/.dotfiles"
-    owner: "lab"
-    group: "lab"
-  - path: "/var/lib/homelab-secrets/ssh/root"
-    owner: "root"
-    group: "root"
-    mode: "0700"
-
 converge_nixos: true
-
-nixos_converge_groups: ["aws", "lab"]

@@ -1,4 +1,14 @@
 ---
+- name: Ensure that remote directories exist
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: directory
+    owner: "{{ item.owner | default(omit) }}"
+    group: "{{ item.group | default(omit) }}"
+    mode: "{{ item.mode | default('0755') }}"
+  with_items:
+    - path: "{{ nixos_dir }}/hosts/{{ inventory_hostname }}"
+
 - name: Check if host-local hardware config exists in flake dir
   ansible.builtin.stat:
     path: "/etc/nixos-flakes/hosts/{{ inventory_hostname }}/hardware-configuration.nix"
@@ -35,6 +45,12 @@
     src: flake.nix.j2
     dest: "{{ nixos_flake }}"
     mode: "0644"
+
+- name: Perform a NixOS rebuild/switch
+  ansible.builtin.command: >
+    nixos-rebuild switch --flake {{ nixos_dir }}#{{ inventory_hostname }}
+  register: rebuild
+  changed_when: true
 
 - name: Get current hostname
   ansible.builtin.command: hostname
