@@ -22,6 +22,14 @@
     mode: "0644"
   when: not hw_in_flake.stat.exists
 
+- name: Copy all NixOS modules to host
+  ansible.builtin.copy:
+    src: "files/modules"
+    dest: "{{ nixos_dir }}"
+    owner: root
+    group: root
+    mode: "0644"
+
 - name: Render Nix flake to host
   ansible.builtin.template:
     src: flake.nix.j2
