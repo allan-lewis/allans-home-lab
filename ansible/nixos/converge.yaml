@@ -33,13 +33,13 @@
       when: converge_nixos
       tags: [l3, host_rebuild]
 
-    - name: L4 | Backup
+    - name: L4 | Managed directories
       ansible.builtin.include_role:
-        name: l4_backup
+        name: l4_managed_dirs
         apply:
-          tags: [l4, backup]
+          tags: [l4, managed_dirs]
       when: converge_nixos
-      tags: [l4, backup]
+      tags: [l4, managed_dirs]
 
     - name: L4 | S3 local mirror
       ansible.builtin.include_role:

@@ -30,6 +30,7 @@
         ./modules/homelab-hello.nix
         ./modules/s3-local-mirror.nix
         ./modules/postgres-db-backup.nix
+        ./modules/managed-directories.nix
 
         ({ pkgs, lib, ... }:
           {
@@ -212,6 +213,12 @@
               "f /var/lib/homelab-secrets/ssh/lab/id_ed25519.pub 0644 lab lab -"
               "L+ /home/lab/.ssh/id_ed25519 - - - - /var/lib/homelab-secrets/ssh/lab/id_ed25519"
               "L+ /home/lab/.ssh/id_ed25519.pub - - - - /var/lib/homelab-secrets/ssh/lab/id_ed25519.pub"
+
+              # Managed directories
+              "d /etc/allans-home-lab/managed-directories 0755 root root -"
+            {% for d in (managed_host_dirs | default([])) %}
+              "d {{ d.local }} {{ d.mode | default('0755') }} {{ d.owner | default('root') }} {{ d.group | default(d.owner | default('root')) }} -"
+            {% endfor %}
 {% endif %}
 {% if converge_docker | default(false) %}
               "d /opt/docker-compose 0750 root root -"
@@ -287,7 +294,18 @@
             services.homelab.backupRunner = {
               enable = true;
               schedule = "*-*-* *:30:00";
-              rsyncFlags = "{{ backup_runner_rsync_flags }}";
+
+              # Convert inventory string into argv list
+              rsyncFlags =
+                lib.splitString " "
+                  "{{ backup_runner_rsync_flags }}";
+
+              readablePaths = [ "/home/lab/backup-restore" ];
+            };
+
+            services.homelab.managedDirectories = {
+              enable = true;
+              writablePaths = [ "/home/lab/backup-restore" ];
             };
 
 {% if converge_s3_mirror | default(false) %}

@@ -1,0 +1,27 @@
+# Canonical managed directories config rendered from Ansible inventory.
+# Source of truth: managed_host_dirs (host_vars/group_vars)
+
+version: 1
+generated_at: "{{ ansible_date_time.iso8601 }}"
+host: "{{ inventory_hostname }}"
+
+managed_directories:
+{% if managed_host_dirs | default([]) | length == 0 %}
+  []
+{% else %}
+{% for d in (managed_host_dirs | default([])) %}
+  - name: "{{ d.name | default(d.local | basename) }}"
+    type: "{{ d.type | default('local') }}"
+    local: "{{ d.local }}"
+    owner: "{{ d.owner | default('root') }}"
+    group: "{{ d.group | default(d.owner | default('root')) }}"
+    mode: "{{ d.mode | default('0755') }}"
+    backup: {{ (d.backup | default(true)) | bool | lower }}
+    restore: {{ (d.restore | default(true)) | bool | lower }}
+    remote: "{{ d.remote | default('') }}"
+    marker: "{{ d.marker | default(managed_dirs_defaults.marker) }}"
+    restore_when: "{{ d.restore_when | default(managed_dirs_defaults.restore_when) }}"
+    backup_when: "{{ d.backup_when | default(managed_dirs_defaults.backup_when) }}"
+    allow_uninitialized_backup: {{ (d.allow_uninitialized_backup | default(managed_dirs_defaults.allow_uninitialized_backup)) | bool | lower }}
+{% endfor %}
+{% endif %}

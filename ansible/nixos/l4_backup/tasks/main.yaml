@@ -1,8 +1,0 @@
----
-- name: Render backup fragment
-  ansible.builtin.template:
-    src: backup-fragment.conf.j2
-    dest: "/etc/allans-home-lab/backup/backup.conf.d/10-volumes.conf"
-    owner: root
-    group: root
-    mode: "0640"

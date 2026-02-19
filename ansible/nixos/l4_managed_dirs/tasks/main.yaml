@@ -1,0 +1,189 @@
+---
+- name: Managed dirs | Load canonical config.yaml from host
+  become: true
+  ansible.builtin.slurp:
+    src: "{{ managed_dirs_config_path }}"
+  register: managed_dirs_config_slurp
+
+- name: Managed dirs | Parse YAML config
+  ansible.builtin.set_fact:
+    managed_dirs_cfg: "{{ managed_dirs_config_slurp.content | b64decode | from_yaml }}"
+
+- name: Managed dirs | Extract managed_directories list (default empty)
+  ansible.builtin.set_fact:
+    managed_dirs: "{{ managed_dirs_cfg.managed_directories | default([]) }}"
+
+# ---- Preflight sanity checks (fail-closed) ----
+
+- name: Managed dirs | Assert config has expected shape
+  ansible.builtin.assert:
+    that:
+      - managed_dirs_cfg.version | default(0) | int == 1
+      - managed_dirs is iterable
+    fail_msg: "Invalid managed directories config at {{ managed_dirs_config_path }}"
+
+# Build per-item marker paths (marker defaults to .restored_from_backup if absent)
+- name: Managed dirs | Normalize entries (marker_path)
+  ansible.builtin.set_fact:
+    managed_dirs_norm: >-
+      {{
+        managed_dirs
+        | map('combine', {
+            'marker': (item.marker | default('.restored_from_backup')),
+            'marker_path': (item.local ~ '/' ~ (item.marker | default('.restored_from_backup')))
+          })
+        | list
+      }}
+  vars:
+    # Jinja needs `item` in map context; use a loop to normalize instead (below)
+    dummy: true
+  when: false
+
+# Safer: do normalization with a loop
+- name: Managed dirs | Normalize entries (marker_path) (loop)
+  ansible.builtin.set_fact:
+    managed_dirs_norm: "{{ (managed_dirs_norm | default([])) + [ d2 ] }}"
+  vars:
+    d2: >-
+      {{
+        item
+        | combine({
+            'marker': (item.marker | default('.restored_from_backup')),
+            'marker_path': (item.local ~ '/' ~ (item.marker | default('.restored_from_backup')))
+          })
+      }}
+  loop: "{{ managed_dirs }}"
+  loop_control:
+    label: "{{ item.name | default(item.local) }}"
+
+# Consider only restore-enabled entries for hydration checks
+- name: Managed dirs | Select restore-enabled entries
+  ansible.builtin.set_fact:
+    managed_dirs_restore: "{{ managed_dirs_norm | selectattr('restore', 'defined') | selectattr('restore') | list }}"
+  when: managed_dirs_norm | length > 0
+
+- name: Managed dirs | Default restore-enabled list (empty)
+  ansible.builtin.set_fact:
+    managed_dirs_restore: []
+  when: managed_dirs_norm | default([]) | length == 0
+
+# ---- State checks ----
+
+- name: Managed dirs | Stat local directories
+  become: true
+  ansible.builtin.stat:
+    path: "{{ item.local }}"
+  loop: "{{ managed_dirs_restore }}"
+  loop_control:
+    label: "{{ item.name | default(item.local) }}"
+  register: managed_dirs_local_stat
+
+- name: Managed dirs | Stat marker files
+  become: true
+  ansible.builtin.stat:
+    path: "{{ item.marker_path }}"
+  loop: "{{ managed_dirs_restore }}"
+  loop_control:
+    label: "{{ item.name | default(item.local) }}"
+  register: managed_dirs_marker_stat
+
+# Determine emptiness (directory contents count == 0)
+- name: Managed dirs | Check local directory emptiness
+  become: true
+  ansible.builtin.find:
+    paths: "{{ item.local }}"
+    file_type: any
+    hidden: true
+    recurse: false
+  loop: "{{ managed_dirs_restore }}"
+  loop_control:
+    label: "{{ item.name | default(item.local) }}"
+  register: managed_dirs_find
+
+# Compute which need hydration (empty + marker missing). Fail if missing dir.
+- name: Managed dirs | Fail if required local dir is missing (Nix should create)
+  ansible.builtin.assert:
+    that:
+      - managed_dirs_local_stat.results[idx].stat.exists
+      - managed_dirs_local_stat.results[idx].stat.isdir | default(false)
+    fail_msg: >-
+      Managed dir missing or not a directory: {{ item.local }}
+      (expected NixOS tmpfiles to create it)
+  loop: "{{ managed_dirs_restore }}"
+  loop_control:
+    index_var: idx
+    label: "{{ item.name | default(item.local) }}"
+
+- name: Managed dirs | Build needs_hydration list
+  ansible.builtin.set_fact:
+    managed_dirs_needs_hydration: "{{ (managed_dirs_needs_hydration | default([])) + [ item ] }}"
+  loop: "{{ managed_dirs_restore }}"
+  loop_control:
+    index_var: idx
+    label: "{{ item.name | default(item.local) }}"
+  when:
+    # marker missing
+    - not managed_dirs_marker_stat.results[idx].stat.exists
+    # directory empty (no entries)
+    - (managed_dirs_find.results[idx].matched | int) == 0
+
+# Fail-closed ambiguity: non-empty but marker missing
+- name: Managed dirs | Fail if dir is non-empty but marker missing (ambiguous)
+  ansible.builtin.fail:
+    msg: >-
+      Managed dir is non-empty but marker is missing (refusing to proceed):
+      name={{ item.name | default('') }} local={{ item.local }} marker={{ item.marker_path }}
+  loop: "{{ managed_dirs_restore }}"
+  loop_control:
+    index_var: idx
+    label: "{{ item.name | default(item.local) }}"
+  when:
+    - not managed_dirs_marker_stat.results[idx].stat.exists
+    - (managed_dirs_find.results[idx].matched | int) > 0
+
+# ---- Trigger hydration if needed ----
+
+- name: Managed dirs | Trigger rehydrate oneshot when needed
+  become: true
+  ansible.builtin.systemd:
+    name: "{{ managed_dirs_rehydrate_unit }}"
+    state: started
+  when: (managed_dirs_needs_hydration | default([])) | length > 0
+
+# ---- Re-check post-conditions (fail if not hydrated) ----
+
+- name: Managed dirs | Re-stat marker files after rehydrate
+  become: true
+  ansible.builtin.stat:
+    path: "{{ item.marker_path }}"
+  loop: "{{ managed_dirs_restore }}"
+  loop_control:
+    label: "{{ item.name | default(item.local) }}"
+  register: managed_dirs_marker_stat_after
+
+- name: Managed dirs | Re-check directory emptiness after rehydrate
+  become: true
+  ansible.builtin.find:
+    paths: "{{ item.local }}"
+    file_type: any
+    hidden: true
+    recurse: false
+  loop: "{{ managed_dirs_restore }}"
+  loop_control:
+    label: "{{ item.name | default(item.local) }}"
+  register: managed_dirs_find_after
+
+- name: Managed dirs | Assert restore-enabled dirs are hydrated (marker present + non-empty)
+  ansible.builtin.assert:
+    that:
+      - managed_dirs_marker_stat_after.results[idx].stat.exists
+      - (managed_dirs_find_after.results[idx].matched | int) > 0
+    fail_msg: >-
+      Managed dir is not hydrated after rehydrate task:
+      name={{ item.name | default('') }}
+      local={{ item.local }}
+      marker={{ item.marker_path }}
+  loop: "{{ managed_dirs_restore }}"
+  loop_control:
+    index_var: idx
+    label: "{{ item.name | default(item.local) }}"

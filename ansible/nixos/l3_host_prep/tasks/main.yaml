@@ -16,6 +16,7 @@
   with_items:
     - path: "{{ nixos_dir }}/assets"
     - path: "/var/lib/homelab-secrets/ssh/root"
+    - path: "/etc/allans-home-lab/managed-directories"
     - path: "/home/lab/.dotfiles"
       owner: "lab"
       group: "lab"
@@ -49,3 +50,19 @@
     name: ssh_keypair
   vars:
     ssh_keypair_owner: "root"
+
+- name: Managed dirs | Write canonical config.yaml from inventory
+  become: true
+  ansible.builtin.template:
+    src: managed-directories-config.yaml.j2
+    dest: /etc/allans-home-lab/managed-directories/config.yaml
+    owner: root
+    group: root
+    mode: "0644"
+  vars:
+    # Optional defaults you can centralize here
+    managed_dirs_defaults:
+      marker: ".restored_from_backup"
+      restore_when: "empty_and_marker_missing"
+      backup_when: "marker_present"
+      allow_uninitialized_backup: false
