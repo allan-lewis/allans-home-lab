@@ -216,11 +216,11 @@
     #       - /usr/local/sbin
     #   when: current_hostname.stdout != inventory_hostname
 
-    - name: Monitoring (Docker)
-      ansible.builtin.include_role:
-        name: all_docker_monitoring
-      when: converge_docker_monitoring
-      tags: [l3, step_docker_monitoring]
+    # - name: Monitoring (Docker)
+    #   ansible.builtin.include_role:
+    #     name: all_docker_monitoring
+    #   when: converge_docker_monitoring
+    #   tags: [l3, step_docker_monitoring]
 
     # - name: DevOps | Clone/update repositories into /home/lab/src
     #   become: true

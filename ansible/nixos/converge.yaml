@@ -56,3 +56,11 @@
           tags: [l4, devops]
       when: converge_nixos and converge_devops
       tags: [l4, devops]
+
+    - name: L4 | Monitoring (Docker)
+      ansible.builtin.include_role:
+        name: docker_monitoring
+        apply:
+          tags: [l4, docker_monitoring]
+      when: converge_docker_monitoring
+      tags: [l4, docker_monitoring]
