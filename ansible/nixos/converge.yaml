@@ -32,3 +32,27 @@
           tags: [l3, host_rebuild]
       when: converge_nixos
       tags: [l3, host_rebuild]
+
+    - name: L4 | Backup
+      ansible.builtin.include_role:
+        name: l4_backup
+        apply:
+          tags: [l4, backup]
+      when: converge_nixos
+      tags: [l4, backup]
+
+    - name: L4 | S3 local mirror
+      ansible.builtin.include_role:
+        name: l4_s3_mirror
+        apply:
+          tags: [l4, mirror]
+      when: converge_nixos and converge_s3_mirror
+      tags: [l4, mirror]
+
+    - name: L4 | DevOps
+      ansible.builtin.include_role:
+        name: l4_devops
+        apply:
+          tags: [l4, devops]
+      when: converge_nixos and converge_devops
+      tags: [l4, devops]

@@ -169,15 +169,34 @@ in
       timeoutSec = cfg.timeoutSec;
 
       requiresNetworkOnline = true;
+
+      # needs to write mirror output
       readWritePaths = [ cfg.destDir ];
 
-      # Ensure aws is available even if you later stop installing it globally
+      # keep awscli available
       path = [
         pkgs.awscli2
         pkgs.coreutils
       ];
 
       taskLabel = "s3_local_mirror";
+
+      # ---- AWS creds fix (works with hardening enabled) ----
+      # /root is hidden when ProtectHome=yes; make it visible (read-only is enough)
+      protectHome = "read-only";
+
+      # Create a writable state dir and use it as HOME so awscli can cache safely
+      stateDirectory = "homelab-s3-local-mirror";
+      environment = {
+        HOME = "/var/lib/homelab-s3-local-mirror";
+        AWS_SHARED_CREDENTIALS_FILE = "/root/.aws/credentials";
+        AWS_CONFIG_FILE            = "/root/.aws/config";
+        # Optional cache dir if you ever use SSO/assume-role caching:
+        AWS_CLI_CACHE_DIR          = "/var/lib/homelab-s3-local-mirror/aws-cli-cache";
+      };
+
+      # Optional belt-and-suspenders: explicitly allow reading the creds dir
+      readOnlyPaths = [ "/root/.aws" ];
     };
   };
 }

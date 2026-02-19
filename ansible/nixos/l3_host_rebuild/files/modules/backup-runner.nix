@@ -10,6 +10,11 @@ let
     CONF_DIR=${lib.escapeShellArg confDir}
     RSYNC_FLAGS=${lib.escapeShellArg cfg.rsyncFlags}
 
+    # Use systemd StateDirectory as HOME so ssh can write known_hosts there.
+    # If not set, fall back to /tmp (still writable with PrivateTmp=true).
+    HOME_DIR="''${HOME:-/tmp}"
+    KNOWN_HOSTS="$HOME_DIR/known_hosts"
+
     timestamp() { date +"%Y-%m-%d %H:%M:%S%z"; }
     log() { echo "$(timestamp) | $*"; }
 
@@ -43,7 +48,7 @@ let
 
           # shellcheck disable=SC2086
           rsync $RSYNC_FLAGS \
-            -e "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o BatchMode=yes" \
+            -e "ssh -i /root/.ssh/id_ed25519 -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=accept-new -o UserKnownHostsFile=$KNOWN_HOSTS" \
             --progress \
             "$src_norm" "$dest_norm"
 
@@ -173,6 +178,16 @@ in
 
       requiresNetworkOnline = true;
       readWritePaths = [ cfg.baseDir ];
+
+      # ---- FIX: allow reading root ssh keys under hardening ----
+      protectHome = "read-only";
+      readOnlyPaths = [ "/root/.ssh" ];
+
+      # Writable HOME for ssh known_hosts (and anything else needing HOME)
+      stateDirectory = "homelab-backup-runner";
+      environment = {
+        HOME = "/var/lib/homelab-backup-runner";
+      };
 
       path = [
         pkgs.rsync

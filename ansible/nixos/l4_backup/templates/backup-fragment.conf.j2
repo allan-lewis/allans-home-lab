@@ -1,0 +1,6 @@
+{% if backup_runner_fragment_header is defined %}
+# {{ backup_runner_fragment_header }}
+{% endif -%}
+{% for pair in backup_runner_volumes -%}
+{{ pair.src }} :: {{ pair.dest }}
+{% endfor %}

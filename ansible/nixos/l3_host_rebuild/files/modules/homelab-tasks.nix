@@ -87,6 +87,13 @@ let
 
       # Provide a reliable PATH to the unit via NixOS-native systemd.services.<name>.path
       pathPkgs = [ pkgs.coreutils pkgs.gawk ] ++ t.path;
+
+      # systemd expects Environment as a list of "K=V" strings
+      envList = lib.mapAttrsToList (k: v: "${k}=${v}") t.environment;
+
+      # Per-task override for ProtectHome; default to framework's conservative value ("yes")
+      protectHomeValue =
+        if t.protectHome != null then t.protectHome else "yes";
     in
     {
       services."${unitName}" = {
@@ -115,11 +122,18 @@ let
           // (lib.optionalAttrs (t.workingDirectory != null) {
             WorkingDirectory = t.workingDirectory;
           })
+          // (lib.optionalAttrs (t.stateDirectory != null) {
+            StateDirectory = t.stateDirectory;
+          })
+          // (lib.optionalAttrs (t.environment != {}) {
+            Environment = envList;
+          })
           // (lib.optionalAttrs cfg.hardening.enable {
             NoNewPrivileges = true;
             PrivateTmp = true;
             ProtectSystem = "strict";
-            ProtectHome = true;
+            ProtectHome = protectHomeValue;
+
             ProtectKernelTunables = true;
             ProtectKernelModules = true;
             ProtectControlGroups = true;
@@ -130,6 +144,9 @@ let
 
             # Allow writing only where we explicitly need it
             ReadWritePaths = rwPaths;
+
+            # Extra read-only paths (optional)
+            ReadOnlyPaths = t.readOnlyPaths;
           });
       };
 
@@ -213,7 +230,7 @@ in
 
           requiresNetworkOnline = lib.mkOption {
             type = lib.types.bool;
-            default = true; # per your choice 1A
+            default = true;
             description = "If true, the task orders after and wants network-online.target.";
           };
 
@@ -233,6 +250,33 @@ in
             type = lib.types.listOf lib.types.str;
             default = [];
             description = "Extra writable paths when hardening is enabled (systemd ReadWritePaths=).";
+          };
+
+          readOnlyPaths = lib.mkOption {
+            type = lib.types.listOf lib.types.str;
+            default = [];
+            description = "Extra read-only paths when hardening is enabled (systemd ReadOnlyPaths=).";
+          };
+
+          # Per-task override for ProtectHome (framework default is "yes")
+          protectHome = lib.mkOption {
+            type = lib.types.nullOr (lib.types.enum [ "yes" "no" "read-only" "tmpfs" ]);
+            default = null;
+            description = "Override systemd ProtectHome=. Null uses framework default.";
+          };
+
+          # Per-task Environment entries
+          environment = lib.mkOption {
+            type = lib.types.attrsOf lib.types.str;
+            default = {};
+            description = "Extra environment variables for the task unit (key/value).";
+          };
+
+          # Optional systemd-managed writable state dir under /var/lib
+          stateDirectory = lib.mkOption {
+            type = lib.types.nullOr lib.types.str;
+            default = null;
+            description = "If set, adds systemd StateDirectory= for a writable per-task state dir under /var/lib.";
           };
 
           taskLabel = lib.mkOption {
