@@ -11,7 +11,16 @@ let
     CONFIG=${lib.escapeShellArg cfg.configPath}
 
     HOME_DIR="''${HOME:-/tmp}"
+    LOGFILE="$HOME_DIR/backup-runner.log"
     KNOWN_HOSTS="$HOME_DIR/known_hosts"
+
+    mkdir -p "$HOME_DIR"
+    touch "$LOGFILE" "$KNOWN_HOSTS"
+    chmod 0644 "$LOGFILE" || true
+    chmod 0600 "$KNOWN_HOSTS" || true
+
+    # Log to journal + file
+    exec > >(tee -a "$LOGFILE") 2>&1
 
     timestamp() { date +"%Y-%m-%d %H:%M:%S%z"; }
     log() { echo "$(timestamp) | $*"; }
@@ -26,6 +35,7 @@ let
 
     [[ -f "$CONFIG" ]] || die "Config missing: $CONFIG"
 
+    # ---- YAML -> JSON (fail hard on any parse error) ----
     cfg_json="$(${py}/bin/python3 - "$CONFIG" <<'PY'
 import sys, json
 import yaml
@@ -45,54 +55,107 @@ data["managed_directories"] = md
 print(json.dumps(data))
 PY
     )"
+
     [[ -n "$cfg_json" ]] || die "Parsed config JSON is empty (unexpected)"
 
-    # Emit TSV: name local remote marker backup restore
-    ${py}/bin/python3 - "$cfg_json" <<'PY' > "$HOME_DIR/entries.tsv"
-import sys, json
-data = json.loads(sys.argv[1])
-items = data.get("managed_directories") or []
+    count="$(${py}/bin/python3 -c 'import json,sys; d=json.loads(sys.argv[1]); print(len(d.get("managed_directories") or []))' "$cfg_json")"
+    [[ "$count" =~ ^[0-9]+$ ]] || die "Invalid managed_directories count: '$count'"
 
-def b(x): return "true" if bool(x) else "false"
+    log "===== Backup run started | entries=$count ====="
+    if [[ "$count" -eq 0 ]]; then
+      log "INFO   | No managed_directories; nothing to do."
+      log "===== Backup run finished (OK) ====="
+      exit 0
+    fi
 
-for i, d in enumerate(items):
-    name   = d.get("name", f"dir_{i}")
-    local  = d.get("local", "")
-    remote = d.get("remote", "")
-    marker = d.get("marker", ".restored_from_backup")
-    backup = bool(d.get("backup", True))
-    restore = bool(d.get("restore", True))
-    backup_when = d.get("backup_when", "marker_present")
-    print("\t".join([name, local, remote, marker, b(backup), b(restore), backup_when]))
-PY
+    # --------------------------------------------------------------------
+    # IMPORTANT: rsync-over-ssh requires ssh stdin/stdout for protocol.
+    # DO NOT use: ssh -n, -o StdinNull=yes, or stdin redirection for rsync.
+    # --------------------------------------------------------------------
 
-    pairs=0
-    failures=0
-
-    ssh_cmd() {
+    # Safe for probes (does not carry rsync protocol)
+    ssh_cmd_probe() {
       ${pkgs.openssh}/bin/ssh \
+        -n \
         -i ${lib.escapeShellArg cfg.sshIdentityPath} \
         -o IdentitiesOnly=yes \
         -o BatchMode=yes \
         -o StrictHostKeyChecking=accept-new \
         -o UserKnownHostsFile="$KNOWN_HOSTS" \
-        -o ConnectTimeout=5 \
+        -o ConnectTimeout=10 \
+        -o ServerAliveInterval=10 \
+        -o ServerAliveCountMax=3 \
         "$@"
     }
 
-    remote_parent_exists() {
+    remote_exists() {
       local remote="$1"
       local hostpart pathpart
+
       [[ "$remote" == *:* ]] || return 2
       hostpart="''${remote%%:*}"
       pathpart="''${remote#*:}"
       [[ -n "$pathpart" ]] || return 2
-      ssh_cmd "$hostpart" "test -d '$pathpart'"
+
+      ssh_cmd_probe "$hostpart" "test -d '$pathpart'"
     }
 
-    log "===== Backup run started ====="
+    do_rsync_backup() {
+      local local_dir="$1"
+      local remote="$2"
 
-    while IFS=$'\t' read -r name local remote marker backup restore backup_when; do
+      local src_norm="''${local_dir%/}/"
+      local dest_norm="''${remote%/}/"
+
+      ${pkgs.rsync}/bin/rsync \
+        ${lib.concatStringsSep " " (map lib.escapeShellArg cfg.rsyncFlags)} \
+        -e "${pkgs.openssh}/bin/ssh -i ${lib.escapeShellArg cfg.sshIdentityPath} -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=accept-new -o UserKnownHostsFile=$KNOWN_HOSTS -o ConnectTimeout=10 -o ServerAliveInterval=10 -o ServerAliveCountMax=3" \
+        --progress \
+        "$src_norm" "$dest_norm"
+    }
+
+    # ---- Build a robust loop list (no TSV loop; no stdin consumption issues) ----
+    mapfile -t entries_b64 < <(${py}/bin/python3 - "$cfg_json" <<'PY'
+import sys, json, base64
+data = json.loads(sys.argv[1])
+items = data.get("managed_directories") or []
+
+for i, d in enumerate(items):
+    out = {
+        "name": d.get("name", f"dir_{i}"),
+        "local": d.get("local", ""),
+        "remote": d.get("remote", ""),
+        "marker": d.get("marker", ".restored_from_backup"),
+        "backup": bool(d.get("backup", True)),
+        "backup_when": d.get("backup_when", "marker_present"),
+    }
+    print(base64.b64encode(json.dumps(out).encode("utf-8")).decode("ascii"))
+PY
+    )
+
+    pairs=0
+    failures=0
+
+    for b64 in "''${entries_b64[@]}"; do
+      entry_json="$(printf '%s' "$b64" | ${pkgs.coreutils}/bin/base64 -d)"
+
+      fields="$(${py}/bin/python3 - "$entry_json" <<'PY'
+import sys, json
+d = json.loads(sys.argv[1])
+def s(x): return "" if x is None else str(x)
+vals = [
+  s(d.get("name","")),
+  s(d.get("local","")),
+  s(d.get("remote","")),
+  s(d.get("marker",".restored_from_backup")),
+  "true" if bool(d.get("backup", True)) else "false",
+  s(d.get("backup_when","marker_present")),
+]
+print("\t".join(vals), end="")
+PY
+      )"
+
+      IFS=$'\t' read -r name local remote marker backup backup_when <<< "$fields"
       [[ -z "$name" ]] && name="UNKNOWN"
 
       if [[ "$backup" != "true" ]]; then
@@ -133,7 +196,7 @@ PY
 
       # Ensure remote exists/reachable (fail-closed)
       log "CHECK  | name=$name | remote exists? $remote"
-      if ! remote_parent_exists "$remote"; then
+      if ! remote_exists "$remote"; then
         rc=$?
         if [[ "$rc" -eq 2 ]]; then
           log "FATAL  | name=$name | invalid remote (expected user@host:/path): '$remote'"
@@ -144,23 +207,17 @@ PY
         continue
       fi
 
-      src_norm="''${local%/}/"
-      dest_norm="''${remote%/}/"
-
       pairs=$((pairs+1))
 
-      log "START  | name=$name | rsync '$src_norm' -> '$dest_norm'"
-
-      ${pkgs.rsync}/bin/rsync \
-        ${lib.concatStringsSep " " (map lib.escapeShellArg cfg.rsyncFlags)} \
-        -e "${pkgs.openssh}/bin/ssh -i ${lib.escapeShellArg cfg.sshIdentityPath} -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=accept-new -o UserKnownHostsFile=$KNOWN_HOSTS -o ConnectTimeout=5" \
-        --progress \
-        "$src_norm" "$dest_norm" \
-        || { log "FATAL  | name=$name | rsync failed"; failures=$((failures+1)); continue; }
-
-      log "OK     | name=$name | $src_norm -> $dest_norm"
-
-    done < "$HOME_DIR/entries.tsv"
+      log "START  | name=$name | rsync '$local/' -> '$remote/'"
+      if do_rsync_backup "$local" "$remote"; then
+        log "OK     | name=$name | $local/ -> $remote/"
+      else
+        log "FATAL  | name=$name | rsync failed"
+        failures=$((failures+1))
+        continue
+      fi
+    done
 
     if [[ $pairs -eq 0 ]]; then
       log "INFO   | No backup pairs configured."
@@ -172,7 +229,7 @@ PY
       log "===== Backup run finished (OK) ====="
       exit 0
     else
-      log "===== Backup run finished (FAIL) ====="
+      log "===== Backup run finished (FAIL) | failures=$failures ====="
       exit 1
     fi
   '';
@@ -199,14 +256,13 @@ in
       description = "Maximum runtime before systemd kills the backup runner.";
     };
 
-    # NEW: where to read managed directories config
     configPath = lib.mkOption {
       type = lib.types.str;
       default = "/etc/allans-home-lab/managed-directories/config.yaml";
       description = "Canonical managed directories config written by Ansible.";
     };
 
-    # NEW: rsync flags as argv list
+    # Uses the argv list passed from your flake config (no re-splitting)
     rsyncFlags = lib.mkOption {
       type = lib.types.listOf lib.types.str;
       default = [ "-aHAX" "--numeric-ids" "--delete" ];
@@ -219,7 +275,6 @@ in
       description = "SSH identity used for remote backup.";
     };
 
-    # NEW: allowlist of local sources under hardening
     readablePaths = lib.mkOption {
       type = lib.types.listOf lib.types.str;
       default = [];
@@ -255,7 +310,7 @@ in
       protectHome = "read-only";
       readOnlyPaths = [ "/root/.ssh" cfg.configPath ] ++ cfg.readablePaths;
 
-      # Writable HOME for ssh known_hosts + script temp files under StateDirectory
+      # Writable HOME for ssh known_hosts + script temp/logs under StateDirectory
       stateDirectory = "homelab-backup-runner";
       environment = { HOME = "/var/lib/homelab-backup-runner"; };
 
