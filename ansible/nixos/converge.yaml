@@ -41,14 +41,6 @@
       when: converge_nixos
       tags: [l4, managed_dirs]
 
-    - name: L4 | S3 local mirror
-      ansible.builtin.include_role:
-        name: l4_s3_mirror
-        apply:
-          tags: [l4, mirror]
-      when: converge_nixos and converge_s3_mirror
-      tags: [l4, mirror]
-
     - name: L4 | DevOps
       ansible.builtin.include_role:
         name: l4_devops

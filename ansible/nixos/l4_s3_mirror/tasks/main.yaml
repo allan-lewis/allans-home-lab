@@ -1,8 +1,0 @@
----
-- name: Render bucket config file
-  ansible.builtin.template:
-    src: buckets.conf.j2
-    dest: /etc/allans-home-lab/s3/buckets.conf
-    owner: root
-    group: root
-    mode: "0644"

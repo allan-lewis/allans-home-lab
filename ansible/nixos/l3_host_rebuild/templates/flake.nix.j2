@@ -300,12 +300,20 @@
                 lib.splitString " "
                   "{{ backup_runner_rsync_flags }}";
 
-              readablePaths = [ "/home/lab/backup-restore" ];
+              readablePaths = [ 
+{% for d in (managed_host_dirs | default([])) %}
+                "{{ d.local }}" 
+{% endfor %}
+              ];
             };
 
             services.homelab.managedDirectories = {
               enable = true;
-              writablePaths = [ "/home/lab/backup-restore" ];
+              writablePaths = [ 
+{% for d in (managed_host_dirs | default([])) %}
+                "{{ d.local }}" 
+{% endfor %}
+              ];
             };
 
 {% if converge_s3_mirror | default(false) %}
@@ -317,7 +325,13 @@
 
               # DO NOT CHANGE semantics
               syncFlags = "--delete --only-show-errors";
-            };
+
+              buckets = [
+            {%- for b in (s3_mirror_buckets | default([])) %}
+                "{{ b }}"
+            {%- endfor %}
+              ];
+};
 {% endif %}
 
 {% if converge_postgres_dump | default(false) %}

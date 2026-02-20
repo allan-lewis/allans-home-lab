@@ -3,53 +3,30 @@
 let
   cfg = config.services.homelab.s3LocalMirror;
 
+  # Convert Nix list -> bash array literal (properly quoted)
+  bucketsBashArray =
+    lib.concatMapStringsSep " " (b: lib.escapeShellArg b) cfg.buckets;
+
   runnerScript = pkgs.writeShellScript "homelab-s3-local-mirror" ''
     set -euo pipefail
 
-    CONFIG_FILE=${lib.escapeShellArg cfg.configFile}
     DEST_DIR=${lib.escapeShellArg cfg.destDir}
     SYNC_FLAGS=${lib.escapeShellArg cfg.syncFlags}
 
     ts(){ date '+%F %T%z'; }
     log(){ echo "$(ts) | $*"; }
 
-    trim() {
-      local s="$1"
-      s="''${s#"''${s%%[![:space:]]*}"}"
-      s="''${s%"''${s##*[![:space:]]}"}"
-      printf '%s' "$s"
-    }
-
-    if [[ ! -f "$CONFIG_FILE" ]]; then
-      log "No bucket config file found at $CONFIG_FILE; nothing to do."
-      exit 0
-    fi
-
-    BUCKETS=()
-
-    while IFS= read -r raw || [[ -n "$raw" ]]; do
-      # strip comments, trim, skip empties
-      raw="''${raw%%#*}"
-      raw="$(trim "$raw")"
-      [[ -z "$raw" ]] && continue
-
-      # allow comma-separated buckets on one line
-      IFS=',' read -r -a parts <<< "$raw"
-      for p in "''${parts[@]}"; do
-        p="$(trim "$p")"
-        [[ -z "$p" ]] && continue
-        BUCKETS+=("$p")
-      done
-    done < "$CONFIG_FILE"
+    # Buckets injected by Nix (no runtime config file)
+    BUCKETS=( ${bucketsBashArray} )
 
     if (( ''${#BUCKETS[@]} == 0 )); then
-      log "Bucket config file is empty ($CONFIG_FILE); nothing to do."
+      log "No buckets configured; nothing to do."
       exit 0
     fi
 
     mkdir -p "$DEST_DIR"
 
-    log "Starting S3 mirror run (config=$CONFIG_FILE)"
+    log "Starting S3 mirror run (dest=$DEST_DIR)"
     failures=0
 
     for bucket in "''${BUCKETS[@]}"; do
@@ -79,22 +56,17 @@ in
   options.services.homelab.s3LocalMirror = {
     enable = lib.mkEnableOption "Homelab S3 local mirror (aws s3 sync to local dir)";
 
-    baseDir = lib.mkOption {
-      type = lib.types.str;
-      default = "/etc/allans-home-lab/s3";
-      description = "Base directory for S3 mirror configuration files.";
-    };
-
-    configFile = lib.mkOption {
-      type = lib.types.str;
-      default = "/etc/allans-home-lab/s3/buckets.conf";
-      description = "Bucket list config file (one bucket per line; blank lines and # comments allowed).";
-    };
-
     destDir = lib.mkOption {
       type = lib.types.str;
       default = "/var/lib/allans-home-lab/s3-mirror";
       description = "Destination base directory for local S3 mirrors.";
+    };
+
+    buckets = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
+      description = "List of S3 bucket names to mirror (e.g. [ \"bucket-a\" \"bucket-b\" ]).";
+      example = [ "gitops-homelab-orchestrator-disks" "gitops-homelab-orchestrator-haos" ];
     };
 
     schedule = lib.mkOption {
@@ -131,33 +103,19 @@ in
         assertion = (cfg.syncFlags or "") != "";
         message = "services.homelab.s3LocalMirror.syncFlags must be set when enable = true";
       }
+      {
+        assertion = (cfg.buckets or [ ]) != [ ];
+        message = "services.homelab.s3LocalMirror.buckets must be non-empty when enable = true";
+      }
     ];
 
     # Ensure task framework is enabled
     services.homelab.tasks.enable = lib.mkDefault true;
 
-    # Ensure directories exist
+    # Ensure dest dir exists
     systemd.tmpfiles.rules = [
-      "d ${cfg.baseDir} 0755 root root -"
-      "d ${builtins.dirOf cfg.configFile} 0755 root root -"
       "d ${cfg.destDir} 0755 root root -"
     ];
-
-    # Declarative default config file (comments, no entries)
-    environment.etc."allans-home-lab/s3/buckets.conf" = {
-      text = ''
-# Managed by NixOS (L3 scaffolding) + Ansible (L4 entries).
-# One bucket per line. Blank lines and # comments are allowed.
-#
-# Examples:
-#   gitops-homelab-orchestrator-disks
-#   gitops-homelab-orchestrator-haos
-#
-# Comma-separated buckets on one line are also accepted:
-#   bucket-a, bucket-b
-'';
-      mode = "0644";
-    };
 
     # Register task with framework
     services.homelab.tasks.tasks.s3-local-mirror = {
@@ -191,7 +149,6 @@ in
         HOME = "/var/lib/homelab-s3-local-mirror";
         AWS_SHARED_CREDENTIALS_FILE = "/root/.aws/credentials";
         AWS_CONFIG_FILE            = "/root/.aws/config";
-        # Optional cache dir if you ever use SSO/assume-role caching:
         AWS_CLI_CACHE_DIR          = "/var/lib/homelab-s3-local-mirror/aws-cli-cache";
       };
 
