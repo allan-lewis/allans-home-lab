@@ -127,7 +127,7 @@ groups:
 
       - alert: HomelabTaskMetricsCountMismatch
         expr: |
-          count(homelab_task_last_run_unix{task!="hello"}) != 9
+          count(homelab_task_last_run_unix{task!~"^(hello|managed_dirs_rehydrate)$"}) != 9
         labels:
           severity: critical
           rulegroup: homelabRules
