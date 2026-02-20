@@ -17,7 +17,7 @@ source_code_repos:
     dest: homelab-metrics 
     version: main
 
-converge_s3_mirror: true
+converge_s3_mirror: false
 s3_mirror_buckets: [
   "gitops-homelab-orchestrator-disks",
   "gitops-homelab-orchestrator-haos",

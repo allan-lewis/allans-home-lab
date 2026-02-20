@@ -18,6 +18,11 @@ let
     mkdir -p "$HOME_DIR"
     touch "$LOGFILE"
     chmod 0644 "$LOGFILE"
+
+    # known_hosts must be writable by the service user; HOME is our StateDirectory path.
+    touch "$KNOWN_HOSTS"
+    chmod 0600 "$KNOWN_HOSTS"
+
     exec > >(tee -a "$LOGFILE") 2>&1
 
     timestamp() { date +"%Y-%m-%d %H:%M:%S%z"; }
@@ -56,7 +61,6 @@ PY
 
     [[ -n "$cfg_json" ]] || die "Parsed config JSON is empty (unexpected)"
 
-    # ---- Count entries using argv (no stdin surprises) ----
     count="$(${py}/bin/python3 -c 'import json,sys; d=json.loads(sys.argv[1]); print(len(d.get("managed_directories") or []))' "$cfg_json")"
     [[ "$count" =~ ^[0-9]+$ ]] || die "Invalid managed_directories count: '$count'"
 
@@ -68,14 +72,33 @@ PY
       exit 0
     fi
 
-    ssh_cmd() {
+    # --------------------------------------------------------------------
+    # IMPORTANT: rsync-over-ssh requires ssh stdin/stdout for protocol.
+    # DO NOT use: ssh -n, -o StdinNull=yes, or stdin redirection for rsync.
+    # --------------------------------------------------------------------
+
+    # Safe for probes (does not carry rsync protocol)
+    ssh_cmd_probe() {
+      ${pkgs.openssh}/bin/ssh \
+        -n \
+        -i ${lib.escapeShellArg cfg.sshIdentityPath} \
+        -o IdentitiesOnly=yes \
+        -o BatchMode=yes \
+        -o StrictHostKeyChecking=accept-new \
+        -o UserKnownHostsFile="$KNOWN_HOSTS" \
+        -o ConnectTimeout=10 \
+        "$@"
+    }
+
+    # Used by rsync transport (MUST allow stdin/stdout to pass through)
+    ssh_cmd_rsync() {
       ${pkgs.openssh}/bin/ssh \
         -i ${lib.escapeShellArg cfg.sshIdentityPath} \
         -o IdentitiesOnly=yes \
         -o BatchMode=yes \
         -o StrictHostKeyChecking=accept-new \
         -o UserKnownHostsFile="$KNOWN_HOSTS" \
-        -o ConnectTimeout=5 \
+        -o ConnectTimeout=10 \
         "$@"
     }
 
@@ -88,7 +111,7 @@ PY
       pathpart="''${remote#*:}"
       [[ -n "$pathpart" ]] || return 2
 
-      ssh_cmd "$hostpart" "test -d '$pathpart'"
+      ssh_cmd_probe "$hostpart" "test -d '$pathpart'"
     }
 
     do_rsync_restore() {
@@ -98,40 +121,60 @@ PY
       local remote_norm="''${remote%/}/"
       local local_norm="''${local_dir%/}/"
 
+      # NOTE: use ssh_cmd_rsync here; do NOT include -n / StdinNull.
       ${pkgs.rsync}/bin/rsync \
         ${lib.concatStringsSep " " (map lib.escapeShellArg cfg.rsyncFlags)} \
-        -e "${pkgs.openssh}/bin/ssh -i ${lib.escapeShellArg cfg.sshIdentityPath} -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=accept-new -o UserKnownHostsFile=$KNOWN_HOSTS -o ConnectTimeout=5" \
+        -e "${pkgs.openssh}/bin/ssh -i ${lib.escapeShellArg cfg.sshIdentityPath} -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=accept-new -o UserKnownHostsFile=$KNOWN_HOSTS -o ConnectTimeout=10" \
         --progress \
         "$remote_norm" "$local_norm"
     }
 
-    # ---- Emit TSV safely using argv JSON ----
-    ${py}/bin/python3 - "$cfg_json" <<'PY' > "$HOME_DIR/entries.tsv"
-import sys, json
-
+    # ---- Build a robust loop list (no TSV, no NUL, no IFS surprises) ----
+    mapfile -t entries_b64 < <(${py}/bin/python3 - "$cfg_json" <<'PY'
+import sys, json, base64
 data = json.loads(sys.argv[1])
 items = data.get("managed_directories") or []
 
-def b(x): return "true" if bool(x) else "false"
-
 for i, d in enumerate(items):
-    name   = d.get("name", f"dir_{i}")
-    local  = d.get("local", "")
-    remote = d.get("remote", "")
-    owner  = d.get("owner", "root")
-    group  = d.get("group", owner)
-    marker = d.get("marker", ".restored_from_backup")
-    restore = bool(d.get("restore", True))
-    restore_when = d.get("restore_when", "empty_and_marker_missing")
-
-    # Tab-separated, one entry per line
-    print("\t".join([name, local, remote, owner, group, marker, b(restore), restore_when]))
+    out = {
+        "name": d.get("name", f"dir_{i}"),
+        "local": d.get("local", ""),
+        "remote": d.get("remote", ""),
+        "owner": d.get("owner", "root"),
+        "group": d.get("group", d.get("owner", "root")),
+        "marker": d.get("marker", ".restored_from_backup"),
+        "restore": bool(d.get("restore", True)),
+        "restore_when": d.get("restore_when", "empty_and_marker_missing"),
+    }
+    print(base64.b64encode(json.dumps(out).encode("utf-8")).decode("ascii"))
 PY
+    )
 
     failures=0
     restored=0
 
-    while IFS=$'\t' read -r name local remote owner group marker restore restore_when; do
+    for b64 in "''${entries_b64[@]}"; do
+      entry_json="$(printf '%s' "$b64" | ${pkgs.coreutils}/bin/base64 -d)"
+
+      fields="$(${py}/bin/python3 - "$entry_json" <<'PY'
+import sys, json
+d = json.loads(sys.argv[1])
+def s(x): return "" if x is None else str(x)
+vals = [
+  s(d.get("name","")),
+  s(d.get("local","")),
+  s(d.get("remote","")),
+  s(d.get("owner","root")),
+  s(d.get("group", d.get("owner","root"))),
+  s(d.get("marker",".restored_from_backup")),
+  "true" if bool(d.get("restore", True)) else "false",
+  s(d.get("restore_when","empty_and_marker_missing")),
+]
+print("\t".join(vals), end="")
+PY
+      )"
+
+      IFS=$'\t' read -r name local remote owner group marker restore restore_when <<< "$fields"
       [[ -z "$name" ]] && name="UNKNOWN"
 
       if [[ "$restore" != "true" ]]; then
@@ -153,27 +196,23 @@ PY
 
       marker_path="$local/$marker"
 
-      # Must exist (Nix tmpfiles responsibility)
       if [[ ! -d "$local" ]]; then
         log "FATAL  | name=$name | local dir missing (expected Nix tmpfiles): $local"
         failures=$((failures+1))
         continue
       fi
 
-      # Already hydrated
       if [[ -e "$marker_path" ]]; then
         log "OK     | name=$name | marker present; hydrated"
         continue
       fi
 
-      # Fail-closed ambiguity: non-empty but marker missing
       if [[ -n "$(ls -A "$local" 2>/dev/null || true)" ]]; then
         log "FATAL  | name=$name | non-empty but marker missing; refusing: $local"
         failures=$((failures+1))
         continue
       fi
 
-      # Needs restore: empty + marker missing
       if [[ -z "$remote" ]]; then
         log "FATAL  | name=$name | restore enabled but remote empty"
         failures=$((failures+1))
@@ -204,7 +243,6 @@ PY
         ${pkgs.coreutils}/bin/chmod 0644 "$tmp"
         ${pkgs.coreutils}/bin/mv -f "$tmp" "$marker_path"
 
-        # Post-check
         if [[ -e "$marker_path" && -n "$(ls -A "$local" 2>/dev/null || true)" ]]; then
           log "OK     | name=$name | restored + marked"
           restored=$((restored+1))
@@ -216,8 +254,7 @@ PY
         log "FATAL  | name=$name | rsync failed"
         failures=$((failures+1))
       fi
-
-    done < "$HOME_DIR/entries.tsv"
+    done
 
     if [[ "$failures" -eq 0 ]]; then
       log "===== Managed dirs rehydrate finished (OK) | restored=$restored ====="
