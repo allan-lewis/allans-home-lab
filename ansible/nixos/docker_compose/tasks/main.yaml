@@ -1,17 +1,31 @@
 ---
-- name: Show configuration that will be used
-  ansible.builtin.debug:
-    var: compose_config
-
-- name: Show project directory
-  ansible.builtin.debug:
-    var: compose_project_dir
-
 - name: Ensure project dir exists
   ansible.builtin.file:
     path: "{{ compose_project_dir }}"
     state: directory
     mode: "0750"
+
+# --- Auto-check: every key in compose_env must be defined and non-empty ---
+- name: Fail if any compose_env entry is undefined or empty
+  ansible.builtin.fail:
+    msg: "compose_env variable '{{ env_item.key }}' is undefined or empty."
+  when: (env_item.value is not defined) or (env_item.value | string | length == 0)
+  loop: "{{ (compose_config.compose_env | default({})) | dict2items }}"
+  loop_control:
+    loop_var: env_item
+    label: "{{ env_item.key }}"
+
+# # --- .env rendering (optional) ---
+- name: Render .env for compose (if provided)
+  ansible.builtin.copy:
+    dest: "{{ compose_project_dir }}/.env"
+    mode: "0640"
+    content: |-
+      {% for k, v in compose_config.compose_env.items() %}
+      {{ k }}={{ v }}
+      {% endfor %}
+  when: (compose_config.compose_env | default([])) | length > 0
+  notify: restart compose stack
 
 # # --- Compose source (url | file | template) ---
 - name: Fetch compose from URL
@@ -46,15 +60,6 @@
     pull: missing
     build: never
   changed_when: false
-
-# # --- Auto-check: every key in compose_env must be defined and non-empty ---
-# - name: Fail if any compose_env entry is undefined or empty
-#   ansible.builtin.fail:
-#     msg: "compose_env variable '{{ item.key }}' is undefined or empty."
-#   when: (item.value is not defined) or (item.value | string | length == 0)
-#   loop: "{{ (compose_env | default({})) | dict2items }}"
-#   loop_control:
-#     label: "{{ item.key }}"
 
 # # --- Prepare local paths ---
 # # Build a list of paths that should be created
@@ -180,16 +185,4 @@
 #   loop: "{{ compose_extra_templates | default([]) }}"
 #   loop_control:
 #     label: "{{ item.dest }}"
-#   notify: restart compose stack
-
-# # --- .env rendering (optional) ---
-# - name: Render .env for compose (if provided)
-#   ansible.builtin.copy:
-#     dest: "{{ compose_project_dir }}/.env"
-#     mode: "0640"
-#     content: |-
-#       {% for k, v in compose_env.items() %}
-#       {{ k }}={{ v }}
-#       {% endfor %}
-#   when: compose_env | length > 0
 #   notify: restart compose stack

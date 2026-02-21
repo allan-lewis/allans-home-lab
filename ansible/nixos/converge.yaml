@@ -38,7 +38,9 @@
         name: l4_managed_dirs
         apply:
           tags: [l4, managed_dirs]
-      when: converge_nixos
+      when:
+        - converge_nixos | default(false) | bool
+        - (managed_host_dirs | default([]) | length) > 0
       tags: [l4, managed_dirs]
 
     - name: L4 | DevOps

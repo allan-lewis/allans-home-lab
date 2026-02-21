@@ -176,7 +176,6 @@
             '';
 
             systemd.tmpfiles.rules = [
-{% if converge_devops | default(false) | bool %}
               # ---- DevOps home scaffolding ----
               "d /home/lab/src 0755 lab lab -"
               "d /home/lab/.ssh 0700 lab lab -"
@@ -192,6 +191,7 @@
 
               # Neovim config wired from dotfiles
               "L+ /home/lab/.config/nvim - - - - /home/lab/.dotfiles/common-lazyvim/.config/nvim"
+{% if converge_devops | default(false) | bool %}
 
               # Persistent AWS secret location (Ansible renders files here)
               "d /var/lib/homelab-secrets/aws 0755 root root -"
@@ -262,6 +262,7 @@
               fd
               fzf
               gcc
+              git
               gnumake
 {% if converge_devops | default(false) %}
               go
@@ -292,7 +293,7 @@
             };
 
             services.homelab.backupRunner = {
-              enable = true;
+              enable = {{ ((managed_host_dirs | default([]) | length) > 0) | lower }};
               schedule = "*-*-* *:30:00";
 
               # Convert inventory string into argv list
@@ -308,7 +309,7 @@
             };
 
             services.homelab.managedDirectories = {
-              enable = true;
+              enable = {{ ((managed_host_dirs | default([]) | length) > 0) | lower }};
               writablePaths = [ 
 {% for d in (managed_host_dirs | default([])) %}
                 "{{ d.local }}" 

@@ -1,5 +1,6 @@
 ---
 compose_project_dir: "/opt/docker-compose/{{ compose_config.compose_app_name }}"
+compose_pull_recreate: true
 # App identity (used for path defaults, logs, etc.)
 # compose_app_name: 
 
@@ -28,6 +29,5 @@ compose_project_dir: "/opt/docker-compose/{{ compose_config.compose_app_name }}"
 # compose_paths: []
 
 # # Whether to aggressively pull/recreate when inputs change
-# compose_pull_recreate: true
 
 # compose_extra_templates: []

@@ -2,7 +2,23 @@
 converge_docker: true
 
 nixos_docker_service_configs:
+  it_tools:
+    compose_app_name: tools
+    compose_source_type: file
+    compose_file_src: files/it-tools.compose.yaml
   monitoring:
     compose_app_name: monitoring
     compose_source_type: template
     compose_template_src: "templates/monitoring.compose.yaml.j2"
+  no_geeks_brewing:
+    compose_app_name: no_geeks_brewing
+    compose_source_type: file
+    compose_file_src: files/no_geeks_brewing.compose.yaml
+    compose_env:
+      NO_GEEKS_BREWING_AUTHENTIK_CLIENT_ID:  "{{ lookup('env', 'NO_GEEKS_BREWING_AUTHENTIK_CLIENT_ID') }}"
+      NO_GEEKS_BREWING_AUTHENTIK_CLIENT_SECRET: "{{ lookup('env', 'NO_GEEKS_BREWING_AUTHENTIK_CLIENT_SECRET') }}"
+      NO_GEEKS_BREWING_AUTHENTIK_ISSUER_URL: "{{ lookup('env', 'NO_GEEKS_BREWING_AUTHENTIK_ISSUER_URL') }}"
+      NO_GEEKS_BREWING_BREWFATHER_AUTH_TOKEN: "{{ lookup('env', 'NO_GEEKS_BREWING_BREWFATHER_AUTH_TOKEN') }}"
+      NO_GEEKS_BREWING_POST_LOGOUT_REDIRECT_URI: "{{ lookup('env', 'NO_GEEKS_BREWING_POST_LOGOUT_REDIRECT_URI') }}"
+      NO_GEEKS_BREWING_AUTHENTIK_LOGOUT_URI: "{{ lookup('env', 'NO_GEEKS_BREWING_AUTHENTIK_LOGOUT_URI') }}"
+      NO_GEEKS_BREWING_REDIRECT_URI: "{{ lookup('env', 'NO_GEEKS_BREWING_REDIRECT_URI') }}"

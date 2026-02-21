@@ -1,0 +1,5 @@
+---
+nixos_docker_services:
+  - it_tools
+  - monitoring
+  - no_geeks_brewing
