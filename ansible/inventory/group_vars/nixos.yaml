@@ -4,3 +4,29 @@ ansible_python_interpreter: /run/current-system/sw/bin/python3
 backup_runner_rsync_flags: "-aHAX --numeric-ids --delete-delay --partial --partial-dir=.rsync-partial --human-readable --sparse --mkpath"
 
 converge_nixos: true
+
+managed_host_dirs: >-
+  {%- set out = [] -%}
+  {%- for item in (managed_host_volumes | default({}) | dict2items) -%}
+    {%- set v = item.value -%}
+    {%- if (v.type | default('local')) == 'local' -%}
+      {%- set _ = out.append(v | combine({'name': item.key})) -%}
+    {%- endif -%}
+  {%- endfor -%}
+  {{ out }}
+
+converge_backup: >-
+  {{
+    managed_host_dirs | default([])
+    | selectattr('backup', 'truthy')
+    | list
+    | length > 0
+  }}
+
+converge_restore: >-
+  {{
+    managed_host_dirs | default([])
+    | selectattr('restore', 'truthy')
+    | list
+    | length > 0
+  }}

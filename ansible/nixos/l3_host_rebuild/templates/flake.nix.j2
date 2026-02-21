@@ -213,13 +213,12 @@
               "f /var/lib/homelab-secrets/ssh/lab/id_ed25519.pub 0644 lab lab -"
               "L+ /home/lab/.ssh/id_ed25519 - - - - /var/lib/homelab-secrets/ssh/lab/id_ed25519"
               "L+ /home/lab/.ssh/id_ed25519.pub - - - - /var/lib/homelab-secrets/ssh/lab/id_ed25519.pub"
-
+{% endif %}
               # Managed directories
               "d /etc/allans-home-lab/managed-directories 0755 root root -"
-            {% for d in (managed_host_dirs | default([])) %}
+{% for d in (managed_host_dirs | default([])) %}
               "d {{ d.local }} {{ d.mode | default('0755') }} {{ d.owner | default('root') }} {{ d.group | default(d.owner | default('root')) }} -"
-            {% endfor %}
-{% endif %}
+{% endfor %}
 {% if converge_docker | default(false) %}
               "d /opt/docker-compose 0750 root root -"
 {% endif %}
@@ -293,7 +292,7 @@
             };
 
             services.homelab.backupRunner = {
-              enable = {{ ((managed_host_dirs | default([]) | length) > 0) | lower }};
+              enable = {{ (converge_backup | default(false) | bool) | string | lower }};
               schedule = "*-*-* *:30:00";
 
               # Convert inventory string into argv list
@@ -309,7 +308,7 @@
             };
 
             services.homelab.managedDirectories = {
-              enable = {{ ((managed_host_dirs | default([]) | length) > 0) | lower }};
+              enable = {{ (converge_restore | default(false) | bool) | string | lower }};
               writablePaths = [ 
 {% for d in (managed_host_dirs | default([])) %}
                 "{{ d.local }}" 
