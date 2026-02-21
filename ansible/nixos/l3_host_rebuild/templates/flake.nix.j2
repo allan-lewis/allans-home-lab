@@ -150,12 +150,12 @@
 
             # NFS mounts generated from Ansible inventory
             fileSystems = {
-            {% for item in (all_nfs_mounts | default([])) if item.nfs_server and item.nfs_path %}
-              "{{ item.path }}" = {
-                device = "{{ item.nfs_server }}:{{ item.nfs_path }}";
+            {% for item in (managed_nfs_dirs | default([])) if item.server and item.path %}
+              "{{ item.local }}" = {
+                device = "{{ item.server }}:{{ item.path }}";
                 fsType = "nfs";
                 options = [
-                  "{{ item.nfs_opts | default('ro') }}"
+                  "{{ item.opts | default('ro') }}"
                   "nofail"
                   "_netdev"
                   "x-systemd.requires=network-online.target"

@@ -6,6 +6,14 @@ nixos_docker_service_configs:
     compose_app_name: tools
     compose_source_type: file
     compose_file_src: files/it-tools.compose.yaml
+  jellyfin:
+    compose_app_name: jellyfin
+    compose_source_type: template
+    compose_template_src: templates/jellyfin.compose.yaml.j2
+    compose_env:
+      JELLYFIN_PUBLISHED_URL: "https://jellyfin.media.allanshomelab.com"
+      JELLYFIN_USER_UID: "{{ lab_uid }}"
+      JELLYFIN_GROUP_GID: "{{ lab_gid }}"
   monitoring:
     compose_app_name: monitoring
     compose_source_type: template

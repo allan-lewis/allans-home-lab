@@ -1,8 +1,8 @@
 ---
 ## HOMELAB-WIDE VARIABLES
 gitops_user: "lab"
-gitops_uid: 1000
-gitops_gid: 1000
+# gitops_uid: 1000
+# gitops_gid: 1000
 gitops_tz: "America/New_York"
 
 ## ANSIBLE BUILT-IN VARIABLES

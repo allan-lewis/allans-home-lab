@@ -15,6 +15,16 @@ managed_host_dirs: >-
   {%- endfor -%}
   {{ out }}
 
+managed_nfs_dirs: >-
+  {%- set out = [] -%}
+  {%- for item in (managed_host_volumes | default({}) | dict2items) -%}
+    {%- set v = item.value -%}
+    {%- if v.type is defined and v.type == 'nfs' -%}
+      {%- set _ = out.append(v | combine({'name': item.key})) -%}
+    {%- endif -%}
+  {%- endfor -%}
+  {{ out }}
+
 converge_backup: >-
   {{
     managed_host_dirs | default([])

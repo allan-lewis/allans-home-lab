@@ -1,6 +1,7 @@
 ---
 nixos_docker_services:
   - it_tools
+  - jellyfin
   - monitoring
   - no_geeks_brewing
 
@@ -16,8 +17,9 @@ managed_host_volumes:
   jellyfin_config_dir:
     type: local
     local: /srv/jellyfin/config
-    restore: false
-    backup: false
+    remote: "{{ default_remote_nas_per_host_backup_volume }}/jellyfin_config"
+    restore: true
+    backup: true
     owner: "lab"
     group: "lab"
     mode: "0755"
@@ -29,28 +31,3 @@ managed_host_volumes:
     owner: "lab"
     group: "lab"
     mode: "0755"
-
-
-# jellyfin_config_dir: ""
-# jellyfin_cache_dir: ""
-
-# managed_host_dirs:
-#   - name: jellyfin_media_library
-
-
-    # compose_paths:
-    #   - path: "{{ jellyfin_config_dir }}"
-    #     create: true
-    #     uid: "{{ gitops_uid }}"
-    #     gid: "{{ gitops_gid }}"
-    #     mode: "0755"
-    #   - path: "{{ jellyfin_cache_dir }}"
-    #     create: true
-    #     uid: "{{ gitops_uid }}"
-    #     gid: "{{ gitops_gid }}"
-    #     mode: "0755"
-    #   - path: "{{ jellyfin_media_library }}"
-    #     nfs: true
-    #     nfs_server: "{{ hostvars['pennywise'].ansible_host }}"
-    #     nfs_path: "/mnt/pool1/media-library"
-    #     nfs_opts: "ro"
