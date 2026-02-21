@@ -37,3 +37,6 @@ managed_host_dirs:
     owner: "lab"
     group: "lab"
     mode: "0755"
+
+nixos_docker_services:
+  - monitoring

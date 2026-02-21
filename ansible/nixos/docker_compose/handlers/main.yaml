@@ -1,12 +1,10 @@
 ---
 - name: restart compose stack
   listen: restart compose stack
-  ansible.builtin.command: >
-    docker compose up -d
-    --remove-orphans
-    --no-build
-    {{ compose_pull_recreate | ternary('--pull always --force-recreate', '--pull missing') }}
-  args:
-    chdir: "{{ compose_project_dir }}"
-  changed_when: false
-
+  community.docker.docker_compose_v2:
+    project_src: "{{ compose_project_dir }}"
+    state: present
+    remove_orphans: true
+    build: never
+    pull: "{{ compose_pull_recreate | ternary('always', 'missing') }}"
+    recreate: "{{ compose_pull_recreate | ternary('always', 'auto') }}"

@@ -49,10 +49,13 @@
       when: converge_nixos and converge_devops
       tags: [l4, devops]
 
-    - name: L4 | Monitoring (Docker)
+    - name: L4 | Docker Services
       ansible.builtin.include_role:
-        name: docker_monitoring
+        name: docker_compose
         apply:
-          tags: [l4, docker_monitoring]
-      when: converge_docker_monitoring
-      tags: [l4, docker_monitoring]
+          tags: [l4, docker]
+      vars:
+        compose_config: "{{ nixos_docker_service_configs[item] }}"
+      when: converge_docker
+      tags: [l4, docker]
+      with_items: "{{ nixos_docker_services | default([]) }}"

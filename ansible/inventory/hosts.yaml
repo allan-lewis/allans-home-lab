@@ -115,12 +115,14 @@ all:
                 callahan:
     nixos:
       children:
-        nixos_devops:
-          hosts:
-            cujo:
-        nixos_tinker:
-          hosts:
-            todash:
+        nixos_docker:
+          children:
+            nixos_devops:
+              hosts:
+                cujo:
+            nixos_tinker:
+              hosts:
+                todash:
 
     ubuntu:
       children: 

@@ -1,5 +1,2 @@
 ---
-converge_docker: true
-converge_docker_monitoring: true
 converge_node_exporter: true
-
