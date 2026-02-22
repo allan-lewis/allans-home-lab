@@ -8,6 +8,31 @@
     mode: "{{ item.mode | default('0755') }}"
   with_items:
     - path: "{{ nixos_dir }}/hosts/{{ inventory_hostname }}"
+    - path: "/run/secrets"
+
+- name: Capture tailscale auth key from environment
+  no_log: true
+  ansible.builtin.set_fact:
+    tailscale_authkey: "{{ lookup('env', 'TAILSCALE_AUTHKEY') | trim }}"
+  when: converge_tailscale | bool
+
+- name: Fail if key missing
+  ansible.builtin.fail:
+    msg: "TAILSCALE_AUTHKEY env var is not set"
+  when:
+    - converge_tailscale | bool
+    - tailscale_authkey | length == 0
+
+- name: Write tailscale auth key file
+  become: true
+  no_log: true
+  ansible.builtin.copy:
+    dest: /run/secrets/tailscale-authkey
+    content: "{{ tailscale_authkey }}"
+    owner: root
+    group: root
+    mode: "0400"
+  when: converge_tailscale | bool
 
 - name: Check if host-local hardware config exists in flake dir
   ansible.builtin.stat:

@@ -32,7 +32,10 @@
         ./modules/postgres-db-backup.nix
         ./modules/managed-directories.nix
 
-        ({ pkgs, lib, ... }:
+        ({ pkgs, lib, ... }:  
+          let
+            converge_tailscale_enabled = {{ (converge_tailscale | default(false) | bool) | string | lower }};
+          in
           {
             boot.loader.grub.enable = true;
             boot.loader.grub.device = "/dev/sda";
@@ -237,6 +240,10 @@
 
               # Ensure tmux user config exists as a regular file (activation script writes contents)
               "f /home/lab/.tmux.conf 0644 lab lab -"
+
+{% if converge_tailscale | default(false) | bool %}
+              "d /var/lib/tailscale 0700 root root -"
+{% endif %}
             ];
 
             # ---- Packages ----
@@ -355,6 +362,17 @@
               ];
             };
 {% endif %}
+
+            services.tailscale = lib.mkIf converge_tailscale_enabled {
+              enable = true;
+              authKeyFile = "/run/secrets/tailscale-authkey";
+              extraUpFlags = [
+                "--accept-dns=true"
+              ];
+            };
+
+            networking.firewall.trustedInterfaces =
+              lib.mkIf converge_tailscale_enabled [ "tailscale0" ];
 
             # Required (don’t change lightly)
             system.stateVersion = "25.11";
