@@ -205,7 +205,10 @@ l4-converge-jellyfin:
 nixos-vm-template update_stable="yes":
   {{run_prefix}} scripts/nixos/vm-template.sh {{update_stable}}
 
+# Apply or detroy Proxmox VM(s) using Terraform
+nixos-terraform persona action approve="0":
+  {{run_prefix}} scripts/nixos/terraform.sh "{{persona}}" "{{action}}" "{{approve}}"
+
 # Fully converge a group of NixOS hosts
 nixos-converge group tags="" limit="":
   {{run_prefix}} scripts/nixos/full-converge.sh "{{group}}" "{{tags}}" "{{limit}}" 
-

@@ -10,7 +10,7 @@ locals {
 }
 
 module "factory" {
-  source = "../modules/common_vm_factory"
+  source = "../../l2/modules/common_vm_factory"
 
   hosts_json_path       = local.hosts_json_path
   template_manifest_map = local.template_manifest_map
