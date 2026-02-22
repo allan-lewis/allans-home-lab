@@ -64,3 +64,22 @@ managed_host_volumes:
     owner: "lab"
     group: "lab"
     mode: "0755"
+  transmission_config:
+    type: local
+    local: "/etc/transmission"
+    remote: "{{ default_remote_nas_per_host_backup_volume }}/transmission/config"
+    restore: true
+    backup: true
+    owner: "lab"
+    group: "lab"
+    mode: "0755"
+  transmission_watch:
+    type: local
+    local: "/var/lib/transmission/watch"
+    remote: "{{ default_remote_nas_per_host_backup_volume }}/transmission/watch"
+    restore: true
+    backup: true
+    owner: "lab"
+    group: "lab"
+    mode: "0755"
+
