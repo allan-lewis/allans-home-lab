@@ -4,10 +4,11 @@
     database: passwd
     key: lab
 
-- name: Set UID/GID facts
+- name: Set facts
   ansible.builtin.set_fact:
     lab_uid: "{{ getent_passwd.lab[1] | int }}"
     lab_gid: "{{ getent_passwd.lab[2] | int }}"
+    lab_tz: UTC
 
 - name: Print out user and group ids
   ansible.builtin.debug:

@@ -1,0 +1,18 @@
+services:
+
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    restart: unless-stopped
+    networks: [media]
+    environment:
+      - PUID={{ lab_uid }}
+      - PGID={{ lab_gid }}
+      - TZ="{{ lab_tz }}"
+    volumes:
+      - {{ managed_host_volumes['prowlarr_config'].local }}:/config
+    ports:
+      - 9696:9696
+
+networks:
+  media: {}

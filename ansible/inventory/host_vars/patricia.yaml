@@ -1,7 +1,10 @@
 ---
+nixos_docker_services:
+  - monitoring
+  - rstack
+
 converge_docker_media_acquisition: true
 lidarr_config_dir: "/etc/lidarr"
-prowlarr_config_dir: "/etc/prowlarr"
 radarr_config_dir: "/etc/radarr"
 sonarr_config_dir: "/etc/sonarr"
 transmission_config_dir: "/etc/transmission"
@@ -43,4 +46,21 @@ media_acquisition_mount: "/mnt/media-acquisition"
 ]
 media_acquisition_nfs_server: "{{ default_remote_nas_ip }}"
 
-converge_restore: true
+managed_host_volumes:
+  media_library_mount:
+    type: nfs
+    server: "{{ hostvars['pennywise'].ansible_host }}"
+    path: "/mnt/pool1/media-acquisition"
+    opts: "rw"
+    restore: false
+    backup: false
+    local: "/data/media-library"
+  prowlarr_config:
+    type: local
+    local: "/etc/prowlarr"
+    remote: "{{ default_remote_nas_per_host_backup_volume }}/prowlarr/config"
+    restore: true
+    backup: true
+    owner: "lab"
+    group: "lab"
+    mode: "0755"

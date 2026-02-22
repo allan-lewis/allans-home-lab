@@ -34,8 +34,12 @@
 
         ({ pkgs, lib, ... }:  
           let
-            converge_tailscale_enabled = {{ (converge_tailscale | default(false) | bool) | string | lower }};
+            converge_backup_enabled = {{ (converge_backup | default(false) | bool) | string | lower }};
             converge_node_exporter_enabled = {{ (converge_node_exporter | default(false) | bool) | string | lower }};
+            converge_restore_enabled = {{ (converge_restore | default(false) | bool) | string | lower }};
+            converge_postgres_db_dump_enabled = {{ (converge_postgres_dump | default(false) | bool) | string | lower }};
+            converge_s3_local_mirror_enabled = {{ (converge_s3_mirror | default(false) | bool) | string | lower }};
+            converge_tailscale_enabled = {{ (converge_tailscale | default(false) | bool) | string | lower }};
           in
           {
             boot.loader.grub.enable = true;
@@ -299,8 +303,8 @@
               intervalSeconds = 15;
             };
 
-            services.homelab.backupRunner = {
-              enable = {{ (converge_backup | default(false) | bool) | string | lower }};
+            services.homelab.backupRunner = lib.mkIf converge_backup_enabled {
+              enable = true;
               schedule = "*-*-* *:30:00";
 
               # Convert inventory string into argv list
@@ -315,17 +319,16 @@
               ];
             };
 
-            services.homelab.managedDirectories = {
-              enable = {{ (converge_restore | default(false) | bool) | string | lower }};
-              writablePaths = [ 
+            services.homelab.managedDirectories = lib.mkIf converge_restore_enabled {
+              enable = true;
+              writablePaths = [
 {% for d in (managed_host_dirs | default([])) %}
                 "{{ d.local }}" 
 {% endfor %}
               ];
             };
 
-{% if converge_s3_mirror | default(false) %}
-            services.homelab.s3LocalMirror = {
+            services.homelab.s3LocalMirror = lib.mkIf converge_s3_local_mirror_enabled {
               enable = true;
 
               # Weekly, Saturday at 07:00
@@ -339,17 +342,14 @@
                 "{{ b }}"
             {%- endfor %}
               ];
-};
-{% endif %}
+            };
 
-{% if converge_postgres_dump | default(false) %}
-            services.homelab.postgresDbBackup = {
+            services.homelab.postgresDbBackup = lib.mkIf converge_postgres_db_dump_enabled {
               enable = true;
 
               # Daily at 05:00
               schedule = "*-*-* 05:00:00";
             };
-{% endif %}
 
             services.prometheus.exporters.node = lib.mkIf converge_node_exporter_enabled {
               enable = true;

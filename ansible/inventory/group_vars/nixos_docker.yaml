@@ -30,3 +30,7 @@ nixos_docker_service_configs:
       NO_GEEKS_BREWING_POST_LOGOUT_REDIRECT_URI: "{{ lookup('env', 'NO_GEEKS_BREWING_POST_LOGOUT_REDIRECT_URI') }}"
       NO_GEEKS_BREWING_AUTHENTIK_LOGOUT_URI: "{{ lookup('env', 'NO_GEEKS_BREWING_AUTHENTIK_LOGOUT_URI') }}"
       NO_GEEKS_BREWING_REDIRECT_URI: "{{ lookup('env', 'NO_GEEKS_BREWING_REDIRECT_URI') }}"
+  rstack:
+    compose_app_name: rstack
+    compose_source_type: template
+    compose_template_src: templates/rstack.compose.yaml.j2

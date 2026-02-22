@@ -79,7 +79,7 @@ all:
         node-exporter: [9100]
     patricia:
       ansible_host: 192.168.86.224
-      gatus_slug: "(Ubuntu Docker/Media)"
+      gatus_slug: "(NixOS R Stack)"
       prometheus_scrape_jobs:
         node-exporter: [9100]
         homelab-metrics: [9102]
@@ -120,6 +120,9 @@ all:
             nixos_devops:
               hosts:
                 cujo:
+            nixos_rstack:
+              hosts:
+                patricia:
             nixos_tinker:
               hosts:
                 todash:
@@ -139,7 +142,6 @@ all:
             carrie:
             flagg:
             misery:
-            patricia:
         ubuntu_openvpn:
           hosts:
             blaine:
