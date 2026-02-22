@@ -1,5 +1,4 @@
 ---
 converge_devops: true
-converge_node_exporter: true
 
 doppler_user: "lab"

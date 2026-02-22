@@ -4,6 +4,7 @@ ansible_python_interpreter: /run/current-system/sw/bin/python3
 backup_runner_rsync_flags: "-aHAX --numeric-ids --delete-delay --partial --partial-dir=.rsync-partial --human-readable --sparse --mkpath"
 
 converge_nixos: true
+converge_node_exporter: true
 
 managed_host_dirs: >-
   {%- set out = [] -%}

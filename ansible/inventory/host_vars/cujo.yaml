@@ -22,19 +22,19 @@ s3_mirror_buckets: [
   "gitops-homelab-orchestrator-tf"
 ]
 
-managed_host_dirs:
-  - name: s3_mirror
-    local: /var/lib/allans-home-lab/s3-mirror
-    remote: "{{ default_remote_nas_per_host_backup_volume }}/s3-mirror"
-    owner: "root"
-    group: "root"
-    mode: "0755"
-  - name: backup_restore_test
-    local: /home/lab/backup-restore
-    remote: "{{ default_remote_nas_per_host_backup_volume }}/backup-restore"
-    owner: "lab"
-    group: "lab"
-    mode: "0755"
+# managed_host_dirs:
+#   - name: s3_mirror
+#     local: /var/lib/allans-home-lab/s3-mirror
+#     remote: "{{ default_remote_nas_per_host_backup_volume }}/s3-mirror"
+#     owner: "root"
+#     group: "root"
+#     mode: "0755"
+#   - name: backup_restore_test
+#     local: /home/lab/backup-restore
+#     remote: "{{ default_remote_nas_per_host_backup_volume }}/backup-restore"
+#     owner: "lab"
+#     group: "lab"
+#     mode: "0755"
 
 nixos_docker_services:
   - monitoring
