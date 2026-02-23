@@ -5,6 +5,7 @@ nixos_docker_services:
   - nginx
   - no_geeks_brewing
   - portainer
+  - trilium
   - twingate
 
 managed_host_volumes:
@@ -17,15 +18,15 @@ managed_host_volumes:
     owner: "lab"
     group: "lab"
     mode: "0755"
-  # trilium_data:
-  #   type: local
-  #   local: "/var/lib/trilium"
-  #   remote: "{{ default_remote_nas_per_host_backup_volume }}/trilium"
-  #   restore: true
-  #   backup: true
-  #   owner: "lab"
-  #   group: "lab"
-  #   mode: "0755"
+  trilium_data:
+    type: local
+    local: "/var/lib/trilium"
+    remote: "{{ default_remote_nas_per_host_backup_volume }}/trilium"
+    restore: true
+    backup: true
+    owner: "root"
+    group: "root"
+    mode: "0755"
   # vaultwarden_data:
   #   type: local
   #   local: "/var/lib/vaultwarden"

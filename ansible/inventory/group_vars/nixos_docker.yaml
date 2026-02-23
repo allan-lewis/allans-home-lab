@@ -42,6 +42,10 @@ nixos_docker_service_configs:
     compose_app_name: rstack
     compose_source_type: template
     compose_template_src: templates/rstack.compose.yaml.j2
+  trilium:
+    compose_app_name: trilium
+    compose_source_type: template
+    compose_template_src: "templates/trilium.compose.yaml.j2"
   twingate:
     compose_app_name: twingate
     compose_source_type: template
