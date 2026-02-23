@@ -4,6 +4,37 @@ nixos_docker_services:
   - monitoring
   - nginx
   - no_geeks_brewing
+  - portainer
+  - twingate
+
+managed_host_volumes:
+  portainer_data:
+    type: local
+    local: "/var/lib/portainer"
+    remote: "{{ default_remote_nas_per_host_backup_volume }}/portainer"
+    restore: true
+    backup: true
+    owner: "lab"
+    group: "lab"
+    mode: "0755"
+  # trilium_data:
+  #   type: local
+  #   local: "/var/lib/trilium"
+  #   remote: "{{ default_remote_nas_per_host_backup_volume }}/trilium"
+  #   restore: true
+  #   backup: true
+  #   owner: "lab"
+  #   group: "lab"
+  #   mode: "0755"
+  # vaultwarden_data:
+  #   type: local
+  #   local: "/var/lib/vaultwarden"
+  #   remote: "{{ default_remote_nas_per_host_backup_volume }}/vaultwarden"
+  #   restore: true
+  #   backup: true
+  #   owner: "lab"
+  #   group: "lab"
+  #   mode: "0755"
 
 twingate_access_token: "{{ lookup('env', 'TWINGATE_MODEST_ANTEATER_ACCESS_TOKEN') }}"
 twingate_refresh_token: "{{ lookup('env', 'TWINGATE_MODEST_ANTEATER_REFRESH_TOKEN') }}"
