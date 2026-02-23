@@ -22,7 +22,7 @@ all:
         homelab-metrics: [9102]
     carrie:
       ansible_host: 192.168.86.228
-      gatus_slug: "(Ubuntu Docker/Misc)"
+      gatus_slug: "(NixOS Apps)"
       prometheus_scrape_jobs:
         node-exporter: [9100]
         homelab-metrics: [9102]
@@ -117,6 +117,9 @@ all:
       children:
         nixos_docker:
           children:
+            nixos_apps:
+              hosts:
+                carrie:
             nixos_devops:
               hosts:
                 cujo:
@@ -134,12 +137,10 @@ all:
             ubuntu_docker_twingate:
               hosts:
                 flagg:
-                carrie:
             ubuntu_tinker:
               hosts:
                 barlow:
           hosts:
-            carrie:
             flagg:
             misery:
         ubuntu_openvpn:

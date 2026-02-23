@@ -1,9 +1,7 @@
 ---
 nixos_docker_services:
-  - it_tools
   - jellyfin
   - monitoring
-  - no_geeks_brewing
 
 managed_host_volumes:
   jellyfin_media_library:

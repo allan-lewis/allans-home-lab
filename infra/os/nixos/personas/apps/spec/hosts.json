@@ -1,0 +1,18 @@
+{
+  "hosts": {
+    "carrie": {
+      "terraform": {
+        "ip": "192.168.86.228",
+        "ssh_user": "lab",
+        "tags": ["orchestrator", "terraform", "nixos", "docker", "apps"],
+        "cpu": 4,
+        "memory_mb": 8192,
+        "disk_gb": 128,
+        "template_ref": "ubuntu/docker/stable",
+        "node": "maturin",
+        "ipconfig": "ip=192.168.86.228/24,gw=192.168.86.1"
+      }
+    }
+  }
+}
+
