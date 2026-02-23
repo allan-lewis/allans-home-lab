@@ -138,6 +138,16 @@
         server: flagg
         container: valiant_stingray
 - Media:
+    - Bazarr:
+        icon: bazarr.png
+        href: https://bazarr.media.allanshomelab.com
+        description: Subtitle management
+        server: patricia
+        container: bazarr
+        widget:
+            type: bazarr
+            url: https://bazarr.media.allanshomelab.com
+            key: "{{ lookup('env', 'HOMEPAGE_VAR_BAZARR_KEY') }}"
     - Immich:
         icon: immich.png
         href: https://photos.allanandvaia.com
