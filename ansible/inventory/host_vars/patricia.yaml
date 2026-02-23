@@ -3,49 +3,6 @@ nixos_docker_services:
   - monitoring
   - rstack
 
-converge_docker_media_acquisition: true
-lidarr_config_dir: "/etc/lidarr"
-radarr_config_dir: "/etc/radarr"
-sonarr_config_dir: "/etc/sonarr"
-transmission_config_dir: "/etc/transmission"
-transmission_watch_dir: "/var/lib/transmission/watch"
-media_acquisition_mount: "/mnt/media-acquisition"
-
-"backup_runner_cron_minute": 50
-"backup_runner_volumes": [
-  { 
-    src: "{{ lidarr_config_dir }}",
-    dest: "{{ default_remote_nas_per_host_backup_volume }}/lidarr/config",
-    owner: "lab"
-  },
-  { 
-    src: "{{ prowlarr_config_dir }}",
-    dest: "{{ default_remote_nas_per_host_backup_volume }}/prowlarr/config",
-    owner: "lab"
-  },
-  { 
-    src: "{{ radarr_config_dir }}",
-    dest: "{{ default_remote_nas_per_host_backup_volume }}/radarr/config",
-    owner: "lab"
-  },
-  { 
-    src: "{{ sonarr_config_dir }}",
-    dest: "{{ default_remote_nas_per_host_backup_volume }}/sonarr/config",
-    owner: "lab"
-  },
-  { 
-    src: "{{ transmission_config_dir }}",
-    dest: "{{ default_remote_nas_per_host_backup_volume }}/transmission/config",
-    owner: "lab"
-  },
-  { 
-    src: "{{ transmission_watch_dir }}",
-    dest: "{{ default_remote_nas_per_host_backup_volume }}/transmission/watch",
-    owner: "lab"
-  }
-]
-media_acquisition_nfs_server: "{{ default_remote_nas_ip }}"
-
 managed_host_volumes:
   media_library_mount:
     type: nfs

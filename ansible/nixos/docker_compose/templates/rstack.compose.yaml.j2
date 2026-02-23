@@ -1,5 +1,21 @@
 services:
 
+  lidarr:
+    image: lscr.io/linuxserver/lidarr:latest
+    container_name: lidarr
+    restart: unless-stopped
+    networks: [media]
+    environment:
+      - PUID={{ lab_uid }}
+      - PGID={{ lab_gid }}
+      - TZ="{{ lab_tz }}"
+    ports:
+      - "8686:8686"
+    volumes:
+      - {{ managed_host_volumes['lidarr_config'].local }}:/config
+      - {{ managed_host_volumes['media_library_mount'].local }}/downloads:/downloads
+      - {{ managed_host_volumes['media_library_mount'].local }}/music:/music
+
   prowlarr:
     image: lscr.io/linuxserver/prowlarr:latest
     container_name: prowlarr
@@ -13,6 +29,38 @@ services:
       - {{ managed_host_volumes['prowlarr_config'].local }}:/config
     ports:
       - 9696:9696
+
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    restart: unless-stopped
+    networks: [media]
+    environment:
+      - PUID={{ lab_uid }}
+      - PGID={{ lab_gid }}
+      - TZ="{{ lab_tz }}"
+    ports:
+      - "7878:7878"
+    volumes:
+      - {{ managed_host_volumes['radarr_config'].local }}:/config
+      - {{ managed_host_volumes['media_library_mount'].local }}/downloads:/downloads
+      - {{ managed_host_volumes['media_library_mount'].local }}/movies:/movies
+
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    restart: unless-stopped
+    networks: [media]
+    environment:
+      - PUID={{ lab_uid }}
+      - PGID={{ lab_gid }}
+      - TZ="{{ lab_tz }}"
+    ports:
+      - "8989:8989"
+    volumes:
+      - {{ managed_host_volumes['sonarr_config'].local }}:/config
+      - {{ managed_host_volumes['media_library_mount'].local }}/downloads:/downloads
+      - {{ managed_host_volumes['media_library_mount'].local }}/tv:/tv
 
   transmission:
     image: lscr.io/linuxserver/transmission:latest
