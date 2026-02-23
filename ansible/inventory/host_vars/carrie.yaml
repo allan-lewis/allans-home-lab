@@ -2,6 +2,7 @@
 nixos_docker_services:
   - it_tools
   - monitoring
+  - nginx
   - no_geeks_brewing
 
 twingate_access_token: "{{ lookup('env', 'TWINGATE_MODEST_ANTEATER_ACCESS_TOKEN') }}"

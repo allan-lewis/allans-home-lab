@@ -4,7 +4,7 @@ locals {
 
   # Logical template refs → manifest JSON files for this persona
   template_manifest_map = {
-    "nixos/rstack/stable" = "${path.module}/../../../infra/os/nixos/spec/vm-template-stable.json"
+    "nixos/apps/stable" = "${path.module}/../../../infra/os/nixos/spec/vm-template-stable.json"
     # Add canary/etc here later if needed
   }
 }

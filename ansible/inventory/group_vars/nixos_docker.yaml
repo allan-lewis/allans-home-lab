@@ -18,6 +18,10 @@ nixos_docker_service_configs:
     compose_app_name: monitoring
     compose_source_type: template
     compose_template_src: "templates/monitoring.compose.yaml.j2"
+  nginx:
+    compose_app_name: nginx
+    compose_source_type: file
+    compose_file_src: files/nginx.compose.yaml
   no_geeks_brewing:
     compose_app_name: no_geeks_brewing
     compose_source_type: file
