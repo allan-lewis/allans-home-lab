@@ -1,5 +1,20 @@
 services:
 
+  bazarr:
+    image: lscr.io/linuxserver/bazarr:latest
+    container_name: bazarr
+    environment:
+      - PUID={{ lab_uid }}
+      - PGID={{ lab_gid}}
+      - TZ="{{ lab_tz }}"
+    volumes:
+      - {{ managed_host_volumes['bazarr_config'].local }}:/config
+      - {{ managed_host_volumes['media_library_mount'].local }}/movies:/movies
+      - {{ managed_host_volumes['media_library_mount'].local }}/tv:/tv
+    ports:
+      - 6767:6767
+    restart: unless-stopped
+
   lidarr:
     image: lscr.io/linuxserver/lidarr:latest
     container_name: lidarr

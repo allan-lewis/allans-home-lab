@@ -12,6 +12,15 @@ managed_host_volumes:
     restore: false
     backup: false
     local: "/data/media-library"
+  bazarr_config:
+    type: local
+    local: "/etc/bazarr"
+    remote: "{{ default_remote_nas_per_host_backup_volume }}/bazarr/config"
+    restore: true
+    backup: true
+    owner: "lab"
+    group: "lab"
+    mode: "0755"
   lidarr_config:
     type: local
     local: "/etc/lidarr"

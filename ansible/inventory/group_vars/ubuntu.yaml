@@ -1,6 +1,9 @@
 ---
 converge_ubuntu: true
 
+gitops_uid: 1000
+gitops_gid: 1000
+
 dotfiles_stow_packages:
   - common-zsh
   - ubuntu-zsh

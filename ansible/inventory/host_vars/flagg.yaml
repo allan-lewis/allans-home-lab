@@ -228,6 +228,10 @@ gatus_https_endpoints:
     group: "Sites (Media)"
     url: "https://lidarr.media.allanshomelab.com/ping"
     pattern: "*OK*"
+  - name: Bazarr
+    group: "Sites (Media)"
+    url: "https://bazarr.media.allanshomelab.com"
+    pattern: "*Bazarr*"
   - name: "Tautulli"
     group: "Sites (Media)"
     url: "https://tautulli.media.allanshomelab.com/api/v2?apikey={{ gatus_tautulli_api_key }}&cmd=status"
@@ -282,6 +286,9 @@ traefik_services:
   - name: lidarr
     host: lidarr.media.allanshomelab.com
     url: "http://{{ hostvars['patricia'].ansible_host }}:8686"
+  - name: bazarr
+    host: bazarr.media.allanshomelab.com
+    url: "http://{{ hostvars['patricia'].ansible_host }}:6767"
   - name: radarr
     host: radarr.media.allanshomelab.com
     url: "http://{{ hostvars['patricia'].ansible_host }}:7878"
@@ -415,10 +422,6 @@ pihole_cname_records:
     target: "docker.allanshomelab.com"
   - alias: "whoami.docker.allanshomelab.com"
     target: "docker.allanshomelab.com"
-  - alias: "lidarr.k8s.allanshomelab.com"
-    target: "k8s.allanshomelab.com"
-  - alias: "dns.k8s.allanshomelab.com"
-    target: "k8s.allanshomelab.com"
   - alias: "portainer.docker.allanshomelab.com"
     target: "docker.allanshomelab.com"
   - alias: "prometheus.docker.allanshomelab.com"
@@ -432,6 +435,8 @@ pihole_cname_records:
   - alias: "prowlarr.media.allanshomelab.com"
     target: "media.allanshomelab.com"
   - alias: "lidarr.media.allanshomelab.com"
+    target: "media.allanshomelab.com"
+  - alias: "bazarr.media.allanshomelab.com"
     target: "media.allanshomelab.com"
   - alias: "radarr.media.allanshomelab.com"
     target: "media.allanshomelab.com"
