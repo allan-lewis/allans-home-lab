@@ -63,7 +63,7 @@ all:
         node-exporter: [9100]
     misery:
       ansible_host: 192.168.86.227
-      gatus_slug: "(Ubuntu Docker/Media)"
+      gatus_slug: "(NixOS Media)"
       prometheus_scrape_jobs:
         node-exporter: [9100]
         homelab-metrics: [9102]
@@ -124,6 +124,9 @@ all:
             nixos_devops:
               hosts:
                 cujo:
+            nixos_media:
+              hosts:
+                misery:
             nixos_rstack:
               hosts:
                 patricia:
@@ -143,7 +146,6 @@ all:
                 barlow:
           hosts:
             flagg:
-            misery:
         ubuntu_openvpn:
           hosts:
             blaine:
