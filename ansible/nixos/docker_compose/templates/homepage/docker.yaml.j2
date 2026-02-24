@@ -1,0 +1,14 @@
+---                                                                       
+# For configuration options and examples, please see:
+# https://gethomepage.dev/configs/docker/
+
+{# Union of hosts in ubuntu_docker + arch_docker, defaulting missing groups to [] #}
+{%- set ubuntu = groups.get('ubuntu_docker', []) -%}
+{%- set arch   = groups.get('arch_docker',   []) -%}
+{%- set docker_hosts = (ubuntu + arch) | unique | sort -%}
+
+{% for h in docker_hosts %}
+{{ h }}:
+  host: {{ hostvars[h].get('ansible_host', h) }}
+  port: {{ hostvars[h].get('docker_api_port', 2375) }}
+{% endfor %}

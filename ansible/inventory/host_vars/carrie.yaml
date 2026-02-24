@@ -1,5 +1,6 @@
 ---
 nixos_docker_services:
+  - homepage
   - it_tools
   - monitoring
   - nginx
@@ -7,8 +8,17 @@ nixos_docker_services:
   - portainer
   - trilium
   - twingate
+  - vaultwarden
 
 managed_host_volumes:
+  homepage_config:
+    type: local
+    local: "/etc/homepage"
+    restore: false
+    backup: false
+    owner: "root"
+    group: "root"
+    mode: "0755"
   portainer_data:
     type: local
     local: "/var/lib/portainer"
@@ -27,50 +37,15 @@ managed_host_volumes:
     owner: "root"
     group: "root"
     mode: "0755"
-  # vaultwarden_data:
-  #   type: local
-  #   local: "/var/lib/vaultwarden"
-  #   remote: "{{ default_remote_nas_per_host_backup_volume }}/vaultwarden"
-  #   restore: true
-  #   backup: true
-  #   owner: "lab"
-  #   group: "lab"
-  #   mode: "0755"
+  vaultwarden_data:
+    type: local
+    local: "/var/lib/vaultwarden"
+    remote: "{{ default_remote_nas_per_host_backup_volume }}/vaultwarden"
+    restore: true
+    backup: true
+    owner: "root"
+    group: "root"
+    mode: "0755"
 
 twingate_access_token: "{{ lookup('env', 'TWINGATE_MODEST_ANTEATER_ACCESS_TOKEN') }}"
 twingate_refresh_token: "{{ lookup('env', 'TWINGATE_MODEST_ANTEATER_REFRESH_TOKEN') }}"
-
-# converge_docker_trilium: true
-# trilium_data_dir: "/var/lib/trilium"
-
-# converge_docker_it_tools: true
-# converge_docker_ngb: true
-# converge_docker_portainer: true
-# converge_docker_nginx: true
-# converge_docker_vaultwarden: true
-# converge_restore: true
-
-# converge_docker_homepage: true
-# homepage_config_dir: "/etc/homepage"
-
-# portainer_data_dir: "/var/lib/portainer"
-# vaultwarden_data_dir: "/var/lib/vaultwarden"
-
-# backup_runner_cron_minute: "10"
-# backup_runner_volumes: [
-#   { 
-#     src: "{{ portainer_data_dir }}",
-#     dest: "{{ default_remote_nas_per_host_backup_volume }}/portainer",
-#     owner: "lab"
-#   },
-#   {
-#     src: "{{ vaultwarden_data_dir }}",
-#     dest: "{{ default_remote_nas_per_host_backup_volume }}/vaultwarden",
-#     owner: "lab"
-#   },
-#   {
-#     src: "{{ trilium_data_dir }}",
-#     dest: "{{ default_remote_nas_per_host_backup_volume }}/trilium",
-#     owner: "lab"
-#   }
-# ]

@@ -1,0 +1,278 @@
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/configs/services/
+
+- Home Lab Management:
+    - Gilead:
+        icon: truenas.png
+        href: https://gilead.hosts.allanshomelab.com
+        description: NAS (offsite backup)
+        widget:
+            type: truenas
+            url: https://gilead.hosts.allanshomelab.com
+            username: truenas_admin
+            password: "{{ lookup('env', 'HOMEPAGE_VAR_TRUENAS_PASSWORD') }}"
+    - Derry:
+        icon: asustor.png
+        href: https://derry.hosts.allanshomelab.com
+        description: NAS (local backup)
+    - Maturin:
+        icon: proxmox.png
+        href: https://maturin.hosts.allanshomelab.com
+        description: Hypervisor
+        widget:
+            type: proxmox
+            url: https://maturin.hosts.allanshomelab.com
+            username: "{{ lookup('env', 'HOMEPAGE_VAR_MATURIN_USERNAME') }}"
+            password: "{{ lookup('env', 'HOMEPAGE_VAR_MATURIN_PASSWORD') }}"
+            fields: ['vms', 'resources.cpu', 'resources.mem']
+    - Portainer:
+        icon: portainer.png
+        href: https://portainer.docker.allanshomelab.com
+        description: Container management
+        host: carrie
+        container: portainer
+    - Pennywise:
+        icon: truenas.png
+        href: https://pennywise.hosts.allanshomelab.com
+        description: NAS
+        widget:
+            type: truenas
+            url: https://pennywise.hosts.allanshomelab.com
+            username: truenas_admin
+            password: "{{ lookup('env', 'HOMEPAGE_VAR_TRUENAS_PASSWORD') }}"
+- Dev Ops:
+    - Alertmanager:
+        icon: alertmanager.png
+        href: https://alertmanager.docker.allanshomelab.com
+        description: Monitoring system
+        server: flagg
+        container: alertmanager
+    - Gatus:
+        icon: gatus.png
+        href: https://gatus.docker.allanshomelab.com
+        description: Health dashboard
+        server: flagg
+        container: gatus
+        widget:
+            type: gatus
+            url: https://gatus.docker.allanshomelab.com
+    - Grafana:
+        icon: grafana.png
+        href: https://grafana.allanshomelab.com
+        description: Operational dashboards
+        server: flagg
+        container: grafana
+        widget:
+            type: grafana
+            url: https://grafana.allanshomelab.com
+            username: "{{ lookup('env', 'HOMEPAGE_VAR_GRAFANA_USERNAME') }}"
+            password: "{{ lookup('env', 'HOMEPAGE_VAR_GRAFANA_PASSWORD') }}"
+            fields: ['dashboards', 'datasources']
+    - Prometheus:
+        icon: prometheus.png
+        href: https://prometheus.docker.allanshomelab.com
+        description: Monitoring/alerting toolkit
+        server: flagg
+        container: prometheus
+        widget:
+            type: prometheus
+            url: https://prometheus.docker.allanshomelab.com
+- Networking and Authentication:
+    - Authentik:
+        icon: authentik.png
+        href: https://authn.allanshomelab.com
+        description: Identity provider
+        server: flagg
+        container: authentik-server-1
+        widget:
+            type: authentik
+            url: https://authn.allanshomelab.com
+            key: "{{ lookup('env', 'HOMEPAGE_VAR_AUTHENTIK_KEY_DOCKER') }}"
+            version: 2
+    - Cloudflared:
+        icon: cloudflare.png
+        href: "{{ lookup('env', 'HOMEPAGE_VAR_CLOUDFLARE_URL') }}"
+        description: Zero trust tunnel
+        server: flagg
+        container: cloudflare-cloudflared-1
+        widget:
+            type: cloudflared
+            key: "{{ lookup('env', 'HOMEPAGE_VAR_CLOUDFLARE_KEY') }}"
+            accountid: "{{ lookup('env', 'HOMEPAGE_VAR_CLOUDFLARE_ACCOUTNT_ID') }}"
+            tunnelid: "{{ lookup('env', 'HOMEPAGE_VAR_CLOUDFLARE_TUNNEL_ID') }}"
+    - Nginx:
+        icon: nginx.png
+        href: https://nginx.docker.allanshomelab.com
+        description: Web server
+        server: carrie
+        container: nginx
+    - Pi-hole:
+        icon: pi-hole.png
+        href: https://dns.docker.allanshomelab.com/admin
+        description: Backup DNS server
+        server: flagg
+        container: pihole
+        widget:
+            type: pihole
+            url: https://dns.docker.allanshomelab.com
+            version: 6
+            key: "{{ lookup('env', 'HOMEPAGE_VAR_PIHOLE_KEY_DOCKER') }}"
+    - Tailscale:
+        icon: tailscale.png
+        href: https://login.tailscale.com/admin/machines
+        description: Mesh VPN
+    - Traefik:
+        icon: traefik.png
+        href: https://traefik.docker.allanshomelab.com
+        description: Reverse proxy/load balancer
+        server: flagg
+        container: traefik
+        widget:
+            type: traefik
+            url: https://traefik.docker.allanshomelab.com
+    - Twingate:
+        icon: twingate.png
+        href: https://allanshomelab.twingate.com/networks/overview
+        description: Zero-trust access
+        server: flagg
+        container: valiant_stingray
+- Media:
+    - Bazarr:
+        icon: bazarr.png
+        href: https://bazarr.media.allanshomelab.com
+        description: Subtitle management
+        server: patricia
+        container: bazarr
+        widget:
+            type: bazarr
+            url: https://bazarr.media.allanshomelab.com
+            key: "{{ lookup('env', 'HOMEPAGE_VAR_BAZARR_KEY') }}"
+    - Immich:
+        icon: immich.png
+        href: https://photos.allanandvaia.com
+        description: Photo and video management
+        server: misery
+        container: immich_server
+        widget:
+            type: immich
+            url: https://photos.allanandvaia.com
+            key: "{{ lookup('env', 'HOMEPAGE_VAR_IMMICH_KEY') }}"
+            version: 2
+    - Jellyfin:
+        icon: jellyfin.png
+        href: https://jellyfin.media.allanshomelab.com
+        description: Media server
+        server: misery
+        container: jellyfin
+        widget:
+            type: jellyfin
+            url: https://jellyfin.media.allanshomelab.com
+            key: "{{ lookup('env', 'HOMEPAGE_VAR_JELLYFIN_KEY') }}"
+            enableBlocks: true # optional, defaults to false
+            enableNowPlaying: true # optional, defaults to true
+            enableUser: true # optional, defaults to false
+            enableMediaControl: false # optional, defaults to true
+            showEpisodeNumber: true # optional, defaults to false
+            expandOneStreamToTwoRows: false # optional, defaults to true
+    - Lidarr:
+        icon: lidarr.png
+        href: https://lidarr.media.allanshomelab.com
+        description: Music management
+        server: patricia
+        container: lidarr
+        widget:
+            type: lidarr
+            url: https://lidarr.media.allanshomelab.com
+            key: "{{ lookup('env', 'HOMEPAGE_VAR_LIDARR_KEY') }}"
+    - Plex:
+        icon: plex.png
+        href: https://plex.media.allanshomelab.com
+        description: Media server
+        server: misery
+        container: plex
+        widget:
+            type: plex
+            url: https://plex.media.allanshomelab.com
+            key: "{{ lookup('env', 'HOMEPAGE_VAR_PLEX_KEY') }}"
+    - Prowlarr:
+        icon: prowlarr.png
+        href: https://prowlarr.media.allanshomelab.com
+        description: Indexer manager
+        server: patricia
+        container: prowlarr
+        widget:
+            type: prowlarr
+            url: https://prowlarr.media.allanshomelab.com
+            key: "{{ lookup('env', 'HOMEPAGE_VAR_PROWLARR_KEY') }}"
+    - Radarr:
+        icon: radarr.png
+        href: https://radarr.media.allanshomelab.com
+        description: Movie management
+        server: patricia
+        container: radarr
+        widget:
+            type: radarr
+            url: https://radarr.media.allanshomelab.com
+            key: "{{ lookup('env', 'HOMEPAGE_VAR_RADARR_KEY') }}"
+    - Sonarr:
+        icon: sonarr.png
+        href: https://sonarr.media.allanshomelab.com
+        description: Show management
+        server: patricia
+        container: sonarr
+        widget:
+            type: sonarr
+            url: https://sonarr.media.allanshomelab.com
+            key: "{{ lookup('env', 'HOMEPAGE_VAR_SONARR_KEY') }}"
+    - Tautulli:
+        icon: tautulli.png
+        href: https://tautulli.media.allanshomelab.com
+        description: Plex monitoring and analytics
+        server: misery
+        container: tautulli
+        widget:
+            type: tautulli
+            url: https://tautulli.media.allanshomelab.com
+            key: "{{ lookup('env', 'HOMEPAGE_VAR_TAUTULLI_KEY') }}"
+    - Transmission:
+        icon: transmission.png
+        href: https://transmission.media.allanshomelab.com
+        description: Torrent download client
+        server: patricia
+        container: transmission
+        widget:
+            type: transmission
+            url: https://transmission.media.allanshomelab.com
+- Productivity:
+    - IT Tools:
+        icon: it-tools.png
+        href: https://tools.docker.allanshomelab.com
+        description: Handy tools for developers
+        server: carrie
+        container: it_tools
+    - Trilium:
+        icon: trilium.png
+        href: https://notes.allanshomelab.com
+        description: Personal knowledge base
+        server: carrie
+        container: trilium-trilium-1
+        widget:
+            type: trilium
+            url: https://notes.allanshomelab.com
+            key: "{{ lookup('env', 'TRILIUM_TOKEN') }}"
+    - Vaultwarden:
+        icon: bitwarden.png
+        href: https://vault.allanshomelab.com
+        description: Secrets management
+        server: carrie
+        container: vaultwarden
+- Home Automation:
+    - Homeassistant:
+        icon: home-assistant.png
+        href: https://home.allanandvaia.com
+        description: Home automation server
+        widget:
+            type: homeassistant
+            url: https://home.allanandvaia.com
+            key: "{{ lookup('env', 'HOMEPAGE_VAR_HOMEASSIST_KEY') }}"
