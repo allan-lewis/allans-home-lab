@@ -2,7 +2,15 @@
 nixos_docker_services:
   - monitoring
 
-managed_host_volumes: []
+managed_host_volumes:
+  media_library_mount:
+    type: nfs
+    server: "{{ hostvars['pennywise'].ansible_host }}"
+    path: "/mnt/pool1/media-library"
+    opts: "ro"
+    restore: false
+    backup: false
+    local: "/data/media-library"
 
 # converge_docker_tautulli: true
 # tautulli_config_dir: "/etc/tautulli"
