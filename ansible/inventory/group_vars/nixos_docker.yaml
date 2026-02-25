@@ -49,6 +49,10 @@ nixos_docker_service_configs:
       NO_GEEKS_BREWING_POST_LOGOUT_REDIRECT_URI: "{{ lookup('env', 'NO_GEEKS_BREWING_POST_LOGOUT_REDIRECT_URI') }}"
       NO_GEEKS_BREWING_AUTHENTIK_LOGOUT_URI: "{{ lookup('env', 'NO_GEEKS_BREWING_AUTHENTIK_LOGOUT_URI') }}"
       NO_GEEKS_BREWING_REDIRECT_URI: "{{ lookup('env', 'NO_GEEKS_BREWING_REDIRECT_URI') }}"
+  plex: 
+    compose_app_name: plex
+    compose_source_type: template
+    compose_template_src: templates/plex.compose.yaml.j2
   portainer:
     compose_app_name: portainer
     compose_source_type: template

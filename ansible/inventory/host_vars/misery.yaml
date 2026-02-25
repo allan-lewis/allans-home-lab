@@ -1,8 +1,44 @@
 ---
 nixos_docker_services:
+  - jellyfin
   - monitoring
+  - plex
 
 managed_host_volumes:
+  jellyfin_config:
+    type: local
+    local: "/srv/jellyfin/config"
+    remote: "{{ default_remote_nas_per_host_backup_volume }}/jellyfin/config"
+    restore: true
+    backup: true
+    owner: "lab"
+    group: "lab"
+    mode: "0755"
+  jellyfin_cache:
+    type: local
+    local: "/srv/jellyfin/cache"
+    restore: false
+    backup: false
+    owner: "lab"
+    group: "lab"
+    mode: "0755"
+  plex_config:
+    type: local
+    local: "/srv/plex/config"
+    remote: "{{ default_remote_nas_per_host_backup_volume }}/plex/config"
+    restore: true
+    backup: true
+    owner: "lab"
+    group: "lab"
+    mode: "0755"
+  plex_transcode:
+    type: local
+    local: "/srv/plex/transcode"
+    restore: false
+    backup: false
+    owner: "lab"
+    group: "lab"
+    mode: "0755"
   media_library_mount:
     type: nfs
     server: "{{ hostvars['pennywise'].ansible_host }}"

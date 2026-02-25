@@ -4,11 +4,11 @@ services:
     container_name: jellyfin
     user: "{{ compose_config.compose_env.JELLYFIN_USER_UID }}:{{ compose_config.compose_env.JELLYFIN_GROUP_GID }}"
     ports:
-      - "8096:8096"
+      - "8096:8096/tcp"
     volumes:
-      - {{ managed_host_volumes['jellyfin_config_dir'].local }}:/config
-      - {{ managed_host_volumes['jellyfin_cache_dir'].local }}:/cache
-      - {{ managed_host_volumes['jellyfin_media_library'].local }}:/media-library:ro
+      - {{ managed_host_volumes['jellyfin_config'].local }}:/config
+      - {{ managed_host_volumes['jellyfin_cache'].local }}:/cache
+      - {{ managed_host_volumes['media_library_mount'].local }}:/media-library:ro
     restart: unless-stopped
     environment:
       - JELLYFIN_PublishedServerUrl={{ compose_config.compose_env.JELLYFIN_PUBLISHED_URL }}

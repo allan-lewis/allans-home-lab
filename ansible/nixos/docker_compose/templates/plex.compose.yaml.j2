@@ -1,0 +1,15 @@
+services:
+  plex:
+    image: "lscr.io/linuxserver/plex:1.43.0"
+    container_name: plex
+    restart: unless-stopped
+    ports:
+      - "32400:32400/tcp"
+    environment:
+      - TZ={{ lab_tz }}
+      - PUID={{ lab_uid }}
+      - PGID={{ lab_gid }}
+    volumes:
+      - {{ managed_host_volumes['plex_config'].local }}:/config
+      - {{ managed_host_volumes['plex_transcode'].local }}:/transcode
+      - {{ managed_host_volumes['media_library_mount'].local }}:/media-library:ro
