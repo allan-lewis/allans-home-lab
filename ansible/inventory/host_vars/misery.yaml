@@ -1,10 +1,37 @@
 ---
 nixos_docker_services:
+  # - immich
   - jellyfin
   - monitoring
   - plex
+  - tautulli
 
 managed_host_volumes:
+  immich_postgres:
+    type: local
+    local: "/srv/immich/postgres"
+    remote: "{{ default_remote_nas_per_host_backup_volume }}/immich/postgres-volume"
+    restore: true
+    backup: true
+    owner: "root"
+    group: "root"
+    mode: "0755"
+  immich_redis:
+    type: local
+    local: "/srv/immich/redis"
+    restore: false
+    backup: false
+    owner: "root"
+    group: "root"
+    mode: "0755"
+  immich_model:
+    type: local
+    local: "/srv/immich/model-cache"
+    restore: false
+    backup: false
+    owner: "root"
+    group: "root"
+    mode: "0755"
   jellyfin_config:
     type: local
     local: "/srv/jellyfin/config"
@@ -39,6 +66,23 @@ managed_host_volumes:
     owner: "lab"
     group: "lab"
     mode: "0755"
+  tautulli_config:
+    type: local
+    local: "/etc/tautulli"
+    remote: "{{ default_remote_nas_per_host_backup_volume }}/tautulli/config"
+    restore: true
+    backup: true
+    owner: "lab"
+    group: "lab"
+    mode: "0755"
+  immich_upload_mount:
+    type: nfs
+    server: "{{ hostvars['pennywise'].ansible_host }}"
+    path: "/mnt/pool1/immich"
+    opts: "rw"
+    restore: false
+    backup: false
+    local: "/data/immich"
   media_library_mount:
     type: nfs
     server: "{{ hostvars['pennywise'].ansible_host }}"

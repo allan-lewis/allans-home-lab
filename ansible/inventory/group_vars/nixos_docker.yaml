@@ -61,6 +61,10 @@ nixos_docker_service_configs:
     compose_app_name: rstack
     compose_source_type: template
     compose_template_src: templates/rstack.compose.yaml.j2
+  tautulli:
+    compose_app_name: tautulli
+    compose_source_type: template
+    compose_template_src: templates/tautulli.compose.yaml.j2
   trilium:
     compose_app_name: trilium
     compose_source_type: template
