@@ -1,6 +1,6 @@
 ---
 nixos_docker_services:
-  # - immich
+  - immich
   - jellyfin
   - monitoring
   - plex

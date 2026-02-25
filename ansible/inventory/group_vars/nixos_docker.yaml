@@ -1,6 +1,8 @@
 ---
 converge_docker: true
 
+immich_version: "v2.5.2"
+
 nixos_docker_service_configs:
   it_tools:
     compose_app_name: tools
@@ -21,6 +23,20 @@ nixos_docker_service_configs:
         dest: "/etc/homepage/settings.yaml"
       - src: "templates/homepage/widgets.yaml.j2"
         dest: "/etc/homepage/widgets.yaml"
+  immich:
+    compose_app_name: immich
+    compose_source_type: url
+    compose_url: "https://github.com/immich-app/immich/releases/download/{{ immich_version }}/docker-compose.yml"
+    compose_env:
+      IMMICH_VERSION: "{{ immich_version }}"
+      UPLOAD_LOCATION: "/data/immich"
+      DB_DATA_LOCATION: "/srv/immich/postgres"  
+      REDIS_DATA_LOCATION: "/srv/immich/redis"
+      MODEL_CACHE_LOCATION: "/srv/immich/model-cache"
+      COMPOSE_PROJECT_NAME: "immich"
+      DB_USERNAME: "postgres"
+      DB_DATABASE_NAME: "immich"
+      DB_PASSWORD: "{{ lookup('env', 'IMMICH_DB_PASSWORD') }}"
   jellyfin:
     compose_app_name: jellyfin
     compose_source_type: template
