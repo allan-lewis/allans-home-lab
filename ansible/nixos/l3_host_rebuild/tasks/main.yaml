@@ -34,6 +34,15 @@
     mode: "0400"
   when: converge_tailscale | bool
 
+- name: Write Postgres dump password file
+  copy:
+    content: "{{ postgres_db_password | trim }}"
+    dest: /etc/allans-home-lab/secrets/postgres_dump_pass
+    owner: root
+    group: root
+    mode: "0600"
+  when: converge_postgres_dump | bool
+
 - name: Check if host-local hardware config exists in flake dir
   ansible.builtin.stat:
     path: "/etc/nixos-flakes/hosts/{{ inventory_hostname }}/hardware-configuration.nix"
