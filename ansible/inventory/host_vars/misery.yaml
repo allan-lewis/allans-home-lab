@@ -7,6 +7,15 @@ nixos_docker_services:
   - tautulli
 
 managed_host_volumes:
+  immich_db_dumps:
+    type: local
+    local: "/var/lib/postgres-db-dumps"
+    remote: "{{ default_remote_nas_per_host_backup_volume }}/immich/db-dumps"
+    restore: true
+    backup: true
+    owner: "root"
+    group: "root"
+    mode: "0755"
   immich_postgres:
     type: local
     local: "/srv/immich/postgres"
@@ -92,58 +101,9 @@ managed_host_volumes:
     backup: false
     local: "/data/media-library"
 
-# converge_docker_tautulli: true
-# tautulli_config_dir: "/etc/tautulli"
-
-# converge_docker_plex: true
-# plex_config_dir: "/srv/plex/config"
-# plex_transcode_dir: "/srv/plex/transcode"
-# plex_media_library: "/mnt/media-library"
-
-# converge_docker_jellyfin: true
-# jellyfin_config_dir: "/srv/jellyfin/config"
-# jellyfin_cache_dir: "/srv/jellyfin/cache"
-# jellyfin_media_library: "/mnt/media-library"
-
-# converge_docker_immich: true
-# immich_version: "v2.5.2"
-# immich_postgres_dir: "/srv/immich/postgres"
-# immich_redis_dir: "/srv/immich/redis"
-# immich_model_dir: "/srv/immich/model-cache"
-# immich_upload_mount: "/mnt/immich"
-# immich_upload_mount_nfs_path: "/mnt/pool1/immich"
-
-# "backup_runner_volumes": [
-#   { 
-#     src: "{{ plex_config_dir }}",
-#     dest: "{{ default_remote_nas_per_host_backup_volume }}/plex/config",
-#     owner: "lab"
-#   },
-#   { 
-#     src: "{{ tautulli_config_dir }}",
-#     dest: "{{ default_remote_nas_per_host_backup_volume }}/tautulli/config",
-#     owner: "lab"
-#   },
-#   { 
-#     src: "{{ jellyfin_config_dir }}",
-#     dest: "{{ default_remote_nas_per_host_backup_volume }}/jellyfin/config",
-#     owner: "lab"
-#   },
-#   { 
-#     src: "{{ immich_postgres_dir }}",
-#     dest: "{{ default_remote_nas_per_host_backup_volume }}/immich/postgres-volume",
-#     owner: "lab"
-#   },
-#   { 
-#     src: "{{ postgres_db_backup_dir }}",
-#     dest: "{{ default_remote_nas_per_host_backup_volume }}/immich/db-dumps",
-#     owner: "root"
-#   }
-# ]
-
-# converge_postgres_dump: true
-# postgres_db_container: immich_postgres
-# postgres_db_name: "immich"
-# postgres_db_user: "postgres"
-# postgres_db_password: "{{ lookup('env', 'IMMICH_DB_PASSWORD') }}"
-# postgres_db_backup_dir: /var/lib/postgres-db-dumps
+converge_postgres_dump: true
+postgres_db_container: immich_postgres
+postgres_db_name: "immich"
+postgres_db_user: "postgres"
+postgres_db_password: "{{ lookup('env', 'IMMICH_DB_PASSWORD') }}"
+postgres_db_backup_dir: /var/lib/postgres-db-dumps
