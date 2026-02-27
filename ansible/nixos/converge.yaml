@@ -17,31 +17,18 @@
       when: converge_nixos
       tags: [rebuild, rebuild_hw, rebuild_modules, rebuild_flake, rebuild_switch]
 
-    # - name: L4 | Managed directories
+    - name: Finish any remaining host setups following rebuild
+      ansible.builtin.include_role:
+        name: converge_02_finalize
+      when:
+        - converge_nixos | default(false) | bool
+        # - converge_restore | default(false) | bool ## TODO - Check this on individual tasks
+      tags: [finalize]
+
+    # - name: Setup Docker services
     #   ansible.builtin.include_role:
-    #     name: l4_managed_dirs
-    #     apply:
-    #       tags: [l4, managed_dirs]
+    #     name: converge_03_docker
     #   when:
     #     - converge_nixos | default(false) | bool
-    #     - converge_restore | default(false) | bool
-    #   tags: [l4, managed_dirs]
-
-    # - name: L4 | DevOps
-    #   ansible.builtin.include_role:
-    #     name: l4_devops
-    #     apply:
-    #       tags: [l4, devops]
-    #   when: converge_nixos and converge_devops
-    #   tags: [l4, devops]
-
-    # - name: L4 | Docker Services
-    #   ansible.builtin.include_role:
-    #     name: docker_compose
-    #     apply:
-    #       tags: [l4, docker]
-    #   vars:
-    #     compose_config: "{{ nixos_docker_service_configs[item] }}"
-    #   when: converge_docker
-    #   tags: [l4, docker]
-    #   with_items: "{{ nixos_docker_services | default([]) }}"
+    #     - converge_docker | default(false) | bool
+    #   tags: [docker]
