@@ -8,22 +8,20 @@
     - name: Prepare host(s) for convergence
       ansible.builtin.include_role:
         name: converge_00_prepare
-      when: converge_nixos
+      when: converge_nixos | default(false) | bool
       tags: [prepare, prepare_groups, prepare_dirs, prepare_files, prepare_keys, prepare_dotfiles, prepare_aws, prepare_tailscale, prepare_dump]
 
     - name: Update configs and rebuild host(s)
       ansible.builtin.include_role:
         name: converge_01_rebuild
-      when: converge_nixos
+      when: converge_nixos | default(false) | bool
       tags: [rebuild, rebuild_hw, rebuild_modules, rebuild_flake, rebuild_switch]
 
     - name: Finish any remaining host setups following rebuild
       ansible.builtin.include_role:
         name: converge_02_finalize
-      when:
-        - converge_nixos | default(false) | bool
-        # - converge_restore | default(false) | bool ## TODO - Check this on individual tasks
-      tags: [finalize]
+      when: converge_nixos | default(false) | bool
+      tags: [finalize, finalize_rehydrate]
 
     # - name: Setup Docker services
     #   ansible.builtin.include_role:

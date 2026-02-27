@@ -1,3 +1,0 @@
----
-managed_dirs_config_path: /etc/allans-home-lab/managed-directories/config.yaml
-managed_dirs_rehydrate_unit: homelab-task-managed-dirs-rehydrate.service

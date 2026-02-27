@@ -1,0 +1,8 @@
+---
+- name: REHYDRATE | Rehydrate managed directories
+  become: true
+  ansible.builtin.command: >
+    rehydrate-managed-dirs homelab-task-managed-dirs-rehydrate.service
+  changed_when: false
+  when: converge_restore | bool
+  tags: [finalize, finalize_rehydrate]

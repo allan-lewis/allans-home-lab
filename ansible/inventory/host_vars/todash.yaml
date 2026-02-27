@@ -2,4 +2,22 @@
 nixos_docker_services:
   - monitoring
 
-managed_host_volumes: {}
+managed_host_volumes:
+  managed_dir_0:
+    type: local
+    local: "/home/lab/managed-dir-0"
+    remote: "{{ default_remote_nas_per_host_backup_volume }}/managed-dir-0"
+    restore: true
+    backup: true
+    owner: "lab"
+    group: "lab"
+    mode: "0755"
+  managed_dir_1:
+    type: local
+    local: "/home/lab/managed-dir-1"
+    remote: "{{ default_remote_nas_per_host_backup_volume }}/managed-dir-1"
+    restore: true
+    backup: true
+    owner: "root"
+    group: "root"
+    mode: "0755"

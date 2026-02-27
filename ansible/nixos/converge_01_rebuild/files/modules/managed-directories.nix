@@ -264,6 +264,168 @@ PY
       exit 1
     fi
   '';
+
+  # Proper package w/ /bin/rehydrate-managed-dirs (merges into system-path cleanly)
+  rehydrateGate = pkgs.writeScriptBin "rehydrate-managed-dirs" ''
+    #!${py}/bin/python3
+    import os
+    import sys
+    import subprocess
+    from typing import Any, Dict, List
+
+    import yaml
+
+    DEFAULT_MARKER = ".restored_from_backup"
+    DEFAULT_LOG = "/var/log/rehydrate-managed-dirs.log"
+    DEFAULT_CONFIG = ${builtins.toJSON cfg.configPath}
+    SYSTEMCTL = ${builtins.toJSON "${pkgs.systemd}/bin/systemctl"}
+
+
+    def _append_log(line: str) -> None:
+        try:
+            with open(DEFAULT_LOG, "a", encoding="utf-8") as f:
+                f.write(line + "\n")
+        except Exception:
+            pass
+
+
+    def log(msg: str) -> None:
+        line = f"INFO  | {msg}"
+        print(line)
+        _append_log(line)
+
+
+    def err(msg: str) -> None:
+        line = f"ERROR | {msg}"
+        print(line, file=sys.stderr)
+        _append_log(line)
+
+
+    def die(msg: str, code: int = 1) -> None:
+        err(f"FATAL | {msg}")
+        sys.exit(code)
+
+
+    def run(cmd: List[str]) -> subprocess.CompletedProcess:
+        return subprocess.run(cmd, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+
+
+    def load_yaml(path: str) -> Dict[str, Any]:
+        if not os.path.exists(path):
+            die(f"Config missing: {path}")
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                data = yaml.safe_load(f)
+            if data is None:
+                data = {}
+            if not isinstance(data, dict):
+                die(f"Config root must be a dict: {path}")
+            return data
+        except Exception as ex:
+            die(f"Failed to parse YAML '{path}': {ex}")
+
+
+    def norm_bool(v: Any) -> bool:
+        if isinstance(v, bool):
+            return v
+        if isinstance(v, str):
+            return v.strip().lower() in ("1", "true", "yes", "on")
+        return bool(v)
+
+
+    def listdir_safe(path: str) -> List[str]:
+        try:
+            return os.listdir(path)
+        except Exception:
+            return []
+
+
+    def main() -> int:
+        # Usage: rehydrate-managed-dirs <unit> [config_path]
+        unit = (sys.argv[1].strip() if len(sys.argv) >= 2 else "")
+        config_path = (sys.argv[2] if len(sys.argv) >= 3 else os.environ.get("MANAGED_DIRS_CONFIG", DEFAULT_CONFIG))
+        require_nonempty = os.environ.get("MANAGED_DIRS_REQUIRE_NONEMPTY", "1").strip().lower() not in ("0", "false", "no", "off")
+
+        if not unit:
+            die("Unit name required: rehydrate-managed-dirs <unit> [config_path]")
+
+        log(f"===== managed-dirs gate start | unit={unit} config={config_path} require_nonempty={str(require_nonempty).lower()} =====")
+
+        cfg = load_yaml(config_path)
+
+        ver = cfg.get("version", 0)
+        try:
+            if int(ver) != 1:
+                die(f"Unsupported config version: {ver} (expected 1)")
+        except Exception:
+            die(f"Invalid version value: {ver} (expected int)")
+
+        managed = cfg.get("managed_directories", [])
+        if managed is None:
+            managed = []
+        if not isinstance(managed, list):
+            die("managed_directories must be a list")
+
+        # Only enforce entries where restore==true AND remote is non-empty.
+        selected: List[Dict[str, Any]] = []
+        for i, d in enumerate(managed):
+            if not isinstance(d, dict):
+                die(f"managed_directories[{i}] must be a dict")
+            restore = norm_bool(d.get("restore", False))
+            remote = str(d.get("remote") or "").strip()
+            if restore and remote:
+                selected.append(d)
+
+        log(f"loaded={len(managed)} selected={len(selected)} (restore=true && remote!=empty)")
+
+        p = run([SYSTEMCTL, "start", unit])
+        if p.returncode != 0:
+            die(f"systemctl start {unit} failed (rc={p.returncode}):\n{p.stdout}")
+
+        failures = 0
+        for i, d in enumerate(selected):
+            name = str(d.get("name") or f"dir_{i}")
+            local = str(d.get("local") or "").strip()
+            marker = str(d.get("marker") or DEFAULT_MARKER).strip() or DEFAULT_MARKER
+
+            if (not local) or (not local.startswith("/")) or (local == "/"):
+                err(f"name={name} invalid local='{local}'")
+                failures += 1
+                continue
+
+            if not os.path.isdir(local):
+                err(f"name={name} local missing/not dir: {local}")
+                failures += 1
+                continue
+
+            marker_path = os.path.join(local.rstrip("/"), marker)
+            if not os.path.exists(marker_path):
+                err(f"name={name} marker missing: {marker_path}")
+                failures += 1
+                continue
+
+            if require_nonempty:
+                entries = [x for x in listdir_safe(local) if x not in (".", "..") and x != marker]
+                if len(entries) == 0:
+                    err(f"name={name} dir empty (excluding marker): {local}")
+                    failures += 1
+                    continue
+
+            log(f"OK name={name} hydrated local={local} marker={marker_path}")
+
+        if failures:
+            die(f"managed-dirs gate failed | failures={failures}", code=2)
+
+        log("===== managed-dirs gate finished (OK) =====")
+        return 0
+
+
+    if __name__ == "__main__":
+        try:
+            sys.exit(main())
+        except KeyboardInterrupt:
+            die("Interrupted", code=130)
+  '';
 in
 {
   options.services.homelab.managedDirectories = {
@@ -306,6 +468,9 @@ in
     systemd.tmpfiles.rules = [
       "d /etc/allans-home-lab/managed-directories 0755 root root -"
     ];
+
+    # Provides: /run/current-system/sw/bin/rehydrate-managed-dirs
+    environment.systemPackages = [ rehydrateGate ];
 
     services.homelab.tasks.tasks."managed-dirs-rehydrate" = {
       description = "Managed directories rehydrate (restore if empty + marker missing; fail-closed)";
