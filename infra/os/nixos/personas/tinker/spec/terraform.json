@@ -4,8 +4,8 @@
       "terraform": {
         "ip": "192.168.86.216",
         "ssh_user": "lab",
-        "cpu": 2,
-        "memory_mb": 2048,
+        "cpu": 4,
+        "memory_mb": 4096,
         "disk_gb": 32,
         "template_ref": "nixos/tinker/stable",
         "node": "maturin",
