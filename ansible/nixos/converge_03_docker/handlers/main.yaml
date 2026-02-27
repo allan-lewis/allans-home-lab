@@ -8,3 +8,4 @@
     build: never
     pull: "{{ compose_pull_recreate | ternary('always', 'missing') }}"
     recreate: "{{ compose_pull_recreate | ternary('always', 'auto') }}"
+  tags: [docker]

@@ -3,25 +3,23 @@
   ansible.builtin.getent:
     database: passwd
     key: lab
+  tags: [docker]
 
 - name: Set facts
   ansible.builtin.set_fact:
     lab_uid: "{{ getent_passwd.lab[1] | int }}"
     lab_gid: "{{ getent_passwd.lab[2] | int }}"
     lab_tz: UTC
-
-- name: Print out user and group ids
-  ansible.builtin.debug:
-    msg: "Running docker compose project {{ compose_project_dir }} with user {{ lab_uid}} and group {{ lab_gid }}"
+  tags: [docker]
 
 - name: Ensure project dir exists
   ansible.builtin.file:
     path: "{{ compose_project_dir }}"
     state: directory
     mode: "0750"
+  tags: [docker]
 
-# --- Auto-check: every key in compose_env must be defined and non-empty ---
-- name: Fail if any compose_env entry is undefined or empty
+- name: Ensure that all environment variables are set
   ansible.builtin.fail:
     msg: "compose_env variable '{{ env_item.key }}' is undefined or empty."
   when: (env_item.value is not defined) or (env_item.value | string | length == 0)
@@ -29,9 +27,9 @@
   loop_control:
     loop_var: env_item
     label: "{{ env_item.key }}"
+  tags: [docker]
 
-# # --- .env rendering (optional) ---
-- name: Render .env for compose (if provided)
+- name: Render .env for compose
   ansible.builtin.copy:
     dest: "{{ compose_project_dir }}/.env"
     mode: "0640"
@@ -41,9 +39,9 @@
       {% endfor %}
   when: (compose_config.compose_env | default([])) | length > 0
   notify: restart compose stack
+  tags: [docker]
 
-# Render any extra templates
-- name: Render extra project templates
+- name: Render additional templates
   ansible.builtin.template:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
@@ -54,8 +52,8 @@
   loop_control:
     label: "{{ item.dest }}"
   notify: restart compose stack
+  tags: [docker]
 
-# # --- Compose source (url | file | template) ---
 - name: Fetch compose from URL
   ansible.builtin.get_url:
     url: "{{ compose_config.compose_url }}"
@@ -63,6 +61,7 @@
     mode: "0644"
   when: compose_config.compose_source_type == 'url'
   notify: restart compose stack
+  tags: [docker]
 
 - name: Copy compose from local file
   ansible.builtin.copy:
@@ -71,6 +70,7 @@
     mode: "0644"
   when: compose_config.compose_source_type == 'file'
   notify: restart compose stack
+  tags: [docker]
 
 - name: Render compose from template
   ansible.builtin.template:
@@ -79,6 +79,7 @@
     mode: "0644"
   when: compose_config.compose_source_type == 'template'
   notify: restart compose stack
+  tags: [docker]
 
 - name: Ensure stack is present (Compose v2 module)
   community.docker.docker_compose_v2:
@@ -88,3 +89,4 @@
     pull: missing
     build: never
   changed_when: false
+  tags: [docker]

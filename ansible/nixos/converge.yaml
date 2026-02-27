@@ -23,10 +23,13 @@
       when: converge_nixos | default(false) | bool
       tags: [finalize, finalize_rehydrate, finalize_repos, finalize_doppler]
 
-    # - name: Deploy Docker Compose services
-    #   ansible.builtin.include_role:
-    #     name: converge_03_docker
-    #   when:
-    #     - converge_nixos | default(false) | bool
-    #     - converge_docker | default(false) | bool
-    #   tags: [docker]
+    - name: Deploy Docker Compose services
+      ansible.builtin.include_role:
+        name: converge_03_docker
+      vars:
+        compose_config: "{{ nixos_docker_service_configs[item] }}"
+      when:
+        - converge_nixos | default(false) | bool
+        - converge_docker | default(false) | bool
+      tags: [docker]
+      with_items: "{{ nixos_docker_services | default([]) }}"
