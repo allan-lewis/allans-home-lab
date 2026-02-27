@@ -26,6 +26,7 @@
         ./hosts/{{ inventory_hostname }}/hardware-configuration.nix
 
         ./modules/backup-runner.nix
+        ./modules/dev-checkouts.nix
         ./modules/homelab-tasks.nix
         ./modules/homelab-hello.nix
         ./modules/s3-local-mirror.nix
@@ -35,6 +36,7 @@
         ({ pkgs, lib, ... }:  
           let
             converge_backup_enabled = {{ (converge_backup | default(false) | bool) | string | lower }};
+            converge_devops_enabled = {{ (converge_devops | default(false) | bool) | string | lower }};
             converge_node_exporter_enabled = {{ (converge_node_exporter | default(false) | bool) | string | lower }};
             converge_restore_enabled = {{ (converge_restore | default(false) | bool) | string | lower }};
             converge_postgres_db_dump_enabled = {{ (converge_postgres_dump | default(false) | bool) | string | lower }};
@@ -373,6 +375,30 @@
               authKeyFile = "/run/secrets/tailscale-authkey";
               extraUpFlags = [
                 "--accept-dns=true"
+              ];
+            };
+
+            services.homelab.devCheckouts = lib.mkIf converge_devops_enabled {
+              enable = true;
+
+              # systemd OnCalendar (examples: "daily", "hourly", "Mon..Fri 09:00", "*-*-* 03:30:00")
+              schedule = "hourly";
+
+              # Where the working directories live
+              rootDir = "/home/lab/src";
+
+              # Optional (defaults to "lab" if omitted)
+              user = "lab";
+
+              # Compatible with your existing Ansible var shape
+              repos = [
+{% for r in (source_code_repos | default([])) %}
+                {
+                  repo = "{{ r.repo }}";
+                  dest = "{{ r.dest }}";
+                  version = "{{ r.version | default('main') }}";
+                }
+{% endfor %}
               ];
             };
 

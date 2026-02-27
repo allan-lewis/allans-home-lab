@@ -21,7 +21,7 @@
       ansible.builtin.include_role:
         name: converge_02_finalize
       when: converge_nixos | default(false) | bool
-      tags: [finalize, finalize_rehydrate]
+      tags: [finalize, finalize_rehydrate, finalize_repos]
 
     # - name: Setup Docker services
     #   ansible.builtin.include_role:
