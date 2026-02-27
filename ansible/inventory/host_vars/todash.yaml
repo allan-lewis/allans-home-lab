@@ -1,4 +1,8 @@
 ---
+doppler_service_token: "{{ lookup('env', 'DOPPLER_SERVICE_TOKEN_MATURIN') }}"
+doppler_config: "mat"
+doppler_project: "orchestrator"
+
 nixos_docker_services:
   - monitoring
 

@@ -13,3 +13,12 @@
     cmd: systemctl start homelab-task-dev_checkouts_sync.service
   when: converge_devops | bool
   tags: [finalize, finalize_repos]
+
+- name: DOPPLER | Start homelab-doppler-setup service
+  become: true
+  ansible.builtin.systemd:
+    name: homelab-doppler-setup.service
+    state: started
+  when: converge_devops | bool
+  tags: [finalize, finalize_doppler]
+

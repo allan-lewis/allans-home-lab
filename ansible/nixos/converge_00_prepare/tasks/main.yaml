@@ -92,6 +92,7 @@
   tags: [prepare, prepare_tailscale]
 
 - name: DUMP | Write PostgreSQL dump password file
+  no_log: true
   copy:
     content: "{{ postgres_db_password | trim }}"
     dest: /etc/allans-home-lab/secrets/postgres_dump_pass
@@ -100,3 +101,14 @@
     mode: "0600"
   when: converge_postgres_dump | bool
   tags: [prepare, prepare_dump]
+
+- name: DOPPLER | Write service token to durable secret file
+  no_log: true
+  ansible.builtin.copy:
+    dest: /var/lib/homelab-secrets/doppler/doppler_token
+    content: "{{ doppler_service_token | trim }}\n"
+    owner: lab
+    group: lab
+    mode: "0600"
+  when: converge_devops | bool
+  tags: [prepare, prepare_doppler]

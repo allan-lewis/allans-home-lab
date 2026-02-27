@@ -9,7 +9,7 @@
       ansible.builtin.include_role:
         name: converge_00_prepare
       when: converge_nixos | default(false) | bool
-      tags: [prepare, prepare_groups, prepare_dirs, prepare_files, prepare_keys, prepare_dotfiles, prepare_aws, prepare_tailscale, prepare_dump]
+      tags: [prepare, prepare_groups, prepare_dirs, prepare_files, prepare_keys, prepare_dotfiles, prepare_aws, prepare_tailscale, prepare_dump, prepare_doppler]
 
     - name: Update configs and rebuild host(s)
       ansible.builtin.include_role:
@@ -21,9 +21,9 @@
       ansible.builtin.include_role:
         name: converge_02_finalize
       when: converge_nixos | default(false) | bool
-      tags: [finalize, finalize_rehydrate, finalize_repos]
+      tags: [finalize, finalize_rehydrate, finalize_repos, finalize_doppler]
 
-    # - name: Setup Docker services
+    # - name: Deploy Docker Compose services
     #   ansible.builtin.include_role:
     #     name: converge_03_docker
     #   when:

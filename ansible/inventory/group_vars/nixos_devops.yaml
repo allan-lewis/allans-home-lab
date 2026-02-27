@@ -11,6 +11,10 @@ nixos_converge_prepare_groups_devops: ["aws"]
 
 nixos_converge_prepare_dirs_devops:    
   - path: "/var/lib/homelab-secrets/aws"
+  - path: "/var/lib/homelab-secrets/doppler"
+    owner: "lab"
+    group: "lab"
+    mode: "0755"
   - path: "/var/lib/homelab-secrets/ssh/lab"
     owner: "lab"
     group: "lab"

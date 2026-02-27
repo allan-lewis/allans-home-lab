@@ -27,6 +27,7 @@
 
         ./modules/backup-runner.nix
         ./modules/dev-checkouts.nix
+        ./modules/doppler.nix
         ./modules/homelab-tasks.nix
         ./modules/homelab-hello.nix
         ./modules/s3-local-mirror.nix
@@ -400,6 +401,23 @@
                 }
 {% endfor %}
               ];
+            };
+
+            services.homelab.doppler = lib.mkIf converge_devops_enabled {
+              enable = true;
+
+              # Who to run doppler setup as (defaults to "lab" if omitted)
+              user = "lab";
+
+              # Directory scope doppler should be configured for
+              scopeDir = "/home/lab/src";
+
+              # Durable secret written earlier in converge (outside /nix/store)
+              tokenFile = "/var/lib/homelab-secrets/doppler/doppler_token";
+
+              # Doppler project/config to select for this scope
+              project = "{{ doppler_project }}";
+              dopplerConfig = "{{ doppler_config }}";
             };
 
             networking.firewall.trustedInterfaces =
