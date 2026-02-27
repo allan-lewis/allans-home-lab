@@ -348,10 +348,10 @@
               enable = true;
               schedule = "*-*-* 05:00:00";
 
-              db = "{{ postgres_db_name }}";
-              user = "{{ postgres_db_user }}";
-              container = "{{ postgres_db_container }}";
-              extraArgs = "{{ postgres_db_extra_args }}";
+              db = "{{ postgres_db_name | default ('') }}";
+              user = "{{ postgres_db_user | default ('') }}";
+              container = "{{ postgres_db_container | default ('') }}";
+              extraArgs = "{{ postgres_db_extra_args | default ('') }}";
 
               backupDir = "/var/lib/postgres-db-dumps";
               passwordFile = "/etc/allans-home-lab/secrets/postgres_dump_pass";

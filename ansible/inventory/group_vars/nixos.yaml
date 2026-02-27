@@ -6,6 +6,15 @@ backup_runner_rsync_flags: "-aHAX --numeric-ids --delete-delay --partial --parti
 converge_nixos: true
 converge_node_exporter: true
 
+nixos_dir: /etc/nixos-flakes
+nixos_flake: "{{ nixos_dir }}/flake.nix"
+
+managed_dirs_defaults:
+  marker: ".restored_from_backup"
+  restore_when: "empty_and_marker_missing"
+  backup_when: "marker_present"
+  allow_uninitialized_backup: false
+
 managed_host_dirs: >-
   {%- set out = [] -%}
   {%- for item in (managed_host_volumes | default({}) | dict2items) -%}
@@ -41,3 +50,76 @@ converge_restore: >-
     | list
     | length > 0
   }}
+
+nixos_converge_prepare_groups: >-
+  {{
+    (
+      (nixos_converge_prepare_groups_all | default([]))
+      | union(nixos_converge_prepare_groups_devops | default([]))
+    )
+    | sort
+  }}
+
+nixos_converge_prepare_groups_all: ["lab"]
+
+nixos_converge_prepare_dirs: >-
+  {{
+    (
+      (nixos_converge_prepare_dirs_all | default([]))
+      + (nixos_converge_prepare_dirs_devops | default([]))
+    )
+    | groupby('path')
+    | map('last')
+    | list
+  }}
+
+nixos_converge_prepare_dirs_all:
+  - path: "{{ nixos_dir }}"
+  - path: "{{ nixos_dir }}/assets"
+  - path: "{{ nixos_dir }}/modules"
+  - path: "{{ nixos_dir }}/hosts/{{ inventory_hostname }}"
+  - path: "/etc/allans-home-lab/managed-directories"
+  - path: "/run/secrets"
+  - path: "/var/lib/homelab-secrets/ssh/root"
+  - path: "/home/lab/.dotfiles"
+    owner: "lab"
+    group: "lab"
+
+nixos_converge_prepare_files: >-
+  {{
+    (
+      (nixos_converge_prepare_files_all | default([]))
+      + (nixos_converge_prepare_files_devops | default([]))
+    )
+    | groupby('src')
+    | map('last')
+    | list
+  }}
+
+nixos_converge_prepare_files_all:
+  - src: "tmux.conf.j2"
+    dest: "{{ nixos_dir }}/assets/tmux.conf"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  - src: "starship.toml.j2"
+    dest: "{{ nixos_dir }}/assets/starship.toml"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  - src: managed-directories-config.yaml.j2
+    dest: /etc/allans-home-lab/managed-directories/config.yaml
+    owner: root
+    group: root
+    mode: "0644"
+
+nixos_converge_prepare_keys: >-
+  {{
+    (
+      (nixos_converge_prepare_keys_all | default([]))
+      | union(nixos_converge_prepare_keys_devops | default([]))
+    )
+    | sort
+  }}
+
+nixos_converge_prepare_keys_all: ["root"]

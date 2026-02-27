@@ -124,15 +124,16 @@ all:
             nixos_devops:
               hosts:
                 cujo:
+                todash:
             nixos_media:
               hosts:
                 misery:
             nixos_rstack:
               hosts:
                 patricia:
-            nixos_tinker:
-              hosts:
-                todash:
+            # nixos_tinker:
+            #   hosts:
+            #     todash:
 
     ubuntu:
       children: 
