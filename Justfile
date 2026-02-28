@@ -207,7 +207,7 @@ nixos-terraform persona action approve="0":
 
 # Fully converge a group of NixOS hosts
 nixos-converge group tags="" limit="":
-  {{run_prefix}} scripts/nixos/full-converge.sh "ansible/nixos/converge.yaml" "{{group}}" "{{tags}}" "{{limit}}"
+  {{run_prefix}} scripts/ansible-playbook.sh "ansible/nixos/converge.yaml" "{{group}}" "{{tags}}" "{{limit}}"
 
 # Prepare a Proxmox VM template suitable for Ubuntu installations
 ubuntu-vm-template:
@@ -218,5 +218,5 @@ ubuntu-terraform persona action approve="0":
   {{run_prefix}} scripts/terraform.sh "ubuntu" "{{persona}}" "{{action}}" "{{approve}}"
 
 # Fully converge a group of Ubuntu hosts
-ubunut-converge group tags="" limit="":
-  {{run_prefix}} scripts/nixos/full-converge.sh "ansible/l3/converge.yaml" "{{group}}" "{{tags}}" "{{limit}}"
+ubuntu-converge group tags="" limit="":
+  {{run_prefix}} scripts/ansible-playbook.sh "ansible/l3/converge.yaml" "{{group}}" "{{tags}}" "{{limit}}"
