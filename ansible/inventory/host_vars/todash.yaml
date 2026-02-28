@@ -1,8 +1,4 @@
 ---
-doppler_service_token: "{{ lookup('env', 'DOPPLER_SERVICE_TOKEN_MATURIN') }}"
-doppler_config: "mat"
-doppler_project: "orchestrator"
-
 nixos_docker_services:
   - monitoring
 
@@ -25,11 +21,3 @@ managed_host_volumes:
     owner: "root"
     group: "root"
     mode: "0755"
-
-source_code_repos:
-  - repo: git@github.com:allan-lewis/allans-home-lab.git
-    dest: allans-home-lab
-    version: main
-  - repo: git@github.com:allan-lewis/homelab-metrics.git
-    dest: homelab-metrics 
-    version: main
