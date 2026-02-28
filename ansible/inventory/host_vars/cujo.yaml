@@ -1,5 +1,6 @@
 ---
 converge_tailscale: true
+tailscale_authkey: "{{ lookup('env', 'TAILSCALE_AUTHKEY') }}"
 
 doppler_service_token: "{{ lookup('env', 'DOPPLER_SERVICE_TOKEN_MATURIN') }}"
 doppler_config: "mat"
