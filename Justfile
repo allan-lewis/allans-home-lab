@@ -67,10 +67,6 @@ l1-truenas-capture vmid:
 l1-truenas-template:
   {{run_prefix}} scripts/l1/appliance-template.sh truenas
 
-# Prepare a Proxmox VM template suitable for Ubuntu installations
-l1-ubuntu-template:
-  {{run_prefix}} scripts/l1/ubuntu-template.sh
-
 # Apply Terraform resources for an OS/persona pair
 l2-apply tfdir apply_flag="0":
   APPLY="{{apply_flag}}" \
@@ -207,13 +203,20 @@ nixos-vm-template update_stable="yes":
 
 # Apply or detroy Proxmox VM(s) using Terraform
 nixos-terraform persona action approve="0":
-  {{run_prefix}} scripts/nixos/terraform.sh "{{persona}}" "{{action}}" "{{approve}}"
+  {{run_prefix}} scripts/terraform.sh "nixos" "{{persona}}" "{{action}}" "{{approve}}"
 
 # Fully converge a group of NixOS hosts
 nixos-converge group tags="" limit="":
-  {{run_prefix}} scripts/nixos/full-converge.sh "{{group}}" "{{tags}}" "{{limit}}"
+  {{run_prefix}} scripts/nixos/full-converge.sh "ansible/nixos/converge.yaml" "{{group}}" "{{tags}}" "{{limit}}"
+
+# Prepare a Proxmox VM template suitable for Ubuntu installations
+ubuntu-vm-template:
+  {{run_prefix}} scripts/l1/ubuntu-template.sh
 
 # Apply or destroy Porxmox VMs using Terraform
 ubuntu-terraform persona action approve="0":
   {{run_prefix}} scripts/terraform.sh "ubuntu" "{{persona}}" "{{action}}" "{{approve}}"
 
+# Fully converge a group of Ubuntu hosts
+ubunut-converge group tags="" limit="":
+  {{run_prefix}} scripts/nixos/full-converge.sh "ansible/l3/converge.yaml" "{{group}}" "{{tags}}" "{{limit}}"

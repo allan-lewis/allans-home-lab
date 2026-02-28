@@ -151,5 +151,4 @@ all:
             blaine:
         ubuntu_tailscale:
           hosts:
-            barlow:
             flagg:
