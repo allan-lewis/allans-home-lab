@@ -201,6 +201,14 @@ arch-iso:
 arch-vm-template:
   {{run_prefix}} scripts/l1/arch-template.sh packer/l1/arch
 
+# Apply or destroy Proxmox VMs using Terraform
+arch-terraform persona action approve="0":
+  {{run_prefix}} scripts/terraform.sh "arch" "{{persona}}" "{{action}}" "{{approve}}"
+
+# Fully converge a group of Arch hosts
+arch-converge group tags="" limit="":
+  {{run_prefix}} scripts/ansible-playbook.sh "ansible/l3/converge.yaml" "{{group}}" "{{tags}}" "{{limit}}"
+
 # Prepare a Proxmox VM template for cloning NixOS VMs
 nixos-vm-template update_stable="yes":
   {{run_prefix}} scripts/nixos/vm-template.sh {{update_stable}}
