@@ -28,16 +28,12 @@ clean:
   {{run_prefix}} scripts/clean.sh
 
 # Runway checks (OS/persona independent)
-l0-runway:
+proxmox-runway:
   {{run_prefix}} scripts/l0/runway.sh
 
 # Prepare a cloud-init seed ISO for use on bare metal Arch installations
 l1-arch-cloud-init host:
   {{run_prefix}} scripts/l1/cloud-init-seed.sh "{{host}}"
-
-# Put a custom, bootable Arch ISO onto Proxmox
-l1-arch-iso:
-  {{run_prefix}} scripts/l1/arch-iso.sh
 
 # Prepare a Proxmox VM template suitable for Arch installations
 l1-arch-template:
@@ -196,6 +192,10 @@ l4-converge-plex:
 l4-converge-jellyfin:
   TAGS=step_docker_jellyfin \
   {{run_prefix}} scripts/converge.sh misery l4
+
+# Put a custom, bootable Arch ISO onto Proxmox
+arch-iso:
+  {{run_prefix}} scripts/l1/arch-iso.sh
 
 # Prepare a Proxmox VM template for cloning NixOS VMs
 nixos-vm-template update_stable="yes":
