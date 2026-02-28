@@ -1,16 +1,16 @@
 locals {
   # Path to this persona's hosts.json spec
-  hosts_json_path = "${path.module}/../../../infra/os/ubuntu/personas/tinker/spec/terraform.json"
+  hosts_json_path = "${path.module}/../../../infra/os/ubuntu/personas/openvpn/spec/hosts.json"
 
   # Logical template refs → manifest JSON files for this persona
   template_manifest_map = {
-    "ubuntu/tinker/stable" = "${path.module}/../../../infra/os/ubuntu/spec/vm-template-stable.json"
+    "ubuntu/openvpn/stable" = "${path.module}/../../../infra/os/ubuntu/spec/vm-template-stable.json"
     # Add canary/etc here later if needed
   }
 }
 
 module "factory" {
-  source = "../modules/common_vm_factory"
+  source = "../../l2/modules/common_vm_factory"
 
   # Spec inputs
   hosts_json_path       = local.hosts_json_path

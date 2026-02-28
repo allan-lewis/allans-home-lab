@@ -211,4 +211,9 @@ nixos-terraform persona action approve="0":
 
 # Fully converge a group of NixOS hosts
 nixos-converge group tags="" limit="":
-  {{run_prefix}} scripts/nixos/full-converge.sh "{{group}}" "{{tags}}" "{{limit}}" 
+  {{run_prefix}} scripts/nixos/full-converge.sh "{{group}}" "{{tags}}" "{{limit}}"
+
+# Apply or destroy Porxmox VMs using Terraform
+ubuntu-terraform persona action approve="0":
+  {{run_prefix}} scripts/terraform.sh "ubuntu" "{{persona}}" "{{action}}" "{{approve}}"
+
