@@ -197,6 +197,10 @@ l4-converge-jellyfin:
 arch-iso:
   {{run_prefix}} scripts/l1/arch-iso.sh
 
+# Prepare a Proxmox VM template suitable for Arch installations
+arch-vm-template:
+  {{run_prefix}} scripts/l1/arch-template.sh packer/l1/arch
+
 # Prepare a Proxmox VM template for cloning NixOS VMs
 nixos-vm-template update_stable="yes":
   {{run_prefix}} scripts/nixos/vm-template.sh {{update_stable}}
@@ -220,3 +224,4 @@ ubuntu-terraform persona action approve="0":
 # Fully converge a group of Ubuntu hosts
 ubuntu-converge group tags="" limit="":
   {{run_prefix}} scripts/ansible-playbook.sh "ansible/l3/converge.yaml" "{{group}}" "{{tags}}" "{{limit}}"
+
