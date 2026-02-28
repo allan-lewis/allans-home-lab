@@ -416,8 +416,8 @@
               tokenFile = "/var/lib/homelab-secrets/doppler/doppler_token";
 
               # Doppler project/config to select for this scope
-              project = "{{ doppler_project }}";
-              dopplerConfig = "{{ doppler_config }}";
+              project = "{{ doppler_project | default('') }}";
+              dopplerConfig = "{{ doppler_config | default('') }}";
             };
 
             networking.firewall.trustedInterfaces =
