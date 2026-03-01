@@ -9,7 +9,7 @@
   vars:
     compose_app_name: authentik
     compose_source_type: url
-    compose_url: "https://docs.goauthentik.io/docker-compose.yml"
+    compose_url: "https://docs.goauthentik.io/compose.yml"
     compose_env:
       AUTHENTIK_TAG: "{{ authentik_version }}"
       COMPOSE_PORT_HTTP: 9180
