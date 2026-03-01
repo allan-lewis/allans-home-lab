@@ -22,7 +22,7 @@ services:
       - TZ={{ lab_tz }}
       - PUID={{ lab_uid }}
       - PGID={{ lab_gid }}
-      - ADVERTISE_IP=http://{{ hostvars['carrie'].ansible_host }}:32400/
+      - ADVERTISE_IP=http://{{ hostvars['misery'].ansible_host }}:32400/
     volumes:
       - {{ managed_host_volumes['plex_config'].local }}:/config
       - {{ managed_host_volumes['plex_transcode'].local }}:/transcode
