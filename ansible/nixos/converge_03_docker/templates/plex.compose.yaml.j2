@@ -4,11 +4,25 @@ services:
     container_name: plex
     restart: unless-stopped
     ports:
+      # Plex Web + main API (this is the big one)
       - "32400:32400/tcp"
+      # Local network discovery (GDM)
+      - "32410:32410/udp"
+      - "32411:32411/udp"
+      - "32412:32412/udp"
+      - "32413:32413/udp"
+      - "32414:32414/udp"
+      # DLNA (only if you actually use DLNA)
+      - "32469:32469/tcp"
+      - "1900:1900/udp"
+      # Optional “remote control / companion” stuff (rarely needed)
+      - "3005:3005/tcp"
+      - "8324:8324/tcp"
     environment:
       - TZ={{ lab_tz }}
       - PUID={{ lab_uid }}
       - PGID={{ lab_gid }}
+      - ADVERTISE_IP=http://{{ hostvars['carrie'].ansible_host }}:32400/
     volumes:
       - {{ managed_host_volumes['plex_config'].local }}:/config
       - {{ managed_host_volumes['plex_transcode'].local }}:/transcode

@@ -81,6 +81,7 @@ nixos_converge_prepare_dirs_all:
   - path: "/etc/allans-home-lab/managed-directories"
   - path: "/run/secrets"
   - path: "/usr/local/sbin"
+  - path: "/etc/allans-home-lab/secrets"
   - path: "/var/lib/homelab-secrets/ssh/root"
   - path: "/home/lab/.dotfiles"
     owner: "lab"
