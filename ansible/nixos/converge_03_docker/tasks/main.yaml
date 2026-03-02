@@ -43,14 +43,15 @@
 
 - name: Render additional templates
   ansible.builtin.template:
-    src: "{{ item.src }}"
-    dest: "{{ item.dest }}"
-    owner: "{{ item.uid | default(0) }}"
-    group: "{{ item.gid | default(0) }}"
-    mode: "{{ item.mode | default('0644') }}"
+    src: "{{ tpl.src }}"
+    dest: "{{ tpl.dest }}"
+    owner: "{{ tpl.uid | default(0) }}"
+    group: "{{ tpl.gid | default(0) }}"
+    mode: "{{ tpl.mode | default('0644') }}"
   loop: "{{ compose_config.compose_extra_templates | default([]) }}"
   loop_control:
-    label: "{{ item.dest }}"
+    loop_var: tpl
+    label: "{{ tpl.dest }}"
   notify: restart compose stack
   tags: [docker]
 
