@@ -1,4 +1,18 @@
 ---
+- name: VARS | Validate required variables are set and non-empty
+  ansible.builtin.fail:
+    msg: >-
+      Required variable '{{ required_var }}' is missing or empty.
+      Ensure it is defined and non-empty in inventory, group_vars, or host_vars
+      before running this play.
+  when: >
+    (lookup('vars', required_var, default='') | string | trim | length) == 0
+  loop: "{{ nixos_required_variables | default([]) }}"
+  loop_control:
+    loop_var: required_var
+    label: "{{ required_var }}"
+  tags: [prepare, prepare_vars]
+
 - name: GROUPS | Ensure that groups exist for rebuild
   become: true
   ansible.builtin.group:

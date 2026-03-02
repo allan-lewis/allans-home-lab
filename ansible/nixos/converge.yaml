@@ -9,7 +9,7 @@
       ansible.builtin.include_role:
         name: converge_00_prepare
       when: converge_nixos | default(false) | bool
-      tags: [prepare, prepare_groups, prepare_dirs, prepare_files, prepare_keys, prepare_dotfiles, prepare_aws, prepare_tailscale, prepare_dump, prepare_doppler]
+      tags: [prepare, prepare_vars, prepare_groups, prepare_dirs, prepare_files, prepare_keys, prepare_dotfiles, prepare_aws, prepare_tailscale, prepare_dump, prepare_doppler]
 
     - name: Update configs and rebuild host(s)
       ansible.builtin.include_role:

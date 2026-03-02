@@ -1,6 +1,9 @@
 ---
 ansible_python_interpreter: /run/current-system/sw/bin/python3
 
+ssh_private_key_b64: "{{ lookup('env', 'SSH_PRIVATE_KEY') | default('', true) }}"
+ssh_public_key_b64:  "{{ lookup('env', 'SSH_PUBLIC_KEY')  | default('', true) }}"
+
 backup_runner_rsync_flags: "-aHAX --numeric-ids --delete-delay --partial --partial-dir=.rsync-partial --human-readable --sparse --mkpath"
 
 converge_nixos: true
@@ -125,3 +128,22 @@ nixos_converge_prepare_keys: >-
   }}
 
 nixos_converge_prepare_keys_all: ["root"]
+
+nixos_required_variables: >-
+  {{
+    (
+      (nixos_required_variables_all    | default([]))
+      +
+      (nixos_required_variables_devops | default([]))
+      +
+      (['postgres_db_password'] if (converge_postgres_dump | default(false) | bool) else [])
+      +
+      (['tailscale_authkey']     if (converge_tailscale     | default(false) | bool) else [])
+    )
+    | unique
+  }}
+
+nixos_required_variables_all:
+  - nixos_dir
+  - ssh_private_key_b64
+  - ssh_public_key_b64

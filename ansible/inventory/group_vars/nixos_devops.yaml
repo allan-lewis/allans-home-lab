@@ -21,3 +21,9 @@ nixos_converge_prepare_dirs_devops:
     mode: "0700"
 
 nixos_converge_prepare_keys_devops: ["lab"]
+
+nixos_required_variables_devops:
+  - aws_default_region
+  - aws_access_key_id
+  - aws_secret_access_key
+  - doppler_service_token
