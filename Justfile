@@ -23,10 +23,6 @@ run_prefix := if doppler == "0" {
 
 tf_base_dir := env_var_or_default("TF_BASE_DIR", "terraform/l2")
 
-# Remove all non-versioned build artifacts and temporary files
-clean:
-  {{run_prefix}} scripts/clean.sh
-
 # Runway checks (OS/persona independent)
 proxmox-runway:
   {{run_prefix}} scripts/l0/runway.sh
@@ -185,6 +181,14 @@ ubuntu-terraform persona action approve="0":
 # Fully converge a group of Ubuntu hosts
 ubuntu-converge group tags="" limit="":
   {{run_prefix}} scripts/ansible-playbook.sh "ansible/l3/converge.yaml" "{{group}}" "{{tags}}" "{{limit}}"
+
+#############################
+#### GENERAL/CROSS-OS #######
+#############################
+
+# Remove all non-versioned build artifacts and temporary files
+clean:
+  {{run_prefix}} scripts/clean.sh
 
 #############################
 #### NIXOS ##################
