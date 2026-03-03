@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Resolve repo root relative to this script
-ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
 mkdir -p artifacts/l0

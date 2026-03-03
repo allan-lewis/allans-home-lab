@@ -23,10 +23,6 @@ run_prefix := if doppler == "0" {
 
 tf_base_dir := env_var_or_default("TF_BASE_DIR", "terraform/l2")
 
-# Runway checks (OS/persona independent)
-proxmox-runway:
-  {{run_prefix}} scripts/l0/runway.sh
-
 # Prepare a cloud-init seed ISO for use on bare metal Arch installations
 l1-arch-cloud-init host:
   {{run_prefix}} scripts/l1/cloud-init-seed.sh "{{host}}"
@@ -154,10 +150,6 @@ l4-converge-cloudflare:
   TAGS=step_docker_cloudflare \
   {{run_prefix}} scripts/converge.sh flagg l4
 
-# Put a custom, bootable Arch ISO onto Proxmox
-arch-iso:
-  {{run_prefix}} scripts/l1/arch-iso.sh
-
 # Prepare a Proxmox VM template suitable for Arch installations
 arch-vm-template:
   {{run_prefix}} scripts/l1/arch-template.sh packer/l1/arch
@@ -190,13 +182,25 @@ ubuntu-converge group tags="" limit="":
 clean:
   {{run_prefix}} scripts/clean.sh
 
+# Runway checks (OS/persona independent)
+proxmox-runway:
+  {{run_prefix}} scripts/proxmox-runway.sh
+
+#############################
+#### ARCH ###################
+#############################
+
+# Put a custom, bootable Arch ISO onto Proxmox
+arch-iso:
+  {{run_prefix}} scripts/arch-iso.sh
+
 #############################
 #### NIXOS ##################
 #############################
 
 # Prepare a Proxmox VM template for cloning NixOS VMs
 nixos-vm-template update_stable="yes":
-  {{run_prefix}} scripts/nixos/vm-template.sh {{update_stable}}
+  {{run_prefix}} scripts/nixos-vm-template.sh {{update_stable}}
 
 # Apply or detroy Proxmox VM(s) using Terraform
 nixos-terraform persona action approve="0":
@@ -229,3 +233,8 @@ nixos-converge-trilium:
 # Converge only the Docker Vaultwarden application
 nixos-converge-vaultwarden:
   {{run_prefix}} scripts/ansible-playbook.sh "ansible/nixos/converge.yaml" "carrie" "docker" "" "nixos_docker_services=vaultwarden"
+
+#############################
+#### UBUNTU #################
+#############################
+
