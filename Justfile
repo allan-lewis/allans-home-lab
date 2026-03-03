@@ -143,26 +143,6 @@ l4-converge-authentik:
   TAGS=step_docker_authentik \
   {{run_prefix}} scripts/converge.sh flagg l4
 
-# Full converge of Immich
-l4-converge-immich:
-  TAGS=step_docker_immich \
-  {{run_prefix}} scripts/converge.sh misery l4
-
-# Full converge of Homepage
-l4-converge-homepage:
-  TAGS=step_docker_homepage_all \
-  {{run_prefix}} scripts/converge.sh carrie l4
-
-# Quick converge of Homepage (just config)
-l4-converge-homepage-config:
-  TAGS=step_docker_homepage \
-  {{run_prefix}} scripts/converge.sh carrie l4
-
-# Full converge of Vaultwarden
-l4-converge-vaultwarden:
-  TAGS=step_docker_vaultwarden \
-  {{run_prefix}} scripts/converge.sh carrie l4
-
 # Full converge of Twingate
 l4-converge-twingate:
   TAGS=step_docker_twingate \
@@ -173,25 +153,10 @@ l4-converge-observability:
   TAGS=step_docker_observability \
   {{run_prefix}} scripts/converge.sh flagg l4
 
-# Full converge of Trilium
-l4-converge-trilium:
-  TAGS=step_docker_trilium \
-  {{run_prefix}} scripts/converge.sh carrie l4
-
 # Full converge of Cloudflare
 l4-converge-cloudflare:
   TAGS=step_docker_cloudflare \
   {{run_prefix}} scripts/converge.sh flagg l4
-
-# Full converge of Plex
-l4-converge-plex:
-  TAGS=step_docker_plex \
-  {{run_prefix}} scripts/converge.sh misery l4
-
-# Full converge of Jellyfin
-l4-converge-jellyfin:
-  TAGS=step_docker_jellyfin \
-  {{run_prefix}} scripts/converge.sh misery l4
 
 # Put a custom, bootable Arch ISO onto Proxmox
 arch-iso:
@@ -209,18 +174,6 @@ arch-terraform persona action approve="0":
 arch-converge group tags="" limit="":
   {{run_prefix}} scripts/ansible-playbook.sh "ansible/l3/converge.yaml" "{{group}}" "{{tags}}" "{{limit}}"
 
-# Prepare a Proxmox VM template for cloning NixOS VMs
-nixos-vm-template update_stable="yes":
-  {{run_prefix}} scripts/nixos/vm-template.sh {{update_stable}}
-
-# Apply or detroy Proxmox VM(s) using Terraform
-nixos-terraform persona action approve="0":
-  {{run_prefix}} scripts/terraform.sh "nixos" "{{persona}}" "{{action}}" "{{approve}}"
-
-# Fully converge a group of NixOS hosts
-nixos-converge group tags="" limit="":
-  {{run_prefix}} scripts/ansible-playbook.sh "ansible/nixos/converge.yaml" "{{group}}" "{{tags}}" "{{limit}}"
-
 # Prepare a Proxmox VM template suitable for Ubuntu installations
 ubuntu-vm-template:
   {{run_prefix}} scripts/l1/ubuntu-template.sh
@@ -233,3 +186,42 @@ ubuntu-terraform persona action approve="0":
 ubuntu-converge group tags="" limit="":
   {{run_prefix}} scripts/ansible-playbook.sh "ansible/l3/converge.yaml" "{{group}}" "{{tags}}" "{{limit}}"
 
+#############################
+#### NIXOS ##################
+#############################
+
+# Prepare a Proxmox VM template for cloning NixOS VMs
+nixos-vm-template update_stable="yes":
+  {{run_prefix}} scripts/nixos/vm-template.sh {{update_stable}}
+
+# Apply or detroy Proxmox VM(s) using Terraform
+nixos-terraform persona action approve="0":
+  {{run_prefix}} scripts/terraform.sh "nixos" "{{persona}}" "{{action}}" "{{approve}}"
+
+# Fully converge a group of NixOS hosts
+nixos-converge group tags="" limit="":
+  {{run_prefix}} scripts/ansible-playbook.sh "ansible/nixos/converge.yaml" "{{group}}" "{{tags}}" "{{limit}}"
+
+# Converge only the Docker Homepage application
+nixos-converge-homepage:
+  {{run_prefix}} scripts/ansible-playbook.sh "ansible/nixos/converge.yaml" "carrie" "docker" "" "nixos_docker_services=homepage"
+
+# Converge only the Docker Immich application
+nixos-converge-immich:
+  {{run_prefix}} scripts/ansible-playbook.sh "ansible/nixos/converge.yaml" "misery" "docker" "" "nixos_docker_services=immich"
+
+# Converge only the Docker Jellyfin application
+nixos-converge-jellyfin:
+  {{run_prefix}} scripts/ansible-playbook.sh "ansible/nixos/converge.yaml" "misery" "docker" "" "nixos_docker_services=jellyfin"
+
+# Converge only the Docker Plex application
+nixos-converge-plex:
+  {{run_prefix}} scripts/ansible-playbook.sh "ansible/nixos/converge.yaml" "misery" "docker" "" "nixos_docker_services=plex"
+
+# Converge only the Docker Trilium application
+nixos-converge-trilium:
+  {{run_prefix}} scripts/ansible-playbook.sh "ansible/nixos/converge.yaml" "carrie" "docker" "" "nixos_docker_services=trilium"
+
+# Converge only the Docker Vaultwarden application
+nixos-converge-vaultwarden:
+  {{run_prefix}} scripts/ansible-playbook.sh "ansible/nixos/converge.yaml" "carrie" "docker" "" "nixos_docker_services=vaultwarden"
