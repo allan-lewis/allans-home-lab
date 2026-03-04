@@ -27,7 +27,7 @@ set -euo pipefail
 UBUNTU_CLOUD_IMAGE_URL="${UBUNTU_CLOUD_IMAGE_URL:-https://cloud-images.ubuntu.com/noble/current/noble-server-cloudimg-amd64.img}"
 # If name not provided, include date so multiple runs don't collide
 UBUNTU_TEMPLATE_NAME="${UBUNTU_TEMPLATE_NAME:-ubuntu-noble-$(date -u +"%Y%m%d")}"
-UPDATE_STABLE="${UPDATE_STABLE:-yes}"
+UPDATE_STABLE="${1:-}"
 
 REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 BUILD_ROOT="${REPO_ROOT}/.template-build-ubuntu/ubuntu"
@@ -38,11 +38,12 @@ IMAGE_PATH="${BUILD_ROOT}/${IMAGE_NAME}"
 SHA_PATH="${BUILD_ROOT}/${IMAGE_NAME}.sha256"
 
 echo "=== Ubuntu cloud image template build ==="
-echo "Ubuntu image URL : ${UBUNTU_CLOUD_IMAGE_URL}"
-echo "Local image path : ${IMAGE_PATH}"
-echo "Template name    : ${UBUNTU_TEMPLATE_NAME}"
-echo "Proxmox node     : ${PVE_NODE}"
-echo "Proxmox storage  : ${PVE_STORAGE_VM}"
+echo "Ubuntu image URL    : ${UBUNTU_CLOUD_IMAGE_URL}"
+echo "Local image path    : ${IMAGE_PATH}"
+echo "Template name       : ${UBUNTU_TEMPLATE_NAME}"
+echo "Proxmox node        : ${PVE_NODE}"
+echo "Proxmox storage     : ${PVE_STORAGE_VM}"
+echo "Update stable link  : ${UPDATE_STABLE}"
 
 echo
 echo "==> Downloading Ubuntu cloud image (if needed)..."

@@ -140,18 +140,6 @@ l4-converge-cloudflare:
   TAGS=step_docker_cloudflare \
   {{run_prefix}} scripts/converge.sh flagg l4
 
-# Prepare a Proxmox VM template suitable for Ubuntu installations
-ubuntu-vm-template:
-  {{run_prefix}} scripts/l1/ubuntu-template.sh
-
-# Apply or destroy Porxmox VMs using Terraform
-ubuntu-terraform persona action approve="0":
-  {{run_prefix}} scripts/terraform.sh "ubuntu" "{{persona}}" "{{action}}" "{{approve}}"
-
-# Fully converge a group of Ubuntu hosts
-ubuntu-converge group tags="" limit="":
-  {{run_prefix}} scripts/ansible-playbook.sh "ansible/l3/converge.yaml" "{{group}}" "{{tags}}" "{{limit}}"
-
 #############################
 #### GENERAL/CROSS-OS #######
 #############################
@@ -182,7 +170,7 @@ arch-terraform persona action approve="0":
 
 # Fully converge a group of Arch hosts
 arch-converge group tags="" limit="":
-  {{run_prefix}} scripts/ansible-playbook.sh "ansible/l3/converge.yaml" "{{group}}" "{{tags}}" "{{limit}}"
+  {{run_prefix}} scripts/ansible-playbook.sh "ansible/linux/converge.yaml" "{{group}}" "{{tags}}" "{{limit}}"
 
 #############################
 #### HAOS ###################
@@ -244,3 +232,14 @@ truenas-terraform action approve="0":
 #### UBUNTU #################
 #############################
 
+# Prepare a Proxmox VM template suitable for Ubuntu installations
+ubuntu-vm-template update_stable="yes":
+  {{run_prefix}} scripts/ubuntu-vm-template.sh {{update_stable}}
+
+# Apply or destroy Ubuntu Proxmox VM(s) using Terraform
+ubuntu-terraform persona action approve="0":
+  {{run_prefix}} scripts/terraform.sh "ubuntu" "{{persona}}" "{{action}}" "{{approve}}"
+
+# Fully converge a group of Ubuntu hosts
+ubuntu-converge group tags="" limit="":
+  {{run_prefix}} scripts/ansible-playbook.sh "ansible/linux/converge.yaml" "{{group}}" "{{tags}}" "{{limit}}"
