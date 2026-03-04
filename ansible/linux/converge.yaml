@@ -1,1 +1,66 @@
 ---
+- name: Full Linux host convergence for a group of hosts
+  hosts: "{{ converge_group }}"
+  gather_facts: true
+  become: true
+
+  tasks:
+    # - TODO: Make this a real check for all hosts
+    - name: Ping host to verify connectivity
+      ansible.builtin.ping:
+      when: converge_arch or converge_ubuntu
+
+    # - name: L3 | Arch | sanity
+    # - name: L3 | Arch | base
+    # - name: L3 | Arch | harden
+    # - name: L3 | Arch | services
+    # - name: L3 | Arch | AUR
+    # - name: L3 | Arch | nvidia
+    # - name: L3 | Arch | desktop
+    # - name: L3 | Arch | Reboot
+    # - name: L3 | Arch | docker
+
+    # - name: L3 | Ubuntu | base
+    # - name: L3 | Ubuntu | harden
+    # - name: L3 | Ubuntu | docker
+    # - name: L3 | Ubuntu | openvpn
+
+    # - name: L3 | All | users
+    # - name: L3 | All | shell
+    # - name: L3 | All | ssh keys
+    # - name: L3 | All | metrics wrapper
+    # - name: L3 | All | backup runner
+    # - name: L3 | All | s3 mirror
+    # - name: L3 | All | postgres dump
+    # - name: L3 | All | node exporter
+    # - name: L3 | All | devops
+    # - name: L3 | All | docker monitoring
+    # - name: L3 | All | tailscale client
+
+    # - name: L4 | Arch | desktop
+    # - name: L4 | Ubuntu | openvpn
+    # - name: L4 | All | restore
+    # - name: L4 | All | backups
+    # - name: L4 | All | devops
+    # - name: L4 | All | s3 mirror
+    # - name: L4 | All | postgres dump
+    # - name: L4 | All | docker it tools
+    # - name: L4 | All | docker no geeks brewing
+    # - name: L4 | All | docker memos
+    # - name: L4 | All | docker portainer
+    # - name: L4 | All | docker nginx
+    # - name: L4 | All | docker vaultwarden
+    # - name: L4 | All | docker tautulli
+    # - name: L4 | All | docker authentik
+    # - name: L4 | All | docker traefik
+    # - name: L4 | All | docker plex
+    # - name: L4 | All | docker jellyfin
+    # - name: L4 | All | docker immich
+    # - name: L4 | All | docker media acquisition
+    # - name: L4 | All | docker twingate
+    # - name: L4 | All | docker cloudflare
+    # - name: L4 | All | docker pihole
+    # - name: L4 | All | docker gatus
+    # - name: L4 | All | docker homepage
+    # - name: L4 | All | observability
+    # - name: L4 | All | docker trilium
