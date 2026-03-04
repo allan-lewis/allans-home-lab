@@ -12,10 +12,12 @@ set -euo pipefail
 #   and optionally updates stable symlink (UPDATE_STABLE=yes)
 #
 
+UPDATE_STABLE="$1"
+
 # --- Resolve repo root -------------------------------------------------------
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ROOT_DIR="$(cd "${SCRIPT_DIR}/../.." && pwd)"
+ROOT_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
 cd "${ROOT_DIR}"
 
 # --- Args --------------------------------------------------------------------
@@ -48,8 +50,7 @@ if ! command -v jq >/dev/null 2>&1; then
   exit 1
 fi
 
-SKIP_BUILD="${SKIP_BUILD:-0}"          # 0 = run packer, 1 = skip
-UPDATE_STABLE="${UPDATE_STABLE:-yes}"
+SKIP_BUILD="${SKIP_BUILD:-0}" # 0 = run packer, 1 = skip
 
 mkdir -p artifacts/l1/l1_images
 
@@ -76,13 +77,13 @@ if [[ "${SKIP_BUILD}" != "1" ]]; then
     // (.builds[-1].artifact_id)' "${manifest}")"
 
   case "${vmid}" in
-    ""|*[!0-9]*)
-      echo "Could not parse numeric VMID from manifest (got: ${vmid})" >&2
-      exit 1
-      ;;
+  "" | *[!0-9]*)
+    echo "Could not parse numeric VMID from manifest (got: ${vmid})" >&2
+    exit 1
+    ;;
   esac
 
-  printf "%s\n" "${vmid}" > artifacts/l1/l1_vmid
+  printf "%s\n" "${vmid}" >artifacts/l1/l1_vmid
   echo "Captured VMID=${vmid}"
 
 else
@@ -91,13 +92,13 @@ else
     echo "artifacts/l1/l1_vmid not found; cannot skip build without existing VMID" >&2
     exit 1
   fi
-  vmid="$(< artifacts/l1/l1_vmid)"
+  vmid="$(<artifacts/l1/l1_vmid)"
 
   case "${vmid}" in
-    ""|*[!0-9]*)
-      echo "Existing VMID in artifacts/l1/l1_vmid is not numeric (got: ${vmid})" >&2
-      exit 1
-      ;;
+  "" | *[!0-9]*)
+    echo "Existing VMID in artifacts/l1/l1_vmid is not numeric (got: ${vmid})" >&2
+    exit 1
+    ;;
   esac
 
   echo "Reusing VMID=${vmid}"
@@ -115,7 +116,7 @@ echo "=== [L1] Fetching Proxmox VM config (VMID=${vmid}) ==="
 
 resp="$(curl -fsS -H "${AUTH_HEADER}" "${HOST}/nodes/${PVE_NODE}/qemu/${vmid}/config")"
 
-echo "${resp}" | jq -S . > "${raw_out}"
+echo "${resp}" | jq -S . >"${raw_out}"
 
 ctime="$(
   echo "${resp}" | jq -r '
@@ -145,7 +146,7 @@ echo "${resp}" | jq -S \
        created_at: $created_at,
        description: .description
      }' \
-  > "${norm_out}"
+  >"${norm_out}"
 
 echo "Wrote ${raw_out}"
 echo "Wrote ${norm_out}"

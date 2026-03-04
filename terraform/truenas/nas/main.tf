@@ -10,7 +10,7 @@ locals {
 }
 
 module "factory" {
-  source = "../modules/common_vm_factory"
+  source = "../../l2/modules/common_vm_factory"
 
   # Spec inputs
   hosts_json_path       = local.hosts_json_path

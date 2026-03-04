@@ -55,16 +55,6 @@ l1-truenas-capture vmid:
 l1-truenas-template:
   {{run_prefix}} scripts/l1/appliance-template.sh truenas
 
-# Apply Terraform resources for an OS/persona pair
-l2-apply tfdir apply_flag="0":
-  APPLY="{{apply_flag}}" \
-  {{run_prefix}} scripts/l2/terraform.sh "{{tf_base_dir}}/{{tfdir}}" apply
-
-# Destroy Terraform resources for an OS/persona pair
-l2-destroy tfdir apply_flag="0":
-  APPLY="{{apply_flag}}" \
-  {{run_prefix}} scripts/l2/terraform.sh "{{tf_base_dir}}/{{tfdir}}" destroy
-
 # Converge a group of hosts (capabilities)
 l3-converge group tags="":
   TAGS="{{tags}}" \
@@ -150,18 +140,6 @@ l4-converge-cloudflare:
   TAGS=step_docker_cloudflare \
   {{run_prefix}} scripts/converge.sh flagg l4
 
-# Prepare a Proxmox VM template suitable for Arch installations
-arch-vm-template:
-  {{run_prefix}} scripts/l1/arch-template.sh packer/l1/arch
-
-# Apply or destroy Proxmox VMs using Terraform
-arch-terraform persona action approve="0":
-  {{run_prefix}} scripts/terraform.sh "arch" "{{persona}}" "{{action}}" "{{approve}}"
-
-# Fully converge a group of Arch hosts
-arch-converge group tags="" limit="":
-  {{run_prefix}} scripts/ansible-playbook.sh "ansible/l3/converge.yaml" "{{group}}" "{{tags}}" "{{limit}}"
-
 # Prepare a Proxmox VM template suitable for Ubuntu installations
 ubuntu-vm-template:
   {{run_prefix}} scripts/l1/ubuntu-template.sh
@@ -191,8 +169,28 @@ proxmox-runway:
 #############################
 
 # Put a custom, bootable Arch ISO onto Proxmox
-arch-iso:
-  {{run_prefix}} scripts/arch-iso.sh
+arch-iso update_stable="yes":
+  {{run_prefix}} scripts/arch-iso.sh "{{update_stable}}"
+
+# Prepare a Proxmox VM template suitable for Arch installations
+arch-vm-template update_stable="yes":
+  {{run_prefix}} scripts/arch-vm-template.sh packer/arch "{{update_stable}}"
+
+# Apply or destroy Arch Proxmox VMs using Terraform
+arch-terraform persona action approve="0":
+  {{run_prefix}} scripts/terraform.sh "arch" "{{persona}}" "{{action}}" "{{approve}}"
+
+# Fully converge a group of Arch hosts
+arch-converge group tags="" limit="":
+  {{run_prefix}} scripts/ansible-playbook.sh "ansible/l3/converge.yaml" "{{group}}" "{{tags}}" "{{limit}}"
+
+#############################
+#### HAOS ###################
+#############################
+
+# Apply or detroy HAOS Proxmox VM(s) using Terraform
+haos-terraform action approve="0":
+  {{run_prefix}} scripts/terraform.sh "haos" "homeassistant" "{{action}}" "{{approve}}"
 
 #############################
 #### NIXOS ##################
@@ -202,7 +200,7 @@ arch-iso:
 nixos-vm-template update_stable="yes":
   {{run_prefix}} scripts/nixos-vm-template.sh {{update_stable}}
 
-# Apply or detroy Proxmox VM(s) using Terraform
+# Apply or detroy NixOS Proxmox VM(s) using Terraform
 nixos-terraform persona action approve="0":
   {{run_prefix}} scripts/terraform.sh "nixos" "{{persona}}" "{{action}}" "{{approve}}"
 
@@ -233,6 +231,14 @@ nixos-converge-trilium:
 # Converge only the Docker Vaultwarden application
 nixos-converge-vaultwarden:
   {{run_prefix}} scripts/ansible-playbook.sh "ansible/nixos/converge.yaml" "carrie" "docker" "" "nixos_docker_services=vaultwarden"
+
+#############################
+#### TRUENAS ################
+#############################
+
+# Apply or detroy TrueNAS Proxmox VM(s) using Terraform
+truenas-terraform action approve="0":
+  {{run_prefix}} scripts/terraform.sh "truenas" "nas" "{{action}}" "{{approve}}"
 
 #############################
 #### UBUNTU #################

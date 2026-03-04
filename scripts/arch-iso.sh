@@ -3,9 +3,11 @@ set -euo pipefail
 
 echo "Host: $(hostname)"
 echo "User: $(whoami)"
+echo "Update Stable Link: $1"
 
+UPDATE_STABLE="$1"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
+REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
 cd "${REPO_ROOT}"
 
@@ -119,7 +121,7 @@ STABLE_LINK="${SPEC_DIR}/iso-manifest-stable.json"
 mkdir -p "$ARTIFACTS_DIR"
 mkdir -p "$SPEC_DIR"
 
-cat > "$MANIFEST_PATH" << 'EOF'
+cat >"$MANIFEST_PATH" <<'EOF'
 {
   "iso_name": "__ISO_NAME__",
   "built_at": "__BUILT_AT__",
