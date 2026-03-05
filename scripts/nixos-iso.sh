@@ -187,7 +187,7 @@ cat > "$OUT/installer.nix" <<'NIX'
       ls -l /dev/disk/by-path 2>/dev/null | sed -n '1,200p' || true
       echo
 
-      # Derive expected partition paths without using bash ${var} (to avoid Nix interpolation landmines)
+      # Derive expected partition paths without using bash brace expansion
       if [[ "$DISK" =~ nvme ]]; then
         EFI="$DISK"p1
         ROOT="$DISK"p2
