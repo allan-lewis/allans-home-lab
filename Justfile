@@ -27,10 +27,6 @@ tf_base_dir := env_var_or_default("TF_BASE_DIR", "terraform/l2")
 l1-arch-cloud-init host:
   {{run_prefix}} scripts/l1/cloud-init-seed.sh "{{host}}"
 
-# Prepare a Proxmox VM template suitable for Arch installations
-l1-arch-template:
-  {{run_prefix}} scripts/l1/arch-template.sh packer/l1/arch
-
 # Write cloud-init ISOs to removable USB drives
 l1-cloud-init-usbs os_iso ci_iso:
   {{run_prefix}} scripts/l1/write-arch-usbs.sh "{{os_iso}}" "{{ci_iso}}"
