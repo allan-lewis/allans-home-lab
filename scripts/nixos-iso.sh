@@ -373,7 +373,15 @@ EOF
 
 echo "Wrote installer files to: $OUT"
 echo "Derived gateway/DNS: $GW"
+
 echo
-echo "Next (run these):"
-echo "  cd $OUT"
-echo '  nix build "path:$(pwd)#iso"'
+echo "Building ISO..."
+(
+  cd "$OUT"
+  nix build "path:$(pwd)#iso"
+)
+
+echo
+echo "ISO build complete."
+echo "Location:"
+echo "  $OUT/result/iso/"
