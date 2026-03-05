@@ -4,12 +4,15 @@ set -euo pipefail
 # scripts/nixos-iso.sh
 #
 # Generate files to build a custom NixOS autoinstall ISO for a bare-metal host.
-# - Installer boots, prints disk info, requires 30s confirmation, wipes disk, installs NixOS, reboots.
-# - Installed system uses static IPv4 on a specified interface.
 #
-# Build (after generation):
-#   cd <outdir>
-#   nix build .#iso
+# What the ISO does when booted:
+# - Prints disk info
+# - Waits 30s for confirmation
+# - If it detects an existing NixOS install on the target disk, it requires a stronger confirmation
+# - Wipes disk, partitions GPT (EFI + root), installs minimal NixOS bootstrap, reboots
+#
+# Build command (run INSIDE the generated directory):
+#   nix build "path:$(pwd)#iso"
 #
 # Required env:
 #   SSH_PUBLIC_KEY="ssh-ed25519 AAAA..."
@@ -92,7 +95,7 @@ mkdir -p "$OUT"
 
 # Write installer.nix WITHOUT bash expanding Nix ${...}
 cat > "$OUT/installer.nix" <<'NIX'
-{ modulesPath, pkgs, ... }:
+{ lib, modulesPath, pkgs, ... }:
 
 {
   imports = [
@@ -103,7 +106,10 @@ cat > "$OUT/installer.nix" <<'NIX'
   # Installer environment
   #
   services.openssh.enable = true;
-  networking.useDHCP = true;
+
+  # Minimal ISO module stack may set this false (e.g. via NetworkManager).
+  # Force DHCP in installer so it’s reachable.
+  networking.useDHCP = lib.mkForce true;
 
   users.users.__USER__ = {
     isNormalUser = true;
@@ -124,12 +130,17 @@ cat > "$OUT/installer.nix" <<'NIX'
 
   #
   # Auto-install service (DESTROYS DISK CONTENTS).
-  # Adds a 30-second confirmation window and prints disk info.
+  # - prints disk info
+  # - 30s confirmation
+  # - guard: if an existing NixOS install is detected on target disk, requires stronger confirmation
   #
   systemd.services.autoinstall = {
     description = "Automatic NixOS install (requires confirmation) to __DISK__";
     wantedBy = [ "multi-user.target" ];
+
     after = [ "network-online.target" ];
+    wants = [ "network-online.target" ];
+
     serviceConfig = {
       Type = "oneshot";
       StandardOutput = "journal+console";
@@ -176,21 +187,57 @@ cat > "$OUT/installer.nix" <<'NIX'
       ls -l /dev/disk/by-path 2>/dev/null | sed -n '1,200p' || true
       echo
 
+      # Derive expected partition paths without using bash ${var} (to avoid Nix interpolation landmines)
+      if [[ "$DISK" =~ nvme ]]; then
+        EFI="$DISK"p1
+        ROOT="$DISK"p2
+      else
+        EFI="$DISK"1
+        ROOT="$DISK"2
+      fi
+
+      # Guard: If ROOT looks like it already contains a NixOS install, warn and require a stronger confirmation.
+      existing_nixos=0
+      if ${pkgs.util-linux}/bin/blkid "$ROOT" >/dev/null 2>&1; then
+        mkdir -p /mnt-check
+        if mount -o ro "$ROOT" /mnt-check >/dev/null 2>&1; then
+          if [[ -e /mnt-check/etc/NIXOS ]]; then
+            existing_nixos=1
+          fi
+          umount /mnt-check >/dev/null 2>&1 || true
+        fi
+      fi
+
       echo "============================================================"
       echo "CONFIRMATION REQUIRED"
       echo "============================================================"
-      echo "Type exactly: WIPE $DISK"
-      echo "You have 30 seconds..."
-      echo
 
-      if ! read -r -t 30 reply; then
-        echo "Timed out. Aborting install."
-        exit 1
-      fi
-
-      if [[ "$reply" != "WIPE $DISK" ]]; then
-        echo "Confirmation mismatch ('$reply'). Aborting install."
-        exit 1
+      if [[ "$existing_nixos" -eq 1 ]]; then
+        echo "GUARD: Existing NixOS install detected on $ROOT (found /etc/NIXOS)."
+        echo "To proceed, type exactly:"
+        echo "  WIPE $DISK YES-I-AM-SURE"
+        echo "You have 30 seconds..."
+        echo
+        if ! read -r -t 30 reply; then
+          echo "Timed out. Aborting install."
+          exit 1
+        fi
+        if [[ "$reply" != "WIPE $DISK YES-I-AM-SURE" ]]; then
+          echo "Confirmation mismatch ('$reply'). Aborting install."
+          exit 1
+        fi
+      else
+        echo "Type exactly: WIPE $DISK"
+        echo "You have 30 seconds..."
+        echo
+        if ! read -r -t 30 reply; then
+          echo "Timed out. Aborting install."
+          exit 1
+        fi
+        if [[ "$reply" != "WIPE $DISK" ]]; then
+          echo "Confirmation mismatch ('$reply'). Aborting install."
+          exit 1
+        fi
       fi
 
       echo
@@ -202,11 +249,14 @@ cat > "$OUT/installer.nix" <<'NIX'
       ${pkgs.parted}/bin/parted "$DISK" -- set 1 esp on
       ${pkgs.parted}/bin/parted "$DISK" -- mkpart primary ext4 512MiB 100%
 
-      partprefix=""
-      if [[ "$DISK" =~ nvme ]]; then partprefix="p"; fi
-
-      EFI="$DISK${partprefix}1"
-      ROOT="$DISK${partprefix}2"
+      # Recompute partition paths (same rule as above)
+      if [[ "$DISK" =~ nvme ]]; then
+        EFI="$DISK"p1
+        ROOT="$DISK"p2
+      else
+        EFI="$DISK"1
+        ROOT="$DISK"2
+      fi
 
       ${pkgs.dosfstools}/bin/mkfs.fat -F32 -n boot "$EFI"
       ${pkgs.e2fsprogs}/bin/mkfs.ext4 -F -L nixos "$ROOT"
@@ -217,6 +267,10 @@ cat > "$OUT/installer.nix" <<'NIX'
 
       ${pkgs.nixos-install-tools}/bin/nixos-generate-config --root /mnt
 
+      # Minimal bootstrap config on the installed system:
+      # - static IP for predictable access
+      # - operator user + ssh key
+      # - ssh enabled
       cat > /mnt/etc/nixos/configuration.nix <<'NIXCONF'
 { pkgs, ... }:
 
@@ -256,7 +310,7 @@ NIXCONF
 }
 NIX
 
-# Substitute placeholders (portable; avoids bash interpreting Nix ${...})
+# Substitute placeholders
 tmp="$(mktemp)"
 sed \
   -e "s|__HOSTNAME__|$HOSTNAME|g" \
@@ -272,7 +326,7 @@ sed \
   "$OUT/installer.nix" > "$tmp"
 mv "$tmp" "$OUT/installer.nix"
 
-# flake.nix (safe to template normally)
+# flake.nix
 cat > "$OUT/flake.nix" <<EOF
 {
   description = "Autoinstall NixOS ISO (bare metal bootstrap)";
@@ -292,6 +346,7 @@ cat > "$OUT/flake.nix" <<EOF
 }
 EOF
 
+# README
 cat > "$OUT/README.md" <<EOF
 # Autoinstall ISO (bare metal bootstrap)
 
@@ -304,14 +359,13 @@ Generated for:
 - dns:      ${DNS}  (derived: same as gw)
 - user:     ${USER_NAME}
 
-Build ISO:
-  cd $(basename "$OUT")
-  nix build "path:$(pwd)#iso"
+Build ISO (run inside this directory):
+  nix build "path:\$(pwd)#iso"
 
 Safety:
-- On boot, prints disk info and requires interactive confirmation:
-    Type exactly:  WIPE ${DISK}
-  within 30 seconds, or it aborts.
+- On boot, prints disk info and requires interactive confirmation within 30 seconds.
+- Guard: if an existing NixOS install is detected on the target disk, confirmation is stricter:
+    WIPE ${DISK} YES-I-AM-SURE
 
 SSH key:
 - Embedded at generation time from env var SSH_PUBLIC_KEY
@@ -319,6 +373,7 @@ EOF
 
 echo "Wrote installer files to: $OUT"
 echo "Derived gateway/DNS: $GW"
-echo "Next:"
+echo
+echo "Next (run these):"
 echo "  cd $OUT"
-echo "  nix build "path:$(pwd)#iso""
+echo '  nix build "path:$(pwd)#iso"'
