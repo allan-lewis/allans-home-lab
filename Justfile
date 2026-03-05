@@ -169,6 +169,15 @@ haos-vm-template update_stable="yes":
 #### NIXOS ##################
 #############################
 
+# Prepare a custom bootable ISO for installing NixOS on a bare metal VM
+nixos-iso hostname disk iface ip:
+  {{run_prefix}} scripts/nixos-iso.sh \
+    --out artifacts/nix-iso/{{hostname}} \
+    --hostname {{hostname}} \
+    --disk {{disk}} \
+    --iface {{iface}} \
+    --ip {{ip}}
+
 # Prepare a Proxmox VM template for cloning NixOS VMs
 nixos-vm-template update_stable="yes":
   {{run_prefix}} scripts/nixos-vm-template.sh {{update_stable}}
