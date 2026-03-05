@@ -24,7 +24,8 @@ set -euo pipefail
 #   TMPDIR               default: /home/lab/restore-template
 #   DESCRIPTION          overrides description in generated template manifest
 
-OS="${1:?Usage: $0 <os>}"
+OS="${1:?Usage: $0 <os> [update_stable]}"
+UPDATE_STABLE="${2:-yes}"
 
 need_cmd() { command -v "$1" >/dev/null 2>&1 || {
   echo "ERROR: missing required command: $1" >&2
@@ -47,7 +48,6 @@ repo_root="$(
 os_root="${repo_root}/infra/os/${OS}"
 
 PROXMOX_NODE="${PVE_SSH_IP}"
-UPDATE_STABLE="${UPDATE_STABLE:-yes}"
 
 # Allow override *under* infra/os/<os>/
 CAPTURE_MANIFEST_REL="${CAPTURE_MANIFEST_REL:-spec/disk-capture-stable.json}"
@@ -106,7 +106,7 @@ REMOTE="${PROXMOX_USER}@${PROXMOX_NODE}"
 timestamp_day() { date +"%Y%m%d"; }
 
 echo "==> Restore-to-template (from disk capture manifest)"
-echo "==> OS:                ${OS}"
+echo "==> OS:                 ${OS}"
 echo "==> Capture manifest:   ${capture_manifest}"
 echo "==> Capture created_at: ${created_at:-<unknown>}"
 echo "==> Capture vmid:       ${capture_vmid:-<unknown>}"
@@ -114,6 +114,7 @@ echo "==> Proxmox node:       ${PROXMOX_NODE}"
 echo "==> Storage:            ${STORAGE}"
 echo "==> S3 URI:             ${s3_uri}"
 echo "==> SSH opts:           ${PROXMOX_SSH_OPTS}"
+echo "==> Update stable:      ${UPDATE_STABLE}"
 echo
 
 # 1) Determine local filename from s3_uri

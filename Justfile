@@ -41,19 +41,11 @@ l1-haos-capture vmid:
   S3_PREFIX=proxmox-images \
   {{run_prefix}} scripts/l1/appliance-capture.sh haos "{{vmid}}"
 
-# Prepare a Proxmox VM template suitable for HAOS installations
-l1-haos-template:
-  {{run_prefix}} scripts/l1/appliance-template.sh haos
-
 # Export a TrueNAS Proxmox VM's boot disk to an S3 bucket
 l1-truenas-capture vmid:
   S3_BUCKET=gitops-homelab-orchestrator-disks \
   S3_PREFIX=proxmox-images \
   {{run_prefix}} scripts/l1/appliance-capture.sh truenas "{{vmid}}"
-
-# Prepare a Proxmox VM template suitable for TrueNAS installations
-l1-truenas-template:
-  {{run_prefix}} scripts/l1/appliance-template.sh truenas
 
 # Converge a group of hosts (capabilities)
 l3-converge group tags="":
@@ -180,6 +172,10 @@ arch-converge group tags="" limit="":
 haos-terraform action approve="0":
   {{run_prefix}} scripts/terraform.sh "haos" "homeassistant" "{{action}}" "{{approve}}"
 
+# Prepare a Proxmox VM template for cloning HAOS VMs
+haos-vm-template update_stable="yes":
+  {{run_prefix}} scripts/appliance-vm-template.sh haos {{update_stable}}
+
 #############################
 #### NIXOS ##################
 #############################
@@ -227,6 +223,10 @@ nixos-converge-vaultwarden:
 # Apply or detroy TrueNAS Proxmox VM(s) using Terraform
 truenas-terraform action approve="0":
   {{run_prefix}} scripts/terraform.sh "truenas" "nas" "{{action}}" "{{approve}}"
+
+# Prepare a Proxmox VM template for cloning TrueNAS VMs
+truenas-vm-template update_stable="yes":
+  {{run_prefix}} scripts/appliance-vm-template.sh truenas {{update_stable}}
 
 #############################
 #### UBUNTU #################
