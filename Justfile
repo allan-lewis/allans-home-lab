@@ -52,23 +52,9 @@ l3-converge group tags="":
   TAGS="{{tags}}" \
   {{run_prefix}} scripts/converge.sh "{{group}}" l3
 
-# Converge a group of NixOS hosts (capabilities)
-l3-converge-nixos group tags="":
-  TAGS="{{tags}}" \
-  {{run_prefix}} scripts/l3/converge-nixos.sh "{{group}}"
-
 # Download backups from S3 and upload to an HAOS host 
 l3-homeassistant-backups:
   {{run_prefix}} scripts/l3/haos.sh
-
-# Reboot a group of hosts (default: dryrun)
-l3-reboot group action="dryrun":
-  REBOOT_ACTION="{{action}}" \
-  {{run_prefix}} scripts/l3/reboot.sh "{{group}}"
-
-# Shut down a group of hosts
-l3-shutdown group:
-  {{run_prefix}} scripts/l3/shutdown.sh "{{group}}"
 
 # Attach disks to a TrueNAS host
 l3-truenas vmid:
@@ -91,11 +77,6 @@ l4-converge-gatus:
 l4-converge-gatus-config:
   TAGS=step_docker_gatus \
   {{run_prefix}} scripts/converge.sh flagg l4
-
-# Converge a group of NixOS hosts (workloads)
-l4-converge-nixos group tags="":
-  TAGS="{{tags}}" \
-  {{run_prefix}} scripts/l4/converge-nixos.sh "{{group}}"
 
 # Full converge of Traefik
 l4-converge-traefik:
@@ -137,19 +118,19 @@ l4-converge-cloudflare:
 #############################
 
 # Remove all non-versioned build artifacts and temporary files
-clean:
+all-clean:
   {{run_prefix}} scripts/clean.sh
 
 # Runway checks (OS/persona independent)
-proxmox-runway:
+all-proxmox-runway:
   {{run_prefix}} scripts/proxmox-runway.sh
 
 # Reboot a group of hosts (default: dryrun)
-reboot group action="dryrun":
+all-reboot group action="dryrun":
   {{run_prefix}} scripts/reboot.sh "{{group}}" "{{action}}"
 
 # Shut down a group of hosts
-shutdown group:
+all-shutdown group:
   {{run_prefix}} scripts/shutdown.sh "{{group}}"
 
 #############################
