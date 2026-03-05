@@ -205,8 +205,8 @@ cat > "$OUT/installer.nix" <<'NIX'
       partprefix=""
       if [[ "$DISK" =~ nvme ]]; then partprefix="p"; fi
 
-      EFI="${DISK}${partprefix}1"
-      ROOT="${DISK}${partprefix}2"
+      EFI="$DISK${partprefix}1"
+      ROOT="$DISK${partprefix}2"
 
       ${pkgs.dosfstools}/bin/mkfs.fat -F32 -n boot "$EFI"
       ${pkgs.e2fsprogs}/bin/mkfs.ext4 -F -L nixos "$ROOT"
@@ -306,7 +306,7 @@ Generated for:
 
 Build ISO:
   cd $(basename "$OUT")
-  nix build .#iso
+  nix build "path:$(pwd)#iso"
 
 Safety:
 - On boot, prints disk info and requires interactive confirmation:
@@ -321,4 +321,4 @@ echo "Wrote installer files to: $OUT"
 echo "Derived gateway/DNS: $GW"
 echo "Next:"
 echo "  cd $OUT"
-echo "  nix build .#iso"
+echo "  nix build "path:$(pwd)#iso""
