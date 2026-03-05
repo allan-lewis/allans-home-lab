@@ -26,11 +26,11 @@ echo
 
 # Resolve host list the SAME WAY reboot resolves execution scope
 if [[ -n "${LIMIT}" ]]; then
-  hosts="$(ansible -i "${INVENTORY}" "${GROUP}" --limit "${LIMIT}" --list-hosts \
-    | awk 'found && NF {print $1} /^  hosts \([0-9]+\):$/ {found=1; next}')"
+  hosts="$(ansible -i "${INVENTORY}" "${GROUP}" --limit "${LIMIT}" --list-hosts |
+    awk 'found && NF {print $1} /^  hosts \([0-9]+\):$/ {found=1; next}')"
 else
-  hosts="$(ansible -i "${INVENTORY}" "${GROUP}" --list-hosts \
-    | awk 'found && NF {print $1} /^  hosts \([0-9]+\):$/ {found=1; next}')"
+  hosts="$(ansible -i "${INVENTORY}" "${GROUP}" --list-hosts |
+    awk 'found && NF {print $1} /^  hosts \([0-9]+\):$/ {found=1; next}')"
 fi
 
 if [[ -z "${hosts}" ]]; then

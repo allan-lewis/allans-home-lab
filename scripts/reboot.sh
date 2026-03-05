@@ -7,10 +7,10 @@ if [[ "${BASH_SOURCE[0]}" != "$0" ]]; then
   return 1
 fi
 
-GROUP="${1:?Usage: $0 <group>}"
+GROUP="${1:?Usage: $0 <group> [action]}"
 
 # Read desired behavior from env; default to dryrun
-REBOOT_ACTION="${REBOOT_ACTION:-dryrun}"
+REBOOT_ACTION="${2:-dryrun}"
 
 INVENTORY="ansible/inventory/"
 PLAYBOOK="ansible/l3/reboot.yaml"
@@ -30,11 +30,11 @@ reboot_action_norm="$(printf '%s' "${REBOOT_ACTION}" | tr '[:upper:]' '[:lower:]
 
 # Validate
 case "${reboot_action_norm}" in
-  dryrun|check|force) ;;
-  *)
-    echo "Invalid REBOOT_ACTION: '${REBOOT_ACTION}'. Expected one of: dryrun|check|force" >&2
-    exit 1
-    ;;
+dryrun | check | force) ;;
+*)
+  echo "Invalid REBOOT_ACTION: '${REBOOT_ACTION}'. Expected one of: dryrun|check|force" >&2
+  exit 1
+  ;;
 esac
 
 TAGS="${TAGS:-}"
@@ -49,21 +49,21 @@ declare -a extra_flags=()
 declare -a extra=()
 
 case "${reboot_action_norm}" in
-  dryrun)
-    reboot_action="dryrun"
-    force_reboot="false"
-    extra_flags+=(--diff)
-    ;;
-  check)
-    reboot_action="check"
-    force_reboot="false"
-    ;;
-  force)
-    reboot_action="check"
-    force_reboot="true"
-    # Serialise reboots to reduce SSH churn
-    extra_flags+=(--forks 1)
-    ;;
+dryrun)
+  reboot_action="dryrun"
+  force_reboot="false"
+  extra_flags+=(--diff)
+  ;;
+check)
+  reboot_action="check"
+  force_reboot="false"
+  ;;
+force)
+  reboot_action="check"
+  force_reboot="true"
+  # Serialise reboots to reduce SSH churn
+  extra_flags+=(--forks 1)
+  ;;
 esac
 
 # Build extra args safely
