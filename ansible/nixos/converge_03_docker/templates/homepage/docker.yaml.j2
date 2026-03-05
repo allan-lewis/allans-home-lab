@@ -5,7 +5,8 @@
 {# Union of hosts in ubuntu_docker + arch_docker, defaulting missing groups to [] #}
 {%- set ubuntu = groups.get('ubuntu_docker', []) -%}
 {%- set arch   = groups.get('arch_docker',   []) -%}
-{%- set docker_hosts = (ubuntu + arch) | unique | sort -%}
+{%- set nixos   = groups.get('nixos_docker',   []) -%}
+{%- set docker_hosts = (ubuntu + arch + nixos) | unique | sort -%}
 
 {% for h in docker_hosts %}
 {{ h }}:
