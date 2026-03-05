@@ -144,6 +144,18 @@ clean:
 proxmox-runway:
   {{run_prefix}} scripts/proxmox-runway.sh
 
+# Reboot a group of hosts (default: dryrun)
+reboot group action="dryrun":
+  {{run_prefix}} scripts/reboot.sh "{{group}}" "{{action}}"
+
+# Shut down a group of hosts
+shutdown group:
+  {{run_prefix}} scripts/shutdown.sh "{{group}}"
+
+#############################
+#### PROXMOX APPLICANCES ####
+#############################
+
 #############################
 #### ARCH ###################
 #############################
