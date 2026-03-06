@@ -7,20 +7,19 @@ set -euo pipefail
 #
 # What the ISO does when booted:
 # - Prints disk info
-# - Waits 30s for confirmation
-# - If it detects an existing NixOS install on the target disk, it requires a stronger confirmation
+# - Optional short countdown window (Ctrl-C abort) to avoid brittle interactive prompts
 # - Wipes disk, partitions GPT (EFI + root), installs minimal NixOS bootstrap, reboots
 #
 # Build command (run INSIDE the generated directory):
 #   nix build "path:$(pwd)#iso"
 #
 # Required env:
-#   SSH_PUBLIC_KEY="ssh-ed25519 AAAA..."
+#   TF_VAR_PROXMOX_VM_PUBLIC_KEY="ssh-ed25519 AAAA..."
 
 usage() {
   cat <<'EOF' >&2
 Usage:
-  SSH_PUBLIC_KEY="ssh-ed25519 AAAA..." \
+  TF_VAR_PROXMOX_VM_PUBLIC_KEY="ssh-ed25519 AAAA..." \
   scripts/nixos-iso.sh \
     --out <dir> \
     --hostname <name> \
@@ -95,8 +94,8 @@ done
 : "${IFACE:?--iface is required}"
 : "${IP_CIDR:?--ip is required}"
 
-if [[ -z "${SSH_PUBLIC_KEY:-}" ]]; then
-  echo "ERROR: SSH_PUBLIC_KEY env var is required (SSH public key)." >&2
+if [[ -z "${TF_VAR_PROXMOX_VM_PUBLIC_KEY:-}" ]]; then
+  echo "ERROR: TF_VAR_PROXMOX_VM_PUBLIC_KEY env var is required (SSH public key)." >&2
   exit 1
 fi
 
@@ -120,7 +119,6 @@ PY
 
 mkdir -p "$OUT"
 
-# Write installer.nix WITHOUT bash expanding Nix ${...}
 cat >"$OUT/installer.nix" <<'NIX'
 { lib, modulesPath, pkgs, ... }:
 
@@ -135,34 +133,33 @@ cat >"$OUT/installer.nix" <<'NIX'
   services.openssh.enable = true;
 
   # Minimal ISO module stack may set this false (e.g. via NetworkManager).
-  # Force DHCP in installer so it’s reachable.
   networking.useDHCP = lib.mkForce true;
 
   users.users.__USER__ = {
     isNormalUser = true;
     extraGroups = [ "wheel" ];
-    openssh.authorizedKeys.keys = [ "__SSH_PUBLIC_KEY__" ];
+    openssh.authorizedKeys.keys = [ "__TF_VAR_PROXMOX_VM_PUBLIC_KEY__" ];
   };
 
   security.sudo.wheelNeedsPassword = false;
 
   environment.systemPackages = with pkgs; [
-    git
-    curl
+    coreutils
     util-linux
     e2fsprogs
     dosfstools
     parted
+    systemd
+    git
+    curl
   ];
 
   #
   # Auto-install service (DESTROYS DISK CONTENTS).
-  # - prints disk info
-  # - 30s confirmation
-  # - guard: if an existing NixOS install is detected on target disk, requires stronger confirmation
+  # NOTE: intentionally non-interactive for stability.
   #
   systemd.services.autoinstall = {
-    description = "Automatic NixOS install (requires confirmation) to __DISK__";
+    description = "Automatic NixOS install to __DISK__";
     wantedBy = [ "multi-user.target" ];
 
     after = [ "network-online.target" ];
@@ -176,6 +173,11 @@ cat >"$OUT/installer.nix" <<'NIX'
 
     script = ''
       set -Eeuo pipefail
+
+      # Make installer tools reliable under systemd
+      export PATH="/run/current-system/sw/bin:/run/wrappers/bin:$PATH"
+      export NIX_PATH="nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos:nixos-config=/etc/nixos/configuration.nix"
+      export NIX_CONFIG="experimental-features = nix-command flakes"
 
       DISK="__DISK__"
 
@@ -204,17 +206,20 @@ cat >"$OUT/installer.nix" <<'NIX'
       ${pkgs.util-linux}/bin/lsblk -d -o NAME,PATH,SIZE,MODEL,SERIAL,WWN,TYPE "$DISK" || true
       echo
 
-      echo "Existing filesystem signatures on target disk (wipefs):"
+      echo "Existing filesystem signatures on target disk (wipefs -n):"
       ${pkgs.util-linux}/bin/wipefs -n "$DISK" || true
       echo
 
-      echo "By-id / by-path hints (if present):"
-      ls -l /dev/disk/by-id 2>/dev/null | sed -n '1,200p' || true
-      echo
-      ls -l /dev/disk/by-path 2>/dev/null | sed -n '1,200p' || true
+      # Stable safety window: countdown + Ctrl-C abort.
+      echo "Starting destructive install in 10 seconds..."
+      echo "Press Ctrl-C NOW to abort."
+      for i in 10 9 8 7 6 5 4 3 2 1; do
+        echo "  ...$i"
+        ${pkgs.coreutils}/bin/sleep 1
+      done
       echo
 
-      # Derive expected partition paths without using bash brace expansion
+      # Partition paths (no brace expansion)
       if [[ "$DISK" =~ nvme ]]; then
         EFI="$DISK"p1
         ROOT="$DISK"p2
@@ -223,6 +228,15 @@ cat >"$OUT/installer.nix" <<'NIX'
         ROOT="$DISK"2
       fi
 
+      # Best-effort unmount from previous attempts (prevents "partitions in use")
+      ${pkgs.util-linux}/bin/umount -R /mnt 2>/dev/null || true
+      ${pkgs.util-linux}/bin/umount "$EFI" 2>/dev/null || true
+      ${pkgs.util-linux}/bin/umount "$ROOT" 2>/dev/null || true
+
+      # Remove signatures before repartitioning
+      ${pkgs.util-linux}/bin/wipefs -a "$DISK" || true
+
+      # Partition non-interactively
       ${pkgs.parted}/bin/parted -s "$DISK" \
         mklabel gpt \
         mkpart ESP fat32 1MiB 512MiB \
@@ -243,20 +257,27 @@ cat >"$OUT/installer.nix" <<'NIX'
       ${pkgs.dosfstools}/bin/mkfs.fat -F32 -n boot "$EFI"
       ${pkgs.e2fsprogs}/bin/mkfs.ext4 -F -L nixos "$ROOT"
 
-      mount "$ROOT" /mnt
-      mkdir -p /mnt/boot
-      mount "$EFI" /mnt/boot
+      ${pkgs.util-linux}/bin/mount "$ROOT" /mnt
+      ${pkgs.coreutils}/bin/mkdir -p /mnt/boot
+      ${pkgs.util-linux}/bin/mount "$EFI" /mnt/boot
 
       ${pkgs.nixos-install-tools}/bin/nixos-generate-config --root /mnt
 
-      # Minimal bootstrap config on the installed system:
-      # - static IP for predictable access
-      # - operator user + ssh key
-      # - ssh enabled
-      cat > /mnt/etc/nixos/configuration.nix <<'NIXCONF'
+      # Bootloader snippet (UEFI vs BIOS)
+      BOOT_SNIPPET=""
+      if [[ -d /sys/firmware/efi ]]; then
+        BOOT_SNIPPET=$'  boot.loader.systemd-boot.enable = true;\n  boot.loader.efi.canTouchEfiVariables = true;\n'
+      else
+        BOOT_SNIPPET=$'  boot.loader.grub.enable = true;\n  boot.loader.grub.devices = [ "'"$DISK"'" ];\n'
+      fi
+
+      # Write bootstrap config, preserving generated hardware config import
+      cat > /mnt/etc/nixos/configuration.nix <<NIXCONF
 { pkgs, ... }:
 
 {
+  imports = [ ./hardware-configuration.nix ];
+$BOOT_SNIPPET
   networking = {
     hostName = "__HOSTNAME__";
     useDHCP = false;
@@ -272,7 +293,7 @@ cat >"$OUT/installer.nix" <<'NIX'
   users.users.__USER__ = {
     isNormalUser = true;
     extraGroups = [ "wheel" ];
-    openssh.authorizedKeys.keys = [ "__SSH_PUBLIC_KEY__" ];
+    openssh.authorizedKeys.keys = [ "__TF_VAR_PROXMOX_VM_PUBLIC_KEY__" ];
   };
 
   security.sudo.wheelNeedsPassword = false;
@@ -286,13 +307,12 @@ NIXCONF
 
       echo
       echo "Install complete. Rebooting..."
-      reboot
+      ${pkgs.systemd}/bin/reboot
     '';
   };
 }
 NIX
 
-# Substitute placeholders
 tmp="$(mktemp)"
 sed \
   -e "s|__HOSTNAME__|$HOSTNAME|g" \
@@ -304,11 +324,10 @@ sed \
   -e "s|__DNS__|$DNS|g" \
   -e "s|__USER__|$USER_NAME|g" \
   -e "s|__STATE_VERSION__|$STATE_VERSION|g" \
-  -e "s|__SSH_PUBLIC_KEY__|$SSH_PUBLIC_KEY|g" \
+  -e "s|__TF_VAR_PROXMOX_VM_PUBLIC_KEY__|$TF_VAR_PROXMOX_VM_PUBLIC_KEY|g" \
   "$OUT/installer.nix" >"$tmp"
 mv "$tmp" "$OUT/installer.nix"
 
-# flake.nix
 cat >"$OUT/flake.nix" <<EOF
 {
   description = "Autoinstall NixOS ISO (bare metal bootstrap)";
@@ -328,7 +347,6 @@ cat >"$OUT/flake.nix" <<EOF
 }
 EOF
 
-# README
 cat >"$OUT/README.md" <<EOF
 # Autoinstall ISO (bare metal bootstrap)
 
@@ -344,13 +362,12 @@ Generated for:
 Build ISO (run inside this directory):
   nix build "path:\$(pwd)#iso"
 
-Safety:
-- On boot, prints disk info and requires interactive confirmation within 30 seconds.
-- Guard: if an existing NixOS install is detected on the target disk, confirmation is stricter:
-    WIPE ${DISK} YES-I-AM-SURE
+Notes:
+- The installer is intentionally non-interactive for stability.
+- A short countdown window is provided; press Ctrl-C on the console to abort before disk wipe.
 
 SSH key:
-- Embedded at generation time from env var SSH_PUBLIC_KEY
+- Embedded at generation time from env var TF_VAR_PROXMOX_VM_PUBLIC_KEY
 EOF
 
 echo "Wrote installer files to: $OUT"
@@ -392,7 +409,6 @@ echo
 info "ISO ready: $ISO_PATH"
 echo
 
-# Detect root disk so we never overwrite it
 root_src="$(findmnt -n -o SOURCE / || true)"
 root_dev="$(readlink -f "$root_src" 2>/dev/null || true)"
 root_disk="$(lsblk -no PKNAME "$root_dev" 2>/dev/null || true)"
