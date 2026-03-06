@@ -32,8 +32,8 @@ all-cloud-init-prepare host:
   {{run_prefix}} scripts/ansible-playbook.sh "ansible/cloud-init-prepare.yaml" "localhost" "" "" "target_host={{host}}"
 
 # Write cloud-init ISOs to removable USB drives
-l1-cloud-init-usbs os_iso ci_iso:
-  {{run_prefix}} scripts/l1/write-arch-usbs.sh "{{os_iso}}" "{{ci_iso}}"
+all-cloud-init-isos os_iso ci_iso:
+  {{run_prefix}} scripts/cloud-init-isos.sh "{{os_iso}}" "{{ci_iso}}"
 
 # Remove all non-versioned build artifacts and temporary files
 all-clean:

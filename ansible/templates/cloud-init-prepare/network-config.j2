@@ -2,5 +2,19 @@ version: 2
 ethernets:
   main:
     match:
-      name: "{{ iface_match }}"
-    dhcp4: {{ dhcp4 | bool | lower }}
+      name: "{{ rendered_cloud_init_network.interface_match }}"
+{% if rendered_cloud_init_network.dhcp4 | bool %}
+    dhcp4: true
+{% else %}
+    dhcp4: false
+    addresses:
+      - "{{ rendered_cloud_init_network.address }}"
+    gateway4: "{{ rendered_cloud_init_network.gateway4 }}"
+{% if rendered_cloud_init_network.nameservers | default([]) | length > 0 %}
+    nameservers:
+      addresses:
+{% for ns in rendered_cloud_init_network.nameservers %}
+        - "{{ ns }}"
+{% endfor %}
+{% endif %}
+{% endif %}

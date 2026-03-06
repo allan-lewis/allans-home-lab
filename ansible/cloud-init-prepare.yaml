@@ -87,8 +87,8 @@
         mode: "0644"
       when: (hostvars[target_host].cloud_init_network.enabled | default(cloud_init_network.enabled)) | bool
       vars:
-        dhcp4: "{{ hostvars[target_host].cloud_init_network.dhcp4 | default(cloud_init_network.dhcp4) }}"
-        iface_match: "{{ hostvars[target_host].cloud_init_network.interface_match | default(cloud_init_network.interface_match) }}"
+        rendered_cloud_init_network:
+          "{{ cloud_init_network | combine(hostvars[target_host].cloud_init_network | default({}), recursive=True) | combine({'address': (hostvars[target_host].ansible_host ~ '/24')}, recursive=True) }}"
 
     - name: Build cidata ISO with network-config
       ansible.builtin.command:

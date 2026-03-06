@@ -36,3 +36,11 @@ ssh_keys_users:
   - root
   - "{{ gitops_user }}"
   - "{{ desktop_interactive_user }}"
+
+cloud_init_network:
+  enabled: true
+  dhcp4: false
+  interface_match: "enp2s0"
+  gateway4: "192.168.86.1"
+  nameservers:
+    - "192.168.86.1"
