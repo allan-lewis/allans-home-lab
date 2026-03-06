@@ -107,9 +107,6 @@ all:
       children:
         arch_docker:
           children:
-            arch_devops:
-              hosts:
-                roland:
             arch_tinker:
               hosts:
                 callahan:
