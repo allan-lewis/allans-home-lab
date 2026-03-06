@@ -148,8 +148,11 @@ cat >"$OUT/installer.nix" <<'NIX'
     util-linux
     e2fsprogs
     dosfstools
+    gnugrep
+    gnused
     parted
     python3
+    sudo
     systemd
     git
     curl
