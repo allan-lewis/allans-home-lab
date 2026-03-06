@@ -16,15 +16,17 @@ set -euo pipefail
 #   - VM must be powered OFF (script enforces this).
 
 PROXMOX_NODE="${PVE_SSH_IP}"
-OS="${1:?Usage: $0 <os> <vmid>}"
-VMID="${2:?Usage: $0 <os> <vmid>}"
-LOCAL_OUT_DIR="${LOCAL_OUT_DIR:-/home/lab/.appliances/capture}"
+OS="${1:?Usage: $0 <os> <s3_bucket> <s3_prefix> <vmid> [update_stable]}"
+S3_BUCKET="${2:?Usage: $0 <os> <s3_bucket> <s3_prefix> <vmid> [update_stable]}"
+S3_PREFIX="${3:?Usage: $0 <os> <s3_bucket> <s3_prefix> <vmid> [update_stable]}"
+VMID="${4:?Usage: $0 <os> <s3_bucket> <s3_prefix> <vmid> [update_stable]}"
+UPDATE_STABLE="${5:-yes}"
+LOCAL_OUT_DIR="${LOCAL_OUT_DIR:-artifacts/appliances/capture}"
 KEEP_LOCAL_QCOW2="${KEEP_LOCAL_QCOW2:-0}"
-UPDATE_STABLE="${UPDATE_STABLE:-yes}"
 
 # Optional: override these via env vars if you want non-root access or extra ssh options.
 PROXMOX_USER="${PROXMOX_USER:-root}"
-PROXMOX_SSH_OPTS="${PROXMOX_SSH_OPTS:-}"
+PROXMOX_SSH_OPTS="-o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
 
 REMOTE="${PROXMOX_USER}@${PROXMOX_NODE}"
 
@@ -141,9 +143,6 @@ echo "==> Done."
 echo "Captured boot disk stored at: ${LOCAL_QCOW2}"
 
 # --- S3 upload + retention (keep last 3 per hostname) -------------------------
-
-S3_BUCKET="${S3_BUCKET:?Set S3_BUCKET (e.g. export S3_BUCKET=my-bucket)}"
-S3_PREFIX="${S3_PREFIX:-appliance-backups}"
 
 # Sanitize for S3 key prefix safety: lower, keep [a-z0-9._-], replace others with '-'
 HOST_FOLDER="$(printf '%s' "${OS}" |

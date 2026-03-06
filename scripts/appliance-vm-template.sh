@@ -125,7 +125,7 @@ if [[ -z "${BASE_NAME}" ]] || [[ "${BASE_NAME}" = "/" ]]; then
 fi
 
 # 2) Download qcow2 locally (ops host)
-LOCAL_TMP_DIR="${TMPDIR:-/home/lab/.appliances/template}"
+LOCAL_TMP_DIR="${TMPDIR:-artifacts/appliances/template}"
 mkdir -p "${LOCAL_TMP_DIR}"
 LOCAL_QCOW2="${LOCAL_TMP_DIR}/${BASE_NAME}"
 

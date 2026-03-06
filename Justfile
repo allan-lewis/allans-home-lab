@@ -80,10 +80,8 @@ arch-converge group tags="" limit="":
 #############################
 
 # Export a HAOS Proxmox VM's boot disk to an S3 bucket
-l1-haos-capture vmid:
-  S3_BUCKET=gitops-homelab-orchestrator-disks \
-  S3_PREFIX=proxmox-images \
-  {{run_prefix}} scripts/l1/appliance-capture.sh haos "{{vmid}}"
+haos-boot-disk-capture vmid update_stable="yes":
+  {{run_prefix}} scripts/appliance-boot-disk-capture.sh "haos" "gitops-homelab-orchestrator-disks" "proxmox-images" "{{vmid}}" "{{update_stable}}"
 
 # Download backups from S3 and upload to an HAOS host 
 l3-homeassistant-backups:
