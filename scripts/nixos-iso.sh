@@ -49,16 +49,43 @@ NIXPKGS_REF="nixos-25.11"
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    --out) OUT="$2"; shift 2 ;;
-    --hostname) HOSTNAME="$2"; shift 2 ;;
-    --disk) DISK="$2"; shift 2 ;;
-    --iface) IFACE="$2"; shift 2 ;;
-    --ip) IP_CIDR="$2"; shift 2 ;;
-    --user) USER_NAME="$2"; shift 2 ;;
-    --state-version) STATE_VERSION="$2"; shift 2 ;;
-    --nixpkgs) NIXPKGS_REF="$2"; shift 2 ;;
-    -h|--help) usage ;;
-    *) echo "Unknown arg: $1" >&2; usage ;;
+  --out)
+    OUT="$2"
+    shift 2
+    ;;
+  --hostname)
+    HOSTNAME="$2"
+    shift 2
+    ;;
+  --disk)
+    DISK="$2"
+    shift 2
+    ;;
+  --iface)
+    IFACE="$2"
+    shift 2
+    ;;
+  --ip)
+    IP_CIDR="$2"
+    shift 2
+    ;;
+  --user)
+    USER_NAME="$2"
+    shift 2
+    ;;
+  --state-version)
+    STATE_VERSION="$2"
+    shift 2
+    ;;
+  --nixpkgs)
+    NIXPKGS_REF="$2"
+    shift 2
+    ;;
+  -h | --help) usage ;;
+  *)
+    echo "Unknown arg: $1" >&2
+    usage
+    ;;
   esac
 done
 
@@ -94,7 +121,7 @@ PY
 mkdir -p "$OUT"
 
 # Write installer.nix WITHOUT bash expanding Nix ${...}
-cat > "$OUT/installer.nix" <<'NIX'
+cat >"$OUT/installer.nix" <<'NIX'
 { lib, modulesPath, pkgs, ... }:
 
 {
@@ -196,58 +223,13 @@ cat > "$OUT/installer.nix" <<'NIX'
         ROOT="$DISK"2
       fi
 
-      # Guard: If ROOT looks like it already contains a NixOS install, warn and require a stronger confirmation.
-      existing_nixos=0
-      if ${pkgs.util-linux}/bin/blkid "$ROOT" >/dev/null 2>&1; then
-        mkdir -p /mnt-check
-        if mount -o ro "$ROOT" /mnt-check >/dev/null 2>&1; then
-          if [[ -e /mnt-check/etc/NIXOS ]]; then
-            existing_nixos=1
-          fi
-          umount /mnt-check >/dev/null 2>&1 || true
-        fi
-      fi
+      ${pkgs.parted}/bin/parted -s "$DISK" \
+        mklabel gpt \
+        mkpart ESP fat32 1MiB 512MiB \
+        set 1 esp on \
+        mkpart primary ext4 512MiB 100%
 
-      echo "============================================================"
-      echo "CONFIRMATION REQUIRED"
-      echo "============================================================"
-
-      if [[ "$existing_nixos" -eq 1 ]]; then
-        echo "GUARD: Existing NixOS install detected on $ROOT (found /etc/NIXOS)."
-        echo "To proceed, type exactly:"
-        echo "  WIPE $DISK YES-I-AM-SURE"
-        echo "You have 30 seconds..."
-        echo
-        if ! read -r -t 30 reply; then
-          echo "Timed out. Aborting install."
-          exit 1
-        fi
-        if [[ "$reply" != "WIPE $DISK YES-I-AM-SURE" ]]; then
-          echo "Confirmation mismatch ('$reply'). Aborting install."
-          exit 1
-        fi
-      else
-        echo "Type exactly: WIPE $DISK"
-        echo "You have 30 seconds..."
-        echo
-        if ! read -r -t 30 reply; then
-          echo "Timed out. Aborting install."
-          exit 1
-        fi
-        if [[ "$reply" != "WIPE $DISK" ]]; then
-          echo "Confirmation mismatch ('$reply'). Aborting install."
-          exit 1
-        fi
-      fi
-
-      echo
-      echo "Confirmed. Proceeding to wipe and install."
-      echo
-
-      ${pkgs.parted}/bin/parted "$DISK" -- mklabel gpt
-      ${pkgs.parted}/bin/parted "$DISK" -- mkpart ESP fat32 1MiB 512MiB
-      ${pkgs.parted}/bin/parted "$DISK" -- set 1 esp on
-      ${pkgs.parted}/bin/parted "$DISK" -- mkpart primary ext4 512MiB 100%
+      ${pkgs.systemd}/bin/udevadm settle
 
       # Recompute partition paths (same rule as above)
       if [[ "$DISK" =~ nvme ]]; then
@@ -323,11 +305,11 @@ sed \
   -e "s|__USER__|$USER_NAME|g" \
   -e "s|__STATE_VERSION__|$STATE_VERSION|g" \
   -e "s|__SSH_PUBLIC_KEY__|$SSH_PUBLIC_KEY|g" \
-  "$OUT/installer.nix" > "$tmp"
+  "$OUT/installer.nix" >"$tmp"
 mv "$tmp" "$OUT/installer.nix"
 
 # flake.nix
-cat > "$OUT/flake.nix" <<EOF
+cat >"$OUT/flake.nix" <<EOF
 {
   description = "Autoinstall NixOS ISO (bare metal bootstrap)";
 
@@ -347,7 +329,7 @@ cat > "$OUT/flake.nix" <<EOF
 EOF
 
 # README
-cat > "$OUT/README.md" <<EOF
+cat >"$OUT/README.md" <<EOF
 # Autoinstall ISO (bare metal bootstrap)
 
 Generated for:
@@ -385,3 +367,137 @@ echo
 echo "ISO build complete."
 echo "Location:"
 echo "  $OUT/result/iso/"
+
+# --- OPTIONAL: write built ISO to a removable USB disk (DANGEROUS) ---
+
+die() {
+  echo "ERROR: $*" >&2
+  exit 1
+}
+info() { echo "==> $*"; }
+
+require_cmd() { command -v "$1" >/dev/null 2>&1 || die "Missing required command: $1"; }
+for c in lsblk dd wipefs findmnt blkid readlink awk sed; do require_cmd "$c"; done
+
+SUDO=""
+if [[ $EUID -ne 0 ]]; then
+  SUDO="sudo -E"
+fi
+
+ISO_DIR="$OUT/result/iso"
+ISO_PATH="$(ls -1 "$ISO_DIR"/*.iso 2>/dev/null | head -n1 || true)"
+[[ -f "$ISO_PATH" ]] || die "Built ISO not found under: $ISO_DIR"
+
+echo
+info "ISO ready: $ISO_PATH"
+echo
+
+# Detect root disk so we never overwrite it
+root_src="$(findmnt -n -o SOURCE / || true)"
+root_dev="$(readlink -f "$root_src" 2>/dev/null || true)"
+root_disk="$(lsblk -no PKNAME "$root_dev" 2>/dev/null || true)"
+root_disk="${root_disk:+/dev/$root_disk}"
+
+info "Root filesystem source: ${root_src:-unknown}"
+info "Root disk: ${root_disk:-unknown}"
+echo
+
+info "Scanning removable USB disks (TRAN=usb)..."
+
+mapfile -t DISK_LINES < <(
+  lsblk -dn -o NAME,TYPE,TRAN,SIZE,MODEL |
+    awk '$2=="disk" && $3=="usb" {print}'
+)
+
+((${#DISK_LINES[@]} >= 1)) || die "No removable USB disks detected (TRAN=usb)."
+
+echo
+printf "%-12s %-6s %-6s %-10s %-30s\n" "DEVICE" "TYPE" "TRAN" "SIZE" "MODEL"
+echo "---------------------------------------------------------------------"
+for line in "${DISK_LINES[@]}"; do
+  dev="$(awk '{print $1}' <<<"$line")"
+  type="$(awk '{print $2}' <<<"$line")"
+  tran="$(awk '{print $3}' <<<"$line")"
+  size="$(awk '{print $4}' <<<"$line")"
+  model="$(cut -d' ' -f5- <<<"$line")"
+  printf "%-12s %-6s %-6s %-10s %-30s\n" "/dev/$dev" "$type" "$tran" "$size" "$model"
+done
+echo
+
+is_usb_disk() {
+  local dev="$1"
+  lsblk -dn -o TYPE,TRAN "$dev" | awk '
+    $1=="disk" && $2=="usb" { found=1 }
+    END { exit(found ? 0 : 1) }
+  '
+}
+
+is_mounted_anywhere() {
+  local dev="$1"
+  findmnt -rn -S "$dev" >/dev/null 2>&1 && return 0
+  while read -r child; do
+    findmnt -rn -S "$child" >/dev/null 2>&1 && return 0
+  done < <(lsblk -ln -o PATH "$dev" | tail -n +2)
+  return 1
+}
+
+pick_disk() {
+  local prompt="$1"
+  local dev
+  while true; do
+    read -rp "$prompt (e.g. /dev/sdb): " dev
+    [[ -n "$dev" ]] || continue
+    [[ "$dev" =~ ^/dev/ ]] || dev="/dev/$dev"
+    [[ -b "$dev" ]] || {
+      echo "Not a block device: $dev"
+      continue
+    }
+
+    is_usb_disk "$dev" || {
+      echo "Not a USB disk (TRAN=usb required): $dev"
+      continue
+    }
+
+    if [[ -n "$root_disk" && "$dev" == "$root_disk" ]]; then
+      echo "Refusing to use root disk: $dev"
+      continue
+    fi
+
+    if is_mounted_anywhere "$dev"; then
+      echo "Disk (or partition) is mounted; unmount first: $dev"
+      continue
+    fi
+
+    echo "$dev"
+    return
+  done
+}
+
+USB_DISK="$(pick_disk 'Select USB disk to write ISO to')"
+
+echo
+info "Summary:"
+echo "  ISO → $ISO_PATH"
+echo "  USB → $USB_DISK"
+echo
+
+read -rp "Type 'YES' to continue: " c1
+[[ "$c1" == "YES" ]] || die "Aborted"
+
+read -rp "Re-type USB disk ($USB_DISK) to confirm: " c2
+[[ "$c2" == "$USB_DISK" || "/dev/$c2" == "$USB_DISK" ]] || die "Mismatch"
+
+read -rp "Type exactly: WIPE $USB_DISK : " c3
+[[ "$c3" == "WIPE $USB_DISK" ]] || die "Mismatch"
+
+info "Wiping filesystem signatures..."
+$SUDO wipefs -a "$USB_DISK"
+
+info "Writing ISO to USB..."
+$SUDO dd if="$ISO_PATH" of="$USB_DISK" bs=4M status=progress conv=fsync
+
+$SUDO sync
+info "Done. USB stick is ready."
+
+info "Post-write blkid (best-effort):"
+$SUDO blkid "$USB_DISK" || true
