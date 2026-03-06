@@ -1,0 +1,19 @@
+#cloud-config
+preserve_hostname: false
+hostname: {{ local_hostname }}
+
+users:
+  - name: {{ default_user.name }}
+    gecos: {{ default_user.gecos }}
+    groups: {{ default_user.groups | join(',') }}
+    sudo: {{ default_user.sudo }}
+    shell: {{ default_user.shell }}
+{% if ssh_authorized_keys | length > 0 %}
+    ssh_authorized_keys:
+{% for k in ssh_authorized_keys %}
+      - {{ k }}
+{% endfor %}
+{% endif %}
+
+ssh_pwauth: false
+disable_root: true

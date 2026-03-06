@@ -27,9 +27,9 @@ tf_base_dir := env_var_or_default("TF_BASE_DIR", "terraform/l2")
 #### GENERAL/CROSS-OS #######
 #############################
 
-# Prepare a cloud-init seed ISO for use on bare metal Arch installations
-l1-arch-cloud-init host:
-  {{run_prefix}} scripts/l1/cloud-init-seed.sh "{{host}}"
+# Prepare a Linux cloud-init seed ISO for a host (based on inventory)
+all-cloud-init-prepare host:
+  {{run_prefix}} scripts/ansible-playbook.sh "ansible/cloud-init-prepare.yaml" "localhost" "" "" "target_host={{host}}"
 
 # Write cloud-init ISOs to removable USB drives
 l1-cloud-init-usbs os_iso ci_iso:

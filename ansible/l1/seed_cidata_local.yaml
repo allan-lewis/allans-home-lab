@@ -1,8 +1,0 @@
----
-- name: Build NoCloud cidata ISO for a target host (inventory-driven)
-  hosts: localhost
-  gather_facts: false
-
-  roles:
-    - role: seed_cidata
-

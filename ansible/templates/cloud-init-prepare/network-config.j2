@@ -1,0 +1,6 @@
+version: 2
+ethernets:
+  main:
+    match:
+      name: "{{ iface_match }}"
+    dhcp4: {{ dhcp4 | bool | lower }}

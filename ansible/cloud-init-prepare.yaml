@@ -1,0 +1,124 @@
+---
+- name: Prepare an ISO image for Linux cloud-init
+  hosts: localhost
+  gather_facts: false
+  become: false
+
+  vars:
+    # Where generated seed artifacts are written
+    cloud_init_seed_out_dir: "{{ playbook_dir }}/../artifacts/cloud-init"
+    # ISO volume label expected by cloud-init NoCloud datasource
+    cloud_init_seed_volume_id: cidata
+    # Default user created by cloud-init
+    cloud_init_default_user:
+      name: lab
+      gecos: "Lab User"
+      groups:
+        - wheel
+        - users
+      sudo:
+        - "ALL=(ALL) NOPASSWD:ALL"
+      shell: /bin/bash
+    # Default SSH keys (inventory may override)
+    cloud_init_ssh_authorized_keys:
+      - "{{ lookup('env', 'TF_VAR_PROXMOX_VM_PUBLIC_KEY') }}"
+    # Network configuration
+    cloud_init_network:
+      enabled: false
+      dhcp4: true
+      interface_match: "en* eth* ens* enp*"
+
+  tasks:
+    - name: Validate target_host exists in inventory
+      ansible.builtin.assert:
+        that:
+          - target_host is defined
+          - target_host | string | length > 0
+          - target_host in hostvars
+        fail_msg: >
+          target_host is missing or not found in inventory.
+          Provide --extra-vars "target_host=<hostname>".
+
+    - name: Ensure xorriso is installed on localhost
+      ansible.builtin.command: xorriso -version
+      register: xorriso_check
+      changed_when: false
+      failed_when: xorriso_check.rc != 0
+
+    - name: Ensure SSH authorized keys are defined
+      ansible.builtin.assert:
+        that:
+          - (hostvars[target_host].cloud_init_ssh_authorized_keys
+             | default(cloud_init_ssh_authorized_keys)) | length > 0
+        fail_msg: "No SSH authorized keys defined for host '{{ target_host }}'"
+
+    - name: Ensure artifact directories exist
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        mode: "0755"
+      loop:
+        - "{{ cloud_init_seed_out_dir }}/{{ target_host }}"
+        - "{{ cloud_init_seed_out_dir }}/{{ target_host }}/work"
+
+    - name: Render meta-data
+      ansible.builtin.template:
+        src: cloud-init-prepare/meta-data.j2
+        dest: "{{ cloud_init_seed_out_dir }}/{{ target_host }}/work/meta-data"
+        mode: "0644"
+      vars:
+        instance_id: "{{ hostvars[target_host].cloud_init_instance_id | default(target_host) }}"
+        local_hostname: "{{ hostvars[target_host].cloud_init_local_hostname | default(target_host) }}"
+
+    - name: Render user-data
+      ansible.builtin.template:
+        src: cloud-init-prepare/user-data.j2
+        dest: "{{ cloud_init_seed_out_dir }}/{{ target_host }}/work/user-data"
+        mode: "0644"
+      vars:
+        local_hostname: "{{ hostvars[target_host].cloud_init_local_hostname | default(target_host) }}"
+        default_user: "{{ hostvars[target_host].cloud_init_default_user | default(cloud_init_default_user) }}"
+        ssh_authorized_keys: "{{ hostvars[target_host].cloud_init_ssh_authorized_keys | default(cloud_init_ssh_authorized_keys) }}"
+
+    - name: Render network-config
+      ansible.builtin.template:
+        src: cloud-init-prepare/network-config.j2
+        dest: "{{ cloud_init_seed_out_dir }}/{{ target_host }}/work/network-config"
+        mode: "0644"
+      when: (hostvars[target_host].cloud_init_network.enabled | default(cloud_init_network.enabled)) | bool
+      vars:
+        dhcp4: "{{ hostvars[target_host].cloud_init_network.dhcp4 | default(cloud_init_network.dhcp4) }}"
+        iface_match: "{{ hostvars[target_host].cloud_init_network.interface_match | default(cloud_init_network.interface_match) }}"
+
+    - name: Build cidata ISO with network-config
+      ansible.builtin.command:
+        argv:
+          - xorriso
+          - -as
+          - mkisofs
+          - -output
+          - "{{ cloud_init_seed_out_dir }}/{{ target_host }}/cidata.iso"
+          - -volid
+          - "{{ cloud_init_seed_volume_id }}"
+          - -joliet
+          - -rock
+          - "{{ cloud_init_seed_out_dir }}/{{ target_host }}/work/user-data"
+          - "{{ cloud_init_seed_out_dir }}/{{ target_host }}/work/meta-data"
+          - "{{ cloud_init_seed_out_dir }}/{{ target_host }}/work/network-config"
+      when: (hostvars[target_host].cloud_init_network.enabled | default(cloud_init_network.enabled)) | bool
+
+    - name: Build cidata ISO without network-config
+      ansible.builtin.command:
+        argv:
+          - xorriso
+          - -as
+          - mkisofs
+          - -output
+          - "{{ cloud_init_seed_out_dir }}/{{ target_host }}/cidata.iso"
+          - -volid
+          - "{{ cloud_init_seed_volume_id }}"
+          - -joliet
+          - -rock
+          - "{{ cloud_init_seed_out_dir }}/{{ target_host }}/work/user-data"
+          - "{{ cloud_init_seed_out_dir }}/{{ target_host }}/work/meta-data"
+      when: not ((hostvars[target_host].cloud_init_network.enabled | default(cloud_init_network.enabled)) | bool)
