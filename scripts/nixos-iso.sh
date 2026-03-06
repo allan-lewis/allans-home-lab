@@ -149,6 +149,7 @@ cat >"$OUT/installer.nix" <<'NIX'
     e2fsprogs
     dosfstools
     parted
+    python3
     systemd
     git
     curl
