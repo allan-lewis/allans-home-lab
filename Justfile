@@ -23,6 +23,10 @@ run_prefix := if doppler == "0" {
 
 tf_base_dir := env_var_or_default("TF_BASE_DIR", "terraform/l2")
 
+#############################
+#### GENERAL/CROSS-OS #######
+#############################
+
 # Prepare a cloud-init seed ISO for use on bare metal Arch installations
 l1-arch-cloud-init host:
   {{run_prefix}} scripts/l1/cloud-init-seed.sh "{{host}}"
@@ -30,88 +34,6 @@ l1-arch-cloud-init host:
 # Write cloud-init ISOs to removable USB drives
 l1-cloud-init-usbs os_iso ci_iso:
   {{run_prefix}} scripts/l1/write-arch-usbs.sh "{{os_iso}}" "{{ci_iso}}"
-
-# Export a HAOS Proxmox VM's boot disk to an S3 bucket
-l1-haos-capture vmid:
-  S3_BUCKET=gitops-homelab-orchestrator-disks \
-  S3_PREFIX=proxmox-images \
-  {{run_prefix}} scripts/l1/appliance-capture.sh haos "{{vmid}}"
-
-# Export a TrueNAS Proxmox VM's boot disk to an S3 bucket
-l1-truenas-capture vmid:
-  S3_BUCKET=gitops-homelab-orchestrator-disks \
-  S3_PREFIX=proxmox-images \
-  {{run_prefix}} scripts/l1/appliance-capture.sh truenas "{{vmid}}"
-
-# Converge a group of hosts (capabilities)
-l3-converge group tags="":
-  TAGS="{{tags}}" \
-  {{run_prefix}} scripts/converge.sh "{{group}}" l3
-
-# Download backups from S3 and upload to an HAOS host 
-l3-homeassistant-backups:
-  {{run_prefix}} scripts/l3/haos.sh
-
-# Attach disks to a TrueNAS host
-l3-truenas vmid:
-  {{run_prefix}} scripts/l3/proxmox-disks.sh \
-    "$PVE_SSH_IP" \
-    "{{vmid}}" \
-    "infra/os/truenas/personas/nas/spec/terraform.json"
-
-# Converge a group of hosts (workloads)
-l4-converge group tags="":
-  TAGS="{{tags}}" \
-  {{run_prefix}} scripts/converge.sh "{{group}}" l4
-
-# Full converge of Gatus
-l4-converge-gatus:
-  TAGS=step_docker_gatus_all \
-  {{run_prefix}} scripts/converge.sh flagg l4
-
-# Quick converge of Gatus (just config)
-l4-converge-gatus-config:
-  TAGS=step_docker_gatus \
-  {{run_prefix}} scripts/converge.sh flagg l4
-
-# Full converge of Traefik
-l4-converge-traefik:
-  TAGS=step_docker_traefik \
-  {{run_prefix}} scripts/converge.sh flagg l4
-
-# Full converge of Pi-hole
-l4-converge-pihole:
-  TAGS=step_docker_pihole_all \
-  {{run_prefix}} scripts/converge.sh flagg l4
-
-# Quick converge of Pi-hole (just DNS records)
-l4-converge-pihole-dns:
-  TAGS=step_docker_pihole \
-  {{run_prefix}} scripts/converge.sh flagg l4
-
-# Full converge of Authentik
-l4-converge-authentik:
-  TAGS=step_docker_authentik \
-  {{run_prefix}} scripts/converge.sh flagg l4
-
-# Full converge of Twingate
-l4-converge-twingate:
-  TAGS=step_docker_twingate \
-  {{run_prefix}} scripts/converge.sh ubuntu_docker_twingate l4
-
-# Full converge of Prometheus/Grafana/Alertmanager
-l4-converge-observability:
-  TAGS=step_docker_observability \
-  {{run_prefix}} scripts/converge.sh flagg l4
-
-# Full converge of Cloudflare
-l4-converge-cloudflare:
-  TAGS=step_docker_cloudflare \
-  {{run_prefix}} scripts/converge.sh flagg l4
-
-#############################
-#### GENERAL/CROSS-OS #######
-#############################
 
 # Remove all non-versioned build artifacts and temporary files
 all-clean:
@@ -156,6 +78,16 @@ arch-converge group tags="" limit="":
 #############################
 #### HAOS ###################
 #############################
+
+# Export a HAOS Proxmox VM's boot disk to an S3 bucket
+l1-haos-capture vmid:
+  S3_BUCKET=gitops-homelab-orchestrator-disks \
+  S3_PREFIX=proxmox-images \
+  {{run_prefix}} scripts/l1/appliance-capture.sh haos "{{vmid}}"
+
+# Download backups from S3 and upload to an HAOS host 
+l3-homeassistant-backups:
+  {{run_prefix}} scripts/l3/haos.sh
 
 # Apply or detroy HAOS Proxmox VM(s) using Terraform
 haos-terraform action approve="0":
@@ -217,6 +149,19 @@ nixos-converge-vaultwarden:
 #############################
 #### TRUENAS ################
 #############################
+
+# Export a TrueNAS Proxmox VM's boot disk to an S3 bucket
+l1-truenas-capture vmid:
+  S3_BUCKET=gitops-homelab-orchestrator-disks \
+  S3_PREFIX=proxmox-images \
+  {{run_prefix}} scripts/l1/appliance-capture.sh truenas "{{vmid}}"
+
+# Attach disks to a TrueNAS host
+l3-truenas vmid:
+  {{run_prefix}} scripts/l3/proxmox-disks.sh \
+    "$PVE_SSH_IP" \
+    "{{vmid}}" \
+    "infra/os/truenas/personas/nas/spec/terraform.json"
 
 # Apply or detroy TrueNAS Proxmox VM(s) using Terraform
 truenas-terraform action approve="0":
