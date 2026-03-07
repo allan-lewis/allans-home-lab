@@ -1,7 +1,5 @@
 ---
-nixos_boot_loader_grub_device: "/dev/nvme0n1"
-
-converge_tailscale: true
+converge_tailscale: false
 tailscale_authkey: "{{ lookup('env', 'TAILSCALE_AUTHKEY') }}"
 
 doppler_service_token: "{{ lookup('env', 'DOPPLER_SERVICE_TOKEN_MATURIN') }}"

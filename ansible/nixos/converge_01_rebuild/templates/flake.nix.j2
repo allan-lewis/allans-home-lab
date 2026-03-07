@@ -45,8 +45,8 @@
             converge_tailscale_enabled = {{ (converge_tailscale | default(false) | bool) | string | lower }};
           in
           {
-            boot.loader.grub.enable = true;
-            boot.loader.grub.device = "{{nixos_boot_loader_grub_device | default('/dev/sda')}}";
+            boot.loader.systemd-boot.enable = true;
+            boot.loader.efi.canTouchEfiVariables = true;
 
             # ---- Identity ----
             networking.hostName = "{{ inventory_hostname }}";
