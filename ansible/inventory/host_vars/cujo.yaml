@@ -1,4 +1,8 @@
 ---
+nixos_is_virtual_machine: false
+nixos_network_interface: "enp2s0"
+nixos_network_address: "192.168.86.219"
+
 converge_tailscale: false
 tailscale_authkey: "{{ lookup('env', 'TAILSCALE_AUTHKEY') }}"
 

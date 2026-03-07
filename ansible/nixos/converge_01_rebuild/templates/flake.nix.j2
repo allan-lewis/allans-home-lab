@@ -45,8 +45,13 @@
             converge_tailscale_enabled = {{ (converge_tailscale | default(false) | bool) | string | lower }};
           in
           {
+{% if nixos_is_virtual_machine | default(true) %}
+            boot.loader.grub.enable = true;
+            boot.loader.grub.device = "{{nixos_boot_loader_grub_device | default('/dev/sda')}}";
+{% else %}
             boot.loader.systemd-boot.enable = true;
             boot.loader.efi.canTouchEfiVariables = true;
+{% endif %}
 
             # ---- Identity ----
             networking.hostName = "{{ inventory_hostname }}";
@@ -64,14 +69,32 @@
               AllowUsers lab
             '';
 
+{% if nixos_is_virtual_machine | default(true) %}
             # Keep Proxmox integration + cloud-init (so you don't regress networking/keys behavior)
             services.qemuGuest.enable = true;
             services.cloud-init.enable = true;
             services.cloud-init.network.enable = true;
+{% endif %}
 
             networking.useNetworkd = true;
             networking.useDHCP = false;
 
+{% if not (nixos_is_virtual_machine | default(true)) %}
+            networking.interfaces.{{ nixos_network_interface }}.ipv4.addresses = [
+              {
+                address = "{{ nixos_network_address }}";
+                prefixLength = 24;
+              }
+            ];
+
+            networking.defaultGateway = {
+              address = "{{ nixos_default_gateway | default('192.168.86.1') }}";
+              interface = "{{ nixos_network_interface }}";
+            };
+
+            networking.nameservers = [ "{{ nixos_default_gateway | default('192.168.86.1') }}" ];
+
+{% endif %}
             virtualisation.docker.enable = {{ (converge_docker | default(false) | bool) | string | lower }};
 
             programs.zsh.enable = true;
