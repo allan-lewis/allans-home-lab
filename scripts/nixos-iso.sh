@@ -148,8 +148,11 @@ cat >"$OUT/installer.nix" <<'NIX'
     util-linux
     e2fsprogs
     dosfstools
+    gnugrep
+    gnused
     parted
     python3
+    sudo
     systemd
     git
     curl
@@ -299,6 +302,15 @@ $BOOT_SNIPPET
 
   security.sudo.wheelNeedsPassword = false;
   services.timesyncd.enable = true;
+
+  environment.systemPackages = with pkgs; [
+    python3
+    git
+    curl
+    coreutils
+    gnugrep
+    gnused
+  ];
 
   system.stateVersion = "__STATE_VERSION__";
 }
