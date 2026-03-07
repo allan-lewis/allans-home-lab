@@ -52,10 +52,6 @@ all-shutdown group:
   {{run_prefix}} scripts/shutdown.sh "{{group}}"
 
 #############################
-#### PROXMOX APPLICANCES ####
-#############################
-
-#############################
 #### ARCH ###################
 #############################
 
@@ -84,8 +80,8 @@ haos-boot-disk-capture vmid update_stable="yes":
   {{run_prefix}} scripts/appliance-boot-disk-capture.sh "haos" "gitops-homelab-orchestrator-disks" "proxmox-images" "{{vmid}}" "{{update_stable}}"
 
 # Download backups from S3 and upload to an HAOS host 
-l3-homeassistant-backups:
-  {{run_prefix}} scripts/l3/haos.sh
+haos-upload-backups:
+  {{run_prefix}} haos-upload-backuos.sh
 
 # Apply or detroy HAOS Proxmox VM(s) using Terraform
 haos-terraform action approve="0":
@@ -149,17 +145,12 @@ nixos-converge-vaultwarden:
 #############################
 
 # Export a TrueNAS Proxmox VM's boot disk to an S3 bucket
-l1-truenas-capture vmid:
-  S3_BUCKET=gitops-homelab-orchestrator-disks \
-  S3_PREFIX=proxmox-images \
-  {{run_prefix}} scripts/l1/appliance-capture.sh truenas "{{vmid}}"
+truenas-boot-disk-capture vmid update_stable="yes":
+  {{run_prefix}} scripts/appliance-boot-disk-capture.sh "truenas" "gitops-homelab-orchestrator-disks" "proxmox-images" "{{vmid}}" "{{update_stable}}"
 
-# Attach disks to a TrueNAS host
-l3-truenas vmid:
-  {{run_prefix}} scripts/l3/proxmox-disks.sh \
-    "$PVE_SSH_IP" \
-    "{{vmid}}" \
-    "infra/os/truenas/personas/nas/spec/terraform.json"
+# Attach physical disks to a TrueNAS host
+truenas-attach-disks vmid:
+  {{run_prefix}} scripts/proxmox-attach-disks.sh "{{vmid}}" "truenas" "nas"
 
 # Apply or detroy TrueNAS Proxmox VM(s) using Terraform
 truenas-terraform action approve="0":

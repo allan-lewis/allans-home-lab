@@ -10,10 +10,13 @@ set -euo pipefail
 #   PROXMOX_USER     default: root
 #   PROXMOX_SSH_OPTS default: disables host key checking
 
-PROXMOX_NODE="${1:?Usage: $0 <proxmox-node> <vmid> <manifest.json>}"
-VMID="${2:?Usage: $0 <proxmox-node> <vmid> <manifest.json>}"
-MANIFEST="${3:?Usage: $0 <proxmox-node> <vmid> <manifest.json>}"
+VMID="${1:?Usage: $0 <vmid> <os> <persona>}"
+VM_OS="${2:?Usage: $0 <vmid> <os> <persona>}"
+VM_PERSONA="${3:?Usage: $0 <vmid> <os> <persona>}"
 
+MANIFEST=infra/os/${VM_OS}/personas/${VM_PERSONA}/spec/terraform.json
+
+PROXMOX_NODE="${PVE_SSH_IP}"
 PROXMOX_USER="${PROXMOX_USER:-root}"
 DEFAULT_SSH_OPTS="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
 PROXMOX_SSH_OPTS="${PROXMOX_SSH_OPTS:-$DEFAULT_SSH_OPTS}"
