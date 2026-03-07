@@ -303,6 +303,15 @@ $BOOT_SNIPPET
   security.sudo.wheelNeedsPassword = false;
   services.timesyncd.enable = true;
 
+  environment.systemPackages = with pkgs; [
+    python3
+    git
+    curl
+    coreutils
+    gnugrep
+    gnused
+  ];
+
   system.stateVersion = "__STATE_VERSION__";
 }
 NIXCONF
