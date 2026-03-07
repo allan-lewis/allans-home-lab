@@ -1,4 +1,6 @@
 ---
+nixos_boot_loader_grub_device: "/dev/nvme0n1"
+
 converge_tailscale: true
 tailscale_authkey: "{{ lookup('env', 'TAILSCALE_AUTHKEY') }}"
 

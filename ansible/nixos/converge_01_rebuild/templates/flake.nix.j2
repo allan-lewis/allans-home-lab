@@ -46,7 +46,7 @@
           in
           {
             boot.loader.grub.enable = true;
-            boot.loader.grub.device = "/dev/sda";
+            boot.loader.grub.device = "{{nixos_boot_loader_grub_device | default('/dev/sda')}}";
 
             # ---- Identity ----
             networking.hostName = "{{ inventory_hostname }}";
