@@ -1,0 +1,260 @@
+---
+- name: Proxmox runway checks
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    artifacts_dir: "{{ (lookup('env','GITHUB_WORKSPACE') | default(playbook_dir ~ '/..', true)) ~ '/artifacts/l0' }}"
+    # Inputs pulled from env unless provided by inventory/extra-vars
+    pve_access_host: "{{ lookup('env','PVE_ACCESS_HOST') | default('', true) }}"
+    pm_token_id: "{{ lookup('env','PM_TOKEN_ID') | default('', true) }}"
+    pm_token_secret: "{{ lookup('env','PM_TOKEN_SECRET') | default('', true) }}"
+    pve_node: "{{ lookup('env','PVE_NODE') | default('', true) }}"
+    pve_storage_iso: "{{ lookup('env','PVE_STORAGE_ISO') | default('local', true) }}"
+    pve_storage_vm: "{{ lookup('env','PVE_STORAGE_VM') | default('', true) }}"
+    pve_bridge: "{{ lookup('env','PVE_BRIDGE') | default('vmbr0', true) }}"
+    # Thresholds
+    l0_min_free_gib_iso: "{{ (lookup('env','L0_MIN_FREE_GIB_ISO') | default('4', true)) | float }}"
+    l0_min_free_pct_vm:  "{{ (lookup('env','L0_MIN_FREE_PCT_VM')  | default('10', true)) | float }}"
+
+
+  pre_tasks:
+    - name: Ensure artifacts directory exists
+      ansible.builtin.file:
+        path: "{{ artifacts_dir }}"
+        state: directory
+        mode: "0755"
+
+    - name: Initialize runway_summary default
+      ansible.builtin.set_fact:
+        runway_summary:
+          runway_status: "INIT"
+          reasons: []
+
+  tasks:
+    - name: Seed accumulators and safe defaults
+      set_fact:
+        fail_reasons: []
+        runway_summary:
+          runway_status: "INIT"
+          reasons: []
+        _host_stripped: "{{ (pve_access_host | default('') | regex_replace('^https?://','')) }}"
+        _auth_header: "PVEAPIToken={{ pm_token_id }}={{ pm_token_secret }}"
+
+    - name: Validate required inputs (soft record)
+      vars:
+        missing: >-
+          {{
+            []
+            + (['PVE_ACCESS_HOST'] if (pve_access_host|length)==0 else [])
+            + (['PM_TOKEN_ID'] if (pm_token_id|length)==0 else [])
+            + (['PM_TOKEN_SECRET'] if (pm_token_secret|length)==0 else [])
+            + (['PVE_NODE'] if (pve_node|length)==0 else [])
+            + (['PVE_STORAGE_VM'] if (pve_storage_vm|length)==0 else [])
+          }}
+      set_fact:
+        fail_reasons: "{{ fail_reasons + ((missing | length > 0) | ternary(['Missing required inputs: ' ~ (missing | join(', '))], [])) }}"
+
+    - name: GET /version (API reachability & auth)
+      uri:
+        url: "https://{{ _host_stripped }}/api2/json/version"
+        method: GET
+        headers:
+          Authorization: "{{ _auth_header }}"
+          Accept: "application/json"
+        return_content: true
+        validate_certs: yes
+        status_code: 200
+      register: _version
+      failed_when: false
+      when: (_host_stripped|length)>0 and (pm_token_id|length)>0 and (pm_token_secret|length)>0
+
+    - name: Record version result
+      copy:
+        dest: "{{ artifacts_dir }}/pve_version.json"
+        mode: '0644'
+        content: "{{ (_version.json | default({})) | to_nice_json }}"
+      when: artifacts_dir is defined
+
+    - name: Flag API/auth failure
+      set_fact:
+        fail_reasons: "{{ fail_reasons + ['API unreachable or auth failed'] }}"
+      when: _version is not defined or (_version.status | default(0)) != 200
+
+    - name: GET /nodes
+      uri:
+        url: "https://{{ _host_stripped }}/api2/json/nodes"
+        method: GET
+        headers:
+          Authorization: "{{ _auth_header }}"
+          Accept: "application/json"
+        return_content: true
+        validate_certs: yes
+        status_code: 200
+      register: _nodes
+      failed_when: false
+
+    - name: Record nodes
+      copy:
+        dest: "{{ artifacts_dir }}/nodes.json"
+        mode: '0644'
+        content: "{{ (_nodes.json | default({})) | to_nice_json }}"
+      when: artifacts_dir is defined
+
+    - name: Determine node status
+      set_fact:
+        node_status: >-
+          {{ (_nodes.json.data | default([]) | selectattr('node','equalto', pve_node) | list | first).status
+            | default('missing') }}
+
+    - name: Flag node missing/offline
+      set_fact:
+        fail_reasons: "{{ fail_reasons + [ msg ] }}"
+      vars:
+        msg: >-
+          {{ 'Node ' ~ pve_node ~ ' not found' if node_status == 'missing'
+            else ('Node ' ~ pve_node ~ ' not online (status=' ~ node_status ~ ')') }}
+      when: node_status != 'online'
+
+    - name: GET /nodes/{{ pve_node }}/network
+      uri:
+        url: "https://{{ _host_stripped }}/api2/json/nodes/{{ pve_node }}/network"
+        method: GET
+        headers:
+          Authorization: "{{ _auth_header }}"
+          Accept: "application/json"
+        return_content: true
+        validate_certs: yes
+        status_code: 200
+      register: _net
+      failed_when: false
+
+    - name: Record network
+      copy:
+        dest: "{{ artifacts_dir }}/network_{{ pve_node }}.json"
+        mode: '0644'
+        content: "{{ (_net.json | default({})) | to_nice_json }}"
+      when: artifacts_dir is defined
+
+    - name: Inspect bridge presence/active
+      set_fact:
+        bridge_type: >-
+          {{ (_net.json.data | default([]) | selectattr('iface','equalto', pve_bridge) | list | first).type
+            | default('missing') }}
+        bridge_active: >-
+          {{ (_net.json.data | default([]) | selectattr('iface','equalto', pve_bridge) | list | first).active
+            | default('0') }}
+
+    - name: Flag missing bridge
+      set_fact:
+        fail_reasons: "{{ fail_reasons + [ 'Bridge ' ~ pve_bridge ~ ' not found on node ' ~ pve_node ] }}"
+      when: bridge_type != 'bridge'
+
+    - name: Warn if bridge not active
+      debug:
+        msg: "⚠️ Bridge {{ pve_bridge }} exists but is not active."
+      when: bridge_type == 'bridge' and (bridge_active | string) != '1'
+
+    - name: GET ISO storage status
+      uri:
+        url: "https://{{ _host_stripped }}/api2/json/nodes/{{ pve_node }}/storage/{{ pve_storage_iso }}/status"
+        method: GET
+        headers:
+          Authorization: "{{ _auth_header }}"
+          Accept: "application/json"
+        return_content: true
+        validate_certs: yes
+        status_code: 200
+      register: _iso
+      failed_when: false
+
+    - name: Record ISO storage
+      copy:
+        dest: "{{ artifacts_dir }}/storage_{{ pve_storage_iso }}.json"
+        mode: '0644'
+        content: "{{ (_iso.json | default({})) | to_nice_json }}"
+      when: artifacts_dir is defined
+
+    - name: GET VM storage status
+      uri:
+        url: "https://{{ _host_stripped }}/api2/json/nodes/{{ pve_node }}/storage/{{ pve_storage_vm }}/status"
+        method: GET
+        headers:
+          Authorization: "{{ _auth_header }}"
+          Accept: "application/json"
+        return_content: true
+        validate_certs: yes
+        status_code: 200
+      register: _vmstore
+      failed_when: false
+
+    - name: Record VM storage
+      copy:
+        dest: "{{ artifacts_dir }}/storage_{{ pve_storage_vm }}.json"
+        mode: '0644'
+        content: "{{ (_vmstore.json | default({})) | to_nice_json }}"
+      when: artifacts_dir is defined
+
+    - name: Compute storage free (GiB and %)
+      set_fact:
+        iso_free_gib: >-
+          {{ (((_iso.json.data.avail | default(0)) | int) / (1024**3)) | float | round(2) }}
+        vm_free_pct: >-
+          {{ (
+              ((_vmstore.json.data.avail | default(0)) | float) /
+              (
+                ((_vmstore.json.data.total | default(1)) | float)
+                if ((_vmstore.json.data.total | default(1)) | float) > 0
+                else 1
+              )
+            ) * 100.0 | round(2) }}
+
+    - name: Enforce storage thresholds (soft – add reason, don’t abort)
+      set_fact:
+        fail_reasons: "{{ fail_reasons + [ reason ] }}"
+      vars:
+        reason: >-
+          {{ 'Insufficient free space on '
+            ~ (pve_storage_iso if iso_free_gib < l0_min_free_gib_iso else pve_storage_vm)
+            ~ ( ' (ISO store: ' ~ iso_free_gib ~ ' GiB)' if iso_free_gib < l0_min_free_gib_iso
+                else ' (VM store free: ' ~ vm_free_pct ~ '%)' ) }}
+      when: iso_free_gib < l0_min_free_gib_iso or vm_free_pct < l0_min_free_pct_vm
+
+    - name: Assemble runway manifest
+      set_fact:
+        runway_manifest:
+          runway_status: "{{ 'FAIL' if (fail_reasons | length) > 0 else 'OK' }}"
+          proxmox:
+            host: "{{ _host_stripped }}"
+            node: "{{ pve_node }}"
+          network:
+            bridge: "{{ pve_bridge }}"
+          storage:
+            iso: { name: "{{ pve_storage_iso }}", free_gib: "{{ (iso_free_gib | default(0.0)) | float }}" }
+            vm:  { name: "{{ pve_storage_vm }}",  free_pct: "{{ (vm_free_pct  | default(0.0)) | float }}" }
+          notes: "L0 performed read-only checks."
+          failures: "{{ fail_reasons }}"
+
+    - name: Write runway manifest
+      copy:
+        dest: "{{ artifacts_dir }}/runway_manifest.json"
+        mode: '0644'
+        content: "{{ runway_manifest | to_nice_json }}"
+      when: artifacts_dir is defined
+
+    - name: Compute final summary (exported as runway_summary)
+      set_fact:
+        runway_summary:
+          runway_status: "{{ runway_manifest.runway_status }}"
+          reasons: "{{ runway_manifest.failures | default([]) }}"
+
+  post_tasks:
+    - name: Print final status
+      ansible.builtin.debug:
+        msg: "{{ runway_summary.runway_status }}: {{ runway_summary.reasons | default([]) }}"
+
+    - name: Fail if runway not OK
+      ansible.builtin.fail:
+        msg: "{{ runway_summary }}"
+      when: runway_summary.runway_status != 'OK'
