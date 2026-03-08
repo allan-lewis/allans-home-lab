@@ -267,13 +267,7 @@ cat >"$OUT/installer.nix" <<'NIX'
 
       ${pkgs.nixos-install-tools}/bin/nixos-generate-config --root /mnt
 
-      # Bootloader snippet (UEFI vs BIOS)
-      BOOT_SNIPPET=""
-      if [[ -d /sys/firmware/efi ]]; then
-        BOOT_SNIPPET=$'  boot.loader.systemd-boot.enable = true;\n  boot.loader.efi.canTouchEfiVariables = true;\n'
-      else
-        BOOT_SNIPPET=$'  boot.loader.grub.enable = true;\n  boot.loader.grub.devices = [ "'"$DISK"'" ];\n'
-      fi
+      BOOT_SNIPPET=$'  boot.loader.systemd-boot.enable = true;\n  boot.loader.efi.canTouchEfiVariables = true;\n'
 
       # Write bootstrap config, preserving generated hardware config import
       cat > /mnt/etc/nixos/configuration.nix <<NIXCONF
