@@ -90,12 +90,6 @@
       when: converge_docker_monitoring
       tags: [linux_monitoring]
 
-    # - name: L3 | Arch | AUR
-    # - name: L3 | Arch | nvidia
-    # - name: L3 | Arch | desktop
-    # - name: L3 | Arch | Reboot
-    # - name: L3 | Arch | docker
-
     # - name: L3 | Ubuntu | openvpn
     # - name: L4 | Ubuntu | openvpn
 
