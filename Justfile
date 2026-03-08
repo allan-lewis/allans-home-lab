@@ -69,7 +69,7 @@ arch-terraform persona action approve="0":
 
 # Fully converge a group of Arch hosts
 arch-converge group tags="" limit="":
-  {{run_prefix}} scripts/ansible-playbook.sh "ansible/linux/converge.yaml" "{{group}}" "{{tags}}" "{{limit}}"
+  {{run_prefix}} scripts/ansible-playbook.sh "ansible/converge-linux.yaml" "{{group}}" "{{tags}}" "{{limit}}"
 
 #############################
 #### HAOS ###################
