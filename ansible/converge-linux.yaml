@@ -8,7 +8,7 @@
     - name: Ping host to verify connectivity
       ansible.builtin.ping:
       when: converge_arch or converge_ubuntu
-      tags: [ping, ubuntu_base, ubuntu_harden, ubuntu_docker, linux_shell]
+      tags: [ping, ubuntu_base, ubuntu_harden, ubuntu_docker, linux_shell, linux_monitoring]
 
     - name: Perform base Ubuntu setup
       ansible.builtin.include_role:
@@ -42,6 +42,14 @@
       when: converge_ubuntu or converge_arch
       tags: [linux_shell]
 
+    - name: Install Docker monitoring services
+      ansible.builtin.include_role:
+        name: converge_linux_monitoring
+        apply:
+          tags: [linux_monitoring]
+      when: converge_docker_monitoring
+      tags: [linux_monitoring]
+
     # - name: L3 | Arch | sanity
     # - name: L3 | Arch | base
     # - name: L3 | Arch | harden
@@ -56,7 +64,6 @@
     # - name: L4 | Ubuntu | openvpn
 
     # - name: L3 | All | users
-    # - name: L3 | All | shell
     # - name: L3 | All | ssh keys
     # - name: L3 | All | metrics wrapper
     # - name: L3 | All | backup runner

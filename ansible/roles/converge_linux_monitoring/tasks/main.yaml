@@ -7,17 +7,14 @@
     owner: root
     group: root
     mode: "0755"
-  tags: [l3, step_docker_monitoring]
+  when: converge_docker_monitoring
 
 - name: Monitoring | Deploy Docker compose app
   ansible.builtin.include_role:
-    name: all_docker_compose
-    apply:
-      tags: [l3, step_docker_monitoring]
+    name: converge_linux_docker_compose
   vars:
     compose_app_name: monitoring
     compose_source_type: template
     compose_template_src: "templates/monitoring.compose.yaml.j2"
   when: converge_docker_monitoring
-  tags: [l3, step_docker_monitoring]
 
