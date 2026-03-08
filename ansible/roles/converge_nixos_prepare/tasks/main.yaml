@@ -44,7 +44,7 @@
 
 - name: KEYS | Install ssh keys
   ansible.builtin.include_role:
-    name: ssh_keypair
+    name: nixos_ssh_keypair
     apply: 
       tags: [prepare, prepare_keys]
   vars:

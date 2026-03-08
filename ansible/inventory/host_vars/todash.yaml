@@ -1,6 +1,5 @@
 ---
 nixos_docker_services:
-  - homepage
   - monitoring
 
 managed_host_volumes:

@@ -114,31 +114,31 @@ nixos-terraform persona action approve="0":
 
 # Fully converge a group of NixOS hosts
 nixos-converge group tags="" limit="":
-  {{run_prefix}} scripts/ansible-playbook.sh "ansible/nixos/converge.yaml" "{{group}}" "{{tags}}" "{{limit}}"
+  {{run_prefix}} scripts/ansible-playbook.sh "ansible/converge-nixos.yaml" "{{group}}" "{{tags}}" "{{limit}}"
 
 # Converge only the Docker Homepage application
 nixos-converge-homepage:
-  {{run_prefix}} scripts/ansible-playbook.sh "ansible/nixos/converge.yaml" "carrie" "docker" "" "nixos_docker_services=homepage"
+  {{run_prefix}} scripts/ansible-playbook.sh "ansible/converge-nixos.yaml" "carrie" "docker" "" "nixos_docker_services=homepage"
 
 # Converge only the Docker Immich application
 nixos-converge-immich:
-  {{run_prefix}} scripts/ansible-playbook.sh "ansible/nixos/converge.yaml" "misery" "docker" "" "nixos_docker_services=immich"
+  {{run_prefix}} scripts/ansible-playbook.sh "ansible/converge-nixos.yaml" "misery" "docker" "" "nixos_docker_services=immich"
 
 # Converge only the Docker Jellyfin application
 nixos-converge-jellyfin:
-  {{run_prefix}} scripts/ansible-playbook.sh "ansible/nixos/converge.yaml" "misery" "docker" "" "nixos_docker_services=jellyfin"
+  {{run_prefix}} scripts/ansible-playbook.sh "ansible/converge-nixos.yaml" "misery" "docker" "" "nixos_docker_services=jellyfin"
 
 # Converge only the Docker Plex application
 nixos-converge-plex:
-  {{run_prefix}} scripts/ansible-playbook.sh "ansible/nixos/converge.yaml" "misery" "docker" "" "nixos_docker_services=plex"
+  {{run_prefix}} scripts/ansible-playbook.sh "ansible/converge-nixos.yaml" "misery" "docker" "" "nixos_docker_services=plex"
 
 # Converge only the Docker Trilium application
 nixos-converge-trilium:
-  {{run_prefix}} scripts/ansible-playbook.sh "ansible/nixos/converge.yaml" "carrie" "docker" "" "nixos_docker_services=trilium"
+  {{run_prefix}} scripts/ansible-playbook.sh "ansible/converge-nixos.yaml" "carrie" "docker" "" "nixos_docker_services=trilium"
 
 # Converge only the Docker Vaultwarden application
 nixos-converge-vaultwarden:
-  {{run_prefix}} scripts/ansible-playbook.sh "ansible/nixos/converge.yaml" "carrie" "docker" "" "nixos_docker_services=vaultwarden"
+  {{run_prefix}} scripts/ansible-playbook.sh "ansible/converge-nixos.yaml" "carrie" "docker" "" "nixos_docker_services=vaultwarden"
 
 #############################
 #### TRUENAS ################

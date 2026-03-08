@@ -8,7 +8,7 @@
     - name: Ping to verify connectivity
       ansible.builtin.ping:
       when: converge_arch or converge_ubuntu
-      tags: [ping, ubuntu_base, ubuntu_harden, ubuntu_docker, linux_shell, linux_monitoring, arch_sanity, arch_base, arch_harden, arch_services]
+      tags: [ping, ubuntu_base, ubuntu_harden, ubuntu_docker, linux_shell, linux_monitoring, arch_sanity, arch_base, arch_harden, arch_services, arch_docker]
 
     - name: Perform Arch sanity checks
       ansible.builtin.include_role:
@@ -41,6 +41,14 @@
           tags: [arch_services]
       when: converge_arch
       tags: [arch_services]
+
+    - name: Perform Arch Docker setup
+      ansible.builtin.include_role:
+        name: converge_arch_docker
+        apply:
+          tags: [arch_docker]
+      when: converge_arch and converge_docker
+      tags: [arch_docker]
 
     - name: Perform base Ubuntu setup
       ansible.builtin.include_role:
