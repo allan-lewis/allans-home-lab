@@ -29,7 +29,7 @@ tf_base_dir := env_var_or_default("TF_BASE_DIR", "terraform/l2")
 
 # Prepare a Linux cloud-init seed ISO for a host (based on inventory)
 all-cloud-init-prepare host:
-  {{run_prefix}} scripts/ansible-playbook.sh "ansible/cloud-init-prepare.yaml" "localhost" "" "" "target_host={{host}}"
+  {{run_prefix}} scripts/ansible-playbook.sh "ansible/prepare-cloud-init.yaml" "localhost" "" "" "target_host={{host}}"
 
 # Write cloud-init ISOs to removable USB drives
 all-cloud-init-isos os_iso ci_iso:
@@ -174,4 +174,4 @@ ubuntu-terraform persona action approve="0":
 
 # Fully converge a group of Ubuntu hosts
 ubuntu-converge group tags="" limit="":
-  {{run_prefix}} scripts/ansible-playbook.sh "ansible/linux/converge.yaml" "{{group}}" "{{tags}}" "{{limit}}"
+  {{run_prefix}} scripts/ansible-playbook.sh "ansible/converge-linux.yaml" "{{group}}" "{{tags}}" "{{limit}}"
