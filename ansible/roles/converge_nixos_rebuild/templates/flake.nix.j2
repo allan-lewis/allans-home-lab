@@ -110,6 +110,9 @@
               shell = pkgs.zsh;
               # lock password (SSH keys still work)
               hashedPassword = "!";
+{% if not (nixos_is_virtual_machine | default(true)) %}
+              openssh.authorizedKeys.keys = [ "{{ nixos_ssh_key }}" ];
+{% endif %}
             };
 
             security.sudo.enable = true;
