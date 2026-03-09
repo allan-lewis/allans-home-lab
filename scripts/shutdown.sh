@@ -4,7 +4,7 @@ set -euo pipefail
 GROUP="${1:?Usage: $0 <group>}"
 
 INVENTORY="ansible/inventory/"
-PLAYBOOK="ansible/l3/shutdown.yaml"
+PLAYBOOK="ansible/shutdown.yaml"
 
 if [[ ! -d "${INVENTORY}" ]]; then
   echo "Inventory not found at: ${INVENTORY}" >&2

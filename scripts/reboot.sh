@@ -13,7 +13,7 @@ GROUP="${1:?Usage: $0 <group> [action]}"
 REBOOT_ACTION="${2:-dryrun}"
 
 INVENTORY="ansible/inventory/"
-PLAYBOOK="ansible/l3/reboot.yaml"
+PLAYBOOK="ansible/reboot.yaml"
 
 if [[ ! -d "${INVENTORY}" ]]; then
   echo "Inventory not found at: ${INVENTORY}" >&2
