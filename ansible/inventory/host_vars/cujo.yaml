@@ -15,8 +15,14 @@ source_code_repos:
   - repo: git@github.com:allan-lewis/allans-home-lab.git
     dest: allans-home-lab
     version: main
+  - repo: git@github.com:allan-lewis/dotfiles.git
+    dest: dotfiles
+    version: main
   - repo: git@github.com:allan-lewis/homelab-metrics.git
     dest: homelab-metrics 
+    version: main
+  - repo: git@github.com:allan-lewis/no-geeks-brewing-go.git
+    dest: no-geeks-brewing-go
     version: main
 
 converge_s3_mirror: false
