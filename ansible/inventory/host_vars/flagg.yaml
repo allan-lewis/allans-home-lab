@@ -25,13 +25,8 @@ postgres_db_user: "authentik"
 postgres_db_password: "{{ lookup('env', 'DOCKER_AUTHENTIK_PG_PASS') }}"
 postgres_db_backup_dir: /var/lib/postgres-db-dumps
 
-converge_docker_cloudflare: true
-
 twingate_access_token: "{{ lookup('env', 'TWINGATE_VALIANT_STINGRAY_ACCESS_TOKEN') }}"
 twingate_refresh_token: "{{ lookup('env', 'TWINGATE_VALIANT_STINGRAY_REFRESH_TOKEN') }}"
-
-backup_runner_cron_hour: "*"
-backup_runner_cron_minute: "30"
 
 managed_host_volumes:
   gatus_config:
@@ -181,10 +176,6 @@ managed_host_volumes:
     owner: "65534"
   }
 ]
-
-converge_docker_traefik: true
-traefik_acme_dir: "/var/lib/traefik/acme"
-traefik_config_dir: "/etc/traefik"
 
 converge_docker_authentik: true
 authentik_version: "2025.10.3"

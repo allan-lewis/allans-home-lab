@@ -156,7 +156,7 @@ nixos_docker_service_configs:
       CLOUDFLARE_API_KEY: "{{ lookup('env', 'TRAEFIK_CF_API_KEY') }}"
     compose_extra_templates:
       - src: "templates/traefik/traefik.config.yaml.j2"
-        dest: "{{ traefik_config_dir }}/traefik.yaml"
+        dest: "/etc/traefik/traefik.yaml"
         uid: "{{ lab_uid }}"
         gid: "{{ lab_gid }}"
   trilium:
