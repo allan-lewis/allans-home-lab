@@ -1,4 +1,7 @@
 ---
+converge_tailscale: true
+tailscale_authkey: "{{ lookup('env', 'TAILSCALE_AUTHKEY') }}"
+
 nixos_docker_services:
   - cloudflare
   - gatus
@@ -315,7 +318,8 @@ traefik_services:
     url: "http://{{hostvars['old_flagg'].ansible_host}}:8180"
   - name: "traefik-dashboard"
     host: traefik.docker.allanshomelab.com
-    url: "http://{{ hostvars['old_flagg'].ansible_host}}:8088"
+    url: "http://127.0.0.1:8080"
+    # use the above on nixos url: "http://{{ hostvars['flagg'].ansible_host}}:8088"
   - name: pihole
     host: dns.docker.allanshomelab.com
     url: "http://{{ hostvars['old_flagg'].ansible_host }}:30080"
