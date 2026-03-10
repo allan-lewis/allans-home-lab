@@ -28,8 +28,8 @@ services:
       - CLOUDFLARE_EMAIL=${CLOUDFLARE_EMAIL}
       - CLOUDFLARE_API_KEY=${CLOUDFLARE_API_KEY}
     volumes:
-      - "{{ traefik_acme_dir }}:/letsencrypt"
-      - "{{ traefik_config_dir }}:/traefik"
+      - "{{ managed_host_volumes['traefik_acme'].local }}:/letsencrypt"
+      - "{{ managed_host_volumes['traefik_config'].local }}:/traefik"
       - "/var/run/docker.sock:/var/run/docker.sock"
 
   whoami:

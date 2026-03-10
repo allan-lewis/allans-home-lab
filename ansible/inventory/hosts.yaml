@@ -48,6 +48,9 @@ all:
         gatus: [8080]
         node-exporter: [9100]
         homelab-metrics: [9102]
+    old_flagg:
+      ansible_host: 192.168.86.205
+      gatus_slug: "(Ubuntu Core)"
     gan:
       ansible_host: 192.168.86.211
       gatus_slug: "(MacOS)"

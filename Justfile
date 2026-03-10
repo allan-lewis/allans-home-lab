@@ -144,6 +144,10 @@ nixos-converge-plex:
 nixos-converge-trilium:
   {{run_prefix}} scripts/ansible-playbook.sh "ansible/converge-nixos.yaml" "carrie" "docker" "" "nixos_docker_services=trilium"
 
+# Converge only the Docker Traefik application
+nixos-converge-traefik:
+  {{run_prefix}} scripts/ansible-playbook.sh "ansible/converge-nixos.yaml" "flagg" "docker" "" "nixos_docker_services=traefik"
+
 # Converge only the Docker Twingate application
 nixos-converge-twingate:
   {{run_prefix}} scripts/ansible-playbook.sh "ansible/converge-nixos.yaml" "nixos_twingate" "docker" "" "nixos_docker_services=twingate"

@@ -7,5 +7,5 @@ services:
     ports: 
       - "8080:8080/tcp"
     volumes: 
-      - "{{ gatus_data_dir }}:/data"
-      - "{{ gatus_config_dir}}:/config"
+      - "{{ managed_host_volumes['gatus_lib'].local }}:/data"
+      - "{{ managed_host_volumes['gatus_config'].local }}:/config"

@@ -3,6 +3,7 @@ nixos_docker_services:
   - cloudflare
   - gatus
   - monitoring
+  - traefik
   - twingate
 
 # converge_restore: true
@@ -50,6 +51,24 @@ managed_host_volumes:
     type: local
     local: /var/lib/gatus
     remote: "{{ default_remote_nas_per_host_backup_volume }}/gatus_lib"
+    restore: true
+    backup: true
+    owner: "root"
+    group: "root"
+    mode: "0755"
+  traefik_config:
+    type: local
+    local: /etc/traefik
+    remote: "{{ default_remote_nas_per_host_backup_volume }}/traefik_config"
+    restore: true
+    backup: true
+    owner: "lab"
+    group: "lab"
+    mode: "0755"
+  traefik_acme:
+    type: local
+    local: /var/lib/traefik/acme
+    remote: "{{ default_remote_nas_per_host_backup_volume }}/traefik_acme"
     restore: true
     backup: true
     owner: "root"
@@ -120,10 +139,6 @@ traefik_config_dir: "/etc/traefik"
 
 converge_docker_authentik: true
 authentik_version: "2025.10.3"
-
-converge_docker_gatus: true
-gatus_config_dir: "/etc/gatus"
-gatus_data_dir: "/var/lib/gatus"
 
 gatus_https_endpoints:
   - name: "Gatus"
@@ -297,13 +312,13 @@ traefik_services:
     url: "http://{{hostvars['pennywise'].ansible_host}}:80"
   - name: "whoami"
     host: whoami.docker.allanshomelab.com
-    url: "http://{{hostvars['flagg'].ansible_host}}:8180"
+    url: "http://{{hostvars['old_flagg'].ansible_host}}:8180"
   - name: "traefik-dashboard"
     host: traefik.docker.allanshomelab.com
-    url: "http://{{ hostvars['flagg'].ansible_host}}:8088"
+    url: "http://{{ hostvars['old_flagg'].ansible_host}}:8088"
   - name: pihole
     host: dns.docker.allanshomelab.com
-    url: "http://{{ hostvars['flagg'].ansible_host }}:30080"
+    url: "http://{{ hostvars['old_flagg'].ansible_host }}:30080"
   - name: gatus
     host: gatus.docker.allanshomelab.com
     url: "http://{{ hostvars['flagg'].ansible_host }}:8080"
@@ -392,7 +407,7 @@ traefik_services:
     url: "http://{{ hostvars['carrie'].ansible_host }}:9000"
   - name: authentik
     host: authn.allanshomelab.com
-    url: "http://{{ hostvars['flagg'].ansible_host }}:9180"
+    url: "http://{{ hostvars['old_flagg'].ansible_host }}:9180"
   - name: homepage
     host: homepage.docker.allanshomelab.com
     url: "http://{{ hostvars['carrie'].ansible_host }}:3007"
@@ -405,13 +420,13 @@ traefik_services:
     authentik: true
   - name: alertmanager
     host: alertmanager.docker.allanshomelab.com
-    url: "http://{{ hostvars['flagg'].ansible_host }}:3070"
+    url: "http://{{ hostvars['old_flagg'].ansible_host }}:3070"
   - name: grafana
     host: grafana.allanshomelab.com
-    url: "http://{{ hostvars['flagg'].ansible_host }}:3071"
+    url: "http://{{ hostvars['old_flagg'].ansible_host }}:3071"
   - name: prometheus
     host: prometheus.docker.allanshomelab.com
-    url: "http://{{ hostvars['flagg'].ansible_host }}:3072"
+    url: "http://{{ hostvars['old_flagg'].ansible_host }}:3072"
   - name: trilium
     host: notes.allanshomelab.com
     url: "http://{{ hostvars['carrie'].ansible_host }}:8376"
@@ -426,15 +441,13 @@ pihole_upstreams:
   - "149.112.112.112"
 pihole_a_records:
   - name: "docker.allanshomelab.com"
-    address: "192.168.86.205" 
+    address: "192.168.86.204" 
   - name: "hosts.allanshomelab.com"
-    address: "192.168.86.205" 
+    address: "192.168.86.204" 
   - name: "media.allanshomelab.com"
-    address: "192.168.86.205" 
+    address: "192.168.86.204" 
   - name: "kvm.allanshomelab.com"
-    address: "192.168.86.205"
-  - name: "postgres.k8s.allanshomelab.com"
-    address: "192.168.86.196"
+    address: "192.168.86.204"
 pihole_cname_records:
   - alias: "gatus.docker.allanshomelab.com"
     target: "docker.allanshomelab.com"
