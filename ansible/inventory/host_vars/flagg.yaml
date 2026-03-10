@@ -19,7 +19,7 @@ nixos_ssh_key: "{{ lookup('env', 'TF_VAR_PROXMOX_VM_PUBLIC_KEY') }}"
 
 gatus_tautulli_api_key: "{{ lookup('env', 'HOMEPAGE_VAR_TAUTULLI_KEY') }}"
 
-# converge_postgres_dump: true
+converge_postgres_dump: true
 postgres_db_container: "authentik-postgresql-1"
 postgres_db_name: "authentik"
 postgres_db_user: "authentik"
@@ -130,6 +130,24 @@ managed_host_volumes:
     mode: "0755"
 
 authentik_version: "2025.10.3"
+
+# converge_s3_mirror: false
+# s3_mirror_buckets: [
+#   "gitops-homelab-orchestrator-disks",
+#   "gitops-homelab-orchestrator-haos",
+#   "gitops-homelab-orchestrator-tf"
+# ]
+
+# managed_host_volumes:
+  # s3_mirror:
+  #   type: local
+  #   local: /var/lib/allans-home-lab/s3-mirror
+  #   remote: "{{ default_remote_nas_per_host_backup_volume }}/s3-mirror"
+  #   restore: true
+  #   backup: true
+  #   owner: "root"
+  #   group: "root"
+  #   mode: "0755"
 
 gatus_https_endpoints:
   - name: "Gatus"
@@ -400,7 +418,7 @@ traefik_services:
     url: "http://{{ hostvars['carrie'].ansible_host }}:9000"
   - name: authentik
     host: authn.allanshomelab.com
-    url: "http://{{ hostvars['old_flagg'].ansible_host }}:9180"
+    url: "http://{{ hostvars['flagg'].ansible_host }}:9180"
   - name: homepage
     host: homepage.docker.allanshomelab.com
     url: "http://{{ hostvars['carrie'].ansible_host }}:3007"

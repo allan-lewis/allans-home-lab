@@ -4,6 +4,16 @@ converge_docker: true
 immich_version: "v2.5.6"
 
 nixos_docker_service_configs:
+  authentik:
+    compose_app_name: authentik
+    compose_source_type: url
+    compose_url: "https://docs.goauthentik.io/compose.yml"
+    compose_env:
+      AUTHENTIK_TAG: "{{ authentik_version }}"
+      COMPOSE_PORT_HTTP: 9180
+      COMPOSE_PORT_HTTPS: 9143
+      PG_PASS: "{{ lookup('env', 'DOCKER_AUTHENTIK_PG_PASS') }}"
+      AUTHENTIK_SECRET_KEY: "{{ lookup('env', 'DOCKER_AUTHENTIK_SECRET_KEY') }}"
   cloudflare:
     compose_app_name: cloudflare
     compose_source_type: file
