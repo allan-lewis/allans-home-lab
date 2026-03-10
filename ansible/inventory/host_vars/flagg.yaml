@@ -3,6 +3,7 @@ converge_tailscale: true
 tailscale_authkey: "{{ lookup('env', 'TAILSCALE_AUTHKEY') }}"
 
 nixos_docker_services:
+  - authentik
   - cloudflare
   - gatus
   - monitoring
@@ -118,66 +119,16 @@ managed_host_volumes:
     owner: "65534"
     group: "65534"
     mode: "0755"
+  postgres_backup:
+    type: local
+    local: "{{ postgres_db_backup_dir }}"
+    remote: "{{ default_remote_nas_per_host_backup_volume }}/authentik/db-dumps"
+    restore: true
+    backup: true
+    owner: "root"
+    group: "root"
+    mode: "0755"
 
-"backup_runner_volumes": [
-  { 
-    src: "/var/lib/gatus",
-    dest: "{{ default_remote_nas_per_host_backup_volume }}/gatus_lib",
-    owner: "root"
-  },
-  { 
-    src: "/etc/gatus",
-    dest: "{{ default_remote_nas_per_host_backup_volume }}/gatus_config",
-    owner: "lab"
-  },
-  { 
-    src: "/var/lib/pihole",
-    dest: "{{ default_remote_nas_per_host_backup_volume }}/pihole_lib",
-    owner: "lab"
-  },
-  { 
-    src: "/etc/traefik",
-    dest: "{{ default_remote_nas_per_host_backup_volume }}/traefik_config",
-    owner: "lab"
-  },
-  { 
-    src: "/var/lib/traefik/acme",
-    dest: "{{ default_remote_nas_per_host_backup_volume }}/traefik_acme",
-    owner: "root"
-  },
-  { 
-    src: "{{ postgres_db_backup_dir }}",
-    dest: "{{ default_remote_nas_per_host_backup_volume }}/authentik/db-dumps",
-    owner: "root"
-  },
-  {
-    src: "{{ prometheus_config_dir }}",
-    dest: "{{ default_remote_nas_per_host_backup_volume }}/prometheus/config",
-    owner: "root"
-  },
-  {
-    src: "{{ grafana_data_dir }}",
-    dest: "{{ default_remote_nas_per_host_backup_volume }}/grafana/data",
-    owner: "472"
-  },
-  {
-    src: "{{ grafana_provision_dir }}",
-    dest: "{{ default_remote_nas_per_host_backup_volume }}/grafana/provision",
-    owner: "472"
-  },
-  {
-    src: "{{ alertmanager_config_dir }}",
-    dest: "{{ default_remote_nas_per_host_backup_volume }}/alertmanager/config",
-    owner: "root"
-  },
-  {
-    src: "{{ alertmanager_data_dir }}",
-    dest: "{{ default_remote_nas_per_host_backup_volume }}/alertmanager/data",
-    owner: "65534"
-  }
-]
-
-converge_docker_authentik: true
 authentik_version: "2025.10.3"
 
 gatus_https_endpoints:

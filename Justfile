@@ -116,6 +116,10 @@ nixos-terraform persona action approve="0":
 nixos-converge group tags="" limit="":
   {{run_prefix}} scripts/ansible-playbook.sh "ansible/converge-nixos.yaml" "{{group}}" "{{tags}}" "{{limit}}"
 
+# Converge only the Docker Authentik application
+nixos-converge-authentik:
+  {{run_prefix}} scripts/ansible-playbook.sh "ansible/converge-nixos.yaml" "flagg" "docker" "" "nixos_docker_services=authentik"
+
 # Converge only the Docker Cloudflare application
 nixos-converge-cloudflare:
   {{run_prefix}} scripts/ansible-playbook.sh "ansible/converge-nixos.yaml" "flagg" "docker" "" "nixos_docker_services=cloudflare"
