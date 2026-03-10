@@ -1,4 +1,5 @@
 ---
+
 - name: Observability | Deploy docker compose app
   ansible.builtin.include_role:
     name: all_docker_compose

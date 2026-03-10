@@ -136,6 +136,10 @@ nixos-converge-immich:
 nixos-converge-jellyfin:
   {{run_prefix}} scripts/ansible-playbook.sh "ansible/converge-nixos.yaml" "misery" "docker" "" "nixos_docker_services=jellyfin"
 
+# Converge only the Docker Prometheus/Grafana/Alertmanager applications
+nixos-converge-observability:
+  {{run_prefix}} scripts/ansible-playbook.sh "ansible/converge-nixos.yaml" "flagg" "docker" "" "nixos_docker_services=observability"
+
 # Converge only the Docker Plex application
 nixos-converge-plex:
   {{run_prefix}} scripts/ansible-playbook.sh "ansible/converge-nixos.yaml" "misery" "docker" "" "nixos_docker_services=plex"

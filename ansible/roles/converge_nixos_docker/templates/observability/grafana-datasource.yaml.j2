@@ -5,6 +5,7 @@ datasources:
   - name: Prometheus
     type: prometheus
     access: proxy
-    url: http://{{ hostvars['flagg'].ansible_host }}:3072
+    url: http://prometheus:9090
+    # Use the above on NixOS url: http://{{ hostvars['flagg'].ansible_host }}:3072
     isDefault: true
     editable: false

@@ -6,6 +6,7 @@ nixos_docker_services:
   - cloudflare
   - gatus
   - monitoring
+  - observability
   - traefik
   - twingate
 
@@ -14,14 +15,6 @@ nixos_is_virtual_machine: false
 nixos_network_interface: "eth1"
 nixos_network_address: "192.168.86.204"
 nixos_ssh_key: "{{ lookup('env', 'TF_VAR_PROXMOX_VM_PUBLIC_KEY') }}"
-
-converge_docker_observability: true
-grafana_data_dir: "/var/lib/grafana"
-grafana_provision_dir: "/etc/grafana/provisioning"
-alertmanager_config_dir: "/etc/alertmanager"
-alertmanager_data_dir: "/var/lib/alertmanager"
-prometheus_config_dir: "/etc/prometheus"
-prometheus_data_dir: "/var/lib/prometheus"
 
 gatus_tautulli_api_key: "{{ lookup('env', 'HOMEPAGE_VAR_TAUTULLI_KEY') }}"
 
@@ -76,6 +69,59 @@ managed_host_volumes:
     backup: true
     owner: "root"
     group: "root"
+    mode: "0755"
+  prometheus_config:
+    type: local
+    local: "/etc/prometheus"
+    remote: "{{ default_remote_nas_per_host_backup_volume }}/prometheus/config"
+    restore: true
+    backup: true
+    owner: "root"
+    group: "root"
+    mode: "0755"
+  prometheus_data:
+    type: local
+    local: "/var/lib/prometheus"
+    restore: false
+    backup: false
+    owner: "lab"
+    group: "lab"
+    mode: "0755"
+  grafana_data:
+    type: local
+    local: "/var/lib/grafana"
+    remote: "{{ default_remote_nas_per_host_backup_volume }}/grafana/data"
+    restore: true
+    backup: true
+    owner: "472"
+    group: "472"
+    mode: "0755"
+  grafana_provision:
+    type: local
+    local: "/etc/grafana/provisioning"
+    remote: "{{ default_remote_nas_per_host_backup_volume }}/grafana/provision"
+    restore: true
+    backup: true
+    owner: "472"
+    group: "472"
+    mode: "0755"
+  alertmanager_config:
+    type: local
+    local: "/etc/alertmanager"
+    remote: "{{ default_remote_nas_per_host_backup_volume }}/alertmanager/config"
+    restore: true
+    backup: true
+    owner: "root"
+    group: "root"
+    mode: "0755"
+  alertmanager_data:
+    type: local
+    local: "/var/lib/alertmanager"
+    remote: "{{ default_remote_nas_per_host_backup_volume }}/alertmanager/data"
+    restore: true
+    backup: true
+    owner: "65534"
+    group: "65534"
     mode: "0755"
 
 "backup_runner_volumes": [
@@ -315,7 +361,8 @@ traefik_services:
     url: "http://{{hostvars['pennywise'].ansible_host}}:80"
   - name: "whoami"
     host: whoami.docker.allanshomelab.com
-    url: "http://{{hostvars['old_flagg'].ansible_host}}:8180"
+    url: "http://whoami:80"
+    # url: "http://{{hostvars['flagg'].ansible_host}}:8180"
   - name: "traefik-dashboard"
     host: traefik.docker.allanshomelab.com
     url: "http://127.0.0.1:8080"
@@ -424,13 +471,13 @@ traefik_services:
     authentik: true
   - name: alertmanager
     host: alertmanager.docker.allanshomelab.com
-    url: "http://{{ hostvars['old_flagg'].ansible_host }}:3070"
+    url: "http://{{ hostvars['flagg'].ansible_host }}:3070"
   - name: grafana
     host: grafana.allanshomelab.com
-    url: "http://{{ hostvars['old_flagg'].ansible_host }}:3071"
+    url: "http://{{ hostvars['flagg'].ansible_host }}:3071"
   - name: prometheus
     host: prometheus.docker.allanshomelab.com
-    url: "http://{{ hostvars['old_flagg'].ansible_host }}:3072"
+    url: "http://{{ hostvars['flagg'].ansible_host }}:3072"
   - name: trilium
     host: notes.allanshomelab.com
     url: "http://{{ hostvars['carrie'].ansible_host }}:8376"
