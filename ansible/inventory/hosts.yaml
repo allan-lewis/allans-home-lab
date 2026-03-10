@@ -41,8 +41,8 @@ all:
       prometheus_scrape_jobs:
         node-exporter: [9100]
     flagg:
-      ansible_host: 192.168.86.205
-      gatus_slug: "(Ubuntu Docker/Core)"
+      ansible_host: 192.168.86.204
+      gatus_slug: "(NixOS Core)"
       prometheus_scrape_jobs:
         cloudflare: [2000]
         gatus: [8080]
@@ -118,6 +118,9 @@ all:
             nixos_apps:
               hosts:
                 carrie:
+            nixos_core:
+              hosts:
+                flagg:
             nixos_devops:
               hosts:
                 cujo:
@@ -130,22 +133,18 @@ all:
             nixos_tinker:
               hosts:
                 todash:
+            nixos_twingate:
+              hosts:
+                carrie:
+                flagg:
 
     ubuntu:
       children: 
         ubuntu_docker:
           children:
-            ubuntu_docker_twingate:
-              hosts:
-                flagg:
             ubuntu_tinker:
               hosts:
                 barlow:
-          hosts:
-            flagg:
         ubuntu_openvpn:
           hosts:
             blaine:
-        ubuntu_tailscale:
-          hosts:
-            flagg:

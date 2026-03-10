@@ -1,5 +1,15 @@
 ---
-converge_restore: true
+nixos_docker_services:
+  - cloudflare
+  - gatus
+  - monitoring
+  - twingate
+
+# converge_restore: true
+nixos_is_virtual_machine: false
+nixos_network_interface: "eth1"
+nixos_network_address: "192.168.86.204"
+nixos_ssh_key: "{{ lookup('env', 'TF_VAR_PROXMOX_VM_PUBLIC_KEY') }}"
 
 converge_docker_observability: true
 grafana_data_dir: "/var/lib/grafana"
@@ -11,7 +21,7 @@ prometheus_data_dir: "/var/lib/prometheus"
 
 gatus_tautulli_api_key: "{{ lookup('env', 'HOMEPAGE_VAR_TAUTULLI_KEY') }}"
 
-converge_postgres_dump: true
+# converge_postgres_dump: true
 postgres_db_container: "authentik-postgresql-1"
 postgres_db_name: "authentik"
 postgres_db_user: "authentik"
@@ -25,6 +35,26 @@ twingate_refresh_token: "{{ lookup('env', 'TWINGATE_VALIANT_STINGRAY_REFRESH_TOK
 
 backup_runner_cron_hour: "*"
 backup_runner_cron_minute: "30"
+
+managed_host_volumes:
+  gatus_config:
+    type: local
+    local: /etc/gatus
+    remote: "{{ default_remote_nas_per_host_backup_volume }}/gatus_config"
+    restore: true
+    backup: true
+    owner: "lab"
+    group: "lab"
+    mode: "0755"
+  gatus_lib:
+    type: local
+    local: /var/lib/gatus
+    remote: "{{ default_remote_nas_per_host_backup_volume }}/gatus_lib"
+    restore: true
+    backup: true
+    owner: "root"
+    group: "root"
+    mode: "0755"
 
 "backup_runner_volumes": [
   { 

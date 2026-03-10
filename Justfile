@@ -116,6 +116,14 @@ nixos-terraform persona action approve="0":
 nixos-converge group tags="" limit="":
   {{run_prefix}} scripts/ansible-playbook.sh "ansible/converge-nixos.yaml" "{{group}}" "{{tags}}" "{{limit}}"
 
+# Converge only the Docker Cloudflare application
+nixos-converge-cloudflare:
+  {{run_prefix}} scripts/ansible-playbook.sh "ansible/converge-nixos.yaml" "flagg" "docker" "" "nixos_docker_services=cloudflare"
+
+# Converge only the Docker Gatus application
+nixos-converge-gatus:
+  {{run_prefix}} scripts/ansible-playbook.sh "ansible/converge-nixos.yaml" "flagg" "docker" "" "nixos_docker_services=gatus"
+
 # Converge only the Docker Homepage application
 nixos-converge-homepage:
   {{run_prefix}} scripts/ansible-playbook.sh "ansible/converge-nixos.yaml" "carrie" "docker" "" "nixos_docker_services=homepage"
@@ -135,6 +143,10 @@ nixos-converge-plex:
 # Converge only the Docker Trilium application
 nixos-converge-trilium:
   {{run_prefix}} scripts/ansible-playbook.sh "ansible/converge-nixos.yaml" "carrie" "docker" "" "nixos_docker_services=trilium"
+
+# Converge only the Docker Twingate application
+nixos-converge-twingate:
+  {{run_prefix}} scripts/ansible-playbook.sh "ansible/converge-nixos.yaml" "nixos_twingate" "docker" "" "nixos_docker_services=twingate"
 
 # Converge only the Docker Vaultwarden application
 nixos-converge-vaultwarden:
