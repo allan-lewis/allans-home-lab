@@ -406,6 +406,15 @@
               ];
             };
 
+{% if converge_docker_pihole | default(false) %}
+            services.resolved = {
+              enable = true;
+              extraConfig = ''
+                DNSStubListener=no
+              '';
+            };
+{% endif %}
+
             services.homelab.devCheckouts = lib.mkIf converge_devops_enabled {
               enable = true;
 

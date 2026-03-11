@@ -141,6 +141,10 @@ nixos_docker_service_configs:
         dest: "/etc/prometheus/prometheus.yml"
       - src: "templates/observability/rules.yaml.j2"
         dest: "/etc/prometheus/rules.yml"
+  pihole:
+    compose_app_name: "pihole"
+    compose_source_type: "template"
+    compose_template_src: "templates/pihole.compose.yaml.j2"
   plex: 
     compose_app_name: plex
     compose_source_type: template

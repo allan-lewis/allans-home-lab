@@ -48,9 +48,6 @@ all:
         gatus: [8080]
         node-exporter: [9100]
         homelab-metrics: [9102]
-    old_flagg:
-      ansible_host: 192.168.86.205
-      gatus_slug: "(Ubuntu Core)"
     gan:
       ansible_host: 192.168.86.211
       gatus_slug: "(MacOS)"
@@ -59,6 +56,12 @@ all:
       gatus_slug: "(Remote Backup)"
       prometheus_scrape_jobs:
         node-exporter: [9100]
+    langolier:
+      ansible_host: 192.168.86.218
+      gatus_slug: "(NixOS Pi-hole)"
+      prometheus_scrape_jobs:
+        node-exporter: [9100]
+        homelab-metrics: [9102]
     maturin:
       ansible_host: 192.168.86.200
       gatus_slug: "(Proxmox Hypervisor)"
@@ -130,6 +133,9 @@ all:
             nixos_media:
               hosts:
                 misery:
+            pixos_pihole:
+              hosts:
+                langolier:
             nixos_rstack:
               hosts:
                 patricia:

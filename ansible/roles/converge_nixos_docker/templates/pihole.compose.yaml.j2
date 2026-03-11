@@ -9,12 +9,12 @@ services:
       FTLCONF_ntp_sync_active: 'false'
       FTLCONF_ntp_ipv4_active: 'false'
       FTLCONF_ntp_ipv6_active: 'false'
-      TZ: "{{ gitops_tz }}"
+      TZ: "{{ lab_tz }}"
       FTLCONF_webserver_api_password: '{{ pihole_admin_password }}'
       FTLCONF_dns_listeningMode: 'all'      
       FTLCONF_dns_upstreams: "{{ pihole_upstreams | join(';') }}"
     volumes:
-      - "{{ pihole_data_dir }}:/etc/pihole"
+      - "{{ managed_host_volumes['pihole_data'].local }}:/etc/pihole"
     ports:
       - "53:53/tcp"
       - "53:53/udp"

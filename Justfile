@@ -144,6 +144,10 @@ nixos-converge-jellyfin:
 nixos-converge-observability:
   {{run_prefix}} scripts/ansible-playbook.sh "ansible/converge-nixos.yaml" "flagg" "docker" "" "nixos_docker_services=observability"
 
+# Converge only the Docker Pi-hole application
+nixos-converge-pihole:
+  {{run_prefix}} scripts/ansible-playbook.sh "ansible/converge-nixos.yaml" "langolier" "docker" "" "nixos_docker_services=pihole"
+
 # Converge only the Docker Plex application
 nixos-converge-plex:
   {{run_prefix}} scripts/ansible-playbook.sh "ansible/converge-nixos.yaml" "misery" "docker" "" "nixos_docker_services=plex"
