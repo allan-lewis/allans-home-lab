@@ -19,7 +19,6 @@ converge_arch_nvidia: false
 converge_ubuntu: false
 converge_docker: false
 converge_node_exporter: false
-converge_devops: false
 converge_docker_monitoring: false
 converge_postgres_dump: false
 converge_restore: false

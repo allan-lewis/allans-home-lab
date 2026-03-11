@@ -1,5 +1,4 @@
 ---
-feature_flag_devops: true
 
 nixos_is_virtual_machine: false
 nixos_network_interface: "enp2s0"

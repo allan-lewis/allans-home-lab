@@ -37,7 +37,7 @@
         ({ pkgs, lib, ... }:  
           let
             converge_backup_enabled = {{ (converge_backup | default(false) | bool) | string | lower }};
-            converge_devops_enabled = {{ (converge_devops | default(false) | bool) | string | lower }};
+            converge_devops_enabled = {{ (feature_flag_devops | default(false) | bool) | string | lower }};
             converge_node_exporter_enabled = {{ (converge_node_exporter | default(false) | bool) | string | lower }};
             converge_restore_enabled = {{ (converge_restore | default(false) | bool) | string | lower }};
             converge_postgres_db_dump_enabled = {{ (converge_postgres_dump | default(false) | bool) | string | lower }};
@@ -144,7 +144,7 @@
                 github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl
               '';
 
-{% if converge_devops | default(false) %}
+{% if feature_flag_devops | default(false) %}
               programs.git = {
                 enable = true;
                 userName  = "{{ git_author_name }}";
@@ -243,7 +243,7 @@
               "L+ /root/.aws/credentials - - - - /var/lib/homelab-secrets/aws/credentials"
 
 {% endif %}              
-{% if converge_devops | default(false) | bool %}
+{% if feature_flag_devops | default(false) | bool %}
               "d /var/lib/homelab-secrets 0711 root root -"
               "d /var/lib/homelab-secrets/ssh 0711 root root -"
               "d /var/lib/homelab-secrets/ssh/lab 0700 lab lab -"
@@ -285,7 +285,7 @@
             nixpkgs.config.allowUnfree = true;
 
             environment.systemPackages = with pkgs; [
-{% if converge_devops | default(false) %}
+{% if feature_flag_devops | default(false) %}
               air
               ansible
 {% endif %}
@@ -296,7 +296,7 @@
               clang
               cmatrix
               curl
-{% if converge_devops | default(false) %}
+{% if feature_flag_devops | default(false) %}
               doppler
 {% endif %}
 {% if converge_docker | default(false) %}
@@ -307,7 +307,7 @@
               gcc
               git
               gnumake
-{% if converge_devops | default(false) %}
+{% if feature_flag_devops | default(false) %}
               go
               just
               jq
@@ -316,12 +316,12 @@
               neovim
               net-tools
               nfs-utils
-{% if converge_devops | default(false) %}
+{% if feature_flag_devops | default(false) %}
               packer
 {% endif %}
               python3
               ripgrep
-{% if converge_devops | default(false) %}
+{% if feature_flag_devops | default(false) %}
               terraform
 {% endif %}
               tmux
