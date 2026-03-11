@@ -3,14 +3,6 @@ nixos_docker_services:
   - monitoring
 
 managed_host_volumes:
-  homepage_config:
-    type: local
-    local: "/etc/homepage"
-    restore: false
-    backup: false
-    owner: "root"
-    group: "root"
-    mode: "0755"
   managed_dir_0:
     type: local
     local: "/home/lab/managed-dir-0"

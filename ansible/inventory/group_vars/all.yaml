@@ -23,28 +23,13 @@ converge_devops: false
 converge_docker_monitoring: false
 converge_postgres_dump: false
 converge_restore: false
-converge_docker_gatus: false
-converge_docker_it_tools: false
-converge_docker_ngb: false
 converge_openvpn: false
-converge_docker_memos: false
 converge_docker_portainer: false
 converge_docker_nginx: false
-converge_docker_vaultwarden: false
-converge_docker_tautulli: false
-converge_docker_authentik: false
-converge_docker_traefik: false
 converge_docker_pihole: false
-converge_docker_plex: false
-converge_docker_jellyfin: false
-converge_docker_immich: false
 converge_docker_media_acquisition: false
 converge_docker_twingate: false
-converge_docker_cloudflare: false
 converge_tailscale: false
-converge_docker_homepage: false
-converge_docker_observability: false
-converge_docker_trilium: false
 
 ## HOMELAB-WIDE VARIABLES
 default_remote_nas_ip: "{{ hostvars['pennywise'].ansible_host }}"
