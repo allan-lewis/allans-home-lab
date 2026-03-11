@@ -1,4 +1,11 @@
 ---
+aws_access_key_id: "{{ lookup('env', 'AWS_ACCESS_KEY_ID') | default('', true) }}"
+aws_default_region: "{{ lookup('env', 'AWS_DEFAULT_REGION') | default('us-east-1', true) }}"
+aws_secret_access_key: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') | default('', true) }}"
+
+feature_flag_s3_mirror: "{{ (s3_mirror_buckets | default([]) | length) > 0 }}"
+feature_flag_aws: "{{ feature_flag_devops | bool or feature_flag_s3_mirror | bool }}"
+
 ansible_python_interpreter: /run/current-system/sw/bin/python3
 
 ssh_private_key_b64: "{{ lookup('env', 'SSH_PRIVATE_KEY') | default('', true) }}"
@@ -56,11 +63,7 @@ converge_restore: >-
 
 nixos_converge_prepare_groups: >-
   {{
-    (
-      (nixos_converge_prepare_groups_all | default([]))
-      | union(nixos_converge_prepare_groups_devops | default([]))
-    )
-    | sort
+    ['lab'] + (['aws'] if (feature_flag_aws | default(false) | bool) else [])
   }}
 
 nixos_converge_prepare_groups_all: ["lab"]
@@ -70,6 +73,7 @@ nixos_converge_prepare_dirs: >-
     (
       (nixos_converge_prepare_dirs_all | default([]))
       + (nixos_converge_prepare_dirs_devops | default([]))
+      + (nixos_aws_secrets_dirs if (feature_flag_aws | default(false) | bool) else [])
     )
     | groupby('path')
     | map('last')
@@ -100,6 +104,9 @@ nixos_converge_prepare_files: >-
     | map('last')
     | list
   }}
+
+nixos_aws_secrets_dirs: 
+  - path: "/var/lib/homelab-secrets/aws"
 
 nixos_converge_prepare_files_all:
   - src: "tmux.conf.j2"

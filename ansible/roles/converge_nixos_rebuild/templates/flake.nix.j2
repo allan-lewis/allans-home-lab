@@ -41,7 +41,7 @@
             converge_node_exporter_enabled = {{ (converge_node_exporter | default(false) | bool) | string | lower }};
             converge_restore_enabled = {{ (converge_restore | default(false) | bool) | string | lower }};
             converge_postgres_db_dump_enabled = {{ (converge_postgres_dump | default(false) | bool) | string | lower }};
-            converge_s3_local_mirror_enabled = {{ (converge_s3_mirror | default(false) | bool) | string | lower }};
+            converge_s3_local_mirror_enabled = {{ (feature_flag_s3_mirror | default(false) | bool) | string | lower }};
             converge_tailscale_enabled = {{ (converge_tailscale | default(false) | bool) | string | lower }};
           in
           {
@@ -228,8 +228,7 @@
 
               # Neovim config wired from dotfiles
               "L+ /home/lab/.config/nvim - - - - /home/lab/.dotfiles/common-lazyvim/.config/nvim"
-{% if converge_devops | default(false) | bool %}
-
+{% if feature_flag_aws | default(false) | bool %}
               # Persistent AWS secret location (Ansible renders files here)
               "d /var/lib/homelab-secrets/aws 0755 root root -"
 
@@ -243,6 +242,8 @@
               "L+ /root/.aws/config - - - - /var/lib/homelab-secrets/aws/config"
               "L+ /root/.aws/credentials - - - - /var/lib/homelab-secrets/aws/credentials"
 
+{% endif %}              
+{% if converge_devops | default(false) | bool %}
               "d /var/lib/homelab-secrets 0711 root root -"
               "d /var/lib/homelab-secrets/ssh 0711 root root -"
               "d /var/lib/homelab-secrets/ssh/lab 0700 lab lab -"
@@ -287,6 +288,8 @@
 {% if converge_devops | default(false) %}
               air
               ansible
+{% endif %}
+{% if feature_flag_aws | default(false) %}
               awscli2
 {% endif %}
               btop

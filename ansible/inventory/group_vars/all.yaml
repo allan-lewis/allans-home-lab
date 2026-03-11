@@ -1,8 +1,6 @@
 ---
 ## HOMELAB-WIDE VARIABLES
 gitops_user: "lab"
-# gitops_uid: 1000
-# gitops_gid: 1000
 gitops_tz: "America/New_York"
 
 ## ANSIBLE BUILT-IN VARIABLES
@@ -10,6 +8,9 @@ ansible_python_interpreter: "/usr/bin/python3"
 ansible_user: "{{ gitops_user }}"
 
 ## CONVERGENCE FEATURE FLAGS
+feature_flag_aws: false
+feature_flag_devops: false
+feature_flag_s3_mirror: false
 converge_nixos: false
 converge_arch: false
 converge_arch_aur: false
@@ -20,7 +21,6 @@ converge_docker: false
 converge_node_exporter: false
 converge_devops: false
 converge_docker_monitoring: false
-converge_s3_mirror: false
 converge_postgres_dump: false
 converge_restore: false
 converge_docker_gatus: false

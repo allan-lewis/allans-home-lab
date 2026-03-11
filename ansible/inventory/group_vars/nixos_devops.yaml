@@ -1,16 +1,9 @@
 ---
-aws_access_key_id: "{{ lookup('env', 'AWS_ACCESS_KEY_ID') | default('', true) }}"
-aws_default_region: "{{ lookup('env', 'AWS_DEFAULT_REGION') | default('us-east-1', true) }}"
-aws_secret_access_key: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') | default('', true) }}"
-
 converge_devops: true
 
 doppler_user: "lab"
 
-nixos_converge_prepare_groups_devops: ["aws"]
-
 nixos_converge_prepare_dirs_devops:    
-  - path: "/var/lib/homelab-secrets/aws"
   - path: "/var/lib/homelab-secrets/doppler"
     owner: "lab"
     group: "lab"
