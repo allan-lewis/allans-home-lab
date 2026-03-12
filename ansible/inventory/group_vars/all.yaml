@@ -10,7 +10,9 @@ ansible_user: "{{ gitops_user }}"
 ## CONVERGENCE FEATURE FLAGS
 feature_flag_aws: false
 feature_flag_devops: false
+feature_flag_openvpn: false
 feature_flag_s3_mirror: false
+
 converge_nixos: false
 converge_arch: false
 converge_arch_aur: false
