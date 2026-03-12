@@ -35,6 +35,11 @@ all:
       prometheus_scrape_jobs:
         node-exporter: [9100]
         homelab-metrics: [9102]
+    dandelo:
+      ansible_host: 192.168.86.217
+      gatus_slug: "(Retro Gaming)"
+      prometheus_scrape_jobs:
+        node-exporter: [9100]
     derry:
       ansible_host: 192.168.86.210
       gatus_slug: "(Local Backup)"
@@ -73,11 +78,6 @@ all:
       prometheus_scrape_jobs:
         node-exporter: [9100]
         homelab-metrics: [9102]
-    mordred:
-      ansible_host: 192.168.86.206
-      gatus_slug: "(Retro Gaming)"
-      prometheus_scrape_jobs:
-        node-exporter: [9100]
     overlook:
       ansible_host: 192.168.86.229
       gatus_slug: "(Home Automation)"
