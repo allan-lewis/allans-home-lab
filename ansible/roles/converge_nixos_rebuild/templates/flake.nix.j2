@@ -118,7 +118,7 @@
             security.sudo.enable = true;
             security.sudo.wheelNeedsPassword = false;
 
-            time.timeZone = "UTC";
+            time.timeZone = "{{ gitops_tz }}";
 
             # ---- Nix features ----
             nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -307,10 +307,10 @@
               gcc
               git
               gnumake
+              jq
 {% if feature_flag_devops | default(false) %}
               go
               just
-              jq
               lazygit
 {% endif %}
               neovim

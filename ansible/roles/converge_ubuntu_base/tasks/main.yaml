@@ -1,7 +1,7 @@
 ---
 - name: Set the time zone.
   community.general.timezone:
-    name: "{{ gitops_tz | default('America/New_York') }}"
+    name: "{{ gitops_tz }}"
 
 - name: Perform an apt update.
   ansible.builtin.apt: update_cache=yes force_apt_get=yes cache_valid_time=3600

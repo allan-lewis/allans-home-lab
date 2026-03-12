@@ -1,14 +1,14 @@
 ---
 ## HOMELAB-WIDE VARIABLES
 gitops_user: "lab"
-gitops_tz: "America/New_York"
+gitops_tz: "UTC"
 
 ## ANSIBLE BUILT-IN VARIABLES
 ansible_python_interpreter: "/usr/bin/python3"
 ansible_user: "{{ gitops_user }}"
 
 ## OS CONVERGENCE FLAGS
-converge_arch: "{{ ansible_distribution == 'Arch' }}"
+converge_arch: "{{ ansible_distribution == 'Archlinux' }}"
 converge_nixos: "{{ ansible_distribution == 'NixOS' }}"
 converge_ubuntu: "{{ ansible_distribution == 'Ubuntu' }}"
 
@@ -24,10 +24,7 @@ converge_docker_monitoring: false
 converge_postgres_dump: false
 converge_restore: false
 converge_openvpn: false
-converge_docker_portainer: false
-converge_docker_nginx: false
 converge_docker_pihole: false
-converge_docker_media_acquisition: false
 converge_docker_twingate: false
 converge_tailscale: false
 
