@@ -102,7 +102,7 @@
     owner: root
     group: root
     mode: "0400"
-  when: converge_tailscale | bool
+  when: feature_flag_tailscale | bool
   tags: [prepare, prepare_tailscale]
 
 - name: DUMP | Write PostgreSQL dump password file

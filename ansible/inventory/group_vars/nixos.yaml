@@ -1,4 +1,6 @@
 ---
+tailscale_authkey: "{{ lookup('env', 'TAILSCALE_AUTHKEY') }}"
+
 aws_access_key_id: "{{ lookup('env', 'AWS_ACCESS_KEY_ID') | default('', true) }}"
 aws_default_region: "{{ lookup('env', 'AWS_DEFAULT_REGION') | default('us-east-1', true) }}"
 aws_secret_access_key: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') | default('', true) }}"
@@ -144,7 +146,7 @@ nixos_required_variables: >-
       +
       (['postgres_db_password'] if (converge_postgres_dump | default(false) | bool) else [])
       +
-      (['tailscale_authkey']     if (converge_tailscale     | default(false) | bool) else [])
+      (['tailscale_authkey']     if (feature_flag_tailscale     | default(false) | bool) else [])
     )
     | unique
   }}

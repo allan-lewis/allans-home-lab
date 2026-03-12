@@ -12,8 +12,9 @@ managed_host_volumes:
   pihole_data:
     type: local
     local: "/var/lib/pihole"
-    restore: false
-    backup: false
+    remote: "{{ default_remote_nas_per_host_backup_volume }}/pihole_lib"
+    restore: true
+    backup: true
     owner: "lab"
     group: "lab"
     mode: "0755"

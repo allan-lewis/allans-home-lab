@@ -5,9 +5,6 @@ nixos_network_interface: "enp2s0"
 nixos_network_address: "192.168.86.219"
 nixos_ssh_key: "{{ lookup('env', 'TF_VAR_PROXMOX_VM_PUBLIC_KEY') }}"
 
-converge_tailscale: false
-tailscale_authkey: "{{ lookup('env', 'TAILSCALE_AUTHKEY') }}"
-
 doppler_service_token: "{{ lookup('env', 'DOPPLER_SERVICE_TOKEN_MATURIN') }}"
 doppler_config: "mat"
 doppler_project: "orchestrator"

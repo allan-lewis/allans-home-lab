@@ -3,6 +3,14 @@
 gitops_user: "lab"
 gitops_tz: "UTC"
 
+backup_runner_user: "allan"
+backup_runner_remote_host: "{{ hostvars['pennywise'].ansible_host }}"
+backup_runner_remote_base_path: "/mnt/pool1/allans-home-lab/backups-automated/{{ inventory_hostname }}"
+default_remote_nas_per_host_backup_volume: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}"
+
+git_author_name: "Allan Lewis"
+git_author_email: "allan@allanshomelab.com"
+
 ## ANSIBLE BUILT-IN VARIABLES
 ansible_python_interpreter: "/usr/bin/python3"
 ansible_user: "{{ gitops_user }}"
@@ -18,6 +26,7 @@ feature_flag_devops: false
 feature_flag_node_exporter: false
 feature_flag_openvpn: false
 feature_flag_s3_mirror: false
+feature_flag_tailscale: false
 
 converge_docker: false
 converge_docker_monitoring: false
@@ -26,18 +35,3 @@ converge_restore: false
 converge_openvpn: false
 converge_docker_pihole: false
 converge_docker_twingate: false
-converge_tailscale: false
-
-## HOMELAB-WIDE VARIABLES
-default_remote_nas_ip: "{{ hostvars['pennywise'].ansible_host }}"
-default_remote_nas_user: "allan"
-
-git_author_name: "Allan Lewis"
-git_author_email: "allan@allanshomelab.com"
-
-backup_runner_remote_base_path: "/mnt/pool1/allans-home-lab/backups-automated/{{ inventory_hostname }}"
-backup_runner_cron_hour: "*"
-backup_runner_user: "allan"
-backup_runner_remote_host: "{{ default_remote_nas_ip }}"
-
-default_remote_nas_per_host_backup_volume: "{{ backup_runner_user }}@{{ backup_runner_remote_host }}:{{ backup_runner_remote_base_path }}"

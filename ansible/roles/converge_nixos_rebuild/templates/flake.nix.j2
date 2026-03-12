@@ -42,7 +42,7 @@
             converge_restore_enabled = {{ (converge_restore | default(false) | bool) | string | lower }};
             converge_postgres_db_dump_enabled = {{ (converge_postgres_dump | default(false) | bool) | string | lower }};
             converge_s3_local_mirror_enabled = {{ (feature_flag_s3_mirror | default(false) | bool) | string | lower }};
-            converge_tailscale_enabled = {{ (converge_tailscale | default(false) | bool) | string | lower }};
+            converge_tailscale_enabled = {{ (feature_flag_tailscale | default(false) | bool) | string | lower }};
           in
           {
 {% if nixos_is_virtual_machine | default(true) %}
@@ -276,7 +276,7 @@
               # Ensure tmux user config exists as a regular file (activation script writes contents)
               "f /home/lab/.tmux.conf 0644 lab lab -"
 
-{% if converge_tailscale | default(false) | bool %}
+{% if feature_flag_tailscale | default(false) | bool %}
               "d /var/lib/tailscale 0700 root root -"
 {% endif %}
             ];

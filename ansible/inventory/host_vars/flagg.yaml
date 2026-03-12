@@ -5,8 +5,7 @@ s3_mirror_buckets: [
   "gitops-homelab-orchestrator-tf"
 ]
 
-converge_tailscale: true
-tailscale_authkey: "{{ lookup('env', 'TAILSCALE_AUTHKEY') }}"
+feature_flag_tailscale: true
 
 nixos_docker_services:
   - authentik
