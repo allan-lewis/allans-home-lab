@@ -76,7 +76,7 @@
             services.cloud-init.network.enable = true;
 {% endif %}
 
-            networking.useNetworkd = true;
+            networking.useNetworkd = {{ nixos_is_virtual_machine | default(true) | lower }};
             networking.useDHCP = false;
 
 {% if not (nixos_is_virtual_machine | default(true)) %}
