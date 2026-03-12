@@ -67,10 +67,6 @@ arch-vm-template update_stable="yes":
 arch-terraform persona action approve="0":
   {{run_prefix}} scripts/terraform.sh "arch" "{{persona}}" "{{action}}" "{{approve}}"
 
-# Fully converge a group of Arch hosts
-arch-converge group tags="" limit="":
-  {{run_prefix}} scripts/ansible-playbook.sh "ansible/converge-linux.yaml" "{{group}}" "{{tags}}" "{{limit}}"
-
 #############################
 #### HAOS ###################
 #############################
@@ -90,6 +86,14 @@ haos-terraform action approve="0":
 # Prepare a Proxmox VM template for cloning HAOS VMs
 haos-vm-template update_stable="yes":
   {{run_prefix}} scripts/appliance-vm-template.sh haos {{update_stable}}
+
+#############################
+#### LINUX ##################
+#############################
+
+# Fully converge a group of Ubuntu hosts
+linux-converge group tags="" limit="":
+  {{run_prefix}} scripts/ansible-playbook.sh "ansible/converge-linux.yaml" "{{group}}" "{{tags}}" "{{limit}}"
 
 #############################
 #### NIXOS ##################
@@ -199,7 +203,3 @@ ubuntu-vm-template update_stable="yes":
 # Apply or destroy Ubuntu Proxmox VM(s) using Terraform
 ubuntu-terraform persona action approve="0":
   {{run_prefix}} scripts/terraform.sh "ubuntu" "{{persona}}" "{{action}}" "{{approve}}"
-
-# Fully converge a group of Ubuntu hosts
-ubuntu-converge group tags="" limit="":
-  {{run_prefix}} scripts/ansible-playbook.sh "ansible/converge-linux.yaml" "{{group}}" "{{tags}}" "{{limit}}"
