@@ -9,7 +9,7 @@
   ansible.builtin.set_fact:
     lab_uid: "{{ getent_passwd.lab[1] | int }}"
     lab_gid: "{{ getent_passwd.lab[2] | int }}"
-    lab_tz: UTC
+    lab_tz: "{{ gitops_tz }}"
   tags: [docker]
 
 - name: Ensure project dir exists
