@@ -13,8 +13,7 @@ ssh_public_key_b64:  "{{ lookup('env', 'SSH_PUBLIC_KEY')  | default('', true) }}
 
 backup_runner_rsync_flags: "-aHAX --numeric-ids --delete-delay --partial --partial-dir=.rsync-partial --human-readable --sparse --mkpath"
 
-converge_nixos: true
-converge_node_exporter: true
+feature_flag_node_exporter: true
 
 nixos_dir: /etc/nixos-flakes
 nixos_flake: "{{ nixos_dir }}/flake.nix"

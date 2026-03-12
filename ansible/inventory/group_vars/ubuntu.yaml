@@ -1,8 +1,5 @@
 ---
-converge_ubuntu: true
-
-gitops_uid: 1000
-gitops_gid: 1000
+feature_flag_node_exporter: true
 
 dotfiles_stow_packages:
   - common-zsh

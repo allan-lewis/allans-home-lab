@@ -38,7 +38,7 @@
           let
             converge_backup_enabled = {{ (converge_backup | default(false) | bool) | string | lower }};
             converge_devops_enabled = {{ (feature_flag_devops | default(false) | bool) | string | lower }};
-            converge_node_exporter_enabled = {{ (converge_node_exporter | default(false) | bool) | string | lower }};
+            converge_node_exporter_enabled = {{ (feature_flag_node_exporter | default(false) | bool) | string | lower }};
             converge_restore_enabled = {{ (converge_restore | default(false) | bool) | string | lower }};
             converge_postgres_db_dump_enabled = {{ (converge_postgres_dump | default(false) | bool) | string | lower }};
             converge_s3_local_mirror_enabled = {{ (feature_flag_s3_mirror | default(false) | bool) | string | lower }};
@@ -260,7 +260,7 @@
 {% if converge_docker | default(false) %}
               "d /opt/docker-compose 0750 root root -"
 {% endif %}
-{% if converge_node_exporter | default(false) %}
+{% if feature_flag_node_exporter | default(false) %}
               "d /var/lib/node_exporter/textfile_collector 0755 root root -"
 {% endif %}
               "d /root/.ssh 0700 root root -"

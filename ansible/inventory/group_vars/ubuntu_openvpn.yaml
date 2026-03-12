@@ -1,5 +1,4 @@
 ---
-converge_node_exporter: true
 feature_flag_openvpn: true
 
 vpn_lan_net: "192.168.86.0/24"

@@ -1,5 +1,5 @@
 ---
-converge_arch: true
+feature_flag_node_exporter: true
 
 dotfiles_stow_packages:
   - common-zsh

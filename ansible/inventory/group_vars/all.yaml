@@ -7,20 +7,19 @@ gitops_tz: "America/New_York"
 ansible_python_interpreter: "/usr/bin/python3"
 ansible_user: "{{ gitops_user }}"
 
+## OS CONVERGENCE FLAGS
+converge_arch: "{{ ansible_distribution == 'Arch' }}"
+converge_nixos: "{{ ansible_distribution == 'NixOS' }}"
+converge_ubuntu: "{{ ansible_distribution == 'Ubuntu' }}"
+
 ## CONVERGENCE FEATURE FLAGS
 feature_flag_aws: false
 feature_flag_devops: false
+feature_flag_node_exporter: false
 feature_flag_openvpn: false
 feature_flag_s3_mirror: false
 
-converge_nixos: false
-converge_arch: false
-converge_arch_aur: false
-converge_arch_desktop: false
-converge_arch_nvidia: false
-converge_ubuntu: false
 converge_docker: false
-converge_node_exporter: false
 converge_docker_monitoring: false
 converge_postgres_dump: false
 converge_restore: false
