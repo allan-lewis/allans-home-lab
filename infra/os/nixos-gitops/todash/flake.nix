@@ -87,7 +87,6 @@
             "d /opt/docker-compose 0750 root root -"
             "d /home/lab/managed-dir-0 0755 lab lab -"
             "d /home/lab/managed-dir-1 0755 root root -"
-            "d /home/lab/src 0755 lab lab -"
           ];
 
           environment.systemPackages = with pkgs; [
