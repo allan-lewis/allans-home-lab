@@ -75,10 +75,6 @@ arch-terraform persona action approve="0":
 haos-boot-disk-capture vmid update_stable="yes":
   {{run_prefix}} scripts/appliance-boot-disk-capture.sh "haos" "gitops-homelab-orchestrator-disks" "proxmox-images" "{{vmid}}" "{{update_stable}}"
 
-# Download backups from S3 and upload to an HAOS host 
-haos-upload-backups:
-  {{run_prefix}} haos-upload-backuos.sh
-
 # Apply or detroy HAOS Proxmox VM(s) using Terraform
 haos-terraform action approve="0":
   {{run_prefix}} scripts/terraform.sh "haos" "homeassistant" "{{action}}" "{{approve}}"
