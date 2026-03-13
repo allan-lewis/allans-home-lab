@@ -36,12 +36,12 @@
         ({ config, pkgs, lib, ... }: 
         let
           featureFlagBackup = false;
-          featureFlagDevOps = true;
+          featureFlagDevOps = false;
           featureFlagNodeExporter = true;
           featureFlagRestore = false;
           featureFlagPostgresDump = false;
           featureFlagS3Mirror = false;
-          featureFlagTailscale = true;
+          featureFlagTailscale = false;
         in
         {
           home-manager.useGlobalPkgs = true;
