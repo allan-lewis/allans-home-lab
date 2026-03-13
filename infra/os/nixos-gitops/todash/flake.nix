@@ -15,14 +15,19 @@
 
       modules = [
         ./hardware-configuration.nix
+        ./modules/backup-runner.nix
+        ./modules/dev-checkouts.nix
         ./modules/homelab-hello.nix
         ./modules/homelab-tasks.nix
+        ./modules/managed-directories.nix
 
         ({ pkgs, lib, ... }: {
           boot.loader.grub.enable = true;
           boot.loader.grub.device = "/dev/sda";
 
           networking.hostName = "todash";
+
+          virtualisation.docker.enable = true;
 
           services.openssh.enable = true;
           services.openssh.settings = {
@@ -49,7 +54,7 @@
           users.users.lab = {
             isNormalUser = true;
             group = "lab";
-            extraGroups = [ "wheel" "aws" ];
+            extraGroups = [ "wheel" "aws" "docker" ];
             shell = pkgs.zsh;
             hashedPassword = "!";
           };
@@ -78,6 +83,11 @@
             "d /home/lab/.config/zsh 0755 lab lab -"
             "f /home/lab/.tmux.conf 0644 lab lab -"
             "d /root/.ssh 0700 root root -"
+            "d /var/lib/node_exporter/textfile_collector 0755 root root -"
+            "d /opt/docker-compose 0750 root root -"
+            "d /home/lab/managed-dir-0 0755 lab lab -"
+            "d /home/lab/managed-dir-1 0755 root root -"
+            "d /home/lab/src 0755 lab lab -"
           ];
 
           environment.systemPackages = with pkgs; [
@@ -107,6 +117,51 @@
           services.homelab.hello = {
             enable = true;
             intervalSeconds = 15;
+          };
+
+          services.prometheus.exporters.node = {
+            enable = true;
+            listenAddress = "0.0.0.0";
+            port = 9100;
+            openFirewall = true;
+            enabledCollectors = [ "textfile" ];
+            extraFlags = [
+              "--collector.textfile.directory=/var/lib/node_exporter/textfile_collector"
+            ];
+          };
+
+          services.homelab.managedDirectories = {
+            enable = false;
+            writablePaths = [
+              "/home/lab/managed-dir-0"
+              "/home/lab/managed-dir-1"
+            ];
+          };
+
+          services.homelab.backupRunner = {
+            enable = false;
+            schedule = "*-*-* *:30:00";
+
+            rsyncFlags =
+              lib.splitString " "
+                "-aHAX --numeric-ids --delete-delay --partial --partial-dir=.rsync-partial --human-readable --sparse --mkpath";
+
+            readablePaths = [
+              "/home/lab/managed-dir-0"
+              "/home/lab/managed-dir-1"
+            ];
+          };
+
+          services.homelab.devCheckouts = {
+            enable = false;
+
+            schedule = "hourly";
+
+            rootDir = "/home/lab/src";
+
+            user = "lab";
+
+            repos = [ ];
           };
 
           system.stateVersion = "25.11";
