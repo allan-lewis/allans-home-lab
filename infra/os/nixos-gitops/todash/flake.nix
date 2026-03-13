@@ -22,11 +22,24 @@
         ./hardware-configuration.nix
         ./modules/backup-runner.nix
         ./modules/dev-checkouts.nix
+        ./modules/doppler.nix
         ./modules/homelab-hello.nix
         ./modules/homelab-tasks.nix
         ./modules/managed-directories.nix
+        ./modules/postgres-db-backup.nix
+        ./modules/s3-local-mirror.nix
 
-        ({ pkgs, lib, ... }: {
+        ({ config, pkgs, lib, ... }: 
+        let
+          featureFlagBackup = false;
+          featureFlagDevOps = false;
+          featureFlagNodeExporter = true;
+          featureFlagRestore = false;
+          featureFlagPostgresDump = false;
+          featureFlagS3Mirror = false;
+          featureFlagTailscale = false;
+        in
+        {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
 
@@ -127,6 +140,18 @@
             "d /opt/docker-compose 0750 root root -"
             "d /home/lab/managed-dir-0 0755 lab lab -"
             "d /home/lab/managed-dir-1 0755 root root -"
+            "d /var/lib/homelab-secrets/doppler 0700 root root -"
+            "d /var/lib/postgres-db-dumps 0755 root root -"
+            "d /var/lib/tailscale 0700 root root -"
+            "d /etc/allans-home-lab/managed-directories 0755 root root -"
+            "d /var/lib/homelab-secrets 0711 root root -"
+            "d /var/lib/homelab-secrets/ssh 0711 root root -"
+            "d /var/lib/homelab-secrets/ssh/root 0700 root root -"
+            "f /var/lib/homelab-secrets/ssh/root/id_ed25519 0600 root root -"
+            "f /var/lib/homelab-secrets/ssh/root/id_ed25519.pub 0644 root root -"
+            "d /etc/allans-home-lab/secrets 0700 root root -"
+            "L+ /root/.ssh/id_ed25519 - - - - /var/lib/homelab-secrets/ssh/root/id_ed25519"
+            "L+ /root/.ssh/id_ed25519.pub - - - - /var/lib/homelab-secrets/ssh/root/id_ed25519.pub"
           ];
 
           environment.systemPackages = with pkgs; [
@@ -152,7 +177,7 @@
             intervalSeconds = 15;
           };
 
-          services.prometheus.exporters.node = {
+          services.prometheus.exporters.node = lib.mkIf featureFlagNodeExporter {
             enable = true;
             listenAddress = "0.0.0.0";
             port = 9100;
@@ -163,7 +188,7 @@
             ];
           };
 
-          services.homelab.managedDirectories = {
+          services.homelab.managedDirectories = lib.mkIf featureFlagRestore {
             enable = false;
             writablePaths = [
               "/home/lab/managed-dir-0"
@@ -171,7 +196,7 @@
             ];
           };
 
-          services.homelab.backupRunner = {
+          services.homelab.backupRunner = lib.mkIf featureFlagBackup {
             enable = false;
             schedule = "*-*-* *:30:00";
 
@@ -185,7 +210,7 @@
             ];
           };
 
-          services.homelab.devCheckouts = {
+          services.homelab.devCheckouts = lib.mkIf featureFlagDevOps {
             enable = false;
 
             schedule = "hourly";
@@ -196,6 +221,51 @@
 
             repos = [ ];
           };
+
+          services.homelab.s3LocalMirror = lib.mkIf featureFlagS3Mirror {
+            enable = false;
+
+            schedule = "Sat *-*-* 07:00:00";
+
+            syncFlags = "--delete --only-show-errors";
+
+            buckets = [ ];
+          };
+
+          services.homelab.postgresDbBackup = lib.mkIf featureFlagPostgresDump {
+            enable = false;
+            schedule = "*-*-* 05:00:00";
+
+            db = "";
+            user = "";
+            container = "";
+            extraArgs = "";
+
+            backupDir = "/var/lib/postgres-db-dumps";
+            passwordFile = "/etc/allans-home-lab/secrets/postgres_dump_pass";
+          };
+
+          services.homelab.doppler = lib.mkIf featureFlagDevOps {
+            enable = false;
+
+            user = "lab";
+            scopeDir = "/home/lab/src";
+
+            tokenFile = "/var/lib/homelab-secrets/doppler/doppler_token";
+
+            project = "";
+            dopplerConfig = "";
+          };
+
+          services.tailscale = lib.mkIf featureFlagTailscale {
+            enable = false;
+            authKeyFile = "/run/secrets/tailscale-authkey";
+            extraUpFlags = [
+              "--accept-dns=true"
+            ];
+          };
+
+          networking.firewall.trustedInterfaces = lib.mkIf config.services.tailscale.enable [ "tailscale0" ];
 
           system.stateVersion = "25.11";
         })
