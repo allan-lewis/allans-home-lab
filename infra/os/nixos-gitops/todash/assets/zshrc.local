@@ -1,0 +1,10 @@
+alias ll="ls -lah"
+alias gs="git status"
+
+# Run fastfetch only for interactive SSH logins on a real terminal
+if [[ -n "${SSH_CONNECTION:-}" && -t 1 ]]; then
+  if command -v fastfetch >/dev/null 2>&1; then
+    clear
+    fastfetch
+  fi
+fi

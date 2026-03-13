@@ -3,9 +3,12 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
+
+    home-manager.url = "github:nix-community/home-manager/release-25.11";
+    home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, nixpkgs }:
+  outputs = { self, nixpkgs, home-manager }:
   let
     system = "x86_64-linux";
   in
@@ -14,6 +17,8 @@
       inherit system;
 
       modules = [
+        home-manager.nixosModules.home-manager
+
         ./hardware-configuration.nix
         ./modules/backup-runner.nix
         ./modules/dev-checkouts.nix
@@ -22,6 +27,52 @@
         ./modules/managed-directories.nix
 
         ({ pkgs, lib, ... }: {
+          home-manager.useGlobalPkgs = true;
+          home-manager.useUserPackages = true;
+
+          home-manager.users.lab = { pkgs, ... }: {
+            home.stateVersion = "25.11";
+
+            xdg.configFile."zsh/zshrc.local".source = ./assets/zshrc.local;
+
+            programs.zsh = {
+              enable = true;
+              autosuggestion.enable = true;
+              syntaxHighlighting.enable = true;
+              initContent = ''
+                source ~/.config/zsh/zshrc.local
+              '';
+            };
+
+            programs.starship = {
+              enable = true;
+            };
+
+            programs.tmux = {
+              enable = true;
+              extraConfig = builtins.readFile ./assets/tmux.conf;
+            };
+
+            xdg.configFile."starship.toml".source = ./assets/starship.toml;
+
+            xdg.configFile."nvim" = {
+              source = ./assets/nvim;
+              recursive = true;
+            };
+
+            home.packages = with pkgs; [
+              fastfetch
+              fd
+              fzf
+              neovim
+              ripgrep
+              starship
+              tmux
+            ];
+          };
+
+          programs.zsh.enable = true;
+
           boot.loader.grub.enable = true;
           boot.loader.grub.device = "/dev/sda";
 
@@ -46,8 +97,6 @@
           networking.useNetworkd = true;
           networking.useDHCP = false;
 
-          programs.zsh.enable = true;
-
           users.groups.lab = {};
           users.groups.aws = {};
 
@@ -69,19 +118,10 @@
 
           environment.etc."tmux.conf".text = lib.mkForce "";
 
-          system.activationScripts.labTmuxConf.text = ''
-            install -D -m 0644 -o lab -g lab ${./assets/tmux.conf} /home/lab/.tmux.conf
-          '';
-
-          system.activationScripts.labStarshipConfig.text = ''
-            install -D -m 0644 -o lab -g lab ${./assets/starship.toml} /home/lab/.config/starship.toml
-          '';
-
           systemd.tmpfiles.rules = [
             "d /home/lab/.ssh 0700 lab lab -"
             "d /home/lab/.config 0755 lab lab -"
             "d /home/lab/.config/zsh 0755 lab lab -"
-            "f /home/lab/.tmux.conf 0644 lab lab -"
             "d /root/.ssh 0700 root root -"
             "d /var/lib/node_exporter/textfile_collector 0755 root root -"
             "d /opt/docker-compose 0750 root root -"
@@ -94,23 +134,17 @@
             clang
             cmatrix
             curl
-            fd
-            fzf
             gcc
+            ghostty.terminfo
             git
             gnumake
             jq
-            neovim
             net-tools
             python3
-            ripgrep
-            starship
-            tmux
             trash-cli
             tree
             tree-sitter
             unzip
-            ghostty.terminfo
           ];
 
           services.homelab.hello = {
