@@ -16,6 +16,7 @@
       modules = [
         ./hardware-configuration.nix
         ./modules/homelab-hello.nix
+        ./modules/homelab-tasks.nix
 
         ({ pkgs, lib, ... }: {
           boot.loader.grub.enable = true;
