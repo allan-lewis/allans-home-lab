@@ -208,24 +208,10 @@ ubuntu-terraform persona action approve="0":
 NIXOS_GITOPS_DIR := "./infra/os/nixos-gitops"
 
 nix-check host:
-    nix flake show {{NIXOS_GITOPS_DIR}}/{{host}}
+    ./scripts/nixos-gitops.sh {{host}} check
 
 nix-test host:
-    TARGET="$(cat {{NIXOS_GITOPS_DIR}}/{{host}}/target-host)" && \
-    nix run nixpkgs#nixos-rebuild -- \
-      test \
-      --fast \
-      --flake {{NIXOS_GITOPS_DIR}}/{{host}}#{{host}} \
-      --build-host "$TARGET" \
-      --target-host "$TARGET" \
-      --use-remote-sudo
+    {{run_prefix}} ./scripts/nixos-gitops.sh {{host}} test
 
 nix-switch host:
-    TARGET="$(cat {{NIXOS_GITOPS_DIR}}/{{host}}/target-host)" && \
-    nix run nixpkgs#nixos-rebuild -- \
-      switch \
-      --fast \
-      --flake {{NIXOS_GITOPS_DIR}}/{{host}}#{{host}} \
-      --build-host "$TARGET" \
-      --target-host "$TARGET" \
-      --use-remote-sudo
+    {{run_prefix}} ./scripts/nixos-gitops.sh {{host}} switch

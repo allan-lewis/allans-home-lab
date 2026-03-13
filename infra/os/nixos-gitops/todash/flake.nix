@@ -6,9 +6,12 @@
 
     home-manager.url = "github:nix-community/home-manager/release-25.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
+
+    sops-nix.url = "github:Mic92/sops-nix";
+    sops-nix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, nixpkgs, home-manager }:
+  outputs = { self, nixpkgs, home-manager, sops-nix }:
   let
     system = "x86_64-linux";
   in
@@ -18,6 +21,7 @@
 
       modules = [
         home-manager.nixosModules.home-manager
+        sops-nix.nixosModules.sops
 
         ./hardware-configuration.nix
         ./modules/backup-runner.nix
@@ -32,12 +36,12 @@
         ({ config, pkgs, lib, ... }: 
         let
           featureFlagBackup = false;
-          featureFlagDevOps = false;
+          featureFlagDevOps = true;
           featureFlagNodeExporter = true;
           featureFlagRestore = false;
           featureFlagPostgresDump = false;
           featureFlagS3Mirror = false;
-          featureFlagTailscale = false;
+          featureFlagTailscale = true;
         in
         {
           home-manager.useGlobalPkgs = true;
@@ -83,6 +87,59 @@
               tmux
             ];
           };
+
+          sops.age.keyFile = "/var/lib/sops-nix/key.txt";
+          sops.secrets.root_ssh_private_key = {
+            sopsFile = ./secrets/ssh.yaml;
+            path = "/root/.ssh/id_ed25519";
+            owner = "root";
+            group = "root";
+            mode = "0600";
+          };
+
+          sops.secrets.doppler_token = {
+            sopsFile = ./secrets/doppler.yaml;
+            key = "doppler_token";
+            path = "/var/lib/homelab-secrets/doppler/doppler_token";
+            owner = "lab";
+            group = "lab";
+            mode = "0600";
+          };
+
+          sops.secrets.aws_credentials = {
+            sopsFile = ./secrets/aws.yaml;
+            key = "aws_credentials";
+            path = "/var/lib/homelab-secrets/aws/credentials";
+            owner = "root";
+            group = "aws";
+            mode = "0640";
+          };
+
+          sops.secrets.tailscale_authkey = {
+            sopsFile = ./secrets/tailscale.yaml;
+            key = "tailscale_authkey";
+            path = "/run/secrets/tailscale-authkey";
+            owner = "root";
+            group = "root";
+            mode = "0400";
+          };
+
+          system.activationScripts.rootSshPublicKey = {
+            text = ''
+              if [ -f /root/.ssh/id_ed25519 ]; then
+                ${pkgs.openssh}/bin/ssh-keygen -y -f /root/.ssh/id_ed25519 > /root/.ssh/id_ed25519.pub
+                chown root:root /root/.ssh/id_ed25519.pub
+                chmod 0644 /root/.ssh/id_ed25519.pub
+              fi
+            '';
+          };
+
+          environment.etc."aws-config".text = ''
+            [default]
+            region = us-east-1
+            output = json
+            cli_pager =
+          '';
 
           programs.zsh.enable = true;
 
@@ -136,29 +193,41 @@
             "d /home/lab/.config 0755 lab lab -"
             "d /home/lab/.config/zsh 0755 lab lab -"
             "d /root/.ssh 0700 root root -"
+
             "d /var/lib/node_exporter/textfile_collector 0755 root root -"
             "d /opt/docker-compose 0750 root root -"
+
             "d /home/lab/managed-dir-0 0755 lab lab -"
             "d /home/lab/managed-dir-1 0755 root root -"
-            "d /var/lib/homelab-secrets/doppler 0700 root root -"
+
+            "d /var/lib/homelab-secrets 0711 root root -"
+            "d /var/lib/homelab-secrets/doppler 0700 lab lab -"
+
             "d /var/lib/postgres-db-dumps 0755 root root -"
             "d /var/lib/tailscale 0700 root root -"
+
+            "d /etc/allans-home-lab 0755 root root -"
             "d /etc/allans-home-lab/managed-directories 0755 root root -"
-            "d /var/lib/homelab-secrets 0711 root root -"
-            "d /var/lib/homelab-secrets/ssh 0711 root root -"
-            "d /var/lib/homelab-secrets/ssh/root 0700 root root -"
-            "f /var/lib/homelab-secrets/ssh/root/id_ed25519 0600 root root -"
-            "f /var/lib/homelab-secrets/ssh/root/id_ed25519.pub 0644 root root -"
             "d /etc/allans-home-lab/secrets 0700 root root -"
-            "L+ /root/.ssh/id_ed25519 - - - - /var/lib/homelab-secrets/ssh/root/id_ed25519"
-            "L+ /root/.ssh/id_ed25519.pub - - - - /var/lib/homelab-secrets/ssh/root/id_ed25519.pub"
+
+            "d /var/lib/homelab-secrets/aws 0750 root aws -"
+            "d /root/.aws 0700 root root -"
+            "d /home/lab/.aws 0700 lab lab -"
+
+            "L+ /root/.aws/config - - - - /etc/aws-config"
+            "L+ /home/lab/.aws/config - - - - /etc/aws-config"
+
+            "L+ /root/.aws/credentials - - - - /var/lib/homelab-secrets/aws/credentials"
+            "L+ /home/lab/.aws/credentials - - - - /var/lib/homelab-secrets/aws/credentials"
           ];
 
           environment.systemPackages = with pkgs; [
+            awscli2
             btop
             clang
             cmatrix
             curl
+            doppler
             gcc
             ghostty.terminfo
             git
@@ -246,19 +315,19 @@
           };
 
           services.homelab.doppler = lib.mkIf featureFlagDevOps {
-            enable = false;
+            enable = true;
 
             user = "lab";
             scopeDir = "/home/lab/src";
 
             tokenFile = "/var/lib/homelab-secrets/doppler/doppler_token";
 
-            project = "";
-            dopplerConfig = "";
+            project = "orchestrator";
+            dopplerConfig = "mat";
           };
 
           services.tailscale = lib.mkIf featureFlagTailscale {
-            enable = false;
+            enable = true;
             authKeyFile = "/run/secrets/tailscale-authkey";
             extraUpFlags = [
               "--accept-dns=true"
