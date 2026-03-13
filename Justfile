@@ -199,3 +199,33 @@ ubuntu-vm-template update_stable="yes":
 # Apply or destroy Ubuntu Proxmox VM(s) using Terraform
 ubuntu-terraform persona action approve="0":
   {{run_prefix}} scripts/terraform.sh "ubuntu" "{{persona}}" "{{action}}" "{{approve}}"
+
+#############################
+#### NIXOS/GITOPS ###########
+#### EXPERIMENTAL! ##########
+#############################
+
+NIXOS_GITOPS_DIR := "./infra/os/nixos-gitops"
+
+nix-check host:
+    nix flake show {{NIXOS_GITOPS_DIR}}/{{host}}
+
+nix-test host:
+    TARGET="$(cat {{NIXOS_GITOPS_DIR}}/{{host}}/target-host)" && \
+    nix run nixpkgs#nixos-rebuild -- \
+      test \
+      --fast \
+      --flake {{NIXOS_GITOPS_DIR}}/{{host}}#{{host}} \
+      --build-host "$TARGET" \
+      --target-host "$TARGET" \
+      --use-remote-sudo
+
+nix-switch host:
+    TARGET="$(cat {{NIXOS_GITOPS_DIR}}/{{host}}/target-host)" && \
+    nix run nixpkgs#nixos-rebuild -- \
+      switch \
+      --fast \
+      --flake {{NIXOS_GITOPS_DIR}}/{{host}}#{{host}} \
+      --build-host "$TARGET" \
+      --target-host "$TARGET" \
+      --use-remote-sudo
