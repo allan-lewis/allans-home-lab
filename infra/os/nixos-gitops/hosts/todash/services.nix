@@ -2,7 +2,6 @@
 
 let
   featureFlagBackup = false;
-  featureFlagDevOps = false;
   featureFlagNodeExporter = true;
   featureFlagRestore = false;
   featureFlagPostgresDump = false;
@@ -54,21 +53,6 @@ in
     ];
   };
 
-  services.homelab.devCheckouts = lib.mkIf featureFlagDevOps {
-    enable = true;
-    schedule = "hourly";
-    rootDir = "/home/lab/src";
-    user = "lab";
-
-    repos = [
-      {
-        repo = "git@github.com:allan-lewis/allans-home-lab.git";
-        dest = "allans-home-lab";
-        version = "main";
-      }
-    ];
-  };
-
   services.homelab.s3LocalMirror = lib.mkIf featureFlagS3Mirror {
     enable = false;
     schedule = "Sat *-*-* 07:00:00";
@@ -87,15 +71,6 @@ in
 
     backupDir = "/var/lib/postgres-db-dumps";
     passwordFile = "/etc/allans-home-lab/secrets/postgres_dump_pass";
-  };
-
-  services.homelab.doppler = lib.mkIf featureFlagDevOps {
-    enable = true;
-    user = "lab";
-    scopeDir = "/home/lab/src";
-    tokenFile = "/var/lib/homelab-secrets/doppler/doppler_token";
-    project = "orchestrator";
-    dopplerConfig = "mat";
   };
 
   services.tailscale = lib.mkIf featureFlagTailscale {
