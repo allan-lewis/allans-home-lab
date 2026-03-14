@@ -8,7 +8,7 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 NIXOS_GITOPS_DIR="${ROOT_DIR}/infra/os/nixos-gitops"
 HOST_DIR="${NIXOS_GITOPS_DIR}/hosts/${HOST}"
 TARGET_HOST_FILE="${HOST_DIR}/target-host"
-FLAKE_REF="${HOST_DIR}#${HOST}"
+FLAKE_REF="${NIXOS_GITOPS_DIR}#${HOST}"
 
 if [[ ! -d "${HOST_DIR}" ]]; then
   echo "ERROR: Host directory not found: ${HOST_DIR}" >&2

@@ -12,16 +12,6 @@ in
 {
   virtualisation.docker.enable = true;
 
-  services.openssh.enable = true;
-  services.openssh.settings = {
-    PermitRootLogin = "no";
-    PasswordAuthentication = false;
-    KbdInteractiveAuthentication = false;
-  };
-  services.openssh.extraConfig = ''
-    AllowUsers lab
-  '';
-
   services.qemuGuest.enable = true;
   services.cloud-init.enable = true;
   services.cloud-init.network.enable = true;

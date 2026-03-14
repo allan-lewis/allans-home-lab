@@ -2,6 +2,8 @@
 
 {
   imports = [
+    ../../profiles/base
+    
     ./tmpfiles.nix
     ./secrets.nix
     ./packages.nix
@@ -9,6 +11,5 @@
     ./services.nix
     ./boot.nix
     ./networking.nix
-    ./system.nix
   ];
 }
