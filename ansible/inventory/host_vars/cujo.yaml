@@ -1,7 +1,7 @@
 ---
 
 nixos_is_virtual_machine: false
-nixos_network_interface: "enp2s0"
+nixos_network_interface: "eth1"
 nixos_network_address: "192.168.86.219"
 nixos_ssh_key: "{{ lookup('env', 'TF_VAR_PROXMOX_VM_PUBLIC_KEY') }}"
 

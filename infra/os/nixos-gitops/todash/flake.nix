@@ -36,7 +36,7 @@
         ({ config, pkgs, lib, ... }: 
         let
           featureFlagBackup = false;
-          featureFlagDevOps = false;
+          featureFlagDevOps = true;
           featureFlagNodeExporter = true;
           featureFlagRestore = false;
           featureFlagPostgresDump = false;
@@ -51,6 +51,12 @@
             home.stateVersion = "25.11";
 
             xdg.configFile."zsh/zshrc.local".source = ./assets/zshrc.local;
+
+            programs.git = {
+              enable = true;
+              userName  = "Allan Lewis";
+              userEmail = "allan.e.lewis@gmail.com";
+            };
 
             programs.zsh = {
               enable = true;
@@ -91,9 +97,19 @@
           sops.age.keyFile = "/var/lib/sops-nix/key.txt";
           sops.secrets.root_ssh_private_key = {
             sopsFile = ./secrets/ssh.yaml;
+            key = "root_ssh_private_key";
             path = "/root/.ssh/id_ed25519";
             owner = "root";
             group = "root";
+            mode = "0600";
+          };
+
+          sops.secrets.lab_ssh_private_key = {
+            sopsFile = ./secrets/ssh.yaml;
+            key = "root_ssh_private_key";
+            path = "/home/lab/.ssh/id_ed25519";
+            owner = "lab";
+            group = "lab";
             mode = "0600";
           };
 
@@ -130,6 +146,16 @@
                 ${pkgs.openssh}/bin/ssh-keygen -y -f /root/.ssh/id_ed25519 > /root/.ssh/id_ed25519.pub
                 chown root:root /root/.ssh/id_ed25519.pub
                 chmod 0644 /root/.ssh/id_ed25519.pub
+              fi
+            '';
+          };
+
+          system.activationScripts.labSshPublicKey = {
+            text = ''
+              if [ -f /home/lab/.ssh/id_ed25519 ]; then
+                ${pkgs.openssh}/bin/ssh-keygen -y -f /home/lab/.ssh/id_ed25519 > /home/lab/.ssh/id_ed25519.pub
+                chown lab:lab /home/lab/.ssh/id_ed25519.pub
+                chmod 0644 /home/lab/.ssh/id_ed25519.pub
               fi
             '';
           };
@@ -233,6 +259,7 @@
             git
             gnumake
             jq
+            just
             net-tools
             python3
             trash-cli
@@ -280,7 +307,7 @@
           };
 
           services.homelab.devCheckouts = lib.mkIf featureFlagDevOps {
-            enable = false;
+            enable = true;
 
             schedule = "hourly";
 
@@ -288,7 +315,13 @@
 
             user = "lab";
 
-            repos = [ ];
+            repos = [ 
+              {
+                repo = "git@github.com:allan-lewis/allans-home-lab.git";
+                dest = "allans-home-lab";
+                version = "main";
+              }
+            ];
           };
 
           services.homelab.s3LocalMirror = lib.mkIf featureFlagS3Mirror {
