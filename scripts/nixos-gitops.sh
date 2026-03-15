@@ -44,10 +44,10 @@ bootstrap_sops_age_key() {
   local target="$2"
 
   # Only bootstrap if the host appears to use sops-nix.
-  if ! grep -Rqs 'sops-nix\.nixosModules\.sops\|sops\.age\.keyFile\|sops\.secrets\.' "${host_dir}"; then
-    echo "==> No sops-nix usage detected for ${HOST}; skipping bootstrap"
-    return 0
-  fi
+  # if ! grep -Rqs 'sops-nix\.nixosModules\.sops\|sops\.age\.keyFile\|sops\.secrets\.' "${host_dir}"; then
+  #   echo "==> No sops-nix usage detected for ${HOST}; skipping bootstrap"
+  #   return 0
+  # fi
 
   if [[ -z "${SOPS_AGE_KEY:-}" ]]; then
     echo "ERROR: sops-nix appears configured for ${HOST}, but SOPS_AGE_KEY is not set." >&2

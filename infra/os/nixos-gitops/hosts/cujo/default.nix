@@ -2,12 +2,12 @@
 
 {
   imports = [
+    ../../profiles/bare-metal
     ../../profiles/base
     ../../profiles/docker
-    ../../profiles/virtual-machine
   ];
 
-  networking.hostName = "todash";
+  networking.hostName = "cujo";
 
   system.stateVersion = "25.11";
 }
