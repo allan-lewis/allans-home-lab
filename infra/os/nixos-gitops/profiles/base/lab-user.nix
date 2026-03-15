@@ -23,11 +23,11 @@ in
   home-manager.users.lab = { pkgs, ... }: {
     home.stateVersion = "25.11";
 
-    xdg.configFile."zsh/zshrc.local".source = ./assets/zshrc.local;
-    xdg.configFile."starship.toml".source = ./assets/starship.toml;
+    xdg.configFile."zsh/zshrc.local".source = ../../assets/zshrc.local;
+    xdg.configFile."starship.toml".source = ../../assets/starship.toml;
 
     xdg.configFile."nvim" = {
-      source = ./assets/nvim;
+      source = ../../assets/nvim;
       recursive = true;
     };
 
@@ -56,7 +56,7 @@ in
 
     programs.tmux = {
       enable = true;
-      extraConfig = builtins.readFile ./assets/tmux.conf;
+      extraConfig = builtins.readFile ../../assets/tmux.conf;
     };
 
     home.packages = with pkgs; [

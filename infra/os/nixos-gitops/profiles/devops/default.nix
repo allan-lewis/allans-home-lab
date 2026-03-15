@@ -1,6 +1,11 @@
 { pkgs, ... }:
 
 {
+  imports = [
+    ./secrets.nix
+    ./tmpfiles.nix
+  ];
+
   environment.systemPackages = with pkgs; [
     awscli2
     clang

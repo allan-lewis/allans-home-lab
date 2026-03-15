@@ -1,6 +1,34 @@
 { pkgs, ... }:
 
 {
+  imports = [
+    ../observability
+
+    ./lab-user.nix
+    ./tmpfiles.nix
+  ];
+
+  sops.age.keyFile = "/var/lib/sops-nix/key.txt";
+
+  sops.secrets.root_ssh_private_key = {
+    sopsFile = ../../secrets/ssh.yaml;
+    key = "root_ssh_private_key";
+    path = "/root/.ssh/id_ed25519";
+    owner = "root";
+    group = "root";
+    mode = "0600";
+  };
+
+  system.activationScripts.rootSshPublicKey = {
+    text = ''
+      if [ -f /root/.ssh/id_ed25519 ]; then
+        ${pkgs.openssh}/bin/ssh-keygen -y -f /root/.ssh/id_ed25519 > /root/.ssh/id_ed25519.pub
+        chown root:root /root/.ssh/id_ed25519.pub
+        chmod 0644 /root/.ssh/id_ed25519.pub
+      fi
+    '';
+  };
+
   security.sudo.enable = true;
   security.sudo.wheelNeedsPassword = false;
 
@@ -33,4 +61,9 @@
     tree-sitter
     unzip
   ];
+
+  services.homelab.hello = {
+    enable = true;
+    intervalSeconds = 15;
+  };
 }

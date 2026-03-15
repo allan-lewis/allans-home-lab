@@ -2,35 +2,12 @@
 
 let
   featureFlagBackup = false;
-  featureFlagNodeExporter = true;
   featureFlagRestore = false;
   featureFlagPostgresDump = false;
   featureFlagS3Mirror = false;
   featureFlagTailscale = false;
 in
 {
-  virtualisation.docker.enable = true;
-
-  services.qemuGuest.enable = true;
-  services.cloud-init.enable = true;
-  services.cloud-init.network.enable = true;
-
-  services.homelab.hello = {
-    enable = true;
-    intervalSeconds = 15;
-  };
-
-  services.prometheus.exporters.node = lib.mkIf featureFlagNodeExporter {
-    enable = true;
-    listenAddress = "0.0.0.0";
-    port = 9100;
-    openFirewall = true;
-    enabledCollectors = [ "textfile" ];
-    extraFlags = [
-      "--collector.textfile.directory=/var/lib/node_exporter/textfile_collector"
-    ];
-  };
-
   services.homelab.managedDirectories = lib.mkIf featureFlagRestore {
     enable = false;
     writablePaths = [

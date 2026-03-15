@@ -4,14 +4,11 @@
   imports = [
     ../../profiles/base
     ../../profiles/devops
-    
-    ./tmpfiles.nix
-    ./secrets.nix
-    ./lab-user.nix
-    ./services.nix
-    ./boot.nix
-    ./networking.nix
+    ../../profiles/docker
+    ../../profiles/virtual-machine
   ];
+
+  networking.hostName = "todash";
 
   system.stateVersion = "25.11";
 }
