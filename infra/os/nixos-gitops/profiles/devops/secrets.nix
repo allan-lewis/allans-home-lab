@@ -36,15 +36,6 @@
     cli_pager =
   '';
 
-  sops.secrets.tailscale_authkey = {
-    sopsFile = ../../secrets/tailscale.yaml;
-    key = "tailscale_authkey";
-    path = "/run/secrets/tailscale-authkey";
-    owner = "root";
-    group = "root";
-    mode = "0400";
-  };
-
   system.activationScripts.labSshPublicKey = {
     text = ''
       if [ -f /home/lab/.ssh/id_ed25519 ]; then

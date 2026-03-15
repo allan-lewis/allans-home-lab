@@ -6,6 +6,7 @@
     ../../profiles/base
     ../../profiles/devops
     ../../profiles/docker
+    ../../profiles/tailscale
   ];
 
   networking.hostName = "cujo";

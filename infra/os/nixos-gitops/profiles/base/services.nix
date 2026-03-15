@@ -50,14 +50,4 @@ in
     passwordFile = "/etc/allans-home-lab/secrets/postgres_dump_pass";
   };
 
-  services.tailscale = lib.mkIf featureFlagTailscale {
-    enable = true;
-    authKeyFile = "/run/secrets/tailscale-authkey";
-    extraUpFlags = [
-      "--accept-dns=true"
-    ];
-  };
-
-  networking.firewall.trustedInterfaces =
-    lib.mkIf config.services.tailscale.enable [ "tailscale0" ];
 }
