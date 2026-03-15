@@ -13,7 +13,9 @@
 
   outputs = { nixpkgs, home-manager, sops-nix, ... }:
   let
-    system = "x86_64-linux";
+    system = "x86_64-linux";  
+    backupRemotePrefix =
+      "allan@192.168.86.220:/mnt/pool1/allans-home-lab/backups-automated";
 
     commonModules = [
       home-manager.nixosModules.home-manager
@@ -25,12 +27,16 @@
       ./modules/homelab-hello.nix
       ./modules/homelab-tasks.nix
       ./modules/managed-directories.nix
+      ./modules/managed-directories-config.nix
       ./modules/postgres-db-backup.nix
       ./modules/s3-local-mirror.nix
     ];
 
     mkHost = hostPath: nixpkgs.lib.nixosSystem {
       inherit system;
+      specialArgs = {
+        inherit backupRemotePrefix;
+      };
       modules = commonModules ++ [
         (hostPath + "/hardware-configuration.nix")
         (hostPath + "/default.nix")

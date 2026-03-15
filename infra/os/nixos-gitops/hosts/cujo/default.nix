@@ -4,6 +4,7 @@
   imports = [
     ../../profiles/bare-metal
     ../../profiles/base
+    ../../profiles/devops
     ../../profiles/docker
   ];
 

@@ -66,4 +66,11 @@
     enable = true;
     intervalSeconds = 15;
   };
+
+  homelab.managedDirectories.defaults = {
+    marker = ".restored_from_backup";
+    restoreWhen = "empty_and_marker_missing";
+    backupWhen = "marker_present";
+    allowUninitializedBackup = false;
+  };
 }
