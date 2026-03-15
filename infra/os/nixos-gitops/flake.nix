@@ -1,5 +1,5 @@
 {
-  description = "Allan's Homelab - NixOps fleet";
+  description = "Allan's Homelab - NixOS GitOps fleet";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
@@ -11,7 +11,7 @@
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, nixpkgs, home-manager, sops-nix }:
+  outputs = { nixpkgs, home-manager, sops-nix, ... }:
   let
     system = "x86_64-linux";
 
@@ -28,28 +28,19 @@
       ./modules/postgres-db-backup.nix
       ./modules/s3-local-mirror.nix
     ];
+
+    mkHost = hostPath: nixpkgs.lib.nixosSystem {
+      inherit system;
+      modules = commonModules ++ [
+        (hostPath + "/hardware-configuration.nix")
+        (hostPath + "/default.nix")
+      ];
+    };
   in
   {
     nixosConfigurations = {
-      todash = nixpkgs.lib.nixosSystem {
-        inherit system;
-        modules =
-          commonModules
-          ++ [
-            ./hosts/todash/hardware-configuration.nix
-            ./hosts/todash/default.nix
-          ];
-      };
-
-      cujo = nixpkgs.lib.nixosSystem {
-        inherit system;
-        modules =
-          commonModules
-          ++ [
-            ./hosts/cujo/hardware-configuration.nix
-            ./hosts/cujo/default.nix
-          ];
-      };
+      todash = mkHost ./hosts/todash;
+      cujo = mkHost ./hosts/cujo;
     };
   };
 }
