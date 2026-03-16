@@ -21,12 +21,10 @@
       home-manager.nixosModules.home-manager
       sops-nix.nixosModules.sops
 
-      ./modules/backup-runner.nix
       ./modules/dev-checkouts.nix
       ./modules/doppler.nix
       ./modules/homelab-hello.nix
       ./modules/homelab-tasks.nix
-      ./modules/managed-directories.nix
       ./modules/managed-directories-config.nix
       ./modules/postgres-db-backup.nix
       ./modules/s3-local-mirror.nix

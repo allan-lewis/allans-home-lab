@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
   imports = [
@@ -31,7 +31,32 @@
         dest = "allans-home-lab";
         version = "main";
       }
+      {
+        repo = "git@github.com:allan-lewis/dotfiles.git";
+        dest = "dotfiles";
+        version = "main";
+      }
+      {
+        repo = "git@github.com:allan-lewis/homelab-metrics.git";
+        dest = "homelab-metrics";
+        version = "main";
+      }
+      {
+        repo = "git@github.com:allan-lewis/no-geeks-brewing-go.git";
+        dest = "no-geeks-brewing-go";
+        version = "main";
+      }
     ];
+  };
+
+  system.activationScripts.devCheckoutsAfterSwitch = {
+    deps = [ "etc" ];
+    text = ''
+      mkdir -p /run/nixos
+      if ! grep -qxF 'homelab-task-dev_checkouts_sync.service' /run/nixos/activation-restart-list 2>/dev/null; then
+        printf '%s\n' 'homelab-task-dev_checkouts_sync.service' >> /run/nixos/activation-restart-list
+      fi
+    '';
   };
 
   services.homelab.doppler = {
