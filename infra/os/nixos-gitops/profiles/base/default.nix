@@ -29,6 +29,16 @@
     '';
   };
 
+  system.activationScripts.managedStateRestoreAfterSwitch = {
+    deps = [ "rootSshPublicKey" "etc" ];
+    text = ''
+      mkdir -p /run/nixos
+      if ! grep -qxF 'homelab-task-managed-state-restore.service' /run/nixos/activation-restart-list 2>/dev/null; then
+        printf '%s\n' 'homelab-task-managed-state-restore.service' >> /run/nixos/activation-restart-list
+      fi
+    '';
+  };
+
   security.sudo.enable = true;
   security.sudo.wheelNeedsPassword = false;
 
@@ -65,5 +75,11 @@
   services.homelab.hello = {
     enable = true;
     intervalSeconds = 15;
+  };
+
+  services.homelab.managedState = {
+    enable = true;
+
+    schedule = "*-*-* 00:00:00";
   };
 }

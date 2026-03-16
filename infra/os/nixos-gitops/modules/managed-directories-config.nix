@@ -10,6 +10,9 @@ let
 
   cfg = config.homelab.managedDirectories;
 
+  tmpfilesRules =
+    map (d: "d ${d.local} ${d.mode} ${d.owner} ${d.group} -") entriesList;
+
   markerFile = ".restored_from_backup";
 
   entriesList =
@@ -116,6 +119,8 @@ in
   config = {
     environment.etc."allans-home-lab/managed-directories/config.yaml".source =
       managedDirectoriesYaml;
+
+    systemd.tmpfiles.rules = tmpfilesRules;
 
     services.homelab.managedState.writablePaths = restoreWritablePaths;
     services.homelab.managedState.readablePaths = backupReadablePaths;

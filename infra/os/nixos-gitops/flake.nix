@@ -26,6 +26,7 @@
       ./modules/homelab-hello.nix
       ./modules/homelab-tasks.nix
       ./modules/managed-directories-config.nix
+      ./modules/managed-state.nix
       ./modules/postgres-db-backup.nix
       ./modules/s3-local-mirror.nix
     ];
