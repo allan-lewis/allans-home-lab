@@ -81,5 +81,7 @@
     enable = true;
 
     schedule = "hourly";
+    
+    persistent = false;
   };
 }
