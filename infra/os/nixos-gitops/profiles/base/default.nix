@@ -80,6 +80,6 @@
   services.homelab.managedState = {
     enable = true;
 
-    schedule = "*-*-* 00:00:00";
+    schedule = "hourly";
   };
 }

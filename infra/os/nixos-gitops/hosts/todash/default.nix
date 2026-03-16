@@ -7,7 +7,6 @@ in
 {
   imports = [
     ../../profiles/base
-    ../../profiles/docker
     ../../profiles/virtual-machine
   ];
 

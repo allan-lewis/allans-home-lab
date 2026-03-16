@@ -5,6 +5,7 @@ groups:
       - record: homelab_task_allowed_age_seconds
         expr: |
           label_replace(vector(3600), "task", "backup_runner", "", "")
+          or label_replace(vector(3600), "task", "managed_state", "", "")
           or label_replace(vector(3600), "task", "media_sync", "", "")
           or label_replace(vector(25 * 3600), "task", "postgres_db_backup", "", "")
           or label_replace(vector(7 * 24 * 3600), "task", "s3_local_mirror", "", "")
@@ -127,7 +128,7 @@ groups:
 
       - alert: HomelabTaskMetricsCountMismatch
         expr: |
-          count(homelab_task_last_run_unix{task!~"^(hello|managed_dirs_rehydrate|dev_checkouts_sync)$"}) != 10
+          count(homelab_task_last_run_unix{task!~"^(hello|managed_state_restore|managed_dirs_rehydrate|dev_checkouts_sync)$"}) != 10
         labels:
           severity: critical
           rulegroup: homelabRules

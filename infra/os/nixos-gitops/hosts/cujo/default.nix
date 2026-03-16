@@ -9,7 +9,6 @@ in
     ../../profiles/bare-metal
     ../../profiles/base
     ../../profiles/devops
-    ../../profiles/docker
     ../../profiles/tailscale
   ];
 
