@@ -146,7 +146,7 @@ nixos-converge-observability:
 
 # Converge only the Docker Pi-hole application
 nixos-converge-pihole:
-  {{run_prefix}} scripts/ansible-playbook.sh "ansible/converge-nixos.yaml" "langolier" "docker" "" "nixos_docker_services=pihole"
+  {{run_prefix}} scripts/ansible-playbook.sh "ansible/converge-nixos.yaml" "flagg" "docker" "" "nixos_docker_services=pihole"
 
 # Converge only the Docker Plex application
 nixos-converge-plex:
