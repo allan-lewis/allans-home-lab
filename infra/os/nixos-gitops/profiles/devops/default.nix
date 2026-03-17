@@ -2,6 +2,7 @@
 
 {
   imports = [
+    ./lab-user.nix
     ./secrets.nix
     ./tmpfiles.nix
   ];

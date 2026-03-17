@@ -12,7 +12,7 @@ in
   users.users.lab = {
     isNormalUser = true;
     group = "lab";
-    extraGroups = [ "wheel" "aws" "docker" ];
+    extraGroups = [ "wheel" ];
     shell = pkgs.zsh;
     hashedPassword = "!";
   };
@@ -29,16 +29,6 @@ in
     xdg.configFile."nvim" = {
       source = ../../assets/nvim;
       recursive = true;
-    };
-
-    programs.git = lib.mkIf featureFlagGit {
-      enable = true;
-      settings = {
-        user = {
-          name = "Allan Lewis";
-          email = "allan.e.lewis@gmail.com";
-        };
-      };
     };
 
     programs.zsh = {
