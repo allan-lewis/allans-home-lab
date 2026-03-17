@@ -33,13 +33,3 @@
         - converge_docker | default(false) | bool
       tags: [docker]
       with_items: "{{ nixos_docker_services | default([]) }}"
-
-    - name: Create custom Pi-hole DNS records
-      ansible.builtin.include_role:
-        name: converge_nixos_pihole_dns
-        apply:
-          tags: [docker]
-      when:
-        - converge_nixos | default(false) | bool
-        - converge_docker_pihole | default(false) | bool
-      tags: [docker]

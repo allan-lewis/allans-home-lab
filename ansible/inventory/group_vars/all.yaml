@@ -33,5 +33,4 @@ converge_docker_monitoring: false
 converge_postgres_dump: false
 converge_restore: false
 converge_openvpn: false
-converge_docker_pihole: false
 converge_docker_twingate: false
