@@ -9,8 +9,8 @@ command_timeout = 1000
 format = "$directory$git_branch$git_status$line_break$username$hostname$cmd_duration$time$character"
 
 # ----------- Active Palette -----------
-palette = "catppuccin_mocha"
-# palette = "gruvbox_dark_hard"
+# palette = "catppuccin_mocha"
+palette = "gruvbox_dark_hard"
 # palette = "gruvbox_dark_medium"
 # palette = "gruvbox_dark_soft"
 

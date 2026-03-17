@@ -3,6 +3,7 @@
 {
   imports = [
     ../observability
+    ../podman
 
     ./lab-user.nix
     ./tmpfiles.nix
@@ -83,7 +84,5 @@
     schedule = "hourly";
     
     persistent = false;
-
-    randomizedDelaySec = "15m";
   };
 }

@@ -331,7 +331,7 @@ traefik_services:
     # use the above on nixos url: "http://{{ hostvars['flagg'].ansible_host}}:8088"
   - name: pihole
     host: dns.docker.allanshomelab.com
-    url: "http://{{ hostvars['langolier'].ansible_host }}:30080"
+    url: "http://{{ hostvars['flagg'].ansible_host }}:30080"
   - name: gatus
     host: gatus.docker.allanshomelab.com
     url: "http://{{ hostvars['flagg'].ansible_host }}:8080"

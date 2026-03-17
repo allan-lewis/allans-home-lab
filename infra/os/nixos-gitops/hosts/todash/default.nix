@@ -7,7 +7,6 @@ in
 {
   imports = [
     ../../profiles/base
-    ../../profiles/pihole
     ../../profiles/virtual-machine
   ];
 
