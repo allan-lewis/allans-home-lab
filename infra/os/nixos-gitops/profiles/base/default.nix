@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 {
   imports = [
@@ -30,7 +30,7 @@
     '';
   };
 
-  system.activationScripts.managedStateRestoreAfterSwitch = {
+  system.activationScripts.managedStateRestoreAfterSwitch = lib.mkIf config.services.homelab.managedState.enable {
     deps = [ "rootSshPublicKey" "etc" ];
     text = ''
       mkdir -p /run/nixos
