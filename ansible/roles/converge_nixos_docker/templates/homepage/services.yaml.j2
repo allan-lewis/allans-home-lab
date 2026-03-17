@@ -109,13 +109,11 @@
         container: nginx
     - Pi-hole:
         icon: pi-hole.png
-        href: https://dns.docker.allanshomelab.com/admin
+        href: https://dns.nixos.allanshomelab.com/admin
         description: Backup DNS server
-        server: langolier
-        container: pihole
         widget:
             type: pihole
-            url: https://dns.docker.allanshomelab.com
+            url: https://dns.nixos.allanshomelab.com
             version: 6
             key: "{{ lookup('env', 'HOMEPAGE_VAR_PIHOLE_KEY_DOCKER') }}"
     - Tailscale:
