@@ -1,8 +1,5 @@
 { pkgs, lib, ... }:
 
-let
-  featureFlagGit = true;
-in
 {
   programs.zsh.enable = true;
 
