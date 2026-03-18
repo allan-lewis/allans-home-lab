@@ -45,8 +45,6 @@
           "whoami.docker.allanshomelab.com,docker.allanshomelab.com"
           "portainer.docker.allanshomelab.com,docker.allanshomelab.com"
           "prometheus.docker.allanshomelab.com,docker.allanshomelab.com"
-          "radarr.k8s.allanshomelab.com,k8s.allanshomelab.com"
-          "sonarr.k8s.allanshomelab.com,k8s.allanshomelab.com"
           "maturin.kvm.allanshomelab.com,kvm.allanshomelab.com"
           "prowlarr.media.allanshomelab.com,media.allanshomelab.com"
           "lidarr.media.allanshomelab.com,media.allanshomelab.com"
