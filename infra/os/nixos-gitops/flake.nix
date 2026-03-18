@@ -24,10 +24,10 @@
       ./modules/dev-checkouts.nix
       ./modules/doppler.nix
       ./modules/homelab-hello.nix
-      ./modules/homelab-metrics.nix
       ./modules/homelab-tasks.nix
       ./modules/managed-directories-config.nix
       ./modules/managed-state.nix
+      ./modules/oci-containers.nix
       ./modules/postgres-db-backup.nix
       ./modules/s3-local-mirror.nix
     ];
