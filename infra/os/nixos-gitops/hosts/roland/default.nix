@@ -56,6 +56,17 @@ in
   home-manager.users.lab = { ... }: {
     xdg.configFile."hypr/hyprland.conf".source =
       ../../assets/hyprland.conf;
+
+    xdg.configFile."ghostty/config".source =
+      ../../assets/ghostty/config.ghostty;
+
+    home.file."wallpapers/default.png".source =
+      ../../assets/wallpaper/nix-wallpaper-binary-blue.png;
+
+    xdg.configFile."hypr/hyprpaper.conf".text = ''
+      preload = /home/lab/wallpapers/default.png
+      wallpaper = ,/home/lab/wallpapers/default.png
+    '';
   };
 
   # ---- HYPRLAND ----
