@@ -47,6 +47,7 @@
     nixosConfigurations = {
       cujo = mkHost ./hosts/cujo;
       langolier = mkHost ./hosts/langolier;
+      roland = mkHost ./hosts/roland;
       todash = mkHost ./hosts/todash;
     };
   };

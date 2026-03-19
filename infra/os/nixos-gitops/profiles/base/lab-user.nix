@@ -16,6 +16,7 @@
 
   home-manager.useGlobalPkgs = true;
   home-manager.useUserPackages = true;
+  home-manager.backupFileExtension = "backup";
 
   home-manager.users.lab = { pkgs, ... }: {
     home.stateVersion = "25.11";
