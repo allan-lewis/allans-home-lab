@@ -11,8 +11,6 @@
     awscli2
     clang
     doppler
-    gcc
-    git
     gnumake
     just
   ];

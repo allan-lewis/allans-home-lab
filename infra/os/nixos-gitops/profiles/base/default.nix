@@ -63,14 +63,18 @@
     btop
     cmatrix
     curl
+    gcc
     ghostty.terminfo
+    git
     jq
     net-tools
+    nslookup
     python3
     trash-cli
     tree
     tree-sitter
     unzip
+    wget
   ];
 
   services.homelab.hello = {

@@ -7,6 +7,7 @@ in
   imports = [
     ../../profiles/bare-metal
     ../../profiles/base
+    ../../profiles/desktop
   ];
 
   networking.hostName = "roland";
@@ -21,36 +22,6 @@ in
   users.users.lab = {
     isNormalUser = true;
     extraGroups = [ "wheel" "video" "audio" ];
-  };
-
-  security.sudo.wheelNeedsPassword = false;
-
-  # ---- CORE PACKAGES ----
-  environment.systemPackages = with pkgs; [
-    bibata-cursors
-    ghostty
-    neovim
-    git
-    curl
-    wget
-    ripgrep
-    fd
-    gcc
-    google-chrome
-    waybar
-    wofi
-    mako
-    wl-clipboard
-    hyprlock
-    hyprpaper
-    hypridle
-  ];
-
-  environment.variables = {
-    XCURSOR_THEME = "Bibata-Modern-Ice";
-    XCURSOR_SIZE = "24";
-    EDITOR = "nvim";
-    TERMINAL = "ghostty";
   };
 
   home-manager.users.lab = { ... }: {
