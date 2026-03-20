@@ -26,7 +26,13 @@ in
 
   home-manager.users.lab = { ... }: {
     xdg.configFile."hypr/hyprland.conf".source =
-      ../../assets/hyprland.conf;
+      ../../assets/hypr/hyprland.conf;
+
+    xdg.configFile."hypr/hypridle.conf".source =
+      ../../assets/hypr/hypridle.conf;
+
+    xdg.configFile."hypr/hyprlock.conf".source =
+      ../../assets/hypr/hyprlock.conf;
 
     xdg.configFile."ghostty/config".source =
       ../../assets/ghostty/config.ghostty;
@@ -38,6 +44,11 @@ in
       preload = /home/lab/wallpapers/default.png
       wallpaper = ,/home/lab/wallpapers/default.png
     '';
+
+    xdg.userDirs = {
+      enable = true;
+      createDirectories = true;
+    };
   };
 
   # ---- HYPRLAND ----

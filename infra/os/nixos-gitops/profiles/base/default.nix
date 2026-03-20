@@ -63,12 +63,12 @@
     btop
     cmatrix
     curl
+    dnsutils
     gcc
     ghostty.terminfo
     git
     jq
     net-tools
-    nslookup
     python3
     trash-cli
     tree
