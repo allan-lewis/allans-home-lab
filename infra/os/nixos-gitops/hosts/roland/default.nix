@@ -12,6 +12,8 @@ in
 
   networking.hostName = "roland";
 
+  time.timeZone = lib.mkForce "America/New_York";
+
   homelab.bareMetal = {
     interface = "enp4s0";
     address = "192.168.86.206";
@@ -59,7 +61,12 @@ in
 
       settings = [
         {
-          modules-right = [ "custom/power" ];
+          modules-right = [ "clock" "custom/power" ];
+
+          "clock" = {
+            format = "{:%H:%M | %a %b %d}";
+            tooltip-format = "{:%Y-%m-%d %H:%M:%S}";
+          };
 
           "custom/power" = {
             format = "⏻";
