@@ -49,6 +49,139 @@ in
       enable = true;
       createDirectories = true;
     };
+
+    home.packages = [
+      pkgs.wlogout
+    ];
+
+    programs.waybar = {
+      enable = true;
+
+      settings = [
+        {
+          modules-right = [ "custom/power" ];
+
+          "custom/power" = {
+            format = "⏻";
+            tooltip = false;
+            on-click = "${pkgs.wlogout}/bin/wlogout -l /home/lab/.config/wlogout/layout -C /home/lab/.config/wlogout/style.css -b 4";
+          };
+        }
+      ];
+
+      style = ''
+        * {
+          font-family: "JetBrainsMono Nerd Font", "JetBrains Mono Nerd Font", monospace;
+          font-size: 14px;
+        }
+
+        #custom-power {
+          padding: 0 10px;
+        }
+      '';
+    };
+
+    xdg.configFile."wlogout/layout".text = ''
+      {
+        "label" : "lock",
+        "action" : "hyprlock",
+        "text" : "lock",
+        "keybind" : "l"
+      }
+      {
+        "label" : "logout",
+        "action" : "hyprctl dispatch exit",
+        "text" : "logout",
+        "keybind" : "e"
+      }
+      {
+        "label" : "reboot",
+        "action" : "systemctl reboot",
+        "text" : "reboot",
+        "keybind" : "r"
+      }
+      {
+        "label" : "shutdown",
+        "action" : "systemctl poweroff",
+        "text" : "shutdown",
+        "keybind" : "s"
+      }
+    '';
+
+xdg.configFile."wlogout/style.css".text = ''
+  * {
+    font-family: "JetBrainsMono Nerd Font", "JetBrains Mono Nerd Font", monospace;
+    color: rgb(111, 141, 184);
+  }
+
+  window {
+    background-color: rgba(20, 30, 50, 0.78);
+    background-image: url("/home/lab/wallpapers/default.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+  button {
+    margin: 20px;
+    padding: 24px;
+    border-radius: 12px;
+    border: 2px solid rgb(111, 141, 184);
+    background: rgb(30, 45, 74);
+    box-shadow: none;
+    outline: none;
+    min-width: 180px;
+    min-height: 180px;
+  }
+
+  button:hover,
+  button:focus,
+  button:active {
+    background: rgb(111, 141, 184);
+    border-color: rgb(143, 168, 201);
+    box-shadow: none;
+    outline: none;
+  }
+
+  button label {
+    font-family: "JetBrainsMono Nerd Font", "JetBrains Mono Nerd Font", monospace;
+    font-size: 18px;
+    font-weight: 500;
+    color: rgb(111, 141, 184);
+  }
+
+  button:hover label,
+  button:focus label,
+  button:active label {
+    color: rgb(30, 45, 74);
+  }
+
+  #lock,
+  #logout,
+  #reboot,
+  #shutdown {
+    background-position: center 32px;
+    background-repeat: no-repeat;
+    background-size: 64px;
+    padding-top: 92px;
+  }
+
+  #lock {
+    background-image: image(url("${pkgs.wlogout}/share/wlogout/icons/lock.png"));
+  }
+
+  #logout {
+    background-image: image(url("${pkgs.wlogout}/share/wlogout/icons/logout.png"));
+  }
+
+  #reboot {
+    background-image: image(url("${pkgs.wlogout}/share/wlogout/icons/reboot.png"));
+  }
+
+  #shutdown {
+    background-image: image(url("${pkgs.wlogout}/share/wlogout/icons/shutdown.png"));
+  }
+'';
   };
 
   # ---- HYPRLAND ----
@@ -61,20 +194,20 @@ in
   ];
 
   # ---- GREETD LOGIN MANAGER ----
-systemd.defaultUnit = "graphical.target";
+  systemd.defaultUnit = "graphical.target";
 
-services.greetd = {
-  enable = true;
-  settings = {
-    default_session = {
-      command = "${pkgs.tuigreet}/bin/tuigreet --cmd Hyprland";
-      user = "greeter";
+  services.greetd = {
+    enable = true;
+    settings = {
+      default_session = {
+        command = "${pkgs.tuigreet}/bin/tuigreet --cmd Hyprland";
+        user = "greeter";
+      };
     };
   };
-};
 
-systemd.services."getty@tty1".enable = false;
-systemd.services."autovt@tty1".enable = false;
+  systemd.services."getty@tty1".enable = false;
+  systemd.services."autovt@tty1".enable = false;
 
   # ---- AUDIO ----
   services.pipewire = {
