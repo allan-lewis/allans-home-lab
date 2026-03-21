@@ -6,7 +6,7 @@ HOST="${2:?Usage: $0 <os> <host> <apply|destroy> <0|1>}"
 MODE="${3:?Usage: $0 <os> <host> <apply|destroy> <0|1>}"
 APPROVE="${4:?Usage: $0 <os> <host> <apply|destroy> <0|1>}"
 
-if [[ "$OS" == "nixos" ]]; then
+if [[ "$OS" == "nixos" || "$OS" == "arch" ]]; then
   AGENT_ENABLED=true
 else
   AGENT_ENABLED=false
@@ -73,6 +73,7 @@ if [[ ! -f "${TEMPLATE_MANIFEST_PATH}" ]]; then
 fi
 
 terraform init \
+  -reconfigure \
   -input=false \
   -upgrade=false \
   -backend-config="bucket=gitops-homelab-orchestrator-tf" \
