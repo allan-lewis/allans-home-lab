@@ -10,9 +10,9 @@ from pathlib import Path
 from typing import Any
 
 try:
-    import yaml
+    import tomllib
 except ImportError:
-    print("ERROR: Missing dependency: pyyaml", file=sys.stderr)
+    print("ERROR: Missing stdlib module: tomllib (requires Python 3.11+)", file=sys.stderr)
     sys.exit(1)
 
 try:
@@ -31,11 +31,11 @@ GENERATED_NIX_DIR = GENERATED_DIR / "nix"
 GENERATED_TERRAFORM_DIR = GENERATED_DIR / "terraform"
 
 
-def load_yaml(path: Path) -> dict[str, Any]:
-    with path.open("r", encoding="utf-8") as f:
-        data = yaml.safe_load(f)
+def load_toml(path: Path) -> dict[str, Any]:
+    with path.open("rb") as f:
+        data = tomllib.load(f)
     if not isinstance(data, dict):
-        raise ValueError(f"{path}: top-level YAML must be an object")
+        raise ValueError(f"{path}: top-level TOML must be an object")
     return data
 
 
@@ -110,7 +110,7 @@ def validate_cross_host(hosts: dict[str, dict[str, Any]]) -> None:
     seen_hostnames: set[str] = set()
     seen_ips: set[str] = set()
     seen_macs: set[str] = set()
-    seen_vm_keys: set[tuple[str, int]] = set()
+    seen_vm_keys: set[tuple[str | None, int]] = set()
 
     for host in hosts.values():
         name = host["name"]
@@ -207,7 +207,7 @@ def build_terraform_host_json(host: dict[str, Any]) -> dict[str, Any]:
             host["name"]: {
                 "platform": host["platform"],
                 "variant": host["variant"],
-                "terraform": build_tf_host_payload(host)
+                "terraform": build_tf_host_payload(host),
             }
         }
     }
@@ -228,11 +228,11 @@ def main() -> int:
     schema = load_json(SCHEMA_PATH)
 
     raw_hosts: list[tuple[Path, dict[str, Any]]] = []
-    for path in sorted(HOSTS_DIR.glob("*.yaml")):
-        raw_hosts.append((path, load_yaml(path)))
+    for path in sorted(HOSTS_DIR.glob("*.toml")):
+        raw_hosts.append((path, load_toml(path)))
 
     if not raw_hosts:
-        print(f"ERROR: No host YAML files found in {HOSTS_DIR}", file=sys.stderr)
+        print(f"ERROR: No host TOML files found in {HOSTS_DIR}", file=sys.stderr)
         return 1
 
     processed_hosts: dict[str, dict[str, Any]] = {}

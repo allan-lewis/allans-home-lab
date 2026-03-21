@@ -207,20 +207,17 @@ ubuntu-terraform persona action approve="0":
 
 NIXOS_GITOPS_DIR := "./infra/os/nixos-gitops"
 
-nix-check host:
+inventory-build:
+	uv run --with jsonschema python3 operations/scripts/render-inventory.py
+
+nix-check host: inventory-build
     ./scripts/nixos-gitops.sh {{host}} check
 
-nix-test host:
+nix-test host: inventory-build
     {{run_prefix}} ./scripts/nixos-gitops.sh {{host}} test
 
-nix-switch host:
+nix-switch host: inventory-build
     {{run_prefix}} ./scripts/nixos-gitops.sh {{host}} switch
 
-# inventory-build:
-# 	python3 operations/scripts/render-inventory.py
-
-inventory-build:
-	uv run --with pyyaml --with jsonschema python3 operations/scripts/render-inventory.py
-
-terraform host action approve="0":
-  {{run_prefix}} scripts/gitops-terraform.sh "{{host}}" "{{action}}" "{{approve}}"
+terraform host action approve="0": inventory-build
+	{{run_prefix}} scripts/gitops-terraform.sh "{{host}}" "{{action}}" "{{approve}}"

@@ -1,17 +1,17 @@
-name = "todash"
-hostname = "todash"
+name = "barlow"
+hostname = "barlow"
 
-platform = "nixos"
-variant = "nixos"
+platform = "linux"
+variant = "ubuntu"
 
 role = "tinker"
-description = "NixOS Sandbox"
+description = "Ubuntu Sandbox"
 
-groups = ["nixos"]
+groups = ["ubuntu"]
 
 [management]
 provisioner = "terraform"
-converger = "nixos"
+converger = "ansible"
 
 [runtime]
 kind = "vm"
@@ -31,9 +31,9 @@ mode = "static"
 dns = ["192.168.86.1"]
 
 [network.ipv4]
-address = "192.168.86.216"
+address = "192.168.86.213"
 gateway = "192.168.86.1"
 
 [provisioning.terraform]
 cloud_init = true
-agent = true
+agent = false
