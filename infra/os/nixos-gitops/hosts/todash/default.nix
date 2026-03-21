@@ -1,7 +1,8 @@
 { backupRemotePrefix, ... }:
 
 let
-  hostName = "todash";
+  inventoryConfig = builtins.fromTOML (builtins.readFile ../../../../../inventory/hosts/todash.toml);
+  hostName = inventoryConfig.hostname;
   defaultRemoteNasPerHostBackupVolume = "${backupRemotePrefix}/${hostName}";
 in
 {

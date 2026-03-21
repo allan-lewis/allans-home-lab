@@ -3,19 +3,6 @@ variable "hosts_json_path" {
   type        = string
 }
 
-variable "template_manifest_map" {
-  description = <<EOT
-Map of template_ref => manifest path (JSON) for L1 templates.
-The factory will use this to look up clone VMIDs and other metadata.
-Example:
-{
-  "arch/devops/stable" = "artifacts/arch/devops/template-manifest-stable.json",
-  "arch/devops/canary" = "artifacts/arch/devops/template-manifest-canary.json"
-}
-EOT
-  type = map(string)
-}
-
 variable "ci_user" {
   description = "Default SSH user for cloud-init (overrides per-host if needed)"
   type        = string
@@ -26,6 +13,10 @@ variable "ssh_authorized_keys" {
   description = "SSH public keys to inject for the default user on all hosts (unless overridden)"
   type        = list(string)
   default     = []
+}
+
+variable "template_manifest_path" {
+  type = string
 }
 
 variable "storage" {

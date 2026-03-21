@@ -1,0 +1,40 @@
+name: todash
+hostname: todash
+
+platform: nixos
+variant: nixos
+
+role: tinker
+description: NixOS Sandbox
+
+groups:
+  - nixos
+
+management:
+  provisioner: terraform
+  converger: nixos
+
+runtime:
+  kind: vm
+  hypervisor: proxmox
+  node: maturin
+
+resources:
+  cpu:
+    cores: 4
+    sockets: 1
+  memory_mb: 4096
+  disk_gb: 32
+
+network:
+  mode: static
+  ipv4:
+    address: 192.168.86.216
+    gateway: 192.168.86.1
+  dns:
+    - 192.168.86.1
+
+provisioning:
+  terraform:
+    cloud_init: true
+    agent: true

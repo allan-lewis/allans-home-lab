@@ -18,7 +18,7 @@ locals {
   # {
   #   "arch/devops/stable" = "infra/arch/spec/vm-template-stable.json"
   # }
-  template_manifests = var.template_manifest_map
+  template_manifest = var.template_manifest_path
 
   # Transform host spec -> vms map expected by common_vm_cloudinit
   vms = {
@@ -43,7 +43,7 @@ locals {
 
       # Decode the chosen template manifest (same as before, just
       # using template_manifests from a variable instead of hard-coding paths)
-      manifest = jsondecode(file(local.template_manifests[host.terraform.template_ref]))
+      manifest = jsondecode(file(local.template_manifest))
     }
   }
 

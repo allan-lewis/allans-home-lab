@@ -215,3 +215,12 @@ nix-test host:
 
 nix-switch host:
     {{run_prefix}} ./scripts/nixos-gitops.sh {{host}} switch
+
+# inventory-build:
+# 	python3 operations/scripts/render-inventory.py
+
+inventory-build:
+	uv run --with pyyaml --with jsonschema python3 operations/scripts/render-inventory.py
+
+terraform host action approve="0":
+  {{run_prefix}} scripts/gitops-terraform.sh "nixos" "{{host}}" "{{action}}" "{{approve}}"
