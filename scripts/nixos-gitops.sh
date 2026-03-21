@@ -7,7 +7,6 @@ MODE="${2:?Usage: $0 <host> <check|test|switch>}"
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 NIXOS_GITOPS_DIR="${ROOT_DIR}/infra/os/nixos-gitops"
 HOST_DIR="${NIXOS_GITOPS_DIR}/hosts/${HOST}"
-TARGET_HOST_FILE="${HOST_DIR}/target-host"
 FLAKE_REF="${NIXOS_GITOPS_DIR}#${HOST}"
 
 if [[ ! -d "${HOST_DIR}" ]]; then
@@ -27,17 +26,17 @@ if [[ "${MODE}" == "check" ]]; then
   exec nix flake show "${HOST_DIR}"
 fi
 
-if [[ ! -f "${TARGET_HOST_FILE}" ]]; then
-  echo "ERROR: target-host file not found: ${TARGET_HOST_FILE}" >&2
-  exit 3
+HOST_JSON_PATH="inventory/generated/terraform/${HOST}.json"
+if [[ ! -f "${HOST_JSON_PATH}" ]]; then
+  echo "ERROR: Host JSON not found: ${HOST_JSON_PATH}" >&2
+  exit 1
 fi
 
-TARGET="$(<"${TARGET_HOST_FILE}")"
+TARGET_HOST_IP="$(jq -r --arg host "$HOST" '.hosts[$host].terraform.ip' "$HOST_JSON_PATH")"
 
-if [[ -z "${TARGET}" ]]; then
-  echo "ERROR: target-host file is empty: ${TARGET_HOST_FILE}" >&2
-  exit 4
-fi
+TARGET="lab@${TARGET_HOST_IP}"
+
+echo "Identified target: ${TARGET}"
 
 bootstrap_sops_age_key() {
   local host_dir="$1"
