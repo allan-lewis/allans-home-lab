@@ -223,4 +223,4 @@ inventory-build:
 	uv run --with pyyaml --with jsonschema python3 operations/scripts/render-inventory.py
 
 terraform host action approve="0":
-  {{run_prefix}} scripts/gitops-terraform.sh "nixos" "{{host}}" "{{action}}" "{{approve}}"
+  {{run_prefix}} scripts/gitops-terraform.sh "{{host}}" "{{action}}" "{{approve}}"

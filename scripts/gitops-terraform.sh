@@ -1,16 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-OS="${1:?Usage: $0 <os> <host> <apply|destroy> <0|1>}"
-HOST="${2:?Usage: $0 <os> <host> <apply|destroy> <0|1>}"
-MODE="${3:?Usage: $0 <os> <host> <apply|destroy> <0|1>}"
-APPROVE="${4:?Usage: $0 <os> <host> <apply|destroy> <0|1>}"
-
-if [[ "$OS" == "nixos" || "$OS" == "arch" ]]; then
-  AGENT_ENABLED=true
-else
-  AGENT_ENABLED=false
-fi
+HOST="${1:?Usage: $0 <host> <apply|destroy> <0|1>}"
+MODE="${2:?Usage: $0 <host> <apply|destroy> <0|1>}"
+APPROVE="${3:?Usage: $0 <host> <apply|destroy> <0|1>}"
 
 TF_DIR="terraform/vm-host"
 
@@ -35,7 +28,6 @@ case "$APPROVE" in
   ;;
 esac
 
-echo "==== Terraform OS: $OS ===="
 echo "==== Terraform host: $HOST ===="
 echo "==== Directory: $TF_DIR ===="
 echo "==== Mode: $MODE ===="
@@ -60,16 +52,24 @@ export TF_VAR_proxmox_vm_public_key="${TF_VAR_PROXMOX_VM_PUBLIC_KEY}"
 cd "${TF_DIR}"
 
 HOST_JSON_PATH="../../inventory/generated/terraform/${HOST}.json"
-TEMPLATE_MANIFEST_PATH="../../infra/os/$OS/spec/vm-template-stable.json"
 
 if [[ ! -f "${HOST_JSON_PATH}" ]]; then
   echo "ERROR: Host JSON not found: ${HOST_JSON_PATH}" >&2
   exit 1
 fi
 
+OS="$(jq -r --arg host "$HOST" '.hosts[$host].variant' "$HOST_JSON_PATH")"
+TEMPLATE_MANIFEST_PATH="../../infra/os/$OS/spec/vm-template-stable.json"
+
 if [[ ! -f "${TEMPLATE_MANIFEST_PATH}" ]]; then
   echo "ERROR: Template manifest not found: ${TEMPLATE_MANIFEST_PATH}" >&2
   exit 1
+fi
+
+if [[ "$OS" == "nixos" || "$OS" == "arch" ]]; then
+  AGENT_ENABLED=true
+else
+  AGENT_ENABLED=false
 fi
 
 terraform init \

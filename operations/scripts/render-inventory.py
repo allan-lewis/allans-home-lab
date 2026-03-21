@@ -205,6 +205,8 @@ def build_terraform_host_json(host: dict[str, Any]) -> dict[str, Any]:
     return {
         "hosts": {
             host["name"]: {
+                "platform": host["platform"],
+                "variant": host["variant"],
                 "terraform": build_tf_host_payload(host)
             }
         }
@@ -263,7 +265,8 @@ def main() -> int:
     print(f"  - {GENERATED_NIX_DIR / 'hosts.json'}")
     for host in processed_hosts.values():
         if host["management"]["provisioner"] == "terraform":
-            print(f"  - {GENERATED_TERRAFORM_DIR / f'{host['name']}.json'}")
+            tf_path = GENERATED_TERRAFORM_DIR / f"{host['name']}.json"
+            print(f"  - {tf_path}")
 
     return 0
 
