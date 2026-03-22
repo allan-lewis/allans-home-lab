@@ -8,10 +8,10 @@ Wants=network-online.target
 After=network-online.target
 
 [Service]
-User={{ common_node_exporter_user }}
-Group={{ common_node_exporter_group }}
-EnvironmentFile={{ common_node_exporter_env_file_path }}
-ExecStart={{ common_node_exporter_binary_path }} $NODE_EXPORTER_OPTS
+User=node_exporter
+Group=node_exporter
+EnvironmentFile={{ node_exporter_env_file_path }}
+ExecStart={{ node_exporter_binary_path }} $NODE_EXPORTER_OPTS
 
 # Security hardening
 NoNewPrivileges=true
