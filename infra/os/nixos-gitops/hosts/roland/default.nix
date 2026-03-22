@@ -65,13 +65,23 @@ in
             "cpu"
             "memory"
             "temperature"
+            "network"
             "clock"
             "custom/power"
           ];
 
+          "network" = {
+            format-wifi = "{ipaddr}";
+            format-ethernet = "{ipaddr}";
+            format-disconnected = "Offline";
+            interface = "enp4s0";
+            tooltip = false;
+          };
+
           "clock" = {
             format = "{:%H:%M | %a %b %d}";
             tooltip-format = "{:%Y-%m-%d %H:%M:%S}";
+            tooltip = false;
           };
 
           "custom/power" = {
