@@ -19,6 +19,7 @@
     hyprpaper
     imv
     mako
+    pavucontrol
     slurp
     waybar
     wl-clipboard

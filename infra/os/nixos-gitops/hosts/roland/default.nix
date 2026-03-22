@@ -12,6 +12,10 @@ in
 
   networking.hostName = "roland";
 
+  hardware.bluetooth.enable = true;
+  hardware.bluetooth.powerOnBoot = true;
+  services.blueman.enable = true;
+
   time.timeZone = lib.mkForce "America/New_York";
 
   homelab.bareMetal = {
@@ -61,14 +65,64 @@ in
 
       settings = [
         {
+          modules-left = [
+            "custom/launcher"
+            "custom/files"
+            "custom/ghostty"
+            "custom/browser"
+          ];
+
           modules-right = [
             "cpu"
             "memory"
             "temperature"
             "network"
+            "bluetooth"
+            "pulseaudio"
             "clock"
             "custom/power"
           ];
+
+          "custom/launcher" = {
+            # format = "";
+            format = "";
+            tooltip = false;
+            on-click = "wofi --show drun";
+          };
+
+          "custom/ghostty" = {
+            # format = "";
+            format = "󰆍";
+            tooltip = false;
+            on-click = "ghostty";
+          };
+        
+          "custom/browser" = {
+            format = "󰇧";
+            tooltip = false;
+            on-click = "google-chrome";
+          };
+
+          "custom/files" = {
+            format = "󰉖";
+            tooltip = false;
+            on-click = "thunar";
+          };
+
+          "bluetooth" = {
+            format = "Bt {status}";
+            tooltip = false;
+            on-click = "blueman-manager";
+          };
+
+          "pulseaudio" = {
+            format = "Vol {volume}%";
+            format-muted = "Muted";
+            tooltip = false;
+            on-click = "pactl set-sink-mute @DEFAULT_SINK@ toggle";
+            on-click-right = "pavucontrol";
+            scroll-step = 5;
+          };
 
           "network" = {
             format-wifi = "{ipaddr}";
@@ -117,14 +171,27 @@ in
         }
 
         #custom-power {
-          padding: 0 8px;
+          margin-right: 8px;
         }
 
         #cpu,
         #memory,
         #temperature,
-        #clock,
-        #custom-power {
+        #network,
+        bluetooth,
+        #pulseaudio,
+        #clock {
+          padding: 0 8px;
+        }
+
+        #custom-launcher {
+          padding: 0 8px;
+          margin-left: 8px;
+        }
+
+        #custom-browser,
+        #custom-files,
+        #custom-chrome {
           padding: 0 8px;
         }
       '';
