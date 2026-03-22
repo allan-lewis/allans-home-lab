@@ -27,7 +27,7 @@ INVENTORY_DIR = REPO_ROOT / "inventory"
 HOSTS_DIR = INVENTORY_DIR / "hosts"
 SCHEMA_PATH = INVENTORY_DIR / "schemas" / "host.schema.json"
 GENERATED_DIR = INVENTORY_DIR / "generated"
-GENERATED_NIX_DIR = GENERATED_DIR / "nix"
+GENERATED_ANSIBLE_DIR = GENERATED_DIR / "ansible"
 GENERATED_TERRAFORM_DIR = GENERATED_DIR / "terraform"
 
 
@@ -157,10 +157,6 @@ def validate_cross_host(hosts: dict[str, dict[str, Any]]) -> None:
             seen_vm_keys.add(vm_key)
 
 
-def build_nix_hosts_json(hosts: dict[str, dict[str, Any]]) -> dict[str, Any]:
-    return {host["name"]: host for host in hosts.values()}
-
-
 def derive_tags(host: dict[str, Any]) -> list[str]:
     tags: list[str] = ["gitops", "terraform", host["variant"], host["role"]]
     for group in host.get("groups", []):
@@ -213,10 +209,142 @@ def build_terraform_host_json(host: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def get_ansible_host_ip(host: dict[str, Any]) -> str:
+    network = host.get("network", {})
+    mode = network.get("mode")
+
+    if mode == "static":
+        ip = deep_get(network, "ipv4", "address")
+        if ip:
+            return ip
+
+    if mode == "dhcp-reservation":
+        ip = deep_get(network, "reservation", "ip")
+        if ip:
+            return ip
+
+    raise ValueError(
+        f"{host['name']}: cannot derive ansible_host from network.mode={mode!r}"
+    )
+
+
+def build_ansible_inventory(hosts: dict[str, dict[str, Any]]) -> dict[str, Any]:
+    ansible_hosts: dict[str, dict[str, Any]] = {}
+    platform_children: dict[str, dict[str, dict[str, dict[str, None]]]] = {}
+
+    for host_name in sorted(hosts):
+        host = hosts[host_name]
+
+        if host["management"]["converger"] != "ansible":
+            continue
+
+        platform = host["platform"]
+        variant = host["variant"]
+        role_group = f"{variant}_{host['role']}"
+        capability_groups = [f"{variant}_{group}" for group in host.get("groups", [])]
+
+        ansible_hosts[host_name] = {
+            "ansible_host": get_ansible_host_ip(host),
+        }
+
+        variant_children = platform_children.setdefault(platform, {}).setdefault(variant, {})
+        variant_children.setdefault(role_group, {})
+        for capability_group in capability_groups:
+            variant_children.setdefault(capability_group, {})
+
+        variant_children[role_group][host_name] = {}
+        for capability_group in capability_groups:
+            variant_children[capability_group][host_name] = {}
+
+    all_children: dict[str, Any] = {}
+    for platform in sorted(platform_children):
+        variant_map = platform_children[platform]
+        platform_children_block: dict[str, Any] = {}
+
+        for variant in sorted(variant_map):
+            child_groups = variant_map[variant]
+            variant_children_block: dict[str, Any] = {}
+
+            for child_group in sorted(child_groups):
+                hosts_block = {host_name: {} for host_name in sorted(child_groups[child_group])}
+                variant_children_block[child_group] = {"hosts": hosts_block}
+
+            platform_children_block[variant] = {"children": variant_children_block}
+
+        all_children[platform] = {"children": platform_children_block}
+
+    return {
+        "all": {
+            "hosts": ansible_hosts,
+            "children": all_children,
+        }
+    }
+
+
+def yaml_scalar(value: Any) -> str:
+    if isinstance(value, str):
+        return json.dumps(value)
+    if value is True:
+        return "true"
+    if value is False:
+        return "false"
+    if value is None:
+        return "null"
+    return str(value)
+
+
+def to_yaml_lines(value: Any, indent: int = 0) -> list[str]:
+    prefix = " " * indent
+
+    if isinstance(value, dict):
+        if not value:
+            return [f"{prefix}{{}}"]
+
+        lines: list[str] = []
+        for key, item in value.items():
+            if isinstance(item, (dict, list)) and item:
+                lines.append(f"{prefix}{key}:")
+                lines.extend(to_yaml_lines(item, indent + 2))
+            elif isinstance(item, dict) and not item:
+                lines.append(f"{prefix}{key}: {{}}")
+            elif isinstance(item, list) and not item:
+                lines.append(f"{prefix}{key}: []")
+            else:
+                lines.append(f"{prefix}{key}: {yaml_scalar(item)}")
+        return lines
+
+    if isinstance(value, list):
+        if not value:
+            return [f"{prefix}[]"]
+
+        lines = []
+        for item in value:
+            if isinstance(item, (dict, list)) and item:
+                lines.append(f"{prefix}-")
+                lines.extend(to_yaml_lines(item, indent + 2))
+            elif isinstance(item, dict) and not item:
+                lines.append(f"{prefix}- {{}}")
+            elif isinstance(item, list) and not item:
+                lines.append(f"{prefix}- []")
+            else:
+                lines.append(f"{prefix}- {yaml_scalar(item)}")
+        return lines
+
+    return [f"{prefix}{yaml_scalar(value)}"]
+
+
 def write_json(path: Path, data: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8") as f:
         json.dump(data, f, indent=2, sort_keys=True)
+        f.write("\n")
+
+
+def write_yaml(path: Path, data: Any) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", encoding="utf-8") as f:
+        f.write("---\n")
+        f.write("\n".join(to_yaml_lines(data)))
         f.write("\n")
 
 
@@ -249,10 +377,11 @@ def main() -> int:
 
     validate_cross_host(processed_hosts)
 
-    nix_hosts = build_nix_hosts_json(processed_hosts)
-    write_json(GENERATED_NIX_DIR / "hosts.json", nix_hosts)
+    write_yaml(
+        GENERATED_ANSIBLE_DIR / "hosts.yaml",
+        build_ansible_inventory(processed_hosts),
+    )
 
-    GENERATED_TERRAFORM_DIR.mkdir(parents=True, exist_ok=True)
     for host in processed_hosts.values():
         if host["management"]["provisioner"] != "terraform":
             continue
@@ -262,7 +391,7 @@ def main() -> int:
         )
 
     print("Rendered inventory successfully:")
-    print(f"  - {GENERATED_NIX_DIR / 'hosts.json'}")
+    print(f"  - {GENERATED_ANSIBLE_DIR / 'hosts.yaml'}")
     for host in processed_hosts.values():
         if host["management"]["provisioner"] == "terraform":
             tf_path = GENERATED_TERRAFORM_DIR / f"{host['name']}.json"

@@ -7,7 +7,7 @@ variant = "ubuntu"
 role = "tinker"
 description = "Ubuntu Sandbox"
 
-groups = ["ubuntu"]
+groups = ["docker"]
 
 [management]
 provisioner = "terraform"

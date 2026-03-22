@@ -7,7 +7,7 @@ variant = "arch"
 role = "tinker"
 description = "Arch Sandbox, BTW"
 
-groups = ["arch"]
+groups = ["docker"]
 
 [management]
 provisioner = "terraform"
