@@ -72,6 +72,11 @@ in
             "custom/browser"
           ];
 
+          modules-center = [
+            "custom/identity"
+            # "clock#center"
+          ];
+
           modules-right = [
             "cpu"
             "memory"
@@ -132,6 +137,17 @@ in
             tooltip = false;
           };
 
+          "clock#center" = {
+            format = "{:%H:%M | %A %B %d}";
+            tooltip = false;
+          };
+
+          "custom/identity" = {
+            exec = "echo \"$(whoami)@$(hostname)\"";
+            interval = 60;
+            tooltip = false;
+          };
+
           "clock" = {
             format = "{:%H:%M | %a %b %d}";
             tooltip-format = "{:%Y-%m-%d %H:%M:%S}";
@@ -172,6 +188,11 @@ in
 
         #custom-power {
           margin-right: 8px;
+        }
+
+        #custom-identity {
+          font-weight: bold;
+          color: rgb(30, 45, 74);
         }
 
         #cpu,
