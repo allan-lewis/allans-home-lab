@@ -8,11 +8,9 @@
     ansible_python_interpreter: "/usr/bin/python3"
     ansible_user: "lab"
   
-    is_linux: "{{ 'linux' in group_names }}"
     is_arch: "{{ 'arch' in group_names }}"
     is_ubuntu: "{{ 'ubuntu' in group_names }}"
     has_docker: "{{ 'arch_docker' in group_names or 'ubuntu_docker' in group_names }}"
-    is_tinker: "{{ 'arch_tinker' in group_names or 'ubuntu_tinker' in group_names }}"
 
     lab_timezone: "UTC"
 
@@ -20,7 +18,6 @@
     - name: Assert host is a Linux host
       ansible.builtin.assert:
         that:
-          - is_linux
           - is_arch or is_ubuntu
           - not (is_arch and is_ubuntu)
         fail_msg: "Host must belong to linux and exactly one supported variant group"
