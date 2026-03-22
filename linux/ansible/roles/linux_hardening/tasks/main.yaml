@@ -1,0 +1,32 @@
+---
+- name: Include Arch hardening tasks
+  ansible.builtin.include_tasks: arch.yaml
+  when: is_arch
+
+- name: Include Ubuntu hardening tasks
+  ansible.builtin.include_tasks: ubuntu.yaml
+  when: is_ubuntu
+
+- name: Set SSH service name for Arch
+  ansible.builtin.set_fact:
+    linux_ssh_service_name: sshd
+  when: is_arch
+
+- name: Set SSH service name for Ubuntu
+  ansible.builtin.set_fact:
+    linux_ssh_service_name: ssh
+  when: is_ubuntu
+
+- name: Ensure SSH service is enabled and running
+  ansible.builtin.systemd:
+    name: "{{ linux_ssh_service_name }}"
+    enabled: true
+    state: started
+  become: true
+
+- name: Restart SSH service to apply config
+  ansible.builtin.systemd:
+    name: "{{ linux_ssh_service_name }}"
+    state: restarted
+  changed_when: false
+  become: true

@@ -1,0 +1,15 @@
+---
+arch_hardening_sshd:
+  PermitRootLogin: "no"
+  PasswordAuthentication: "no"
+  PubkeyAuthentication: "yes"
+  KbdInteractiveAuthentication: "no"
+  ChallengeResponseAuthentication: "no"
+  MaxAuthTries: "3"
+  LoginGraceTime: "20s"
+  ClientAliveInterval: "300"
+  ClientAliveCountMax: "2"
+  UsePAM: "yes"
+  X11Forwarding: "no"
+  AllowTcpForwarding: "yes"
+  AllowAgentForwarding: "yes"

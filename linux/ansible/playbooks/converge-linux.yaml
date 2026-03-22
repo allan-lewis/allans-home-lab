@@ -40,8 +40,8 @@
     - role: linux_user
       tags: [user]
 
-    # - role: linux_hardening
-    #   tags: [hardening]
+    - role: linux_hardening
+      tags: [hardening]
 
     # - role: linux_services
     #   tags: [services]
