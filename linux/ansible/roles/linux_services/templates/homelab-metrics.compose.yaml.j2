@@ -1,0 +1,11 @@
+services:
+  homelab-metrics:
+    image: "allanelewis/homelab-metrics:latest"
+    container_name: "homelab-metrics"
+    restart: "unless-stopped"
+    ports: 
+      - "9102:9102/tcp"
+{% if homelab_metrics_forward_url is defined %}
+    environment: 
+      FORWARD_METRICS_URL: "{{ homelab_metrics_forward_url }}"
+{% endif %}

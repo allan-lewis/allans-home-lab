@@ -1,0 +1,28 @@
+---
+- name: Ensure homelab-metrics project directory exists
+  ansible.builtin.file:
+    path: /opt/docker-compose/homelab-metrics
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Render homelab-metrics compose file
+  ansible.builtin.template:
+    src: homelab-metrics.compose.yaml.j2
+    dest: /opt/docker-compose/homelab-metrics/docker-compose.yaml
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Pull homelab-metrics image
+  ansible.builtin.shell:
+    cmd: docker compose pull
+    chdir: /opt/docker-compose/homelab-metrics
+  changed_when: false
+
+- name: Start homelab-metrics container
+  ansible.builtin.shell:
+    cmd: docker compose up -d
+    chdir: /opt/docker-compose/homelab-metrics
+  changed_when: false
