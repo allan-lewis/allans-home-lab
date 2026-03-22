@@ -37,8 +37,8 @@
     - role: linux_base
       tags: [base]
 
-    # - role: linux_user
-    #   tags: [user]
+    - role: linux_user
+      tags: [user]
 
     # - role: linux_hardening
     #   tags: [hardening]

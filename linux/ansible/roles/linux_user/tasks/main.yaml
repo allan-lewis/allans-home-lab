@@ -1,0 +1,16 @@
+---
+- name: Set stow package list for Arch
+  ansible.builtin.set_fact:
+    user_stow_packages: "{{ linux_user_stow_packages_arch }}"
+  when: is_arch
+
+- name: Set stow package list for Ubuntu
+  ansible.builtin.set_fact:
+    user_stow_packages: "{{ linux_user_stow_packages_ubuntu }}"
+  when: is_ubuntu
+
+- name: Apply user setup
+  ansible.builtin.include_tasks: user.yaml
+  vars:
+    dot_user: lab
+    dotfiles_stow_packages: "{{ user_stow_packages }}"

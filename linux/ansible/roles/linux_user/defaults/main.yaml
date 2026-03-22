@@ -1,0 +1,25 @@
+---
+dot_user: "{{ ansible_user }}"
+
+dotfiles_dest: "/home/lab/.dotfiles"
+dotfiles_home: "/home/lab"
+dotfiles_repo: "https://github.com/allan-lewis/dotfiles.git"
+dotfiles_version: "main"
+
+dotfiles_zsh_plugins:
+  - name: zsh-autosuggestions
+    repo: "https://github.com/zsh-users/zsh-autosuggestions.git"
+  - name: zsh-syntax-highlighting
+    repo: "https://github.com/zsh-users/zsh-syntax-highlighting.git"
+
+linux_user_stow_packages_arch:
+  - common-zsh
+  - arch-zsh
+  - common-starship
+  - common-lazyvim
+
+linux_user_stow_packages_ubuntu:
+  - common-zsh
+  - ubuntu-zsh
+  - common-starship
+  - common-lazyvim
