@@ -1,13 +1,4 @@
 ---
-- name: Ensure required apt dependencies are present
-  ansible.builtin.apt:
-    name:
-      - ca-certificates
-      - curl
-      - gnupg
-    state: present
-    update_cache: true
-
 - name: Add Docker’s official GPG key
   ansible.builtin.apt_key:
     url: https://download.docker.com/linux/ubuntu/gpg
@@ -30,9 +21,14 @@
     state: present
     update_cache: true
 
+- name: Ensure docker group exists
+  ansible.builtin.group:
+    name: docker
+    state: present
+
 - name: Add user to the Docker group.
   ansible.builtin.user:
-    name: "{{ ansible_user }}"
+    name: "lab"
     groups: 
       - docker
     append: yes
@@ -40,5 +36,5 @@
 - name: Start the Docker service.
   ansible.builtin.service:
     name: docker
-    enabled: yes
+    enabled: true
     state: started

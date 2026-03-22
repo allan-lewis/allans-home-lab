@@ -1,3 +1,11 @@
 ---
-- name: Include Arch hardening tasks
+- name: Install Node Exporter
   ansible.builtin.include_tasks: node_exporter.yaml
+
+- name: Install Docker on Arch
+  ansible.builtin.include_tasks: docker_arch.yaml
+  when: is_arch and has_docker
+
+- name: Install Docker on Ubuntu
+  ansible.builtin.include_tasks: docker_ubuntu.yaml
+  when: is_ubuntu and has_docker

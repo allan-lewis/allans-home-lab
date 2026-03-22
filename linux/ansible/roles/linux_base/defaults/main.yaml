@@ -34,6 +34,7 @@ ubuntu_base_packages:
   - build-essential
   - ca-certificates
   - curl
+  - gnupg
   - gpg
   - net-tools
   - nfs-common
