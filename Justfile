@@ -88,8 +88,8 @@ haos-vm-template update_stable="yes":
 #############################
 
 # Fully converge a group of Ubuntu hosts
-linux-converge group tags="" limit="":
-  {{run_prefix}} scripts/ansible-playbook.sh "ansible/converge-linux.yaml" "{{group}}" "{{tags}}" "{{limit}}"
+linux-converge tags="" limit="":
+  {{run_prefix}} linux/scripts/ansible-playbook.sh "playbooks/converge-linux.yaml" "{{tags}}" "{{limit}}"
 
 #############################
 #### NIXOS ##################

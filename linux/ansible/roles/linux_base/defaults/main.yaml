@@ -1,0 +1,48 @@
+---
+arch_base_packages:
+  - base-devel
+  - bind
+  - btop
+  - ca-certificates
+  - cmatrix
+  - curl
+  - fastfetch
+  - git
+  - htop
+  - inetutils
+  - jq
+  - less
+  - neovim
+  - openssh
+  - parted
+  - python
+  - ripgrep
+  - rsync
+  - starship
+  - stow
+  - sudo
+  - tar
+  - tmux
+  - unzip
+  - vim
+  - zsh
+
+arch_base_enable_timesyncd: true
+arch_base_journald_persistent: true
+
+ubuntu_base_packages:
+  - build-essential
+  - ca-certificates
+  - curl
+  - gpg
+  - net-tools
+  - nfs-common
+  - software-properties-common
+  - stow
+  - sudo
+  - tmux
+  - unzip
+  - zsh
+
+ubuntu_nvim_url: "https://github.com/neovim/neovim/releases/download/nightly/nvim-linux-x86_64.appimage"
+ubuntu_nvim_path: "/usr/local/bin/nvim"

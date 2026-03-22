@@ -5,8 +5,8 @@
     upgrade: true
   become: true
   register: pacman_upgrade
-  retries: 5          # try up to 5 times
-  delay: 30           # wait 30s between tries
+  retries: 5       
+  delay: 30         
   until: pacman_upgrade is succeeded
 
 - name: Pacman | install base packages
@@ -30,10 +30,9 @@
   become: true
   when: arch_qga | default(true)
 
-- name: Time | set timezone (idempotent)
-  ansible.builtin.command: "timedatectl set-timezone {{ arch_base_timezone }}"
+- name: Time | set timezone
+  ansible.builtin.command: "timedatectl set-timezone {{ lab_timezone }}"
   changed_when: false
-  when: arch_base_timezone is truthy
   become: true
 
 - name: Time | ensure timesyncd enabled
@@ -73,6 +72,5 @@
     content: |
       [Journal]
       Storage=persistent
-  notify: restart journald
-  when: arch_base_journald_persistent
+  changed_when: false
   become: true

@@ -1,0 +1,8 @@
+---
+- name: Include Arch sanity tasks
+  ansible.builtin.include_tasks: arch.yaml
+  when: is_arch
+
+- name: Include Ubuntu sanity tasks
+  ansible.builtin.include_tasks: ubuntu.yaml
+  when: is_ubuntu

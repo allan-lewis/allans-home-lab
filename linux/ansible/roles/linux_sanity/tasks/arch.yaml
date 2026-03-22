@@ -31,13 +31,12 @@
       Expected BOOT_IMAGE=/boot/vmlinuz-linux
   when: "'BOOT_IMAGE=/boot/vmlinuz-linux' not in _cmdline.stdout"
 
-- name: Pacman sanity | Dry-run pacman DB lock check
-  ansible.builtin.command: pacman -Sy --noconfirm --needed filesystem
-  changed_when: false
-
-- name: Pacman | wait for database lock to be released
+- name: Pacman sanity | Wait for database lock to be released
   ansible.builtin.wait_for:
     path: /var/lib/pacman/db.lck
     state: absent
-    timeout: 120 
-  become: true
+    timeout: 120
+
+- name: Pacman sanity | Dry-run package DB access
+  ansible.builtin.command: pacman -Sy --noconfirm --needed filesystem
+  changed_when: false

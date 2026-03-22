@@ -1,0 +1,46 @@
+---
+- name: Set the time zone.
+  community.general.timezone:
+    name: "{{ lab_timezone }}"
+
+- name: Perform an apt update.
+  ansible.builtin.apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+
+- name: Perform an apt upgrade.
+  ansible.builtin.apt: upgrade=dist force_apt_get=yes
+
+- name: Install necessary dependencies.
+  ansible.builtin.apt:
+    pkg: "{{ ubuntu_base_packages }}"
+    state: latest
+    update_cache: true
+
+- name: Add Fastfetch official PPA
+  ansible.builtin.apt_repository:
+    repo: ppa:zhangsongcui3371/fastfetch
+    state: present
+    filename: fastfetch
+
+- name: Install fastfetch
+  ansible.builtin.apt:
+    name: fastfetch
+    state: present
+    update_cache: true
+
+- name: Download and install Starship
+  ansible.builtin.shell: curl -sS https://starship.rs/install.sh | sh -s -- -y
+  args:
+    creates: /usr/local/bin/starship
+
+- name: Neovim | Ensure Ubuntu neovim package is absent
+  ansible.builtin.apt:
+    name: neovim
+    state: absent
+    purge: true
+
+- name: Neovim | Download pinned AppImage
+  ansible.builtin.get_url:
+    url: "{{ ubuntu_nvim_url }}"
+    dest: "{{ ubuntu_nvim_path }}"
+    mode: "0755"
+    force: true

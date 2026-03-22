@@ -1,0 +1,16 @@
+---
+- name: Apt sanity | Wait for dpkg lock to be released
+  ansible.builtin.shell: |
+    while fuser /var/lib/dpkg/lock-frontend >/dev/null 2>&1 \
+       || fuser /var/lib/dpkg/lock >/dev/null 2>&1; do
+      sleep 2
+    done
+  changed_when: false
+
+- name: Apt sanity | Verify apt can run
+  ansible.builtin.command: apt-get update -y
+  register: _apt_check
+  changed_when: false
+  retries: 5
+  delay: 5
+  until: _apt_check.rc == 0
