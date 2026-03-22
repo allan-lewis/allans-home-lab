@@ -61,7 +61,13 @@ in
 
       settings = [
         {
-          modules-right = [ "clock" "custom/power" ];
+          modules-right = [
+            "cpu"
+            "memory"
+            "temperature"
+            "clock"
+            "custom/power"
+          ];
 
           "clock" = {
             format = "{:%H:%M | %a %b %d}";
@@ -73,6 +79,24 @@ in
             tooltip = false;
             on-click = "${pkgs.wlogout}/bin/wlogout -l /home/lab/.config/wlogout/layout -C /home/lab/.config/wlogout/style.css -b 4";
           };
+
+          "cpu" = {
+            format = "CPU {usage}%";
+            tooltip = false;
+          };
+
+          "memory" = {
+            format = "Mem {}%";
+            tooltip = false;
+          };
+
+          "temperature" = {
+            hwmon-path = "/sys/class/hwmon/hwmon0/temp1_input";
+            critical-threshold = 80;
+            format = "Temp {temperatureC}°C";
+            format-critical = "TEMP {temperatureC}°C";
+            tooltip = false;
+          };
         }
       ];
 
@@ -83,7 +107,15 @@ in
         }
 
         #custom-power {
-          padding: 0 10px;
+          padding: 0 8px;
+        }
+
+        #cpu,
+        #memory,
+        #temperature,
+        #clock,
+        #custom-power {
+          padding: 0 8px;
         }
       '';
     };
