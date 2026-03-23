@@ -88,7 +88,7 @@ haos-vm-template update_stable="yes":
 #############################
 
 # Fully converge a group of Ubuntu hosts
-linux-converge tags="" limit="":
+linux-converge tags="" limit="": inventory-build
   {{run_prefix}} linux/scripts/ansible-playbook.sh "playbooks/converge-linux.yaml" "{{tags}}" "{{limit}}"
 
 #############################
@@ -220,4 +220,4 @@ nix-switch host: inventory-build
     {{run_prefix}} ./scripts/nixos-gitops.sh {{host}} switch
 
 terraform host action approve="0": inventory-build
-	{{run_prefix}} scripts/gitops-terraform.sh "{{host}}" "{{action}}" "{{approve}}"
+	{{run_prefix}} shared/terraform/provision.sh "{{host}}" "{{action}}" "{{approve}}"

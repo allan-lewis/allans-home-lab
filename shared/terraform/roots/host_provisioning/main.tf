@@ -1,5 +1,5 @@
 module "factory" {
-  source = "../l2/modules/common_vm_factory"
+  source = "../../modules/proxmox_vm_hosts"
 
   hosts_json_path       = var.hosts_json_path
   template_manifest_path = var.template_manifest_path

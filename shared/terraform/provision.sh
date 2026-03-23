@@ -5,7 +5,7 @@ HOST="${1:?Usage: $0 <host> <apply|destroy> <0|1>}"
 MODE="${2:?Usage: $0 <host> <apply|destroy> <0|1>}"
 APPROVE="${3:?Usage: $0 <host> <apply|destroy> <0|1>}"
 
-TF_DIR="terraform/vm-host"
+TF_DIR="shared/terraform/roots/host_provisioning"
 
 [[ -d "$TF_DIR" ]] || {
   echo "ERROR: Terraform directory does not exist: $TF_DIR" >&2
@@ -29,7 +29,7 @@ case "$APPROVE" in
 esac
 
 echo "==== Terraform host: $HOST ===="
-echo "==== Directory: $TF_DIR ===="
+echo "==== Terraform root module: $TF_DIR ===="
 echo "==== Mode: $MODE ===="
 echo "==== Approve: $APPROVE ===="
 
@@ -51,7 +51,7 @@ export TF_VAR_proxmox_vm_public_key="${TF_VAR_PROXMOX_VM_PUBLIC_KEY}"
 
 cd "${TF_DIR}"
 
-HOST_JSON_PATH="../../inventory/generated/terraform/${HOST}.json"
+HOST_JSON_PATH="../../../../inventory/generated/terraform/${HOST}.json"
 
 if [[ ! -f "${HOST_JSON_PATH}" ]]; then
   echo "ERROR: Host JSON not found: ${HOST_JSON_PATH}" >&2
@@ -59,7 +59,7 @@ if [[ ! -f "${HOST_JSON_PATH}" ]]; then
 fi
 
 OS="$(jq -r --arg host "$HOST" '.hosts[$host].variant' "$HOST_JSON_PATH")"
-TEMPLATE_MANIFEST_PATH="../../infra/os/$OS/spec/vm-template-stable.json"
+TEMPLATE_MANIFEST_PATH="../../../../infra/os/$OS/spec/vm-template-stable.json"
 
 if [[ ! -f "${TEMPLATE_MANIFEST_PATH}" ]]; then
   echo "ERROR: Template manifest not found: ${TEMPLATE_MANIFEST_PATH}" >&2
@@ -71,6 +71,11 @@ if [[ "$OS" == "nixos" || "$OS" == "arch" ]]; then
 else
   AGENT_ENABLED=false
 fi
+
+echo "==== Host JSON path: $HOST_JSON_PATH ===="
+echo "==== Operating system: $OS ===="
+echo "==== Manifest path: $TEMPLATE_MANIFEST_PATH ===="
+echo "==== Guest agent enabled: $AGENT_ENABLED ===="
 
 terraform init \
   -reconfigure \
