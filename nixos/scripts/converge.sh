@@ -4,8 +4,8 @@ set -euo pipefail
 HOST="${1:?Usage: $0 <host> <check|test|switch>}"
 MODE="${2:?Usage: $0 <host> <check|test|switch>}"
 
-ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-NIXOS_GITOPS_DIR="${ROOT_DIR}/infra/os/nixos-gitops"
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+NIXOS_GITOPS_DIR="${ROOT_DIR}/nixos"
 HOST_DIR="${NIXOS_GITOPS_DIR}/hosts/${HOST}"
 FLAKE_REF="${NIXOS_GITOPS_DIR}#${HOST}"
 

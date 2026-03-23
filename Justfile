@@ -3,8 +3,6 @@
 set shell := ["bash", "-eu", "-o", "pipefail", "-c"]
 set dotenv-load := true
 
-export ANSIBLE_CONFIG := "{{ justfile_directory() }}/ansible.cfg"
-
 ci := env_var_or_default("CI", "false")
 force_doppler := env_var_or_default("FORCE_DOPPLER", "0")
 doppler := env_var_or_default("DOPPLER", "1")
@@ -208,16 +206,16 @@ ubuntu-terraform persona action approve="0":
 NIXOS_GITOPS_DIR := "./infra/os/nixos-gitops"
 
 inventory-build:
-	uv run --with jsonschema python3 operations/scripts/render-inventory.py
+	uv run --with jsonschema python3 shared/scripts/render-inventory.py
 
 nix-check host: inventory-build
-    ./scripts/nixos-gitops.sh {{host}} check
+    ./nixos/scripts/converge.sh {{host}} check
 
 nix-test host: inventory-build
-    {{run_prefix}} ./scripts/nixos-gitops.sh {{host}} test
+    {{run_prefix}} ./nixos/scripts/converge.sh {{host}} test
 
 nix-switch host: inventory-build
-    {{run_prefix}} ./scripts/nixos-gitops.sh {{host}} switch
+    {{run_prefix}} ./nixos/scripts/converge.sh {{host}} switch
 
 terraform host action approve="0": inventory-build
 	{{run_prefix}} shared/terraform/provision.sh "{{host}}" "{{action}}" "{{approve}}"
