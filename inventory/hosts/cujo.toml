@@ -1,11 +1,11 @@
-name = "roland"
-hostname = "roland"
+name = "cujo"
+hostname = "cujo"
 
 platform = "nixos"
 variant = "nixos"
 
 role = "core"
-description = "NixOS Daily Driver"
+description = "NixOS DevOps"
 
 groups = []
 
@@ -29,7 +29,7 @@ mode = "static"
 dns = ["192.168.86.1"]
 
 [network.ipv4]
-address = "192.168.86.206"
+address = "192.168.86.219"
 gateway = "192.168.86.1"
 
 [provisioning.terraform]
