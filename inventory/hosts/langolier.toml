@@ -1,0 +1,37 @@
+name = "langolier"
+hostname = "langolier"
+
+platform = "nixos"
+variant = "nixos"
+
+role = "core"
+description = "NixOS Pi-hole"
+
+groups = []
+
+[management]
+provisioner = "terraform"
+converger = "nixos"
+
+[runtime]
+kind = "baremetal"
+
+[resources.cpu]
+cores = 1
+sockets = 1
+
+[resources]
+memory_mb = 128
+disk_gb = 1
+
+[network]
+mode = "static"
+dns = ["192.168.86.1"]
+
+[network.ipv4]
+address = "192.168.86.218"
+gateway = "192.168.86.1"
+
+[provisioning.terraform]
+cloud_init = false
+agent = false
