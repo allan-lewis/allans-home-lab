@@ -82,8 +82,8 @@ in
             "memory"
             "temperature"
             "network"
-            "bluetooth"
-            "pulseaudio"
+            # "bluetooth"
+            # "pulseaudio"
             "clock"
             "custom/power"
           ];
@@ -184,6 +184,10 @@ in
         * {
           font-family: "JetBrainsMono Nerd Font", "JetBrains Mono Nerd Font", monospace;
           font-size: 14px;
+        }
+
+        #network {
+          color: rgb(130, 150, 175);
         }
 
         #custom-power {
