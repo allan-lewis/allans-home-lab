@@ -105,7 +105,7 @@ in
           "custom/browser" = {
             format = "󰇧";
             tooltip = false;
-            on-click = "google-chrome";
+            on-click = "google-chrome-stable";
           };
 
           "custom/files" = {
@@ -192,7 +192,7 @@ in
 
         #custom-identity {
           font-weight: bold;
-          color: rgb(30, 45, 74);
+          color: rgb(11, 84, 186)
         }
 
         #cpu,
@@ -212,7 +212,7 @@ in
 
         #custom-browser,
         #custom-files,
-        #custom-chrome {
+        #custom-ghostty {
           padding: 0 8px;
         }
       '';
