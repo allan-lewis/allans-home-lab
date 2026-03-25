@@ -79,7 +79,7 @@ haos-terraform action approve="0":
 
 # Prepare a Proxmox VM template for cloning HAOS VMs
 haos-vm-template update_stable="yes":
-  {{run_prefix}} scripts/appliance-vm-template.sh haos {{update_stable}}
+  {{run_prefix}} appliances/scripts/vm-template.sh haos {{update_stable}}
 
 #############################
 #### LINUX ##################

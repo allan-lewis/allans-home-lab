@@ -45,16 +45,16 @@ repo_root="$(
   fi
 )"
 
-os_root="${repo_root}/infra/os/${OS}"
+os_root="${repo_root}/appliances/${OS}"
 
 PROXMOX_NODE="${PVE_SSH_IP}"
 
-# Allow override *under* infra/os/<os>/
+# Allow override *under* appliances/<os>/
 CAPTURE_MANIFEST_REL="${CAPTURE_MANIFEST_REL:-spec/disk-capture-stable.json}"
 
-# Enforce "below infra/os/<os>/" and prevent path traversal
+# Enforce "below appliances/<os>/" and prevent path traversal
 if [[ "${CAPTURE_MANIFEST_REL}" = /* ]] || [[ "${CAPTURE_MANIFEST_REL}" == *".."* ]]; then
-  echo "ERROR: CAPTURE_MANIFEST_REL must be a relative path under infra/os/${OS}/ (no leading /, no ..)" >&2
+  echo "ERROR: CAPTURE_MANIFEST_REL must be a relative path under appliances/${OS}/ (no leading /, no ..)" >&2
   exit 1
 fi
 
@@ -232,7 +232,7 @@ cat >"${manifest_path}" <<EOF
 EOF
 
 if [[ "${UPDATE_STABLE}" == "yes" ]]; then
-  spec_dir="infra/os/${OS}/spec"
+  spec_dir="appliances/${OS}/spec"
   mkdir -p "${spec_dir}"
   ln -sf "../artifacts/${manifest_path##*/}" "${spec_dir}/vm-template-stable.json"
   echo "Updated stable symlink -> ${spec_dir}/vm-template-stable.json"
