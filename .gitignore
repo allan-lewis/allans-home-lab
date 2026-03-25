@@ -103,3 +103,4 @@ Icon?
 /inventory/generated
 !/inventory/schemas/*.json
 !*/flake.lock
+!/appliances/**/*
