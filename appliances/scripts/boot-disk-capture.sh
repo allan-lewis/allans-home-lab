@@ -212,7 +212,7 @@ fi
 ts="$(date -u +"%Y%m%d-%H%M%S")"
 created_at="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 
-artifacts_dir="infra/os/${OS}/artifacts"
+artifacts_dir="appliances/${OS}/artifacts"
 manifest_path="${artifacts_dir}/disk-capture-${ts}.json"
 
 mkdir -p "${artifacts_dir}"
@@ -237,7 +237,7 @@ echo "==> Manifest written: ${manifest_path}"
 # --- end manifest ------------------------------------------------------------
 
 if [[ "${UPDATE_STABLE}" == "yes" ]]; then
-  spec_dir="infra/os/${OS}/spec"
+  spec_dir="appliances/${OS}/spec"
   mkdir -p "${spec_dir}"
   ln -sf "../artifacts/${manifest_path##*/}" "${spec_dir}/disk-capture-stable.json"
   echo "Updated stable symlink -> ${spec_dir}/disk-capture-stable.json"

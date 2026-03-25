@@ -71,7 +71,7 @@ arch-terraform persona action approve="0":
 
 # Export a HAOS Proxmox VM's boot disk to an S3 bucket
 haos-boot-disk-capture vmid update_stable="yes":
-  {{run_prefix}} scripts/appliance-boot-disk-capture.sh "haos" "gitops-homelab-orchestrator-disks" "proxmox-images" "{{vmid}}" "{{update_stable}}"
+  {{run_prefix}} appliances/scripts/boot-disk-capture.sh "haos" "gitops-homelab-orchestrator-disks" "proxmox-images" "{{vmid}}" "{{update_stable}}"
 
 # Apply or detroy HAOS Proxmox VM(s) using Terraform
 haos-terraform action approve="0":
