@@ -61,9 +61,13 @@ arch-iso update_stable="yes":
 arch-vm-template update_stable="yes":
   {{run_prefix}} scripts/arch-vm-template.sh packer/arch "{{update_stable}}"
 
-# Apply or destroy Arch Proxmox VMs using Terraform
-arch-terraform persona action approve="0":
-  {{run_prefix}} scripts/terraform.sh "arch" "{{persona}}" "{{action}}" "{{approve}}"
+# Apply or destroy an Arch Proxmox VM using Terraform
+arch-terraform host action approve="0": inventory-build
+  {{run_prefix}} shared/terraform/provision.sh \
+    "{{host}}" \
+    "{{action}}" \
+    "infra/os/arch/spec/vm-template-stable.json" \
+    "{{approve}}"
 
 #############################
 #### HAOS ###################
@@ -75,7 +79,11 @@ haos-boot-disk-capture vmid update_stable="yes":
 
 # Apply or detroy a HAOS Proxmox VM using Terraform
 haos-terraform host action approve="0": inventory-build
-	{{run_prefix}} shared/terraform/provision.sh "{{host}}" "{{action}}" "./appliance/haos/spec/vm-template-stable.json" "{{approve}}"
+  {{run_prefix}} shared/terraform/provision.sh \
+    "{{host}}" \
+    "{{action}}" \
+    "appliance/haos/spec/vm-template-stable.json" \
+    "{{approve}}"
 
 # Prepare a Proxmox VM template for cloning HAOS VMs
 haos-vm-template update_stable="yes":
@@ -194,9 +202,13 @@ truenas-vm-template update_stable="yes":
 ubuntu-vm-template update_stable="yes":
   {{run_prefix}} scripts/ubuntu-vm-template.sh {{update_stable}}
 
-# Apply or destroy Ubuntu Proxmox VM(s) using Terraform
-ubuntu-terraform persona action approve="0":
-  {{run_prefix}} scripts/terraform.sh "ubuntu" "{{persona}}" "{{action}}" "{{approve}}"
+# Apply or destroy an Ubuntu Proxmox VM using Terraform
+ubuntu-terraform host action approve="0": inventory-build
+  {{run_prefix}} shared/terraform/provision.sh \
+    "{{host}}" \
+    "{{action}}" \
+    "infra/os/ubuntu/spec/vm-template-stable.json" \
+    "{{approve}}"
 
 #############################
 #### NIXOS/GITOPS ###########

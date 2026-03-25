@@ -192,7 +192,7 @@ def build_tf_host_payload(host: dict[str, Any]) -> dict[str, Any]:
         reservation = network["reservation"]
         tf_payload["ip"] = reservation["ip"]
         tf_payload["ipconfig"] = "ip=dhcp"
-        tf_payload["mac"] = normalize_mac(reservation["mac"])
+        tf_payload["mac_address"] = normalize_mac(reservation["mac"])
 
     return {k: v for k, v in tf_payload.items() if v is not None}
 

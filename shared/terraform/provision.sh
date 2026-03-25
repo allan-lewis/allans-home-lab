@@ -8,6 +8,7 @@ APPROVE="${4:?Usage: $0 <host> <apply|destroy> <template_manifest> <0|1>}"
 
 TF_DIR="shared/terraform/roots/host_provisioning"
 
+
 [[ -d "$TF_DIR" ]] || {
   echo "ERROR: Terraform directory does not exist: $TF_DIR" >&2
   exit 1
@@ -29,11 +30,17 @@ case "$APPROVE" in
   ;;
 esac
 
+TEMPLATE_ABS_PATH="$(realpath "$TEMPLATE_MANIFEST_PATH")"
+if [[ ! -f "${TEMPLATE_ABS_PATH}" ]]; then
+  echo "ERROR: Template manifest not found: ${TEMPLATE_ABS_PATH}" >&2
+  exit 1
+fi
+
 echo "==== Terraform host: $HOST ===="
 echo "==== Terraform root module: $TF_DIR ===="
 echo "==== Mode: $MODE ===="
 echo "==== Approve: $APPROVE ===="
-echo "==== Template: $TEMPLATE_MANIFEST_PATH ===="
+echo "==== Template: $TEMPLATE_ABS_PATH ===="
 
 # --- Environment validation ---------------------------------------------------
 
@@ -52,11 +59,6 @@ export TF_VAR_proxmox_vm_public_key="${TF_VAR_PROXMOX_VM_PUBLIC_KEY}"
 # --- Run Terraform ------------------------------------------------------------
 
 cd "${TF_DIR}"
-
-if [[ ! -f "${TEMPLATE_MANIFEST_PATH}" ]]; then
-  echo "ERROR: Template manifest not found: ${TEMPLATE_MANIFEST_PATH}" >&2
-  exit 1
-fi
 
 HOST_JSON_PATH="../../../../inventory/generated/terraform/${HOST}.json"
 
@@ -93,14 +95,14 @@ apply)
     terraform apply -auto-approve \
       -var="agent_enabled=${AGENT_ENABLED}" \
       -var="hosts_json_path=${HOST_JSON_PATH}" \
-      -var="template_manifest_path=${TEMPLATE_MANIFEST_PATH}"
+      -var="template_manifest_path=${TEMPLATE_ABS_PATH}"
   else
     echo "Terraform plan only (no changes applied)."
     echo "Set APPLY=1 to actually apply."
     terraform plan \
       -var="agent_enabled=${AGENT_ENABLED}" \
       -var="hosts_json_path=${HOST_JSON_PATH}" \
-      -var="template_manifest_path=${TEMPLATE_MANIFEST_PATH}"
+      -var="template_manifest_path=${TEMPLATE_ABS_PATH}"
   fi
   ;;
 destroy)
@@ -109,14 +111,14 @@ destroy)
     terraform apply -destroy -auto-approve \
       -var="agent_enabled=${AGENT_ENABLED}" \
       -var="hosts_json_path=${HOST_JSON_PATH}" \
-      -var="template_manifest_path=${TEMPLATE_MANIFEST_PATH}"
+      -var="template_manifest_path=${TEMPLATE_ABS_PATH}"
   else
     echo "Terraform destroy plan only (no changes applied)."
     echo "Set APPLY=1 to actually destroy."
     terraform plan -destroy \
       -var="agent_enabled=${AGENT_ENABLED}" \
       -var="hosts_json_path=${HOST_JSON_PATH}" \
-      -var="template_manifest_path=${TEMPLATE_MANIFEST_PATH}"
+      -var="template_manifest_path=${TEMPLATE_ABS_PATH}"
   fi
   ;;
 esac
