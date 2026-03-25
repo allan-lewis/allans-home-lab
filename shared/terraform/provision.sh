@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-HOST="${1:?Usage: $0 <host> <apply|destroy> <0|1>}"
-MODE="${2:?Usage: $0 <host> <apply|destroy> <0|1>}"
-APPROVE="${3:?Usage: $0 <host> <apply|destroy> <0|1>}"
+HOST="${1:?Usage: $0 <host> <apply|destroy> <template_manifest> <0|1>}"
+MODE="${2:?Usage: $0 <host> <apply|destroy> <template_manifest> <0|1>}"
+TEMPLATE_MANIFEST_PATH="${3:?Usage: $0 <host> <apply|destroy> <template_manifest> <0|1>}"
+APPROVE="${4:?Usage: $0 <host> <apply|destroy> <template_manifest> <0|1>}"
 
 TF_DIR="shared/terraform/roots/host_provisioning"
 
@@ -32,6 +33,7 @@ echo "==== Terraform host: $HOST ===="
 echo "==== Terraform root module: $TF_DIR ===="
 echo "==== Mode: $MODE ===="
 echo "==== Approve: $APPROVE ===="
+echo "==== Template: $TEMPLATE_MANIFEST_PATH ===="
 
 # --- Environment validation ---------------------------------------------------
 
@@ -51,6 +53,11 @@ export TF_VAR_proxmox_vm_public_key="${TF_VAR_PROXMOX_VM_PUBLIC_KEY}"
 
 cd "${TF_DIR}"
 
+if [[ ! -f "${TEMPLATE_MANIFEST_PATH}" ]]; then
+  echo "ERROR: Template manifest not found: ${TEMPLATE_MANIFEST_PATH}" >&2
+  exit 1
+fi
+
 HOST_JSON_PATH="../../../../inventory/generated/terraform/${HOST}.json"
 
 if [[ ! -f "${HOST_JSON_PATH}" ]]; then
@@ -59,12 +66,6 @@ if [[ ! -f "${HOST_JSON_PATH}" ]]; then
 fi
 
 OS="$(jq -r --arg host "$HOST" '.hosts[$host].variant' "$HOST_JSON_PATH")"
-TEMPLATE_MANIFEST_PATH="../../../../infra/os/$OS/spec/vm-template-stable.json"
-
-if [[ ! -f "${TEMPLATE_MANIFEST_PATH}" ]]; then
-  echo "ERROR: Template manifest not found: ${TEMPLATE_MANIFEST_PATH}" >&2
-  exit 1
-fi
 
 if [[ "$OS" == "nixos" || "$OS" == "arch" ]]; then
   AGENT_ENABLED=true
@@ -74,7 +75,6 @@ fi
 
 echo "==== Host JSON path: $HOST_JSON_PATH ===="
 echo "==== Operating system: $OS ===="
-echo "==== Manifest path: $TEMPLATE_MANIFEST_PATH ===="
 echo "==== Guest agent enabled: $AGENT_ENABLED ===="
 
 terraform init \

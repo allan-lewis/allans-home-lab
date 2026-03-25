@@ -45,16 +45,16 @@ repo_root="$(
   fi
 )"
 
-os_root="${repo_root}/appliances/${OS}"
+os_root="${repo_root}/appliance/${OS}"
 
 PROXMOX_NODE="${PVE_SSH_IP}"
 
-# Allow override *under* appliances/<os>/
+# Allow override *under* appliance/<os>/
 CAPTURE_MANIFEST_REL="${CAPTURE_MANIFEST_REL:-spec/disk-capture-stable.json}"
 
-# Enforce "below appliances/<os>/" and prevent path traversal
+# Enforce "below appliance/<os>/" and prevent path traversal
 if [[ "${CAPTURE_MANIFEST_REL}" = /* ]] || [[ "${CAPTURE_MANIFEST_REL}" == *".."* ]]; then
-  echo "ERROR: CAPTURE_MANIFEST_REL must be a relative path under appliances/${OS}/ (no leading /, no ..)" >&2
+  echo "ERROR: CAPTURE_MANIFEST_REL must be a relative path under appliance/${OS}/ (no leading /, no ..)" >&2
   exit 1
 fi
 
@@ -125,7 +125,7 @@ if [[ -z "${BASE_NAME}" ]] || [[ "${BASE_NAME}" = "/" ]]; then
 fi
 
 # 2) Download qcow2 locally (ops host)
-LOCAL_TMP_DIR="${TMPDIR:-artifacts/appliances/template}"
+LOCAL_TMP_DIR="${TMPDIR:-artifacts/appliance/template}"
 mkdir -p "${LOCAL_TMP_DIR}"
 LOCAL_QCOW2="${LOCAL_TMP_DIR}/${BASE_NAME}"
 
@@ -232,7 +232,7 @@ cat >"${manifest_path}" <<EOF
 EOF
 
 if [[ "${UPDATE_STABLE}" == "yes" ]]; then
-  spec_dir="appliances/${OS}/spec"
+  spec_dir="appliance/${OS}/spec"
   mkdir -p "${spec_dir}"
   ln -sf "../artifacts/${manifest_path##*/}" "${spec_dir}/vm-template-stable.json"
   echo "Updated stable symlink -> ${spec_dir}/vm-template-stable.json"

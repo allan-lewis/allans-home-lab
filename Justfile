@@ -71,15 +71,15 @@ arch-terraform persona action approve="0":
 
 # Export a HAOS Proxmox VM's boot disk to an S3 bucket
 haos-boot-disk-capture vmid update_stable="yes":
-  {{run_prefix}} appliances/scripts/boot-disk-capture.sh "haos" "gitops-homelab-orchestrator-disks" "proxmox-images" "{{vmid}}" "{{update_stable}}"
+  {{run_prefix}} appliance/scripts/boot-disk-capture.sh "haos" "gitops-homelab-orchestrator-disks" "proxmox-images" "{{vmid}}" "{{update_stable}}"
 
-# Apply or detroy HAOS Proxmox VM(s) using Terraform
-haos-terraform action approve="0":
-  {{run_prefix}} scripts/terraform.sh "haos" "homeassistant" "{{action}}" "{{approve}}"
+# Apply or detroy a HAOS Proxmox VM using Terraform
+haos-terraform host action approve="0": inventory-build
+	{{run_prefix}} shared/terraform/provision.sh "{{host}}" "{{action}}" "./appliance/haos/spec/vm-template-stable.json" "{{approve}}"
 
 # Prepare a Proxmox VM template for cloning HAOS VMs
 haos-vm-template update_stable="yes":
-  {{run_prefix}} appliances/scripts/vm-template.sh haos {{update_stable}}
+  {{run_prefix}} appliance/scripts/vm-template.sh haos {{update_stable}}
 
 #############################
 #### LINUX ##################
@@ -216,6 +216,3 @@ nix-test host: inventory-build
 
 nix-switch host: inventory-build
     {{run_prefix}} ./nixos/scripts/converge.sh {{host}} switch
-
-terraform host action approve="0": inventory-build
-	{{run_prefix}} shared/terraform/provision.sh "{{host}}" "{{action}}" "{{approve}}"

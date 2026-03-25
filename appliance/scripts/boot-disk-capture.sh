@@ -21,7 +21,7 @@ S3_BUCKET="${2:?Usage: $0 <os> <s3_bucket> <s3_prefix> <vmid> [update_stable]}"
 S3_PREFIX="${3:?Usage: $0 <os> <s3_bucket> <s3_prefix> <vmid> [update_stable]}"
 VMID="${4:?Usage: $0 <os> <s3_bucket> <s3_prefix> <vmid> [update_stable]}"
 UPDATE_STABLE="${5:-yes}"
-LOCAL_OUT_DIR="${LOCAL_OUT_DIR:-artifacts/appliances/capture}"
+LOCAL_OUT_DIR="${LOCAL_OUT_DIR:-artifacts/appliance/capture}"
 KEEP_LOCAL_QCOW2="${KEEP_LOCAL_QCOW2:-0}"
 
 # Optional: override these via env vars if you want non-root access or extra ssh options.
@@ -212,7 +212,7 @@ fi
 ts="$(date -u +"%Y%m%d-%H%M%S")"
 created_at="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 
-artifacts_dir="appliances/${OS}/artifacts"
+artifacts_dir="appliance/${OS}/artifacts"
 manifest_path="${artifacts_dir}/disk-capture-${ts}.json"
 
 mkdir -p "${artifacts_dir}"
@@ -237,7 +237,7 @@ echo "==> Manifest written: ${manifest_path}"
 # --- end manifest ------------------------------------------------------------
 
 if [[ "${UPDATE_STABLE}" == "yes" ]]; then
-  spec_dir="appliances/${OS}/spec"
+  spec_dir="appliance/${OS}/spec"
   mkdir -p "${spec_dir}"
   ln -sf "../artifacts/${manifest_path##*/}" "${spec_dir}/disk-capture-stable.json"
   echo "Updated stable symlink -> ${spec_dir}/disk-capture-stable.json"
