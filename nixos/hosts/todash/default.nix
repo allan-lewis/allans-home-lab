@@ -8,6 +8,7 @@ in
 {
   imports = [
     ../../profiles/base
+    ../../profiles/gatus
     ../../profiles/virtual-machine
   ];
 
