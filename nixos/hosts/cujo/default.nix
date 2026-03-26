@@ -8,6 +8,7 @@ in
   imports = [
     ../../profiles/bare-metal
     ../../profiles/base
+    ../../profiles/cloudflare
     ../../profiles/containers/it-tools
     ../../profiles/containers/nginx
     ../../profiles/containers/no-geeks-brewing
@@ -39,6 +40,10 @@ in
     enable = true;
     connectorKey = "modestAnteater";
     networkName = "allanshomelab";
+  };
+
+  services.homelab.cloudflaredTunnel = {
+    enable = true;
   };
 
   system.stateVersion = "25.11";
