@@ -187,7 +187,7 @@ in
         }
 
         #network {
-          color: rgb(130, 150, 175);
+          color: rgb(11, 84, 186);
         }
 
         #custom-power {
@@ -196,7 +196,7 @@ in
 
         #custom-identity {
           font-weight: bold;
-          color: rgb(11, 84, 186)
+          color: rgb(11, 84, 186);
         }
 
         #cpu,
