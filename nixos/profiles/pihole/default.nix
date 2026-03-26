@@ -31,7 +31,7 @@
           "192.168.86.204 docker.allanshomelab.com"
           "192.168.86.204 hosts.allanshomelab.com"
           "192.168.86.204 media.allanshomelab.com"
-          "192.168.86.204 nixos.allanshomelab.com"
+          "192.168.86.219 nixos.allanshomelab.com"
           "192.168.86.204 kvm.allanshomelab.com"
         ];
 
@@ -55,11 +55,13 @@
           "transmission.media.allanshomelab.com,media.allanshomelab.com"
           "tautulli.media.allanshomelab.com,media.allanshomelab.com"
           "plex.media.allanshomelab.com,media.allanshomelab.com"
-          "tools.docker.allanshomelab.com,docker.allanshomelab.com"
           "homepage.docker.allanshomelab.com,docker.allanshomelab.com"
-          "nginx.docker.allanshomelab.com,docker.allanshomelab.com"
           "alertmanager.docker.allanshomelab.com,docker.allanshomelab.com"
+          ## NixOS on cujo
           "dns.nixos.allanshomelab.com,nixos.allanshomelab.com"
+          "nginx.nixos.allanshomelab.com,nixos.allanshomelab.com"
+          "tools.nixos.allanshomelab.com,nixos.allanshomelab.com"
+          "whoami.nixos.allanshomelab.com,nixos.allanshomelab.com"
         ];
       };
 

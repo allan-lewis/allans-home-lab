@@ -8,8 +8,14 @@ in
   imports = [
     ../../profiles/bare-metal
     ../../profiles/base
+    ../../profiles/containers/it-tools
+    ../../profiles/containers/nginx
+    ../../profiles/containers/no-geeks-brewing
+    ../../profiles/containers/twingate
     ../../profiles/devops
+    ../../profiles/gatus
     ../../profiles/tailscale
+    ../../profiles/traefik
   ];
 
   networking.hostName = hostName;
@@ -27,6 +33,12 @@ in
       group = "lab";
       mode = "0755";
     };
+  };
+
+  services.homelab.twingateConnector = {
+    enable = true;
+    connectorKey = "modestAnteater";
+    networkName = "allanshomelab";
   };
 
   system.stateVersion = "25.11";
