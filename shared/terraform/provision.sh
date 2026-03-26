@@ -1,13 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-HOST="${1:?Usage: $0 <host> <apply|destroy> <template_manifest> <0|1>}"
-MODE="${2:?Usage: $0 <host> <apply|destroy> <template_manifest> <0|1>}"
-TEMPLATE_MANIFEST_PATH="${3:?Usage: $0 <host> <apply|destroy> <template_manifest> <0|1>}"
-APPROVE="${4:?Usage: $0 <host> <apply|destroy> <template_manifest> <0|1>}"
+HOST="${1:?Usage: $0 <host> <apply|destroy> <0|1>}"
+MODE="${2:?Usage: $0 <host> <apply|destroy> <0|1>}"
+APPROVE="${3:?Usage: $0 <host> <apply|destroy> <0|1>}"
 
 TF_DIR="shared/terraform/roots/host_provisioning"
-
 
 [[ -d "$TF_DIR" ]] || {
   echo "ERROR: Terraform directory does not exist: $TF_DIR" >&2
@@ -30,17 +28,10 @@ case "$APPROVE" in
   ;;
 esac
 
-TEMPLATE_ABS_PATH="$(realpath "$TEMPLATE_MANIFEST_PATH")"
-if [[ ! -f "${TEMPLATE_ABS_PATH}" ]]; then
-  echo "ERROR: Template manifest not found: ${TEMPLATE_ABS_PATH}" >&2
-  exit 1
-fi
-
 echo "==== Terraform host: $HOST ===="
 echo "==== Terraform root module: $TF_DIR ===="
 echo "==== Mode: $MODE ===="
 echo "==== Approve: $APPROVE ===="
-echo "==== Template: $TEMPLATE_ABS_PATH ===="
 
 # --- Environment validation ---------------------------------------------------
 
@@ -75,9 +66,24 @@ else
   AGENT_ENABLED=false
 fi
 
+if [ "$OS" = "ubuntu" ]; then
+  TEMPLATE_ABS_PATH="$(realpath ../../../../infra/os/ubuntu/spec/vm-template-stable.json)"
+elif [ "$OS" = "arch" ]; then
+  TEMPLATE_ABS_PATH="$(realpath ../../../../infra/os/arch/spec/vm-template-stable.json)"
+else
+  echo "ERROR: Unsupported OS: $OS"
+  exit 1
+fi
+
+if [ ! -f "$TEMPLATE_ABS_PATH" ]; then
+  echo "ERROR: Template file does not exist: $TEMPLATE_ABS_PATH"
+  exit 1
+fi
+
 echo "==== Host JSON path: $HOST_JSON_PATH ===="
 echo "==== Operating system: $OS ===="
 echo "==== Guest agent enabled: $AGENT_ENABLED ===="
+echo "==== Template: $TEMPLATE_ABS_PATH ===="
 
 terraform init \
   -reconfigure \

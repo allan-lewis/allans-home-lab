@@ -19,8 +19,6 @@ run_prefix := if doppler == "0" {
   "doppler run --"
 }
 
-tf_base_dir := env_var_or_default("TF_BASE_DIR", "terraform/l2")
-
 #############################
 #### GENERAL/CROSS-OS #######
 #############################
@@ -61,14 +59,6 @@ arch-iso update_stable="yes":
 arch-vm-template update_stable="yes":
   {{run_prefix}} scripts/arch-vm-template.sh packer/arch "{{update_stable}}"
 
-# Apply or destroy an Arch Proxmox VM using Terraform
-arch-terraform host action approve="0": inventory-build
-  {{run_prefix}} shared/terraform/provision.sh \
-    "{{host}}" \
-    "{{action}}" \
-    "infra/os/arch/spec/vm-template-stable.json" \
-    "{{approve}}"
-
 #############################
 #### HAOS ###################
 #############################
@@ -76,14 +66,6 @@ arch-terraform host action approve="0": inventory-build
 # Export a HAOS Proxmox VM's boot disk to an S3 bucket
 haos-boot-disk-capture vmid update_stable="yes":
   {{run_prefix}} appliance/scripts/boot-disk-capture.sh "haos" "gitops-homelab-orchestrator-disks" "proxmox-images" "{{vmid}}" "{{update_stable}}"
-
-# Apply or detroy a HAOS Proxmox VM using Terraform
-haos-terraform host action approve="0": inventory-build
-  {{run_prefix}} shared/terraform/provision.sh \
-    "{{host}}" \
-    "{{action}}" \
-    "appliance/haos/spec/vm-template-stable.json" \
-    "{{approve}}"
 
 # Prepare a Proxmox VM template for cloning HAOS VMs
 haos-vm-template update_stable="yes":
@@ -113,10 +95,6 @@ nixos-iso hostname disk iface ip:
 # Prepare a Proxmox VM template for cloning NixOS VMs
 nixos-vm-template update_stable="yes":
   {{run_prefix}} scripts/nixos-vm-template.sh {{update_stable}}
-
-# Apply or detroy NixOS Proxmox VM(s) using Terraform
-nixos-terraform persona action approve="0":
-  {{run_prefix}} scripts/terraform.sh "nixos" "{{persona}}" "{{action}}" "{{approve}}"
 
 # Fully converge a group of NixOS hosts
 nixos-converge group tags="" limit="":
@@ -186,10 +164,6 @@ truenas-boot-disk-capture vmid update_stable="yes":
 truenas-attach-disks vmid:
   {{run_prefix}} scripts/proxmox-attach-disks.sh "{{vmid}}" "truenas" "nas"
 
-# Apply or detroy TrueNAS Proxmox VM(s) using Terraform
-truenas-terraform action approve="0":
-  {{run_prefix}} scripts/terraform.sh "truenas" "nas" "{{action}}" "{{approve}}"
-
 # Prepare a Proxmox VM template for cloning TrueNAS VMs
 truenas-vm-template update_stable="yes":
   {{run_prefix}} scripts/appliance-vm-template.sh truenas {{update_stable}}
@@ -201,14 +175,6 @@ truenas-vm-template update_stable="yes":
 # Prepare a Proxmox VM template suitable for Ubuntu installations
 ubuntu-vm-template update_stable="yes":
   {{run_prefix}} scripts/ubuntu-vm-template.sh {{update_stable}}
-
-# Apply or destroy an Ubuntu Proxmox VM using Terraform
-ubuntu-terraform host action approve="0": inventory-build
-  {{run_prefix}} shared/terraform/provision.sh \
-    "{{host}}" \
-    "{{action}}" \
-    "infra/os/ubuntu/spec/vm-template-stable.json" \
-    "{{approve}}"
 
 #############################
 #### NIXOS/GITOPS ###########
@@ -228,3 +194,11 @@ nix-test host: inventory-build
 
 nix-switch host: inventory-build
     {{run_prefix}} ./nixos/scripts/converge.sh {{host}} switch
+
+#Apply or destroy a Proxmox VM using Terraform
+terraform host action approve="0": inventory-build
+  {{run_prefix}} shared/terraform/provision.sh \
+    "{{host}}" \
+    "{{action}}" \
+    "{{approve}}"
+
