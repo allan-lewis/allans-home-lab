@@ -1,0 +1,39 @@
+name = "pennywise"
+hostname = "pennywise"
+
+platform = "appliance"
+variant = "truenas"
+
+role = "nas"
+description = "NAS"
+
+groups = []
+
+[management]
+provisioner = "terraform"
+converger = "none"
+
+[runtime]
+kind = "vm"
+hypervisor = "proxmox"
+node = "maturin"
+
+[resources.cpu]
+cores = 8
+sockets = 1
+
+[resources]
+memory_mb = 32768
+disk_gb = 16
+
+[network]
+mode = "dhcp-reservation"
+dns = ["192.168.86.1"]
+
+[network.reservation]
+ip = "192.168.86.220"
+mac = "02:42:AC:11:00:04"
+
+[provisioning.terraform]
+cloud_init = false
+agent = false

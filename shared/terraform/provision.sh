@@ -70,6 +70,12 @@ if [ "$OS" = "ubuntu" ]; then
   TEMPLATE_ABS_PATH="$(realpath ../../../../infra/os/ubuntu/spec/vm-template-stable.json)"
 elif [ "$OS" = "arch" ]; then
   TEMPLATE_ABS_PATH="$(realpath ../../../../infra/os/arch/spec/vm-template-stable.json)"
+elif [ "$OS" = "haos" ]; then
+  TEMPLATE_ABS_PATH="$(realpath ../../../../appliance/haos/spec/vm-template-stable.json)"
+elif [ "$OS" = "truenas" ]; then
+  TEMPLATE_ABS_PATH="$(realpath ../../../../appliance/truenas/spec/vm-template-stable.json)"
+elif [ "$OS" = "nixos" ]; then
+  TEMPLATE_ABS_PATH="$(realpath ../../../../infra/os/nixos/spec/vm-template-stable.json)"
 else
   echo "ERROR: Unsupported OS: $OS"
   exit 1
