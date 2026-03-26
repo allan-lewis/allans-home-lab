@@ -26,7 +26,7 @@ in
 
     sopsFile = lib.mkOption {
       type = lib.types.path;
-      default = ./secrets/twingate.yaml;
+      default = ../../../secrets/twingate.yaml;
       description = "SOPS file containing connector credentials";
     };
   };
