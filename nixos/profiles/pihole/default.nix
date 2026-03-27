@@ -36,14 +36,12 @@
         ];
 
         cnameRecords = [
-          "gatus.docker.allanshomelab.com,docker.allanshomelab.com"
           "derry.hosts.allanshomelab.com,hosts.allanshomelab.com"
           "gilead.hosts.allanshomelab.com,hosts.allanshomelab.com"
           "pennywise.hosts.allanshomelab.com,hosts.allanshomelab.com"
           "maturin.hosts.allanshomelab.com,hosts.allanshomelab.com"
           "traefik.docker.allanshomelab.com,docker.allanshomelab.com"
           "whoami.docker.allanshomelab.com,docker.allanshomelab.com"
-          "portainer.docker.allanshomelab.com,docker.allanshomelab.com"
           "prometheus.docker.allanshomelab.com,docker.allanshomelab.com"
           "maturin.kvm.allanshomelab.com,kvm.allanshomelab.com"
           "prowlarr.media.allanshomelab.com,media.allanshomelab.com"
@@ -59,6 +57,7 @@
           "alertmanager.docker.allanshomelab.com,docker.allanshomelab.com"
           ## NixOS on cujo
           "dns.nixos.allanshomelab.com,nixos.allanshomelab.com"
+          "gatus.nixos.allanshomelab.com,nixos.allanshomelab.com"
           "nginx.nixos.allanshomelab.com,nixos.allanshomelab.com"
           "tools.nixos.allanshomelab.com,nixos.allanshomelab.com"
           "whoami.nixos.allanshomelab.com,nixos.allanshomelab.com"

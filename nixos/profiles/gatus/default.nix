@@ -137,8 +137,8 @@ let
 
     {
       name = "Gatus";
-      group = "Sites (Docker)";
-      url = "https://gatus.docker.allanshomelab.com";
+      group = "Sites (NixOS)";
+      url = "https://gatus.nixos.allanshomelab.com";
       conditions = [
         "[STATUS] == 200"
         "[CERTIFICATE_EXPIRATION] > 168h"
@@ -187,12 +187,12 @@ let
     }
     {
       name = "Whoami";
-      group = "Sites (Docker)";
-      url = "https://whoami.docker.allanshomelab.com";
+      group = "Sites (NixOS)";
+      url = "https://whoami.nixos.allanshomelab.com";
       conditions = [
         "[STATUS] == 200"
         "[CERTIFICATE_EXPIRATION] > 168h"
-        "[BODY] == pat(*whoami.docker.allanshomelab.com*)"
+        "[BODY] == pat(*whoami.nixos.allanshomelab.com*)"
       ];
     }
     {
@@ -377,8 +377,8 @@ let
     }
     {
       name = "IT Tools";
-      group = "Sites (Docker)";
-      url = "https://tools.docker.allanshomelab.com";
+      group = "Sites (NixOS)";
+      url = "https://tools.nixos.allanshomelab.com";
       conditions = [
         "[STATUS] == 200"
         "[CERTIFICATE_EXPIRATION] > 168h"
@@ -413,16 +413,6 @@ let
         "[STATUS] == 200"
         "[CERTIFICATE_EXPIRATION] > 168h"
         "[BODY] == pat(*Homepage*)"
-      ];
-    }
-    {
-      name = "Portainer";
-      group = "Sites (Docker)";
-      url = "https://portainer.docker.allanshomelab.com";
-      conditions = [
-        "[STATUS] == 200"
-        "[CERTIFICATE_EXPIRATION] > 168h"
-        "[BODY] == pat(*Portainer*)"
       ];
     }
     {
@@ -507,8 +497,8 @@ let
     }
     {
       name = "Nginx";
-      group = "Sites (Docker)";
-      url = "https://nginx.docker.allanshomelab.com";
+      group = "Sites (NixOS)";
+      url = "https://nginx.nixos.allanshomelab.com";
       conditions = [
         "[STATUS] == 200"
         "[BODY] == pat(*nginx*)"
