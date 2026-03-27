@@ -53,7 +53,7 @@ all-shutdown group:
 
 # Put a custom, bootable Arch ISO onto Proxmox
 arch-iso update_stable="yes":
-  {{run_prefix}} scripts/arch-iso.sh "{{update_stable}}"
+  {{run_prefix}} linux/scripts/iso-arch.sh "{{update_stable}}"
 
 # Prepare a Proxmox VM template suitable for Arch installations
 arch-vm-template update_stable="yes":

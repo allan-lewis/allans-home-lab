@@ -102,6 +102,8 @@ else
   echo "==> Skipping Proxmox upload (PVE_ACCESS_HOST / PM_TOKEN_* not set)"
 fi
 
+exit 0
+
 ########################################
 # Generate ISO build manifest
 ########################################
