@@ -157,8 +157,8 @@ let
     }
     {
       name = "Traefik";
-      group = "Sites (Docker)";
-      url = "https://traefik.docker.allanshomelab.com/dashboard/#/";
+      group = "Sites (NixOS)";
+      url = "https://traefik.nixos.allanshomelab.com/dashboard/#/";
       conditions = [
         "[STATUS] == 200"
         "[CERTIFICATE_EXPIRATION] > 168h"

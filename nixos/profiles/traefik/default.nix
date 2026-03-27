@@ -3,6 +3,30 @@
 let
   traefikServices = [
     {
+      name = "alertmanager";
+      host = "alertmanager.docker.allanshomelab.com";
+      url = "http://192.168.86.204:3070";
+      authentik = false;
+    }
+    {
+      name = "allan-and-vaia";
+      host = "allanandvaia.com";
+      url = "http://192.168.86.229:8123";
+      authentik = false;
+    }
+    {
+      name = "authentik";
+      host = "authn.allanshomelab.com";
+      url = "http://192.168.86.204:9180";
+      authentik = false;
+    }
+    {
+      name = "bazarr";
+      host = "bazarr.media.allanshomelab.com";
+      url = "http://192.168.86.224:6767";
+      authentik = false;
+    }
+    {
       name = "derry";
       host = "derry.hosts.allanshomelab.com";
       url = "http://192.168.86.210:8000";
@@ -21,15 +45,51 @@ let
       authentik = false;
     }
     {
+      name = "grafana";
+      host = "grafana.allanshomelab.com";
+      url = "http://192.168.86.204:3071";
+      authentik = false;
+    }
+    {
+      name = "home-assistant";
+      host = "home.allanandvaia.com";
+      url = "http://192.168.86.229:8123";
+      authentik = false;
+    }
+    {
+      name = "homepage";
+      host = "homepage.docker.allanshomelab.com";
+      url = "http://192.168.86.228:3007";
+      authentik = false;
+    }
+    {
+      name = "immich";
+      host = "photos.allanandvaia.com";
+      url = "http://192.168.86.227:2283";
+      authentik = false;
+    }
+    {
       name = "it-tools";
       host = "tools.nixos.allanshomelab.com";
       url = "http://192.168.86.219:8386";
       authentik = false;
     }
     {
+      name = "jellyfin";
+      host = "jellyfin.media.allanshomelab.com";
+      url = "http://192.168.86.227:8096";
+      authentik = false;
+    }
+    {
       name = "kvm-maturin";
       host = "maturin.kvm.allanshomelab.com";
       url = "http://192.168.86.248";
+      authentik = false;
+    }
+    {
+      name = "lidarr";
+      host = "lidarr.media.allanshomelab.com";
+      url = "http://192.168.86.224:8686";
       authentik = false;
     }
     {
@@ -45,6 +105,12 @@ let
       authentik = false;
     }
     {
+      name = "no-geeks-brewing";
+      host = "nogeeksbrewing.com";
+      url = "http://192.168.86.228:8080";
+      authentik = false;
+    }
+    {
       name = "pennywise";
       host = "pennywise.hosts.allanshomelab.com";
       url = "https://192.168.86.220";
@@ -54,6 +120,60 @@ let
       name = "pihole";
       host = "dns.nixos.allanshomelab.com";
       url = "http://192.168.86.218";
+      authentik = false;
+    }
+    {
+      name = "plex";
+      host = "plex.media.allanshomelab.com";
+      url = "http://192.168.86.227:32400";
+      authentik = false;
+    }
+    {
+      name = "prometheus";
+      host = "prometheus.docker.allanshomelab.com";
+      url = "http://192.168.86.204:3072";
+      authentik = false;
+    }
+    {
+      name = "prowlarr";
+      host = "prowlarr.media.allanshomelab.com";
+      url = "http://192.168.86.224:9696";
+      authentik = false;
+    }
+    {
+      name = "radarr";
+      host = "radarr.media.allanshomelab.com";
+      url = "http://192.168.86.224:7878";
+      authentik = false;
+    }
+    {
+      name = "sonarr";
+      host = "sonarr.media.allanshomelab.com";
+      url = "http://192.168.86.224:8989";
+      authentik = false;
+    }
+    {
+      name = "tautulli";
+      host = "tautulli.media.allanshomelab.com";
+      url = "http://192.168.86.227:8181";
+      authentik = false;
+    }
+    {
+      name = "traefik1";
+      host = "traefik.nixos.allanshomelab.com";
+      url = "http://127.0.0.1:8088";
+      authentik = false;
+    }
+    {
+      name = "traefik2";
+      host = "traefik.docker.allanshomelab.com";
+      url = "http://192.168.86.204:8088";
+      authentik = false;
+    }
+    {
+      name = "transmission";
+      host = "transmission.media.allanshomelab.com";
+      url = "http://192.168.86.224:9091";
       authentik = false;
     }
     {
