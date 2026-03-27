@@ -15,6 +15,12 @@ let
       authentik = false;
     }
     {
+      name = "kvm-maturin";
+      host = "maturin.kvm.allanshomelab.com";
+      url = "http://192.168.86.248";
+      authentik = false;
+    }
+    {
       name = "nginx";
       host = "nginx.nixos.allanshomelab.com";
       url = "http://192.168.86.219";
@@ -32,14 +38,6 @@ let
       url = "http://127.0.0.1:8180";
       authentik = false;
     }
-
-    # example of a protected backend matching your template shape
-    # {
-    #   name = "grafana";
-    #   host = "grafana.allanshomelab.com";
-    #   url = "http://192.168.86.205:3000";
-    #   authentik = true;
-    # }
   ];
 
   mkRouter = service: {

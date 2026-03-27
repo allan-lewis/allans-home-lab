@@ -32,7 +32,7 @@
           "192.168.86.204 hosts.allanshomelab.com"
           "192.168.86.204 media.allanshomelab.com"
           "192.168.86.219 nixos.allanshomelab.com"
-          "192.168.86.204 kvm.allanshomelab.com"
+          "192.168.86.219 kvm.allanshomelab.com"
         ];
 
         cnameRecords = [
@@ -43,7 +43,6 @@
           "traefik.docker.allanshomelab.com,docker.allanshomelab.com"
           "whoami.docker.allanshomelab.com,docker.allanshomelab.com"
           "prometheus.docker.allanshomelab.com,docker.allanshomelab.com"
-          "maturin.kvm.allanshomelab.com,kvm.allanshomelab.com"
           "prowlarr.media.allanshomelab.com,media.allanshomelab.com"
           "lidarr.media.allanshomelab.com,media.allanshomelab.com"
           "bazarr.media.allanshomelab.com,media.allanshomelab.com"
@@ -55,6 +54,8 @@
           "plex.media.allanshomelab.com,media.allanshomelab.com"
           "homepage.docker.allanshomelab.com,docker.allanshomelab.com"
           "alertmanager.docker.allanshomelab.com,docker.allanshomelab.com"
+          ## KVM on cujo
+          "maturin.kvm.allanshomelab.com,kvm.allanshomelab.com"
           ## NixOS on cujo
           "dns.nixos.allanshomelab.com,nixos.allanshomelab.com"
           "gatus.nixos.allanshomelab.com,nixos.allanshomelab.com"
