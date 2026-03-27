@@ -3,6 +3,18 @@
 let
   traefikServices = [
     {
+      name = "129-monroe";
+      host = "129monroe.com";
+      url = "http://192.168.86.228:35550";
+      authentik = false;
+    }
+    {
+      name = "129-vault";
+      host = "vault.129monroe.com";
+      url = "http://192.168.86.228:35550";
+      authentik = false;
+    }
+    {
       name = "alertmanager";
       host = "alertmanager.docker.allanshomelab.com";
       url = "http://192.168.86.204:3070";
@@ -13,6 +25,12 @@ let
       host = "allanandvaia.com";
       url = "http://192.168.86.229:8123";
       authentik = false;
+    }
+    {
+      name = "allans-home-lab";
+      host = "allanshomelab.com";
+      url = "http://192.168.86.228:3007";
+      authentik = true;
     }
     {
       name = "authentik";
@@ -177,6 +195,18 @@ let
       authentik = false;
     }
     {
+      name = "trilium";
+      host = "notes.allanshomelab.com";
+      url = "http://192.168.86.228:8376";
+      authentik = false;
+    }
+    {
+      name = "vaultwarden";
+      host = "vault.allanshomelab.com";
+      url = "http://192.168.86.228:35550";
+      authentik = false;
+    }
+    {
       name = "whoami";
       host = "whoami.nixos.allanshomelab.com";
       url = "http://127.0.0.1:8180";
@@ -270,7 +300,7 @@ in
         middlewares = {
           authentik = {
             forwardAuth = {
-              address = "http://192.168.86.205:9180/outpost.goauthentik.io/auth/traefik";
+              address = "http://192.168.86.204:9180/outpost.goauthentik.io/auth/traefik";
               trustForwardHeader = true;
               authResponseHeaders = [
                 "X-authentik-username"
