@@ -3,6 +3,18 @@
 let
   traefikServices = [
     {
+      name = "derry";
+      host = "derry.hosts.allanshomelab.com";
+      url = "http://192.168.86.210:8000";
+      authentik = false;
+    }
+    {
+      name = "gilead";
+      host = "gilead.hosts.allanshomelab.com";
+      url = "http://100.95.108.6:80";
+      authentik = false;
+    }
+    {
       name = "gatus";
       host = "gatus.nixos.allanshomelab.com";
       url = "http://192.168.86.219:8080";
@@ -21,9 +33,21 @@ let
       authentik = false;
     }
     {
+      name = "maturin";
+      host = "maturin.hosts.allanshomelab.com";
+      url = "https://192.168.86.200:8006";
+      authentik = false;
+    }
+    {
       name = "nginx";
       host = "nginx.nixos.allanshomelab.com";
       url = "http://192.168.86.219";
+      authentik = false;
+    }
+    {
+      name = "pennywise";
+      host = "pennywise.hosts.allanshomelab.com";
+      url = "https://192.168.86.220";
       authentik = false;
     }
     {

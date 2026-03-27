@@ -24,7 +24,7 @@ in
 
     composeUrl = lib.mkOption {
       type = lib.types.str;
-      default = "https://goauthentik.io/version/2026.2/docker-compose.yml";
+      default = "https://docs.goauthentik.io/compose.yml";
     };
 
     httpPort = lib.mkOption {
@@ -44,7 +44,7 @@ in
 
     sopsFile = lib.mkOption {
       type = lib.types.path;
-      default = ./secrets/authentik.yaml;
+      default = ../../secrets/authentik.yaml;
     };
   };
 

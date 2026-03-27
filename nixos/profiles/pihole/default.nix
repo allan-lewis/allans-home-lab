@@ -29,8 +29,8 @@
 
         hosts = [
           "192.168.86.204 docker.allanshomelab.com"
-          "192.168.86.204 hosts.allanshomelab.com"
-          "192.168.86.204 media.allanshomelab.com"
+          "192.168.86.219 hosts.allanshomelab.com"
+          "192.168.86.219 media.allanshomelab.com"
           "192.168.86.219 nixos.allanshomelab.com"
           "192.168.86.219 kvm.allanshomelab.com"
         ];
