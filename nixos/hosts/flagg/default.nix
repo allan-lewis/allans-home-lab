@@ -12,6 +12,7 @@ in
     ../../profiles/gatus
     ../../profiles/containers/twingate
     ../../profiles/tailscale
+    ../../profiles/traefik
   ];
 
   networking.hostName = hostName;

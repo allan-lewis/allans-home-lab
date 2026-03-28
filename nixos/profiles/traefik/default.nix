@@ -177,15 +177,9 @@ let
       authentik = false;
     }
     {
-      name = "traefik1";
+      name = "traefik";
       host = "traefik.nixos.allanshomelab.com";
       url = "http://127.0.0.1:8088";
-      authentik = false;
-    }
-    {
-      name = "traefik2";
-      host = "traefik.docker.allanshomelab.com";
-      url = "http://192.168.86.204:8088";
       authentik = false;
     }
     {

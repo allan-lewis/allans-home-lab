@@ -13,7 +13,6 @@ in
     ../../profiles/containers/no-geeks-brewing
     ../../profiles/devops
     ../../profiles/tailscale
-    ../../profiles/traefik
   ];
 
   networking.hostName = hostName;

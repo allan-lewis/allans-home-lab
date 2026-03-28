@@ -19,7 +19,7 @@ in
 
     version = lib.mkOption {
       type = lib.types.str;
-      default = "2026.2";
+      default = "2025.10.3";
     };
 
     composeUrl = lib.mkOption {
