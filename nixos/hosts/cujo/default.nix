@@ -8,13 +8,10 @@ in
   imports = [
     ../../profiles/bare-metal
     ../../profiles/base
-    ../../profiles/cloudflare
     ../../profiles/containers/it-tools
     ../../profiles/containers/nginx
     ../../profiles/containers/no-geeks-brewing
-    ../../profiles/containers/twingate
     ../../profiles/devops
-    ../../profiles/gatus
     ../../profiles/tailscale
     ../../profiles/traefik
   ];
@@ -34,16 +31,6 @@ in
       group = "lab";
       mode = "0755";
     };
-  };
-
-  services.homelab.twingateConnector = {
-    enable = true;
-    connectorKey = "modestAnteater";
-    networkName = "allanshomelab";
-  };
-
-  services.homelab.cloudflaredTunnel = {
-    enable = true;
   };
 
   system.stateVersion = "25.11";

@@ -59,7 +59,7 @@ let
     {
       name = "gatus";
       host = "gatus.nixos.allanshomelab.com";
-      url = "http://192.168.86.219:8080";
+      url = "http://192.168.86.204:8080";
       authentik = false;
     }
     {

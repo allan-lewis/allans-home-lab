@@ -26,7 +26,7 @@ if [[ "${MODE}" == "check" ]]; then
   exec nix flake show "${HOST_DIR}"
 fi
 
-HOST_JSON_PATH="inventory/generated/terraform/${HOST}.json"
+HOST_JSON_PATH=".build/inventory/terraform/${HOST}.json"
 if [[ ! -f "${HOST_JSON_PATH}" ]]; then
   echo "ERROR: Host JSON not found: ${HOST_JSON_PATH}" >&2
   exit 1
