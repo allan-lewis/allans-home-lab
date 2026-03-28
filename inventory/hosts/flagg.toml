@@ -1,11 +1,11 @@
-name = "cujo"
-hostname = "cujo"
+name = "flagg"
+hostname = "flagg"
 
 platform = "nixos"
 variant = "nixos"
 
-role = "devops"
-description = "NixOS DevOps"
+role = "core"
+description = "NixOS Core"
 
 groups = []
 
@@ -29,7 +29,7 @@ mode = "static"
 dns = ["192.168.86.1"]
 
 [network.ipv4]
-address = "192.168.86.219"
+address = "192.168.86.204"
 gateway = "192.168.86.1"
 
 [provisioning.terraform]

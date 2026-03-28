@@ -26,7 +26,7 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 INVENTORY_DIR = REPO_ROOT / "inventory"
 HOSTS_DIR = INVENTORY_DIR / "hosts"
 SCHEMA_PATH = INVENTORY_DIR / "schemas" / "host.schema.json"
-GENERATED_DIR = INVENTORY_DIR / "generated"
+GENERATED_DIR = INVENTORY_DIR.parent / ".build" / "inventory"
 GENERATED_ANSIBLE_DIR = GENERATED_DIR / "ansible"
 GENERATED_TERRAFORM_DIR = GENERATED_DIR / "terraform"
 

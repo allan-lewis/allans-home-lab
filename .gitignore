@@ -96,6 +96,7 @@ Icon?
 
 .iso-build/
 .template-build-ubuntu/
+.build/
 
 /infra/os/nixos/result
 /infra/os/nixos/result-*
