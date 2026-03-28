@@ -7,7 +7,6 @@ let
 in
 {
   imports = [
-    ../../profiles/authentik
     ../../profiles/base
     ../../profiles/virtual-machine
   ];
@@ -34,13 +33,6 @@ in
       group = "root";
       mode = "0755";
     };
-  };
-
-  services.homelab.authentikCompose = {
-    enable = true;
-    version = "2026.2";
-    httpPort = 9180;
-    httpsPort = 9143;
   };
 
   system.stateVersion = "25.11";

@@ -5,6 +5,7 @@ let
 in
 {
   imports = [
+    ../../profiles/authentik
     ../../profiles/bare-metal
     ../../profiles/base
     ../../profiles/cloudflare
@@ -28,6 +29,13 @@ in
 
   services.homelab.cloudflaredTunnel = {
     enable = true;
+  };
+
+  services.homelab.authentikCompose = {
+    enable = true;
+    version = "2025.10.3";
+    httpPort = 9180;
+    httpsPort = 9143;
   };
 
   system.stateVersion = "25.11";
