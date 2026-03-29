@@ -76,7 +76,7 @@ let
     }
     {
       name = "homepage";
-      host = "homepage.docker.allanshomelab.com";
+      host = "homepage.nixos.allanshomelab.com";
       url = "http://192.168.86.228:3007";
       authentik = false;
     }
