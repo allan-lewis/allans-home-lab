@@ -4,27 +4,10 @@ let
   homepageConfigSrc = ../../../assets/homepage;
 in
 {
-  sops.secrets.homepage_truenas_password = {
-    sopsFile = ../../../secrets/homepage.yaml;
-  };
-
-  sops.secrets.homepage_maturin_username = {
-    sopsFile = ../../../secrets/homepage.yaml;
-  };
-
-  sops.secrets.homepage_maturin_password = {
-    sopsFile = ../../../secrets/homepage.yaml;
-  };
-
-  sops.templates."homepage.env" = {
-    content = ''
-      HOMEPAGE_VAR_TRUENAS_PASSWORD=${config.sops.placeholder.homepage_truenas_password}
-      HOMEPAGE_VAR_MATURIN_USERNAME=${config.sops.placeholder.homepage_maturin_username}
-      HOMEPAGE_VAR_MATURIN_PASSWORD=${config.sops.placeholder.homepage_maturin_password}
-    '';
-    owner = "root";
-    group = "root";
-    mode = "0400";
+  sops.secrets.homepage_env = {
+    sopsFile = ../../../secrets/homepage.env;
+    format = "dotenv";
+    key = "";
   };
 
   systemd.tmpfiles.rules = [
@@ -65,7 +48,7 @@ in
       };
 
       environmentFiles = [
-        config.sops.templates."homepage.env".path
+        config.sops.secrets.homepage_env.path
       ];
 
       extraOptions = [
@@ -83,7 +66,7 @@ in
 
     restartTriggers = [
       homepageConfigSrc
-      config.sops.templates."homepage.env".path
+      config.sops.secrets.homepage_env.path
     ];
   };
 }
