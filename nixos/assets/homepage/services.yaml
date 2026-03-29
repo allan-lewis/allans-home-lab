@@ -35,3 +35,33 @@
             url: https://pennywise.hosts.allanshomelab.com
             username: truenas_admin
             password: "{{HOMEPAGE_VAR_TRUENAS_PASSWORD}}"
+
+- Dev Ops:
+    - Alertmanager:
+        icon: alertmanager.png
+        href: https://alertmanager.nixos.allanshomelab.com
+        description: Monitoring system
+    - Gatus:
+        icon: gatus.png
+        href: https://gatus.nixos.allanshomelab.com
+        description: Health dashboard
+        widget:
+            type: gatus
+            url: https://gatus.nixos.allanshomelab.com
+    - Grafana:
+        icon: grafana.png
+        href: https://grafana.allanshomelab.com
+        description: Operational dashboards
+        widget:
+            type: grafana
+            url: https://grafana.allanshomelab.com
+            username: "{{HOMEPAGE_VAR_GRAFANA_USERNAME}}"
+            password: "{{HOMEPAGE_VAR_GRAFANA_PASSWORD}}"
+            fields: ['dashboards', 'datasources']
+    - Prometheus:
+        icon: prometheus.png
+        href: https://prometheus.nixos.allanshomelab.com
+        description: Monitoring/alerting toolkit
+        widget:
+            type: prometheus
+            url: https://prometheus.nixos.allanshomelab.com
