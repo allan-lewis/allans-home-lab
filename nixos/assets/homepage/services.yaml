@@ -1,0 +1,37 @@
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/configs/services/
+
+- Home Lab Management:
+    - Gilead:
+        icon: truenas.png
+        href: https://gilead.hosts.allanshomelab.com
+        description: NAS (offsite backup)
+        widget:
+            type: truenas
+            url: https://gilead.hosts.allanshomelab.com
+            username: truenas_admin
+            password: "{{HOMEPAGE_VAR_TRUENAS_PASSWORD}}"
+    - Derry:
+        icon: asustor.png
+        href: https://derry.hosts.allanshomelab.com
+        description: NAS (local backup)
+    - Maturin:
+        icon: proxmox.png
+        href: https://maturin.hosts.allanshomelab.com
+        description: Hypervisor
+        widget:
+            type: proxmox
+            url: https://maturin.hosts.allanshomelab.com
+            username: "{{HOMEPAGE_VAR_MATURIN_USERNAME}}"
+            password: "{{HOMEPAGE_VAR_MATURIN_PASSWORD}}"
+            fields: ['vms', 'resources.cpu', 'resources.mem']
+    - Pennywise:
+        icon: truenas.png
+        href: https://pennywise.hosts.allanshomelab.com
+        description: NAS
+        widget:
+            type: truenas
+            url: https://pennywise.hosts.allanshomelab.com
+            username: truenas_admin
+            password: "{{HOMEPAGE_VAR_TRUENAS_PASSWORD}}"

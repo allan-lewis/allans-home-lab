@@ -3,3 +3,8 @@ creation_rules:
     key_groups:
       - age:
           - age1rsa3wqfhq3fxjmkqf3809wln39f64qvlqgwxy4usx9jng7t545xs8ts3dp
+
+  - path_regex: .*\.env$
+    key_groups:
+      - age:
+          - age1rsa3wqfhq3fxjmkqf3809wln39f64qvlqgwxy4usx9jng7t545xs8ts3dp
