@@ -148,7 +148,7 @@ let
     }
     {
       name = "prometheus";
-      host = "prometheus.docker.allanshomelab.com";
+      host = "prometheus.nixos.allanshomelab.com";
       url = "http://192.168.86.204:3072";
       authentik = false;
     }

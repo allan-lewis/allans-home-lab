@@ -9,8 +9,9 @@ in
     ../../profiles/bare-metal
     ../../profiles/base
     ../../profiles/cloudflare
-    ../../profiles/gatus
     ../../profiles/containers/twingate
+    ../../profiles/gatus
+    ../../profiles/prometheus
     ../../profiles/tailscale
     ../../profiles/traefik
   ];
@@ -37,6 +38,10 @@ in
     version = "2025.10.3";
     httpPort = 9180;
     httpsPort = 9143;
+  };
+
+  services.homelab.prometheus = {
+    enable = true;
   };
 
   system.stateVersion = "25.11";
