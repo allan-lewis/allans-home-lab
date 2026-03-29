@@ -387,8 +387,8 @@ let
     }
     {
       name = "Alertmanager";
-      group = "Sites (Docker)";
-      url = "https://alertmanager.docker.allanshomelab.com";
+      group = "Sites (NixOS)";
+      url = "https://alertmanager.nixos.allanshomelab.com";
       conditions = [
         "[STATUS] == 200"
         "[CERTIFICATE_EXPIRATION] > 168h"
@@ -407,8 +407,8 @@ let
     }
     {
       name = "Homepage";
-      group = "Sites (Docker)";
-      url = "https://homepage.docker.allanshomelab.com";
+      group = "Sites (NixOS)";
+      url = "https://homepage.nixos.allanshomelab.com";
       conditions = [
         "[STATUS] == 200"
         "[CERTIFICATE_EXPIRATION] > 168h"
@@ -417,8 +417,8 @@ let
     }
     {
       name = "Prometheus";
-      group = "Sites (Docker)";
-      url = "https://prometheus.docker.allanshomelab.com";
+      group = "Sites (NixOS)";
+      url = "https://prometheus.nixos.allanshomelab.com";
       conditions = [
         "[STATUS] == 200"
         "[CERTIFICATE_EXPIRATION] > 168h"
@@ -505,7 +505,7 @@ let
       ];
     }
     {
-      name = "Authentik (Docker)";
+      name = "Authentik";
       group = "Sites (Allan's Home Lab)";
       url = "https://authn.allanshomelab.com";
       conditions = [

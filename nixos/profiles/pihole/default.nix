@@ -28,7 +28,6 @@
         reply.host.force4 = true;
 
         hosts = [
-          "192.168.86.204 docker.allanshomelab.com"
           "192.168.86.204 hosts.allanshomelab.com"
           "192.168.86.204 media.allanshomelab.com"
           "192.168.86.204 nixos.allanshomelab.com"
@@ -36,10 +35,6 @@
         ];
 
         cnameRecords = [
-          ## DOCKER
-          "alertmanager.docker.allanshomelab.com,docker.allanshomelab.com"
-          "homepage.docker.allanshomelab.com,docker.allanshomelab.com"
-          "prometheus.docker.allanshomelab.com,docker.allanshomelab.com"
           ## HOSTS
           "derry.hosts.allanshomelab.com,hosts.allanshomelab.com"
           "gilead.hosts.allanshomelab.com,hosts.allanshomelab.com"
@@ -58,9 +53,12 @@
           "tautulli.media.allanshomelab.com,media.allanshomelab.com"
           "transmission.media.allanshomelab.com,media.allanshomelab.com"
           ## NIXOS
+          "alertmanager.nixos.allanshomelab.com,nixos.allanshomelab.com"
           "dns.nixos.allanshomelab.com,nixos.allanshomelab.com"
           "gatus.nixos.allanshomelab.com,nixos.allanshomelab.com"
+          "homepage.nixos.allanshomelab.com,nixos.allanshomelab.com"
           "nginx.nixos.allanshomelab.com,nixos.allanshomelab.com"
+          "prometheus.nixos.allanshomelab.com,nixos.allanshomelab.com"
           "tools.nixos.allanshomelab.com,nixos.allanshomelab.com"
           "traefik.nixos.allanshomelab.com,nixos.allanshomelab.com"
           "whoami.nixos.allanshomelab.com,nixos.allanshomelab.com"
