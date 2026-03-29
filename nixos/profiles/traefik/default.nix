@@ -125,7 +125,7 @@ let
     {
       name = "no-geeks-brewing";
       host = "nogeeksbrewing.com";
-      url = "http://192.168.86.228:8080";
+      url = "http://192.168.86.219:8083";
       authentik = false;
     }
     {

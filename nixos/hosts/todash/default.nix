@@ -8,7 +8,6 @@ in
 {
   imports = [
     ../../profiles/base
-    ../../profiles/containers/no-geeks-brewing
     ../../profiles/virtual-machine
   ];
 
