@@ -5,6 +5,7 @@ let
 in
 {
   imports = [
+    ../../profiles/alertmanager
     ../../profiles/authentik
     ../../profiles/bare-metal
     ../../profiles/base
@@ -41,6 +42,10 @@ in
   };
 
   services.homelab.prometheus = {
+    enable = true;
+  };
+
+  services.homelab.alertmanager = {
     enable = true;
   };
 
