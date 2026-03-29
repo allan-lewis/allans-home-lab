@@ -16,7 +16,7 @@ let
     }
     {
       name = "alertmanager";
-      host = "alertmanager.docker.allanshomelab.com";
+      host = "alertmanager.nixos.allanshomelab.com";
       url = "http://192.168.86.204:3070";
       authentik = false;
     }
