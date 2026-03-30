@@ -65,3 +65,51 @@
         widget:
             type: prometheus
             url: https://prometheus.nixos.allanshomelab.com
+
+- Networking and Authentication:
+    - Authentik:
+        icon: authentik.png
+        href: https://authn.allanshomelab.com
+        description: Identity provider
+        widget:
+            type: authentik
+            url: https://authn.allanshomelab.com
+            key: "{{HOMEPAGE_VAR_AUTHENTIK_KEY_DOCKER}}"
+            version: 2
+    - Cloudflared:
+        icon: cloudflare.png
+        href: "{{HOMEPAGE_VAR_CLOUDFLARE_URL}}"
+        description: Zero trust tunnel
+        widget:
+            type: cloudflared
+            key: "{{HOMEPAGE_VAR_CLOUDFLARE_KEY}}"
+            accountid: "{{HOMEPAGE_VAR_CLOUDFLARE_ACCOUTNT_ID}}"
+            tunnelid: "{{HOMEPAGE_VAR_CLOUDFLARE_TUNNEL_ID}}"
+    - Nginx:
+        icon: nginx.png
+        href: https://nginx.docker.allanshomelab.com
+        description: Web server
+    - Pi-hole:
+        icon: pi-hole.png
+        href: https://dns.nixos.allanshomelab.com
+        description: Backup DNS server
+        widget:
+            type: pihole
+            url: https://dns.nixos.allanshomelab.com
+            version: 6
+            key: "{{HOMEPAGE_VAR_PIHOLE_KEY_DOCKER}}"
+    - Tailscale:
+        icon: tailscale.png
+        href: https://login.tailscale.com/admin/machines
+        description: Mesh VPN
+    - Traefik:
+        icon: traefik.png
+        href: https://traefik.nixos.allanshomelab.com
+        description: Reverse proxy/load balancer
+        widget:
+            type: traefik
+            url: https://traefik.nixos.allanshomelab.com
+    - Twingate:
+        icon: twingate.png
+        href: https://allanshomelab.twingate.com/networks/overview
+        description: Zero-trust access
