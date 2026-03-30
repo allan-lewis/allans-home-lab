@@ -49,5 +49,11 @@ in
     enable = true;
   };
 
+  services.homelab.grafana = {
+    enable = true;
+    port = 3071;
+    domain = "grafana.allanshomelab.com";
+  };
+
   system.stateVersion = "25.11";
 }
