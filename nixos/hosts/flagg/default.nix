@@ -12,6 +12,7 @@ in
     ../../profiles/cloudflare
     ../../profiles/containers/twingate
     ../../profiles/gatus
+    ../../profiles/grafana
     ../../profiles/prometheus
     ../../profiles/tailscale
     ../../profiles/traefik

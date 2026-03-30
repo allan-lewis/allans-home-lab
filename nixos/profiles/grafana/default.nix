@@ -22,6 +22,11 @@ in
       default = "localhost";
     };
 
+    protocol = lib.mkOption {
+      type = lib.types.enum [ "http" "https" ];
+      default = "http";
+    };
+
     openFirewall = lib.mkOption {
       type = lib.types.bool;
       default = true;
@@ -30,6 +35,16 @@ in
     dataDir = lib.mkOption {
       type = lib.types.str;
       default = "/var/lib/grafana";
+    };
+
+    prometheusUrl = lib.mkOption {
+      type = lib.types.str;
+      default = "http://127.0.0.1:3072";
+    };
+
+    prometheusDatasourceName = lib.mkOption {
+      type = lib.types.str;
+      default = "Prometheus";
     };
   };
 
@@ -41,6 +56,7 @@ in
 
       settings = {
         server = {
+          protocol = cfg.protocol;
           http_addr = cfg.addr;
           http_port = cfg.port;
           domain = cfg.domain;
@@ -48,6 +64,24 @@ in
 
         security = {
           admin_user = "admin";
+        };
+      };
+
+      provision = {
+        enable = true;
+
+        datasources.settings = {
+          apiVersion = 1;
+
+          datasources = [
+            {
+              name = cfg.prometheusDatasourceName;
+              type = "prometheus";
+              access = "proxy";
+              url = cfg.prometheusUrl;
+              isDefault = true;
+            }
+          ];
         };
       };
     };
