@@ -87,7 +87,7 @@
             tunnelid: "{{HOMEPAGE_VAR_CLOUDFLARE_TUNNEL_ID}}"
     - Nginx:
         icon: nginx.png
-        href: https://nginx.docker.allanshomelab.com
+        href: https://nginx.nixos.allanshomelab.com
         description: Web server
     - Pi-hole:
         icon: pi-hole.png
@@ -113,3 +113,119 @@
         icon: twingate.png
         href: https://allanshomelab.twingate.com/networks/overview
         description: Zero-trust access
+
+- Media:
+    - Bazarr:
+        icon: bazarr.png
+        href: https://bazarr.media.allanshomelab.com
+        description: Subtitle management
+        widget:
+            type: bazarr
+            url: https://bazarr.media.allanshomelab.com
+            key: "{{HOMEPAGE_VAR_BAZARR_KEY}}"
+    - Immich:
+        icon: immich.png
+        href: https://photos.allanandvaia.com
+        description: Photo and video management
+        widget:
+            type: immich
+            url: https://photos.allanandvaia.com
+            key: "{{HOMEPAGE_VAR_IMMICH_KEY}}"
+            version: 2
+    - Jellyfin:
+        icon: jellyfin.png
+        href: https://jellyfin.media.allanshomelab.com
+        description: Media server
+        widget:
+            type: jellyfin
+            url: https://jellyfin.media.allanshomelab.com
+            key: "{{HOMEPAGE_VAR_JELLYFIN_KEY}}"
+            enableBlocks: true # optional, defaults to false
+            enableNowPlaying: true # optional, defaults to true
+            enableUser: true # optional, defaults to false
+            enableMediaControl: false # optional, defaults to true
+            showEpisodeNumber: true # optional, defaults to false
+            expandOneStreamToTwoRows: false # optional, defaults to true
+    - Lidarr:
+        icon: lidarr.png
+        href: https://lidarr.media.allanshomelab.com
+        description: Music management
+        widget:
+            type: lidarr
+            url: https://lidarr.media.allanshomelab.com
+            key: "{{HOMEPAGE_VAR_LIDARR_KEY}}"
+    - Plex:
+        icon: plex.png
+        href: https://plex.media.allanshomelab.com
+        description: Media server
+        widget:
+            type: plex
+            url: https://plex.media.allanshomelab.com
+            key: "{{HOMEPAGE_VAR_PLEX_KEY}}"
+    - Prowlarr:
+        icon: prowlarr.png
+        href: https://prowlarr.media.allanshomelab.com
+        description: Indexer manager
+        widget:
+            type: prowlarr
+            url: https://prowlarr.media.allanshomelab.com
+            key: "{{HOMEPAGE_VAR_PROWLARR_KEY}}"
+    - Radarr:
+        icon: radarr.png
+        href: https://radarr.media.allanshomelab.com
+        description: Movie management
+        widget:
+            type: radarr
+            url: https://radarr.media.allanshomelab.com
+            key: "{{HOMEPAGE_VAR_RADARR_KEY}}"
+    - Sonarr:
+        icon: sonarr.png
+        href: https://sonarr.media.allanshomelab.com
+        description: Show management
+        widget:
+            type: sonarr
+            url: https://sonarr.media.allanshomelab.com
+            key: "{{HOMEPAGE_VAR_SONARR_KEY}}"
+    - Tautulli:
+        icon: tautulli.png
+        href: https://tautulli.media.allanshomelab.com
+        description: Plex monitoring and analytics
+        widget:
+            type: tautulli
+            url: https://tautulli.media.allanshomelab.com
+            key: "{{HOMEPAGE_VAR_TAUTULLI_KEY}}"
+    - Transmission:
+        icon: transmission.png
+        href: https://transmission.media.allanshomelab.com
+        description: Torrent download client
+        widget:
+            type: transmission
+            url: https://transmission.media.allanshomelab.com
+
+- Productivity:
+    - IT Tools:
+        icon: it-tools.png
+        href: https://tools.docker.allanshomelab.com
+        description: Handy tools for developers
+    - Trilium:
+        icon: trilium.png
+        href: https://notes.allanshomelab.com
+        description: Personal knowledge base
+        widget:
+            type: trilium
+            url: https://notes.allanshomelab.com
+            key: "{{HOMEPAGE_VAR_TRILIUM_TOKEN}}"
+    - Vaultwarden:
+        icon: bitwarden.png
+        href: https://vault.allanshomelab.com
+        description: Secrets management
+
+- Home Automation:
+    - Homeassistant:
+        icon: home-assistant.png
+        href: https://home.allanandvaia.com
+        description: Home automation server
+        widget:
+            type: homeassistant
+            url: https://home.allanandvaia.com
+            key: "{{HOMEPAGE_VAR_HOMEASSIST_KEY}}"
