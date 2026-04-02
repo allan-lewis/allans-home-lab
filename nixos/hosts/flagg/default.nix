@@ -29,7 +29,7 @@ in
     enable = true;
     connectorKey = "modestAnteater";
     networkName = "allanshomelab";
-    image = "twingate/connector:1.85.0@sha256:5e126d3ce36aa20b8977bab0b7e3da90ba1e10476234020a81cbdaf02781136b";
+    image = "twingate/connector:1.86.0@sha256:0a74cb9ffcf00e02d22199c8b9b53e3d02aa577d10615542bc3138acf7bb68f5";
   };
 
   services.homelab.cloudflaredTunnel = {
