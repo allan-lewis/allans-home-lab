@@ -31,7 +31,7 @@ in
     backend = "podman";
 
     containers.homepage = {
-      image = "ghcr.io/gethomepage/homepage@sha256:9627769818fbfb14147d3e633e57cef9c27c0c5f07585f5a1d6c3d3425b3b33c";
+      image = "ghcr.io/gethomepage/homepage:v1.12.1@sha256:9627769818fbfb14147d3e633e57cef9c27c0c5f07585f5a1d6c3d3425b3b33c";
       autoStart = true;
 
       ports = [
