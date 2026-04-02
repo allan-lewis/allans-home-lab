@@ -323,7 +323,7 @@ in
     backend = "podman";
 
     containers.whoami = {
-      image = "traefik/whoami:latest";
+      image = "traefik/whoami:v1.11@sha256:4f90b33ddca9c4d4f06527070d6e503b16d71016edea036842be2a84e60c91cb";
       pull = "missing";
       ports = [
         "127.0.0.1:8180:80/tcp"

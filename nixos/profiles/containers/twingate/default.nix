@@ -20,7 +20,7 @@ in
 
     image = lib.mkOption {
       type = lib.types.str;
-      default = "twingate/connector@sha256:5e126d3ce36aa20b8977bab0b7e3da90ba1e10476234020a81cbdaf02781136b";
+      default = "twingate/connector:1.85.0@sha256:21d71de5d6605936e23b1d15f268b1d94b68de685f7b51603b99e17c180002cb";
       description = "Twingate connector image";
     };
 
