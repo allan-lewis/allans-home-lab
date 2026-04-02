@@ -22,6 +22,7 @@ in
     enable = true;
     connectorKey = "valiantStingray";
     networkName = "allanshomelab";
+    image = "twingate/connector:1.85.0@sha256:21d71de5d6605936e23b1d15f268b1d94b68de685f7b51603b99e17c180002cb";
   };
 
   system.stateVersion = "25.11";
