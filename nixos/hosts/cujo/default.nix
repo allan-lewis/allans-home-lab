@@ -12,6 +12,7 @@ in
     ../../profiles/containers/it-tools
     ../../profiles/containers/nginx
     ../../profiles/containers/no-geeks-brewing
+    ../../profiles/containers/twingate
     ../../profiles/devops
     ../../profiles/tailscale
   ];
@@ -31,6 +32,13 @@ in
       group = "lab";
       mode = "0755";
     };
+  };
+
+  services.homelab.twingateConnector = {
+    enable = true;
+    connectorKey = "valiantStingray";
+    networkName = "allanshomelab";
+    image = "twingate/connector:1.85.0@sha256:5e126d3ce36aa20b8977bab0b7e3da90ba1e10476234020a81cbdaf02781136b";
   };
 
   system.stateVersion = "25.11";
