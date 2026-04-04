@@ -30,8 +30,10 @@ UBUNTU_TEMPLATE_NAME="${UBUNTU_TEMPLATE_NAME:-ubuntu-noble-$(date -u +"%Y%m%d")}
 UPDATE_STABLE="${1:-}"
 
 REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
-BUILD_ROOT="${REPO_ROOT}/.template-build-ubuntu/ubuntu"
+BUILD_ROOT="${REPO_ROOT}/.build/template-build-ubuntu/ubuntu"
 mkdir -p "${BUILD_ROOT}"
+
+echo "Building to ${BUILD_ROOT}"
 
 IMAGE_NAME="$(basename "${UBUNTU_CLOUD_IMAGE_URL}")"
 IMAGE_PATH="${BUILD_ROOT}/${IMAGE_NAME}"
@@ -46,7 +48,7 @@ echo "Proxmox storage     : ${PVE_STORAGE_VM}"
 echo "Update stable link  : ${UPDATE_STABLE}"
 
 echo
-echo "==> Downloading Ubuntu cloud image (if needed)..."
+echo "==> Downloading Ubuntu cloud to ${IMAGE_PATH} image (if needed)..."
 if [[ ! -f "${IMAGE_PATH}" ]]; then
   curl -L --fail-with-body -o "${IMAGE_PATH}" "${UBUNTU_CLOUD_IMAGE_URL}"
 else
@@ -150,8 +152,8 @@ echo
 echo "==> Generating manifest JSON..."
 
 TIMESTAMP_UTC="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
-ARTIFACT_DIR="${REPO_ROOT}/infra/os/ubuntu/artifacts"
-SPEC_DIR="${REPO_ROOT}/infra/os/ubuntu/spec"
+ARTIFACT_DIR="${REPO_ROOT}/linux/ubuntu/artifacts"
+SPEC_DIR="${REPO_ROOT}/linux/ubuntu/spec"
 mkdir -p "${ARTIFACT_DIR}" "${SPEC_DIR}"
 
 MANIFEST_FILE="${ARTIFACT_DIR}/vm-template-$(date -u +"%Y%m%d-%H%M%S").json"

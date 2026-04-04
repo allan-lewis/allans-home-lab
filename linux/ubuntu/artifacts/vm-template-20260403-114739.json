@@ -1,0 +1,10 @@
+{
+  "created_at": "2026-04-03T11:47:39Z",
+  "description": "Ubuntu cloud-image base with qemu-guest-agent and cloud-init drive",
+  "name": "ubuntu-noble-20260403",
+  "node": "maturin",
+  "storage": "local-lvm",
+  "vmid": 119,
+  "cloud_image_url": "https://cloud-images.ubuntu.com/noble/current/noble-server-cloudimg-amd64.img",
+  "cloud_image_sha256": "6e7016f2c9f4d3c00f48789eb6b9043ba2172ccc1b6b1eaf3ed1e29dd3e52bb3"
+}

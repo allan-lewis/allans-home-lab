@@ -105,3 +105,4 @@ Icon?
 !/inventory/schemas/*.json
 !*/flake.lock
 !/appliance/**/*
+!/linux/**/*

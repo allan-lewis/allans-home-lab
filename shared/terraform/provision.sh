@@ -67,9 +67,9 @@ else
 fi
 
 if [ "$OS" = "ubuntu" ]; then
-  TEMPLATE_ABS_PATH="$(realpath ../../../../infra/os/ubuntu/spec/vm-template-stable.json)"
+  TEMPLATE_ABS_PATH="$(realpath ../../../../linux/ubuntu/spec/vm-template-stable.json)"
 elif [ "$OS" = "arch" ]; then
-  TEMPLATE_ABS_PATH="$(realpath ../../../../infra/os/arch/spec/vm-template-stable.json)"
+  TEMPLATE_ABS_PATH="$(realpath ../../../../linux/arch/spec/vm-template-stable.json)"
 elif [ "$OS" = "haos" ]; then
   TEMPLATE_ABS_PATH="$(realpath ../../../../appliance/haos/spec/vm-template-stable.json)"
 elif [ "$OS" = "truenas" ]; then

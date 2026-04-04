@@ -174,7 +174,7 @@ truenas-vm-template update_stable="yes":
 
 # Prepare a Proxmox VM template suitable for Ubuntu installations
 ubuntu-vm-template update_stable="yes":
-  {{run_prefix}} scripts/ubuntu-vm-template.sh {{update_stable}}
+  {{run_prefix}} linux/scripts/vm-template-ubuntu.sh {{update_stable}}
 
 #############################
 #### NIXOS/GITOPS ###########
