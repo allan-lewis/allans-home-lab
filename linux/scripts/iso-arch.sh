@@ -74,15 +74,15 @@ docker run --rm -i --privileged \
     set -eux
     pacman -Syu --noconfirm archiso
 
-    rm -rf .iso-build/archiso/out/*
+    rm -rf .build/iso-build-arch/out/*
     mkarchiso -v \
       -w /tmp/archiso-work \
-      -o .iso-build/archiso/out \
-      .iso-build/archiso/profile \
-      2>&1 | tee .iso-build/archiso/out/build.log
+      -o .build/iso-build-arch/out \
+      .build/iso-build-arch/profile \
+      2>&1 | tee .build/iso-build-arch/out/build.log
 
-    chown -R "$HOST_UID:$HOST_GID" .iso-build/archiso/out
-    ls -lh .iso-build/archiso/out/*.iso
+    chown -R "$HOST_UID:$HOST_GID" .build/iso-build-arch/out
+    ls -lh .build/iso-build-arch/out/*.iso
   '
 
 ISO_PATH=$(echo "${OUT_DIR}"/*.iso)
@@ -112,7 +112,7 @@ exit 0
 
 echo "==> Generating ISO build manifest"
 
-ISO_PATH=$(echo .iso-build/archiso/out/*.iso)
+ISO_PATH=$(echo .build/iso-build-arch/out/*.iso)
 ISO_NAME="$(basename "$ISO_PATH")"
 BASE_NAME="${ISO_NAME%.iso}"
 
