@@ -64,8 +64,6 @@ ls -l "${DEST}"
 echo "==> Building Arch ISO via Docker"
 mkdir -p "${OUT_DIR}"
 
-exit 0
-
 docker run --rm -i --privileged \
   -v "${REPO_ROOT}:/work" -w /work \
   -e ARCHISO_TRACE=1 \
@@ -104,8 +102,6 @@ else
   echo "==> Skipping Proxmox upload (PVE_ACCESS_HOST / PM_TOKEN_* not set)"
 fi
 
-exit 0
-
 ########################################
 # Generate ISO build manifest
 ########################################
@@ -116,8 +112,8 @@ ISO_PATH=$(echo .build/iso-build-arch/out/*.iso)
 ISO_NAME="$(basename "$ISO_PATH")"
 BASE_NAME="${ISO_NAME%.iso}"
 
-ARTIFACTS_DIR="infra/os/arch/artifacts"
-SPEC_DIR="infra/os/arch/spec"
+ARTIFACTS_DIR="linux/arch/artifacts"
+SPEC_DIR="linux/arch/spec"
 
 MANIFEST_PATH="${ARTIFACTS_DIR}/${BASE_NAME}.json"
 STABLE_LINK="${SPEC_DIR}/iso-manifest-stable.json"
