@@ -7,17 +7,17 @@ echo "Update Stable Link: $1"
 
 UPDATE_STABLE="$1"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 
 cd "${REPO_ROOT}"
 
 echo "Repo root: ${REPO_ROOT}"
 
-BUILD_ROOT=".iso-build/archiso"
+BUILD_ROOT=".build/iso-build-arch"
 PROFILE_DIR="${BUILD_ROOT}/profile"
 OUT_DIR="${BUILD_ROOT}/out"
 
-AUTOMATED_SRC="infra/os/arch/iso/automated_script.sh"
+AUTOMATED_SRC="linux/arch/iso/automated_script.sh"
 
 # You can export these from env or let the script no-op the upload part
 PVE_ACCESS_HOST="${PVE_ACCESS_HOST:-}"
@@ -43,9 +43,9 @@ docker run --rm -i --privileged \
   archlinux:latest bash -lc '
     set -eux
     pacman -Syu --noconfirm archiso
-    rm -rf .iso-build/archiso/profile
-    cp -r /usr/share/archiso/configs/releng .iso-build/archiso/profile
-    chown -R "$HOST_UID:$HOST_GID" .iso-build/archiso/profile
+    rm -rf .build/iso-build-arch/profile
+    cp -r /usr/share/archiso/configs/releng .build/iso-build-arch/profile
+    chown -R "$HOST_UID:$HOST_GID" .build/iso-build-arch/profile
   '
 
 echo "==> Installing custom automated_script.sh into profile"
@@ -63,6 +63,8 @@ ls -l "${DEST}"
 
 echo "==> Building Arch ISO via Docker"
 mkdir -p "${OUT_DIR}"
+
+exit 0
 
 docker run --rm -i --privileged \
   -v "${REPO_ROOT}:/work" -w /work \
