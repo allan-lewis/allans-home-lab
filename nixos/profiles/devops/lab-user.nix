@@ -1,7 +1,7 @@
 { ... }:
 
 {
-  users.users.lab.extraGroups = [ "aws" ];
+  users.users.lab.extraGroups = [ "aws" "docker" ];
 
   home-manager.users.lab = { ... }: {
     programs.git = {

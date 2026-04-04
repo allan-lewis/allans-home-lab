@@ -13,7 +13,11 @@
     doppler
     gnumake
     just
+    terraform
+    uv
   ];
+    
+  virtualisation.docker.enable = true;
 
   services.homelab.devCheckouts = {
     enable = true;
