@@ -57,7 +57,7 @@ arch-iso update_stable="yes":
 
 # Prepare a Proxmox VM template suitable for Arch installations
 arch-vm-template update_stable="yes":
-  {{run_prefix}} scripts/arch-vm-template.sh packer/arch "{{update_stable}}"
+  {{run_prefix}} linux/scripts/vm-template-arch.sh "{{update_stable}}"
 
 #############################
 #### HAOS ###################

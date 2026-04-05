@@ -1,42 +1,38 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-#
-# L1 build + manifest:
-# - Optionally runs packer init/validate/build (unless SKIP_BUILD=1)
-# - Captures VMID -> artifacts/l1_vmid
-# - Fetches Proxmox VM config and writes:
-#     - artifacts/l1_images/qemu-<vmid>-config.json (raw)
-#     - artifacts/l1_images/template-manifest.json (normalized)
-#     - infra/<os>/artifacts/vm-template-<timestamp>.json
-#   and optionally updates stable symlink (UPDATE_STABLE=yes)
-#
+# --- Args --------------------------------------------------------------------
 
-UPDATE_STABLE="$1"
+if [[ $# -gt 1 ]]; then
+  echo "Usage: $0 [update_stable]" >&2
+  echo "Example: $0 yes  # default is 'yes'" >&2
+  exit 1
+fi
+
+UPDATE_STABLE="${1:-yes}"
 
 # --- Resolve repo root -------------------------------------------------------
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ROOT_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
+ROOT_DIR="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 cd "${ROOT_DIR}"
 
-# --- Args --------------------------------------------------------------------
-
-if [[ $# -lt 1 || $# -gt 2 ]]; then
-  echo "Usage: $0 <packer_dir> [os_name]" >&2
-  echo "Example: $0 packer/arch  # os_name defaults to 'arch'" >&2
-  exit 1
-fi
-
-PACKER_DIR="$1"
+PACKER_DIR="linux/arch/packer"
 
 if [[ ! -d "${PACKER_DIR}" ]]; then
   echo "Packer directory does not exist: ${PACKER_DIR}" >&2
   exit 1
 fi
 
-# If second argument is missing, default OS to basename of PACKER_DIR
-OS_NAME="${2:-$(basename "${PACKER_DIR}")}"
+OS_NAME="arch"
+
+BUILD_DIR=".build/template-build-arch"
+mkdir -p ${BUILD_DIR}
+
+echo "==== Operating System:  ${OS_NAME}"
+echo "==== Update Stable:     ${UPDATE_STABLE}"
+echo "==== Packer Dir:        ${PACKER_DIR}"
+echo "==== Build Dir:         ${BUILD_DIR}"
 
 # --- Environment validation ---------------------------------------------------
 
@@ -52,8 +48,6 @@ fi
 
 SKIP_BUILD="${SKIP_BUILD:-0}" # 0 = run packer, 1 = skip
 
-mkdir -p artifacts/l1/l1_images
-
 # --- Optional Packer build ----------------------------------------------------
 
 vmid=""
@@ -64,9 +58,9 @@ if [[ "${SKIP_BUILD}" != "1" ]]; then
   packer init "${PACKER_DIR}"
   packer validate "${PACKER_DIR}"
 
-  packer build "${PACKER_DIR}" | tee artifacts/l1/l1_packer.log
+  packer build "${PACKER_DIR}" | tee .build/template-build-arch/packer.log
 
-  manifest="artifacts/l1/packer-manifest.json"
+  manifest=".build/template-build-arch/packer-manifest.json"
   if [[ ! -f "${manifest}" ]]; then
     echo "Missing ${manifest}; Packer did not emit a manifest" >&2
     exit 1
@@ -83,20 +77,20 @@ if [[ "${SKIP_BUILD}" != "1" ]]; then
     ;;
   esac
 
-  printf "%s\n" "${vmid}" >artifacts/l1/l1_vmid
+  printf "%s\n" "${vmid}" >.build/template-build-arch/l1_vmid
   echo "Captured VMID=${vmid}"
 
 else
   echo "=== [L1] SKIP_BUILD=1 -> skipping Packer build ==="
-  if [[ ! -f artifacts/l1/l1_vmid ]]; then
-    echo "artifacts/l1/l1_vmid not found; cannot skip build without existing VMID" >&2
+  if [[ ! -f .build/template-build-arch/l1_vmid ]]; then
+    echo ".build/template-build-arch/l1_vmid not found; cannot skip build without existing VMID" >&2
     exit 1
   fi
-  vmid="$(<artifacts/l1/l1_vmid)"
+  vmid="$(<.build/template-build-arch/l1_vmid)"
 
   case "${vmid}" in
   "" | *[!0-9]*)
-    echo "Existing VMID in artifacts/l1/l1_vmid is not numeric (got: ${vmid})" >&2
+    echo "Existing VMID in .build/template-build-arch/l1_vmid is not numeric (got: ${vmid})" >&2
     exit 1
     ;;
   esac
@@ -109,8 +103,8 @@ fi
 AUTH_HEADER="Authorization: PVEAPIToken=${PM_TOKEN_ID}=${PM_TOKEN_SECRET}"
 HOST="${PVE_ACCESS_HOST%/}/api2/json"
 
-raw_out="artifacts/l1/l1_images/qemu-${vmid}-config.json"
-norm_out="artifacts/l1/l1_images/template-manifest.json"
+raw_out=".build/template-build-arch/qemu-${vmid}-config.json"
+norm_out=".build/template-build-arch/template-manifest.json"
 
 echo "=== [L1] Fetching Proxmox VM config (VMID=${vmid}) ==="
 
@@ -155,7 +149,7 @@ echo "Wrote ${norm_out}"
 
 ts="$(date -u +"%Y%m%d-%H%M%S")"
 
-dest_dir="infra/os/${OS_NAME}/artifacts"
+dest_dir="linux/arch/artifacts"
 mkdir -p "${dest_dir}"
 
 dest_file="${dest_dir}/vm-template-${ts}.json"
@@ -164,7 +158,7 @@ cp "${norm_out}" "${dest_file}"
 echo "Saved timestamped manifest to ${dest_file}"
 
 if [[ "${UPDATE_STABLE}" == "yes" ]]; then
-  spec_dir="infra/os/${OS_NAME}/spec"
+  spec_dir="linux/arch/spec"
   mkdir -p "${spec_dir}"
   ln -sf "../artifacts/${dest_file##*/}" "${spec_dir}/vm-template-stable.json"
   echo "Updated stable symlink -> ${spec_dir}/vm-template-stable.json"

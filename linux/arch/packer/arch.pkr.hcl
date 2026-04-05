@@ -9,7 +9,7 @@ packer {
 
 locals {
   arch_iso_manifest = jsondecode(
-    file("../../infra/os/arch/spec/iso-manifest-stable.json")
+    file("../../../linux/arch/spec/iso-manifest-stable.json")
   )
 
   arch_iso_storage = local.arch_iso_manifest.proxmox_storage
@@ -99,7 +99,7 @@ build {
   }
 
   post-processor "manifest" {
-    output     = "artifacts/l1/packer-manifest.json"
+    output     = ".build/template-build-arch/packer-manifest.json"
     strip_path = true
   }
 }
