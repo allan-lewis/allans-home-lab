@@ -102,15 +102,15 @@ nixos-vm-template update_stable="yes":
 
 # Export a TrueNAS Proxmox VM's boot disk to an S3 bucket
 truenas-boot-disk-capture vmid update_stable="yes":
-  {{run_prefix}} scripts/appliance-boot-disk-capture.sh "truenas" "gitops-homelab-orchestrator-disks" "proxmox-images" "{{vmid}}" "{{update_stable}}"
+  {{run_prefix}} appliance/scripts/boot-disk-capture.sh "truenas" "gitops-homelab-orchestrator-disks" "proxmox-images" "{{vmid}}" "{{update_stable}}"
 
 # Attach physical disks to a TrueNAS host
 truenas-attach-disks vmid:
-  {{run_prefix}} scripts/proxmox-attach-disks.sh "{{vmid}}" "truenas" "nas"
+  {{run_prefix}} appliance/scripts/attach-disks.sh "{{vmid}}" "truenas" "nas"
 
 # Prepare a Proxmox VM template for cloning TrueNAS VMs
 truenas-vm-template update_stable="yes":
-  {{run_prefix}} scripts/appliance-vm-template.sh truenas {{update_stable}}
+  {{run_prefix}} appliance/scripts/vm-template.sh truenas {{update_stable}}
 
 #############################
 #### UBUNTU #################
