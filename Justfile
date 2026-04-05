@@ -94,63 +94,7 @@ nixos-iso hostname disk iface ip:
 
 # Prepare a Proxmox VM template for cloning NixOS VMs
 nixos-vm-template update_stable="yes":
-  {{run_prefix}} scripts/nixos-vm-template.sh {{update_stable}}
-
-# Fully converge a group of NixOS hosts
-nixos-converge group tags="" limit="":
-  {{run_prefix}} scripts/ansible-playbook.sh "ansible/converge-nixos.yaml" "{{group}}" "{{tags}}" "{{limit}}"
-
-# Converge only the Docker Authentik application
-nixos-converge-authentik:
-  {{run_prefix}} scripts/ansible-playbook.sh "ansible/converge-nixos.yaml" "flagg" "docker" "" "nixos_docker_services=authentik"
-
-# Converge only the Docker Cloudflare application
-nixos-converge-cloudflare:
-  {{run_prefix}} scripts/ansible-playbook.sh "ansible/converge-nixos.yaml" "flagg" "docker" "" "nixos_docker_services=cloudflare"
-
-# Converge only the Docker Gatus application
-nixos-converge-gatus:
-  {{run_prefix}} scripts/ansible-playbook.sh "ansible/converge-nixos.yaml" "flagg" "docker" "" "nixos_docker_services=gatus"
-
-# Converge only the Docker Homepage application
-nixos-converge-homepage:
-  {{run_prefix}} scripts/ansible-playbook.sh "ansible/converge-nixos.yaml" "carrie" "docker" "" "nixos_docker_services=homepage"
-
-# Converge only the Docker Immich application
-nixos-converge-immich:
-  {{run_prefix}} scripts/ansible-playbook.sh "ansible/converge-nixos.yaml" "misery" "docker" "" "nixos_docker_services=immich"
-
-# Converge only the Docker Jellyfin application
-nixos-converge-jellyfin:
-  {{run_prefix}} scripts/ansible-playbook.sh "ansible/converge-nixos.yaml" "misery" "docker" "" "nixos_docker_services=jellyfin"
-
-# Converge only the Docker Prometheus/Grafana/Alertmanager applications
-nixos-converge-observability:
-  {{run_prefix}} scripts/ansible-playbook.sh "ansible/converge-nixos.yaml" "flagg" "docker" "" "nixos_docker_services=observability"
-
-# Converge only the Docker Pi-hole application
-nixos-converge-pihole:
-  {{run_prefix}} scripts/ansible-playbook.sh "ansible/converge-nixos.yaml" "flagg" "docker" "" "nixos_docker_services=pihole"
-
-# Converge only the Docker Plex application
-nixos-converge-plex:
-  {{run_prefix}} scripts/ansible-playbook.sh "ansible/converge-nixos.yaml" "misery" "docker" "" "nixos_docker_services=plex"
-
-# Converge only the Docker Trilium application
-nixos-converge-trilium:
-  {{run_prefix}} scripts/ansible-playbook.sh "ansible/converge-nixos.yaml" "carrie" "docker" "" "nixos_docker_services=trilium"
-
-# Converge only the Docker Traefik application
-nixos-converge-traefik:
-  {{run_prefix}} scripts/ansible-playbook.sh "ansible/converge-nixos.yaml" "flagg" "docker" "" "nixos_docker_services=traefik"
-
-# Converge only the Docker Twingate application
-nixos-converge-twingate:
-  {{run_prefix}} scripts/ansible-playbook.sh "ansible/converge-nixos.yaml" "nixos_twingate" "docker" "" "nixos_docker_services=twingate"
-
-# Converge only the Docker Vaultwarden application
-nixos-converge-vaultwarden:
-  {{run_prefix}} scripts/ansible-playbook.sh "ansible/converge-nixos.yaml" "carrie" "docker" "" "nixos_docker_services=vaultwarden"
+  {{run_prefix}} nixos/scripts/vm-template.sh {{update_stable}}
 
 #############################
 #### TRUENAS ################

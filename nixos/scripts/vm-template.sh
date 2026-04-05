@@ -47,10 +47,10 @@ NIXOS_DISK_IMPORT_FMT="${NIXOS_DISK_IMPORT_FMT:-qcow2}"
 REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 
 # NixOS flake location (in-repo)
-NIXOS_FLAKE_DIR="${REPO_ROOT}/infra/os/nixos"
+NIXOS_FLAKE_DIR="${REPO_ROOT}/nixos/template"
 
 # Keep build output symlink outside infra/ so it can't be committed accidentally
-OUT_LINK_DIR="${REPO_ROOT}/artifacts/nixos"
+OUT_LINK_DIR="${REPO_ROOT}/.build/nixos"
 OUT_LINK="${OUT_LINK_DIR}/proxmox-base-qcow2"
 
 mkdir -p "${OUT_LINK_DIR}"
@@ -65,6 +65,7 @@ SSH_OPTS=(
 )
 
 echo "=== NixOS Proxmox template build ==="
+echo "Root dir       : ${REPO_ROOT}"
 echo "Flake dir       : ${NIXOS_FLAKE_DIR}"
 echo "Out link        : ${OUT_LINK}"
 echo "Template name   : ${NIXOS_TEMPLATE_NAME}"
@@ -88,6 +89,8 @@ if [[ ! -e "${OUT_LINK}" ]]; then
   echo "ERROR: expected out-link to exist at ${OUT_LINK}" >&2
   exit 1
 fi
+
+exit 0
 
 # Find the actual disk image produced. Commonly it's a .qcow2 file inside the out-link path.
 echo "==> Locating built disk image..."

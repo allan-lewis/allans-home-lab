@@ -122,7 +122,7 @@ let
       conditions = [ "[CONNECTED] == true" ];
     }
     {
-      name = "Roland (NixOS Daily Driver";
+      name = "Roland (NixOS Daily Driver)";
       group = "Hosts";
       url = "icmp://192.168.86.206";
       conditions = [ "[CONNECTED] == true" ];
