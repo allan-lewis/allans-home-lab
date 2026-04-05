@@ -37,3 +37,70 @@ mac = "02:42:AC:11:00:04"
 [provisioning.terraform]
 cloud_init = false
 agent = false
+
+[runtime.proxmox.disks]
+scsihw = "virtio-scsi-single"
+
+[[runtime.proxmox.disks.devices]]
+slot = 3
+by_id = "ata-T-FORCE_1TB_TPBF2212050020101174"
+
+[runtime.proxmox.disks.devices.opts]
+cache = "none"
+format = "raw"
+iothread = 1
+
+[[runtime.proxmox.disks.devices]]
+slot = 4
+by_id = "ata-T-FORCE_1TB_TPBF2212050020101597"
+
+[runtime.proxmox.disks.devices.opts]
+cache = "none"
+format = "raw"
+iothread = 1
+
+[[runtime.proxmox.disks.devices]]
+slot = 5
+by_id = "ata-ST8000VN004-2M2101_WSD74XFX"
+
+[runtime.proxmox.disks.devices.opts]
+cache = "none"
+format = "raw"
+iothread = 1
+
+[[runtime.proxmox.disks.devices]]
+slot = 6
+by_id = "ata-ST8000VN004-2M2101_WSD929FL"
+
+[runtime.proxmox.disks.devices.opts]
+cache = "none"
+format = "raw"
+iothread = 1
+
+[[runtime.proxmox.disks.devices]]
+slot = 7
+by_id = "ata-ST8000VN004-2M2101_WSD92C4L"
+
+[runtime.proxmox.disks.devices.opts]
+cache = "none"
+format = "raw"
+iothread = 1
+
+[[runtime.proxmox.disks.devices]]
+slot = 8
+by_id = "ata-ST8000VN004-2M2101_WSD92E7L"
+
+[runtime.proxmox.disks.devices.opts]
+cache = "none"
+format = "raw"
+iothread = 1
+
+[[runtime.proxmox.disks.pools]]
+name = "pool0"
+layout = "mirror"
+slots = [3, 4]
+
+[[runtime.proxmox.disks.pools]]
+name = "pool1"
+layout = "raidz1"
+slots = [5, 6, 7, 8]

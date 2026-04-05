@@ -106,6 +106,97 @@
         "vmid": {
           "type": "integer",
           "minimum": 1
+        },
+        "proxmox": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "disks": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "scsihw",
+                "devices",
+                "pools"
+              ],
+              "properties": {
+                "scsihw": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "devices": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "slot",
+                      "by_id",
+                      "opts"
+                    ],
+                    "properties": {
+                      "slot": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "by_id": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "opts": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                          "cache": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "format": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "iothread": {
+                            "type": "integer",
+                            "minimum": 0
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "pools": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "name",
+                      "layout",
+                      "slots"
+                    ],
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "layout": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "slots": {
+                        "type": "array",
+                        "items": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "minItems": 1
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       },
       "allOf": [

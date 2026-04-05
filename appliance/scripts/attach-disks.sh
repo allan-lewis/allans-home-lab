@@ -10,11 +10,7 @@ set -euo pipefail
 #   PROXMOX_USER     default: root
 #   PROXMOX_SSH_OPTS default: disables host key checking
 
-VMID="${1:?Usage: $0 <vmid> <os> <persona>}"
-VM_OS="${2:?Usage: $0 <vmid> <os> <persona>}"
-VM_PERSONA="${3:?Usage: $0 <vmid> <os> <persona>}"
-
-MANIFEST=infra/os/${VM_OS}/personas/${VM_PERSONA}/spec/terraform.json
+VMID="${1:?Usage: $0 <vmid>}"
 
 PROXMOX_NODE="${PVE_SSH_IP}"
 PROXMOX_USER="${PROXMOX_USER:-root}"
@@ -27,17 +23,11 @@ need_local() { command -v "$1" >/dev/null 2>&1 || {
   exit 1
 }; }
 need_local jq
-[[ -f "$MANIFEST" ]] || {
-  echo "ERROR: manifest not found: $MANIFEST" >&2
-  exit 1
-}
 
 echo "==> Converge disks"
 echo "==> Proxmox node: ${PROXMOX_NODE}"
 echo "==> VMID:         ${VMID}"
-echo "==> Manifest:     ${MANIFEST}"
 echo "==> SSH opts:     ${PROXMOX_SSH_OPTS}"
-echo
 
 echo "==> Resolving hostname from VMID via qm config..."
 HOSTNAME="$(
@@ -50,6 +40,14 @@ if [[ -z "${HOSTNAME}" ]]; then
   exit 1
 fi
 echo "==> Hostname:     ${HOSTNAME}"
+
+MANIFEST=.build/inventory/appliance/${HOSTNAME}.json
+[[ -f "$MANIFEST" ]] || {
+  echo "ERROR: manifest not found: $MANIFEST" >&2
+  exit 1
+}
+
+exit 0
 
 # Validate hostname exists in JSON
 if ! jq -e --arg h "$HOSTNAME" '.hosts[$h]' "$MANIFEST" >/dev/null; then

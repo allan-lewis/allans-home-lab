@@ -85,6 +85,10 @@ def apply_defaults(host: dict[str, Any]) -> dict[str, Any]:
     if memory_mb is not None:
         terraform.setdefault("balloon_mb", memory_mb)
 
+    # Intentionally do not transform runtime.proxmox.* yet.
+    # We only validate and preserve those TOML fields for later use.
+    result.setdefault("runtime", {})
+
     return result
 
 
