@@ -33,7 +33,7 @@ all-cloud-init-isos os_iso ci_iso:
 
 # Remove all non-versioned build artifacts and temporary files
 all-clean:
-  {{run_prefix}} scripts/clean.sh
+  {{run_prefix}} shared/scripts/clean.sh
 
 # Runway checks (OS/persona independent)
 all-proxmox-runway:
