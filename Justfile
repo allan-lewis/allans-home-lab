@@ -105,7 +105,7 @@ truenas-boot-disk-capture vmid update_stable="yes":
   {{run_prefix}} appliance/scripts/boot-disk-capture.sh "truenas" "gitops-homelab-orchestrator-disks" "proxmox-images" "{{vmid}}" "{{update_stable}}"
 
 # Attach physical disks to a TrueNAS host
-truenas-attach-disks vmid:
+truenas-attach-disks vmid: inventory-build
   {{run_prefix}} appliance/scripts/attach-disks.sh "{{vmid}}" "truenas" "nas"
 
 # Prepare a Proxmox VM template for cloning TrueNAS VMs

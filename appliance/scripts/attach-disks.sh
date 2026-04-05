@@ -41,13 +41,11 @@ if [[ -z "${HOSTNAME}" ]]; then
 fi
 echo "==> Hostname:     ${HOSTNAME}"
 
-MANIFEST=.build/inventory/appliance/${HOSTNAME}.json
+MANIFEST=.build/inventory/proxmox/${HOSTNAME}.json
 [[ -f "$MANIFEST" ]] || {
   echo "ERROR: manifest not found: $MANIFEST" >&2
   exit 1
 }
-
-exit 0
 
 # Validate hostname exists in JSON
 if ! jq -e --arg h "$HOSTNAME" '.hosts[$h]' "$MANIFEST" >/dev/null; then

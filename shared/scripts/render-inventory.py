@@ -29,6 +29,7 @@ SCHEMA_PATH = INVENTORY_DIR / "schemas" / "host.schema.json"
 GENERATED_DIR = INVENTORY_DIR.parent / ".build" / "inventory"
 GENERATED_ANSIBLE_DIR = GENERATED_DIR / "ansible"
 GENERATED_TERRAFORM_DIR = GENERATED_DIR / "terraform"
+GENERATED_PROXMOX_DIR = GENERATED_DIR / "proxmox"
 
 
 def load_toml(path: Path) -> dict[str, Any]:
@@ -84,10 +85,6 @@ def apply_defaults(host: dict[str, Any]) -> dict[str, Any]:
     memory_mb = resources.get("memory_mb")
     if memory_mb is not None:
         terraform.setdefault("balloon_mb", memory_mb)
-
-    # Intentionally do not transform runtime.proxmox.* yet.
-    # We only validate and preserve those TOML fields for later use.
-    result.setdefault("runtime", {})
 
     return result
 
@@ -211,6 +208,30 @@ def build_terraform_host_json(host: dict[str, Any]) -> dict[str, Any]:
             }
         }
     }
+
+
+def build_proxmox_host_json(host: dict[str, Any]) -> dict[str, Any]:
+    proxmox = deep_get(host, "runtime", "proxmox")
+    if not isinstance(proxmox, dict):
+        raise ValueError(f"{host['name']}: runtime.proxmox must be an object")
+
+    proxmox_payload: dict[str, Any] = {}
+
+    disks = proxmox.get("disks")
+    if disks is not None:
+        proxmox_payload["disks"] = deepcopy(disks)
+
+    return {
+        "hosts": {
+            host["name"]: {
+                "proxmox": proxmox_payload,
+            }
+        }
+    }
+
+
+def has_proxmox_config(host: dict[str, Any]) -> bool:
+    return isinstance(deep_get(host, "runtime", "proxmox"), dict)
 
 
 def get_ansible_host_ip(host: dict[str, Any]) -> str:
@@ -387,19 +408,30 @@ def main() -> int:
     )
 
     for host in processed_hosts.values():
-        if host["management"]["provisioner"] != "terraform":
-            continue
-        write_json(
-            GENERATED_TERRAFORM_DIR / f"{host['name']}.json",
-            build_terraform_host_json(host),
-        )
+        if host["management"]["provisioner"] == "terraform":
+            write_json(
+                GENERATED_TERRAFORM_DIR / f"{host['name']}.json",
+                build_terraform_host_json(host),
+            )
+
+        if has_proxmox_config(host):
+            write_json(
+                GENERATED_PROXMOX_DIR / f"{host['name']}.json",
+                build_proxmox_host_json(host),
+            )
 
     print("Rendered inventory successfully:")
     print(f"  - {GENERATED_ANSIBLE_DIR / 'hosts.yaml'}")
+
     for host in processed_hosts.values():
         if host["management"]["provisioner"] == "terraform":
             tf_path = GENERATED_TERRAFORM_DIR / f"{host['name']}.json"
             print(f"  - {tf_path}")
+
+    for host in processed_hosts.values():
+        if has_proxmox_config(host):
+            proxmox_path = GENERATED_PROXMOX_DIR / f"{host['name']}.json"
+            print(f"  - {proxmox_path}")
 
     return 0
 
