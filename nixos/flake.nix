@@ -29,7 +29,6 @@
       ./modules/managed-state.nix
       ./modules/oci-containers.nix
       ./modules/postgres-db-backup.nix
-      ./modules/s3-local-mirror.nix
     ];
 
     mkHost = hostPath: nixpkgs.lib.nixosSystem {

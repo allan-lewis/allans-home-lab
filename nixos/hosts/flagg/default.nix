@@ -1,10 +1,13 @@
-{ lib, ... }:
+{ backupRemotePrefix, ... }:
 
 let
   hostName = "flagg";
+  defaultRemoteNasPerHostBackupVolume = "${backupRemotePrefix}/${hostName}";
 in
 {
   imports = [
+    ../../profiles/s3-mirror
+    
     ../../profiles/alertmanager
     ../../profiles/authentik
     ../../profiles/bare-metal
@@ -23,7 +26,26 @@ in
   homelab.bareMetal.interface = "eth1";
   homelab.bareMetal.address = "192.168.86.204";
 
-  services.homelab.managedState.enable = lib.mkForce false;
+  homelab.managedDirectories.entries = {
+    postgres_backup = {
+      local = "/var/lib/postgres-db-dumps";
+      remote = "${defaultRemoteNasPerHostBackupVolume}/authentik/db-dumps";
+      restore = true;
+      backup = true;
+      owner = "root";
+      group = "root";
+      mode = "0755";
+    };
+    s3_mirror = {
+      local = "/var/lib/s3-mirror";
+      remote = "${defaultRemoteNasPerHostBackupVolume}/s3-mirror";
+      restore = true;
+      backup = true;
+      owner = "root";
+      group = "root";
+      mode = "0755";
+    };
+  };
 
   services.homelab.twingateConnector = {
     enable = true;

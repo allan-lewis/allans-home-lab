@@ -58,7 +58,7 @@ in
 
     destDir = lib.mkOption {
       type = lib.types.str;
-      default = "/var/lib/allans-home-lab/s3-mirror";
+      default = "/var/lib/s3-mirror";
       description = "Destination base directory for local S3 mirrors.";
     };
 

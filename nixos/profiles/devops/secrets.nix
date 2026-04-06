@@ -20,6 +20,7 @@
     mode = "0600";
   };
 
+  ## TODO REPLACE WITH AWS-CREDENTIALS 
   sops.secrets.aws_credentials = {
     sopsFile = ../../secrets/aws.yaml;
     key = "aws_credentials";
