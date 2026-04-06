@@ -13,6 +13,14 @@
     httpsPort = 9143;
   };
 
-  services.homelab.postgresDbBackup.enable = false;
+  services.homelab.postgresDbBackup = {
+    enable = true;
+    schedule = "*-*-* 05:00:00";
+
+    db = "authentik";
+    user = "authentik";
+    container = "authentik-postgresql-1";
+    extraArgs = "";
+  };
 
 }
