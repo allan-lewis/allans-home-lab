@@ -91,7 +91,7 @@ in
 
     backupDir = lib.mkOption {
       type = lib.types.str;
-      default = "/var/lib/allans-home-lab/postgres-backup";
+      default = "/var/lib/postgres-db-dumps";
       description = "Directory where dumps are written.";
     };
 
