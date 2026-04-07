@@ -107,3 +107,5 @@ Icon?
 !/appliance/**/*
 !/linux/**/*
 !/nixos/**/*
+/nixos/assets/nvim/lazyvim.json
+/nixos/assets/nvim/.neoconf.json
