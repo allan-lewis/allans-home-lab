@@ -90,8 +90,6 @@ if [[ ! -e "${OUT_LINK}" ]]; then
   exit 1
 fi
 
-exit 0
-
 # Find the actual disk image produced. Commonly it's a .qcow2 file inside the out-link path.
 echo "==> Locating built disk image..."
 IMAGE_PATH="$(
@@ -210,8 +208,8 @@ echo
 echo "==> Generating manifest JSON..."
 
 TIMESTAMP_UTC="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
-ARTIFACT_DIR="${REPO_ROOT}/infra/os/nixos/artifacts"
-SPEC_DIR="${REPO_ROOT}/infra/os/nixos/spec"
+ARTIFACT_DIR="${REPO_ROOT}/nixos/artifacts"
+SPEC_DIR="${REPO_ROOT}/nixos/spec"
 mkdir -p "${ARTIFACT_DIR}" "${SPEC_DIR}"
 
 MANIFEST_FILE="${ARTIFACT_DIR}/vm-template-$(date -u +"%Y%m%d-%H%M%S").json"

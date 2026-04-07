@@ -106,3 +106,4 @@ Icon?
 !*/flake.lock
 !/appliance/**/*
 !/linux/**/*
+!/nixos/**/*
