@@ -12,6 +12,8 @@ in
 
   networking.hostName = "roland";
 
+  security.polkit.enable = true;
+
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
   services.blueman.enable = true;
@@ -57,6 +59,7 @@ in
     };
 
     home.packages = [
+      pkgs.polkit_gnome
       pkgs.wlogout
     ];
 
@@ -66,14 +69,16 @@ in
       settings = [
         {
           modules-left = [
-            "custom/launcher"
-            "custom/files"
-            "custom/ghostty"
-            "custom/browser"
+            "custom/power"
+            "custom/identity"
+            # "custom/launcher"
+            # "custom/files"
+            # "custom/ghostty"
+            # "custom/browser"
           ];
 
           modules-center = [
-            "custom/identity"
+            "clock"
             # "clock#center"
           ];
 
@@ -84,8 +89,6 @@ in
             "network"
             # "bluetooth"
             # "pulseaudio"
-            "clock"
-            "custom/power"
           ];
 
           "custom/launcher" = {
@@ -184,33 +187,29 @@ in
         * {
           font-family: "JetBrainsMono Nerd Font", "JetBrains Mono Nerd Font", monospace;
           font-size: 14px;
+          color: rgb(255, 255, 255);
+          background-color: rgb(20, 30, 50);
         }
 
         #network {
-          color: rgb(11, 84, 186);
-        }
-
-        #custom-power {
-          margin-right: 8px;
+        
         }
 
         #custom-identity {
-          font-weight: bold;
-          color: rgb(11, 84, 186);
+          padding-left: 16px;
+        }
+
+        #clock {
         }
 
         #cpu,
         #memory,
         #temperature,
-        #network,
-        bluetooth,
-        #pulseaudio,
-        #clock {
+        #network {
           padding: 0 8px;
         }
 
-        #custom-launcher {
-          padding: 0 8px;
+        #custom-power {
           margin-left: 8px;
         }
 
@@ -221,7 +220,7 @@ in
         }
       '';
     };
-
+#          padding: 0 8px;
     xdg.configFile."wlogout/layout".text = ''
       {
         "label" : "lock",
