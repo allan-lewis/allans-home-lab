@@ -75,7 +75,7 @@ elif [ "$OS" = "haos" ]; then
 elif [ "$OS" = "truenas" ]; then
   TEMPLATE_ABS_PATH="$(realpath ../../../../appliance/truenas/spec/vm-template-stable.json)"
 elif [ "$OS" = "nixos" ]; then
-  TEMPLATE_ABS_PATH="$(realpath ../../../../infra/os/nixos/spec/vm-template-stable.json)"
+  TEMPLATE_ABS_PATH="$(realpath ../../../../nixos/spec/vm-template-stable.json)"
 else
   echo "ERROR: Unsupported OS: $OS"
   exit 1
