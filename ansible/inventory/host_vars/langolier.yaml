@@ -1,8 +1,0 @@
----
-nixos_docker_services:
-  - monitoring
-
-nixos_is_virtual_machine: false
-nixos_network_interface: "enp2s0"
-nixos_network_address: "192.168.86.218"
-nixos_ssh_key: "{{ lookup('env', 'TF_VAR_PROXMOX_VM_PUBLIC_KEY') }}"

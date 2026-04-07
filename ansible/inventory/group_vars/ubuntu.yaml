@@ -1,8 +1,0 @@
----
-feature_flag_node_exporter: true
-
-dotfiles_stow_packages:
-  - common-zsh
-  - ubuntu-zsh
-  - common-starship
-  - common-lazyvim
