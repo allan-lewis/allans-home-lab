@@ -1,633 +1,176 @@
 # Allan's Home Lab
 
-
 ## Overview
 
-Allan's Home Lab is a layered, GitOps-driven infrastructure
-system for managing a (mostly) Proxmox-based home lab. It provides a structured
-model for building, instantiating, converging, and rebuilding virtual
-machines and their workloads using a clear separation of
-responsibilities across infrastructure layers.
+A GitOps-driven homelab centered on NixOS host management, with supporting workflows for appliance and legacy VMs — all driven from a unified TOML inventory.
 
-The project combines:
+---
 
--   **Proxmox VE** for virtualization
--   **Terraform** for VM lifecycle management
--   **Ansible** for operating system convergence
--   **Docker Compose** for workload orchestration
--   **Just** as the operational interface
--   **Git** as the single source of truth
+## What This Project Does
 
-The system is designed around one central idea:
+This project provides a structured system for managing homelab infrastructure with a strong emphasis on reproducibility and rebuildability.
 
-> Infrastructure should be reproducible, inspectable, and rebuildable
-> from declarative intent.
+Core capabilities:
 
-------------------------------------------------------------------------
+- NixOS remote build and deployment (bare metal and virtual machines)
+- Appliance VM lifecycle management using Proxmox and Terraform
+- Legacy Linux VM management using Ansible (non-production use)
+- Inventory-driven configuration generation (TOML → tool-specific configs)
 
-### What This Project Is
+---
 
-This repository defines:
+## Core Model
 
--   A structured L0--L4 infrastructure layering model
--   A persona-driven approach to defining infrastructure intent
--   A repeatable process for creating OS templates and VMs
--   A clean separation between system configuration (L3) and workloads
-    (L4)
--   A capture-and-restore model that treats rebuildability as a primary
-    goal
+This project is built around two core ideas: separation of concerns and inventory-driven design.
 
-It is not a collection of ad-hoc scripts. It is an opinionated
-infrastructure system designed to make rebuilding a host safer than
-manually mutating it.
+### Separation of Concerns
 
-------------------------------------------------------------------------
+Infrastructure is intentionally split into distinct areas:
 
-### Why This Exists
+- Infrastructure: virtual machines, disks, networking
+- System: operating system configuration (primarily NixOS)
+- Workloads: applications and services running on hosts
 
-Most homelabs evolve organically:
+Each area has a clear responsibility and avoids overlap. This keeps systems easier to reason about and rebuild.
 
--   Manual VM creation
--   Drift between machines
--   Snowflake configurations
--   "I think I installed that at some point"
--   Backups that are an afterthought
+### Inventory-Driven Design
 
-This project exists to eliminate that entropy.
+All host definitions live in the `inventory/` directory as TOML files.
 
-It enforces:
+- The inventory is the single source of truth
+- Tool-specific configurations (Terraform, Ansible, NixOS inputs) are generated from it
+- No tool owns configuration — they consume derived state
 
--   Clear responsibility boundaries between layers
--   Declarative intent stored in Git
--   Idempotent convergence of system state
--   Rebuild-first thinking over mutation-first thinking
--   Predictable operational workflows
+This ensures consistency across systems and prevents configuration drift between tools.
 
-The goal is not just automation --- it is **controlled evolution of
-infrastructure**.
+---
 
-------------------------------------------------------------------------
+## Primary Focus: NixOS Host Management
 
-### Who This Is For
+The primary focus of this project is managing hosts using NixOS.
 
-This project is intended for:
+Hosts are defined in the inventory and rendered into NixOS configurations, which are then built and deployed remotely.
 
--   Experienced homelabbers comfortable with Proxmox
--   Users familiar with Terraform and Ansible
--   Engineers who value reproducibility and structured infrastructure
--   People who prefer rebuilding over debugging snowflakes
--   Anyone interested in treating their homelab like real infrastructure
+This applies to:
 
-It assumes familiarity with:
+- Bare metal systems
+- Proxmox virtual machines
 
--   Linux administration
--   SSH-based workflows
--   Declarative infrastructure concepts
--   Version-controlled configuration
+Key characteristics of this approach:
 
-This is not a beginner-oriented homelab starter kit.
+- Declarative system configuration
+- Remote builds and deployments
+- Rebuild-first workflows instead of manual mutation
+- Minimal per-host drift over time
 
-------------------------------------------------------------------------
+The goal is to make rebuilding a host straightforward, predictable, and preferred over debugging configuration drift.
 
-### What This Project Is Not
+For more details, see:
 
-This project is intentionally not:
+- `nixos/`
+- `docs/nixos.md`
 
--   A Kubernetes-first platform
--   A highly available multi-site architecture
--   A turnkey "click to deploy" system
--   A UI-driven infrastructure solution
--   A generic infrastructure framework intended to fit all environments
+---
 
-It is:
+## Appliance VM Management (Proxmox + Terraform)
 
--   Optimized for a single-operator homelab
--   Focused on reproducibility over convenience
--   Opinionated about layering and separation of concerns
--   Designed to scale within a home lab, not a production enterprise
+Appliance VMs are managed separately from NixOS hosts and live under the `appliance/` directory.
 
-The constraints are deliberate. The architecture is shaped by clarity,
-not maximal flexibility.
+These include systems such as:
 
-## Core Design Philosophy
+- Home Assistant
+- TrueNAS
+- Other specialized, non-NixOS workloads
 
-Allan's Home Lab is built around a small number of strongly enforced
-principles. These principles shape how infrastructure is defined, how
-changes are introduced, and how systems are rebuilt over time.
+Typical workflow:
 
-------------------------------------------------------------------------
+- Export or capture boot disks from existing systems
+- Convert disks into reusable templates
+- Use Terraform with Proxmox to instantiate and manage VMs
 
-### Layered Infrastructure
+This approach treats appliances as reproducible infrastructure while respecting their need to run outside the NixOS model.
 
-The system is organized into explicit layers (L0--L4), each with a
-narrowly defined responsibility.
+For more details, see:
 
--   L0 validates and prepares the hypervisor environment.
--   L1 produces reusable OS templates.
--   L2 instantiates virtual machines from those templates.
--   L3 converges the operating system to a known-good state.
--   L4 deploys and manages application workloads.
+- `docs/appliances.md`
 
-Each layer exists to prevent responsibility overlap. A layer should only
-do one class of work, and it should do that work well. This separation
-reduces hidden coupling and makes rebuild workflows predictable.
+---
 
-------------------------------------------------------------------------
+## Legacy Linux VM Management (Ansible)
 
-### Git as the Source of Truth
+Legacy Linux hosts (primarily Arch and Ubuntu) are managed under the `linux/` directory using Ansible.
 
-All durable infrastructure intent lives in Git.
+These systems are retained for:
 
-Specifications for personas, resource definitions, OS configuration, and
-workload definitions are version-controlled. The running system is
-expected to reflect what is defined in the repository.
+- Experimentation
+- Compatibility testing
+- Non-critical workloads
 
-Drift is treated as a problem to be corrected by convergence, not as
-something to be manually patched in production.
+This is no longer the primary approach for managing infrastructure. NixOS has replaced it for most production use cases.
 
-------------------------------------------------------------------------
+For more details, see:
 
-### Rebuild Over Mutation
+- `docs/legacy.md`
 
-The system favors rebuilding over in-place mutation.
+---
 
-When something is unclear, broken, or outdated, the preferred approach
-is to recreate it from declarative intent rather than to surgically
-modify it. Templates can be re-generated. VMs can be destroyed and
-recreated. OS state can be re-converged.
+## Operations & Tooling
 
-Rebuildability is considered a design feature, not a disaster recovery
-fallback.
+The project is operated through a combination of:
 
-------------------------------------------------------------------------
+- The `Justfile` as the primary interface
+- Supporting scripts located alongside the features they support
+- Tool-specific workflows (NixOS rebuilds, Terraform applies, Ansible runs)
 
-### Idempotent Convergence
+A typical flow looks like:
 
-Every convergence step should be safe to run repeatedly.
+1. Update inventory
+2. Generate or render configuration
+3. Apply changes using the appropriate tool
 
-Ansible roles, Terraform modules, and supporting scripts are written
-with idempotency in mind. Running a convergence operation twice should
-produce the same result as running it once.
+Commands are intentionally routed through the Justfile to keep workflows consistent.
 
-This property enables:
+For more details, see:
 
--   Safe iteration
--   Predictable automation
--   Reduced fear of running commands
--   Simplified recovery workflows
+- `docs/operations.md`
 
-------------------------------------------------------------------------
-
-### Clear System vs Workload Boundary
-
-A strict boundary exists between system configuration (L3) and
-application workloads (L4).
-
-L3 is responsible for the operating system itself: - Users - Packages -
-Services required for the base host - Filesystem layout - System-level
-configuration
-
-L4 is responsible for workloads that run on top of the host: - Docker
-Compose stacks - Monitoring services - Media services - Identity
-providers - Reverse proxies
-
-This separation ensures that:
-
--   The base host remains reusable and portable.
--   Workloads can evolve independently of the underlying OS.
--   Rebuilding a host does not require redefining application logic.
--   System-level changes do not accidentally couple to application
-    concerns.
-
-The boundary is intentional. It keeps infrastructure modular and
-reinforces the rebuild-first model.
-
-------------------------------------------------------------------------
-
-### Backups and Capture as First-Class Concerns
-
-Backup and image capture are not afterthoughts.
-
-Templates can be promoted. Boot disks can be captured. Persistent data
-can be synchronized or replicated. The system is designed with the
-expectation that machines will be replaced and data will need to be
-restored.
-
-Infrastructure is treated as disposable. Data is treated as durable.
-
-## The Layer Model (L0--L4)
-
-Allan's Home Lab is organized around a strict layered model. Each layer
-has a clearly defined scope and exists to isolate responsibilities. The
-goal is not complexity --- it is clarity.
-
-The layers build on one another, but they do not overlap. A higher layer
-may depend on a lower one, but it should never reimplement or bypass it.
-
-------------------------------------------------------------------------
-
-### Why Layers Exist
-
-Without enforced boundaries, homelab infrastructure tends to drift:
-
--   Hypervisor configuration bleeds into VM provisioning.
--   OS setup logic mixes with application deployment.
--   One-off fixes become permanent snowflakes.
--   Recovery steps are undocumented and inconsistent.
-
-The layered model prevents that drift.
-
-Each layer answers a different question:
-
--   Is the environment ready?
--   Can we build a reusable base image?
--   Can we instantiate infrastructure predictably?
--   Is the operating system configured correctly?
--   Are workloads deployed and healthy?
-
-By isolating these concerns, failures become easier to diagnose and
-rebuild workflows become predictable.
-
-------------------------------------------------------------------------
-
-### Layer Responsibilities at a Glance
-
-| Layer | Name        | Responsibility                                  | Primary Tooling                  |
-|-------|------------|--------------------------------------------------|-----------------------------------|
-| L0    | Runway     | Validate and prepare Proxmox environment         | Shell / validation scripts       |
-| L1    | Image      | Build OS templates and golden images             | Packer / build scripts           |
-| L2    | Instantiate| Create VMs from templates                        | Terraform                        |
-| L3    | Converge (System)   | Configure operating system state        | Ansible                          |
-| L4    | Converge (Workload) | Deploy and manage applications         | Ansible + Docker Compose         |
-
-
-------------------------------------------------------------------------
-
-### L0 -- Runway (Environment & Hypervisor Validation)
-
-L0 ensures that the hypervisor environment is ready before
-infrastructure changes occur.
-
-This includes validating:
-
--   Proxmox connectivity
--   Available storage
--   Network configuration
--   Required tokens and credentials
--   Environmental prerequisites
-
-L0 does not create infrastructure. It confirms that the runway is clear
-before takeoff.
-
-------------------------------------------------------------------------
-
-### L1 -- Image & Template Creation
-
-L1 produces reusable operating system templates.
-
-Templates are built once and reused across multiple personas. This
-ensures:
-
--   Consistent base OS configuration
--   Faster VM provisioning
--   Reduced duplication of OS bootstrap logic
-
-Templates are treated as versioned artifacts. When the base OS
-definition changes, a new template is created rather than mutating
-existing VMs.
-
-------------------------------------------------------------------------
-
-### L2 -- VM Instantiation
-
-L2 is responsible for creating virtual machines from templates.
-
-Terraform defines:
-
--   CPU and memory allocations
--   Disk layout
--   Network configuration
--   Tags and metadata
--   Initial cloud-init parameters
-
-L2 answers the question:
-
-"Does this machine exist with the correct infrastructure definition?"
-
-It does not configure the OS beyond what is required for initial
-bootstrapping.
-
-------------------------------------------------------------------------
-
-### L3 -- OS Convergence
-
-L3 converges the operating system to its desired state.
-
-This includes:
-
--   User management
--   Package installation
--   Service configuration
--   Filesystem preparation
--   Base monitoring agents
--   Host-level utilities
-
-L3 ensures the machine is a properly configured system, independent of
-application workloads.
-
-If a host is rebuilt, L3 can be re-run to restore system-level
-configuration to its declared state.
-
-------------------------------------------------------------------------
-
-### L4 -- Workload Convergence
-
-L4 manages application workloads running on top of the host.
-
-This includes:
-
--   Docker Compose stacks
--   Monitoring services
--   Media services
--   Reverse proxies
--   Identity providers
--   Any service logically considered a workload
-
-L4 assumes the host is already properly configured by L3.
-
-By isolating workloads into L4, applications can evolve independently of
-base OS concerns, and hosts remain portable and reusable.
-
-------------------------------------------------------------------------
-
-### How the Layers Work Together
-
-A typical lifecycle follows this progression:
-
-1.  Validate environment (L0)
-2.  Build or update templates (L1)
-3.  Instantiate or modify VM infrastructure (L2)
-4.  Converge system configuration (L3)
-5.  Deploy or update workloads (L4)
-
-Each step depends on the previous one being correct, but no step
-collapses into another. This structure enables safe iteration,
-controlled rebuilds, and long-term maintainability.
+---
 
 ## Repository Structure
 
-The repository is organized to reflect the layered model and
-persona-driven design.
-
-### High-Level Directory Layout
-
-    infra/
-    artifacts/
-    scripts/
-    Justfile
-    docs/
-
-Each top-level directory serves a distinct purpose and maps to one or
-more layers in the system.
-
-------------------------------------------------------------------------
-
-### The `infra/` Directory
-
-The `infra/` directory encodes infrastructure intent.
-
-It is organized by operating system family and persona. Each persona
-defines the desired state of a host at the infrastructure level.
-
-Typical responsibilities include:
-
--   VM resource definitions
--   Disk layout specifications
--   Network configuration intent
--   OS-level convergence configuration
--   Workload grouping definitions
-
-Personas are declarative. They describe what a machine should be, not
-how to manually construct it.
-
-------------------------------------------------------------------------
-
-### The `artifacts/` Directory
-
-The `artifacts/` directory contains generated or promoted outputs of the
-system.
-
-Examples include:
-
--   Template metadata
--   Captured disk images
--   Build outputs
--   Promotion state
-
-Artifacts are derived from declared intent. They are not the source of
-truth, but rather the result of applying it.
-
-------------------------------------------------------------------------
-
-### Scripts and Supporting Tooling
-
-Supporting scripts exist to:
-
--   Validate environment assumptions
--   Perform controlled image capture or restore
--   Wrap Terraform or Ansible flows
--   Enforce repeatable operational patterns
-
-Scripts are helpers. They do not replace the layered model --- they
-reinforce it.
-
-------------------------------------------------------------------------
-
-### The Justfile as the Operational Interface
-
-The Justfile serves as the primary operational interface.
-
-It exposes:
-
--   Layer-specific operations (L0--L4)
--   Group-based convergence
--   Persona-targeted workflows
--   Rebuild and promotion paths
-
-Rather than invoking Terraform, Ansible, or scripts directly, operations
-are routed through Just recipes to maintain consistency and reduce
-cognitive overhead.
-
-See `docs/operations.md` for a detailed breakdown of available commands
-and workflows.
-
-------------------------------------------------------------------------
-
-## Personas and Desired State
-
-### What Is a Persona?
-
-A persona represents a role-specific host definition.
-
-Examples might include:
-
--   A monitoring node
--   A media acquisition host
--   A reverse proxy gateway
--   A development workstation
--   A storage-backed utility machine
-
-A persona encodes:
-
--   Infrastructure characteristics (CPU, memory, disk)
--   OS-level configuration intent
--   Workload grouping
--   Lifecycle expectations
-
-Personas are the primary abstraction in Allan's Home Lab.
-
-------------------------------------------------------------------------
-
-### Relationship Between Spec, Artifact, and Runtime
-
-The system distinguishes between:
-
--   **Spec** --- The declarative definition stored in Git
--   **Artifact** --- The generated template or captured image
--   **Runtime** --- The currently running VM instance
-
-Spec defines intent.
-Artifacts accelerate rebuilds.
-Runtime reflects the result of applying convergence.
-
-This separation allows machines to be destroyed and recreated without
-losing design clarity.
-
-------------------------------------------------------------------------
-
-### Promotion, Capture, and Rebuild Concepts
-
-Templates can be promoted when base OS definitions change.
-
-Boot disks can be captured to preserve known-good states.
-
-VMs can be destroyed and recreated from spec alone.
-
-The system is designed so that rebuilding is routine, not catastrophic.
-
-------------------------------------------------------------------------
-
-## Typical End-to-End Workflow
-
-### Creating or Updating a Template
-
-1.  Modify base OS definition.
-2.  Build a new template (L1).
-3.  Promote or validate the template.
-
-------------------------------------------------------------------------
-
-### Instantiating or Modifying a Persona
-
-1.  Update persona specification.
-2.  Apply infrastructure changes (L2).
-3.  Converge system state (L3).
-4.  Converge workloads (L4).
-
-------------------------------------------------------------------------
-
-### Rebuilding a Host
-
-1.  Destroy existing VM (if required).
-2.  Recreate from template (L2).
-3.  Re-run OS convergence (L3).
-4.  Re-run workload convergence (L4).
-
-Rebuilds are expected and supported workflows.
-
-------------------------------------------------------------------------
-
-## Managing Infrastructure Changes
-
-Infrastructure changes fall into distinct categories.
-
-### Resource-Level Changes
-
-Adjustments to CPU, memory, disk, or networking occur at L2 and are
-applied through Terraform.
-
-------------------------------------------------------------------------
-
-### System-Level Changes
-
-Package updates, service configuration, and host-level changes occur at
-L3 and are applied via Ansible convergence.
-
-------------------------------------------------------------------------
-
-### Workload-Level Changes
-
-Application configuration and Docker Compose stacks are managed at L4.
-
-Each category has a clear operational entry point, preventing
-cross-layer drift.
-
-For detailed operational commands, see `docs/operations.md`.
-
-For persona lifecycle guidance, see `docs/personas.md`.
-
-------------------------------------------------------------------------
-
-## Disaster Recovery and Reproducibility
-
-Allan's Home Lab assumes that machines are replaceable.
-
-The system supports:
-
--   Rebuilding from declarative spec alone
--   Restoring from captured disk images
--   Re-converging system and workload layers independently
-
-Infrastructure is disposable.
-Data is durable.
-
-The architecture ensures that a failed host can be recreated without
-reintroducing entropy.
-
-------------------------------------------------------------------------
-
-## Current Scope and Evolution
-
-This project continues to evolve.
-
-Some workflows may:
-
--   Transition from manual to scripted
--   Move between layers as boundaries sharpen
--   Be refined for clarity or reproducibility
-
-Intentional structure matters more than rapid expansion.
-
-Operational notes, edge cases, and transitional procedures are
-documented in `docs/notes.md`.
-
-------------------------------------------------------------------------
+The repository is organized around the core areas of responsibility:
+
+- `inventory/` — Source of truth (TOML host definitions)
+- `nixos/` — NixOS configurations and modules
+- `appliance/` — Appliance VM workflows and definitions
+- `linux/` — Legacy Ansible-based systems
+- `shared/` — Cross-cutting logic and templates
+- `docs/` — Detailed documentation
+- `Justfile` — Operational entry point
+
+---
 
 ## Documentation
 
-The README provides architectural context and high-level guidance.
+The README provides a high-level overview.
 
-For detailed operational and lifecycle documentation:
+For more detailed information:
 
-- **Operations Reference** → [docs/operations.md](docs/operations.md)  
-  Layer-oriented command reference and workflow examples.
+- NixOS → `docs/nixos.md`
+- Appliances → `docs/appliances.md`
+- Legacy → `docs/legacy.md`
+- Operations → `docs/operations.md`
+- Notes → `docs/notes.md`
 
-- **Personas & Lifecycle** → [docs/personas.md](docs/personas.md)  
-  Detailed explanation of persona structure, lifecycle, and infrastructure evolution.
+Start here for context, then move into the relevant section based on what you are trying to do.
 
-- **Notes & Operational Edge Cases** → [docs/notes.md](docs/notes.md)  
-  Transitional procedures, sharp edges, and manual workflows.
+---
 
-If you are new to the project, start with this README, then move to **Operations**.  
-If you are modifying infrastructure or evolving a persona, read **Personas & Lifecycle** next.
+## Design Principles
 
+- Git is the source of truth
+- Inventory drives all configuration
+- Rebuild over mutation
+- Clear separation of concerns
+
+The system is designed to make infrastructure predictable, repeatable, and easy to rebuild.
