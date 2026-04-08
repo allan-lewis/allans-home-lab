@@ -1,0 +1,39 @@
+name = "blaine"
+hostname = "blaine"
+
+platform = "nixos"
+variant = "nixos"
+
+role = "openvpn"
+description = "NixOS OpenVPN Gateway"
+
+groups = ["nixos"]
+
+[management]
+provisioner = "terraform"
+converger = "nixos"
+
+[runtime]
+kind = "vm"
+hypervisor = "proxmox"
+node = "maturin"
+
+[resources.cpu]
+cores = 4
+sockets = 1
+
+[resources]
+memory_mb = 4096
+disk_gb = 32
+
+[network]
+mode = "static"
+dns = ["192.168.86.1"]
+
+[network.ipv4]
+address = "192.168.86.222"
+gateway = "192.168.86.1"
+
+[provisioning.terraform]
+cloud_init = true
+agent = true
