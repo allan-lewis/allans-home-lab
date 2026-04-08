@@ -3,6 +3,7 @@
 {
   imports = [
     ../../modules/openvpn-client.nix
+    ../../modules/vpn-killswitch.nix
   ];
 
   sops.secrets.openvpn-auth = {
@@ -47,7 +48,7 @@
     path = "/run/secrets/openvpn/ca.crt";
     owner = "root";
     group = "root";
-    mode = "0644";
+    mode = "0444";
   };
 
   services.homelab.openvpnClient = {
@@ -56,5 +57,28 @@
     configFile = ../../assets/openvpn/expressvpn/client.conf;
     restartDaily = true;
     restartTime = "06:00";
+  };
+
+  services.homelab.vpnKillSwitch = {
+    enable = true;
+
+    wanInterface = "eth0";
+    vpnInterface = "tun0";
+
+    lanSubnets = [ "192.168.86.0/24" ];
+
+    vpnEndpointIps = [
+      "45.84.216.183"
+      "45.84.216.83"
+    ];
+
+    vpnPort = 1195;
+    vpnProtocol = "udp";
+  };
+
+  systemd.services.openvpn-expressvpn = {
+    after = [ "network-online.target" "nftables.service" ];
+    wants = [ "network-online.target" ];
+    requires = [ "nftables.service" ];
   };
 }
