@@ -8,11 +8,13 @@
   ];
 
   environment.systemPackages = with pkgs; [
+    ansible
     awscli2
     clang
     doppler
     gnumake
     just
+    packer
     terraform
     uv
   ];
