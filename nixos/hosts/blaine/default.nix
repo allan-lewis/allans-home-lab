@@ -7,6 +7,7 @@ in
 {
   imports = [
     ../../profiles/base
+    ../../profiles/openvpn
     ../../profiles/virtual-machine
   ];
 
