@@ -10,10 +10,10 @@ let
       conditions = [ "[CONNECTED] == true" ];
     }
     {
-      name = "Blaine (OpenVPN Gateway)";
+      name = "Blaine (NixOS OpenVPN Gateway)";
       group = "Hosts";
       enabled = true;
-      url = "icmp://192.168.86.223";
+      url = "icmp://192.168.86.222";
       conditions = [ "[CONNECTED] == true" ];
     }
     {

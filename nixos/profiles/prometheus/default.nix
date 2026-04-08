@@ -215,7 +215,7 @@ in
           job_name = "node-exporter";
           static_configs = [
             {
-              targets = [ "192.168.86.223:9100" ];
+              targets = [ "192.168.86.222:9100" ];
               labels.__meta_friendly_instance = "blaine";
             }
             {
