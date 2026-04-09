@@ -45,6 +45,24 @@ in
       group = "root";
       mode = "0755";
     };
+    grafana = {
+      local = "/var/lib/grafana";
+      remote = "${defaultRemoteNasPerHostBackupVolume}/grafana";
+      restore = true;
+      backup = true;
+      owner = "grafana";
+      group = "grafana";
+      mode = "0750";
+    };
+    alertmanager = {
+      local = "/var/lib/alertmanager";
+      remote = "${defaultRemoteNasPerHostBackupVolume}/alertmanager";
+      restore = true;
+      backup = true;
+      owner = "nobody";
+      group = "nogroup";
+      mode = "0750";
+    };
   };
 
   services.homelab.twingateConnector = {

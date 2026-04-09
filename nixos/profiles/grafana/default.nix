@@ -55,12 +55,13 @@ in
       dataDir = cfg.dataDir;
 
       settings = {
-        server = {
-          protocol = cfg.protocol;
-          http_addr = cfg.addr;
-          http_port = cfg.port;
-          domain = cfg.domain;
-        };
+      server = {
+        protocol = cfg.protocol;
+        http_addr = cfg.addr;
+        http_port = cfg.port;
+        domain = cfg.domain;
+        root_url = "https://${cfg.domain}";
+      };
 
         security = {
           admin_user = "admin";
@@ -84,6 +85,11 @@ in
           ];
         };
       };
+    };
+
+    systemd.services.grafana = {
+      requires = [ "homelab-task-managed-state-restore.service" ];
+      after = [ "homelab-task-managed-state-restore.service" ];
     };
 
     networking.firewall.allowedTCPPorts =

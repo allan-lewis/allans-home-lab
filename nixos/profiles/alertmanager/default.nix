@@ -69,5 +69,10 @@ in
         ];
       };
     };
+
+    systemd.services.prometheus-alertmanager = {
+      requires = [ "homelab-task-managed-state-restore.service" ];
+      after = [ "homelab-task-managed-state-restore.service" ];
+    };
   };
 }
