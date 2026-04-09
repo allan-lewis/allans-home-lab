@@ -1,4 +1,4 @@
-{ backupRemotePrefix, ... }:
+{ backupRemotePrefix, config, ... }:
 
 let
   hostName = "flagg";
@@ -80,8 +80,15 @@ in
     enable = true;
   };
 
+  sops.secrets.alertmanager_telegram_env = {
+    sopsFile = ../../secrets/alertmanager-telegram.env;
+    format = "dotenv";
+    key = "";
+  };
+
   services.homelab.alertmanager = {
     enable = true;
+    environmentFile = config.sops.secrets.alertmanager_telegram_env.path;
   };
 
   services.homelab.grafana = {

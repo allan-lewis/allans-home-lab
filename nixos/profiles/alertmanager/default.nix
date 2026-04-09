@@ -1,7 +1,8 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 let
   cfg = config.services.homelab.alertmanager;
+  telegramTemplatePath = "/etc/alertmanager/config/telegram.tmpl";
 in
 {
   options.services.homelab.alertmanager = {
@@ -40,10 +41,14 @@ in
     environmentFile = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
       default = null;
+      example = lib.literalExpression ''config.sops.secrets.alertmanager_telegram_env.path'';
     };
   };
 
   config = lib.mkIf cfg.enable {
+    environment.etc."alertmanager/config/telegram.tmpl".source =
+      ../../assets/alertmanager/telegram.tmpl;
+
     services.prometheus.alertmanager = {
       enable = true;
 
@@ -55,22 +60,52 @@ in
       environmentFile = cfg.environmentFile;
       webExternalUrl = cfg.webExternalUrl;
 
-      configuration = {
-        global = { };
+      checkConfig = false;
 
-        route = {
-          receiver = "default";
-        };
+      configText = ''
+        global:
+          resolve_timeout: 5m
+          http_config:
+            follow_redirects: true
+            enable_http2: true
+          telegram_api_url: https://api.telegram.org
 
-        receivers = [
-          {
-            name = "default";
-          }
-        ];
-      };
+        route:
+          receiver: "null"
+          group_by: ["alertname"]
+          group_wait: 30s
+          group_interval: 5m
+          repeat_interval: 24h
+
+          routes:
+            - receiver: "null"
+              matchers:
+                - alertname="Watchdog"
+              continue: false
+
+            - receiver: "telegram"
+              matchers:
+                - severity="critical"
+              continue: false
+
+        receivers:
+          - name: "null"
+
+          - name: "telegram"
+            telegram_configs:
+              - send_resolved: true
+                api_url: https://api.telegram.org
+                bot_token: "$TELEGRAM_BOT_TOKEN"
+                chat_id: $TELEGRAM_CHAT_ID
+                message: '{{ template "telegram.default.message" . }}'
+                parse_mode: HTML
+
+        templates:
+          - ${telegramTemplatePath}
+      '';
     };
 
-    systemd.services.prometheus-alertmanager = {
+    systemd.services.alertmanager = {
       requires = [ "homelab-task-managed-state-restore.service" ];
       after = [ "homelab-task-managed-state-restore.service" ];
     };
