@@ -23,14 +23,6 @@ run_prefix := if doppler == "0" {
 #### GENERAL/CROSS-OS #######
 #############################
 
-# Prepare a Linux cloud-init seed ISO for a host (based on inventory)
-all-cloud-init-prepare host:
-  {{run_prefix}} scripts/ansible-playbook.sh "ansible/prepare-cloud-init.yaml" "localhost" "" "" "target_host={{host}}"
-
-# Write cloud-init ISOs to removable USB drives
-all-cloud-init-isos os_iso ci_iso:
-  {{run_prefix}} scripts/cloud-init-isos.sh "{{os_iso}}" "{{ci_iso}}"
-
 # Remove all non-versioned build artifacts and temporary files
 all-clean:
   {{run_prefix}} shared/scripts/clean.sh
@@ -38,6 +30,17 @@ all-clean:
 # Perform runway checks to validate that VMs can be managed
 all-runway:
   {{run_prefix}} shared/scripts/runway.sh
+
+# Render invetory artifacts
+all-inventory-build:
+	uv run --with jsonschema python3 shared/scripts/render-inventory.py
+
+#Apply or destroy a Proxmox VM using Terraform
+all-terraform host action approve="0": all-inventory-build
+  {{run_prefix}} shared/terraform/provision.sh \
+    "{{host}}" \
+    "{{action}}" \
+    "{{approve}}"
 
 #############################
 #### ARCH ###################
@@ -68,7 +71,7 @@ haos-vm-template update_stable="yes":
 #############################
 
 # Fully converge a group of Ubuntu hosts
-linux-converge tags="" limit="": inventory-build
+linux-converge tags="" limit="": all-inventory-build
   {{run_prefix}} linux/scripts/ansible-playbook.sh "playbooks/converge-linux.yaml" "{{tags}}" "{{limit}}"
 
 #############################
@@ -88,6 +91,15 @@ nixos-iso hostname disk iface ip:
 nixos-vm-template update_stable="yes":
   {{run_prefix}} nixos/scripts/vm-template.sh {{update_stable}}
 
+nixos-check host: all-inventory-build
+    ./nixos/scripts/converge.sh {{host}} check
+
+nixos-test host: all-inventory-build
+    {{run_prefix}} ./nixos/scripts/converge.sh {{host}} test
+
+nixos-switch host: all-inventory-build
+    {{run_prefix}} ./nixos/scripts/converge.sh {{host}} switch
+
 #############################
 #### TRUENAS ################
 #############################
@@ -97,7 +109,7 @@ truenas-boot-disk-capture vmid update_stable="yes":
   {{run_prefix}} appliance/scripts/boot-disk-capture.sh "truenas" "gitops-homelab-orchestrator-disks" "proxmox-images" "{{vmid}}" "{{update_stable}}"
 
 # Attach physical disks to a TrueNAS host
-truenas-attach-disks vmid: inventory-build
+truenas-attach-disks vmid: all-inventory-build
   {{run_prefix}} appliance/scripts/attach-disks.sh "{{vmid}}" "truenas" "nas"
 
 # Prepare a Proxmox VM template for cloning TrueNAS VMs
@@ -111,30 +123,3 @@ truenas-vm-template update_stable="yes":
 # Prepare a Proxmox VM template suitable for Ubuntu installations
 ubuntu-vm-template update_stable="yes":
   {{run_prefix}} linux/scripts/vm-template-ubuntu.sh {{update_stable}}
-
-#############################
-#### NIXOS/GITOPS ###########
-#### EXPERIMENTAL! ##########
-#############################
-
-NIXOS_GITOPS_DIR := "./infra/os/nixos-gitops"
-
-inventory-build:
-	uv run --with jsonschema python3 shared/scripts/render-inventory.py
-
-nix-check host: inventory-build
-    ./nixos/scripts/converge.sh {{host}} check
-
-nix-test host: inventory-build
-    {{run_prefix}} ./nixos/scripts/converge.sh {{host}} test
-
-nix-switch host: inventory-build
-    {{run_prefix}} ./nixos/scripts/converge.sh {{host}} switch
-
-#Apply or destroy a Proxmox VM using Terraform
-terraform host action approve="0": inventory-build
-  {{run_prefix}} shared/terraform/provision.sh \
-    "{{host}}" \
-    "{{action}}" \
-    "{{approve}}"
-
