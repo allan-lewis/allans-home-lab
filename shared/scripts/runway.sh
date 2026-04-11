@@ -102,14 +102,15 @@ validate_required_inputs() {
   [[ -n "${PM_TOKEN_SECRET:-}" ]] || missing+=("PM_TOKEN_SECRET")
   [[ -n "${PVE_NODE:-}" ]] || missing+=("PVE_NODE")
   [[ -n "${PVE_STORAGE_VM:-}" ]] || missing+=("PVE_STORAGE_VM")
+  [[ -n "${PVE_STORAGE_ISO:-}" ]] || missing+=("PVE_STORAGE_ISO")
 
   if [[ "${#missing[@]}" -eq 0 ]]; then
     log_pass "Required inputs are populated"
     return 0
   fi
 
-  add_fail "Missing required inputs: $(IFS=', '; echo "${missing[*]}")"
-  return 0
+  log_fail "Missing required inputs: $(IFS=,; echo "${missing[*]}")"
+  return 1
 }
 
 # ------------------------------------------------------------------------------
@@ -609,10 +610,9 @@ PY
 print_summary() {
   log_section "Final status"
 
-  local first=1
-  local reason
   local fail_count=0
   local warn_count=0
+  local reason
 
   if declare -p FAIL_REASONS >/dev/null 2>&1; then
     fail_count=${#FAIL_REASONS[@]}
@@ -622,31 +622,52 @@ print_summary() {
     warn_count=${#WARN_REASONS[@]}
   fi
 
-  printf "%s: [" "$RUNWAY_STATUS"
+  printf "\n"
+
+  if (( fail_count == 0 && warn_count == 0 )); then
+    printf "${GREEN}${BOLD}"
+    printf "╔══════════════════════════════════════════════╗\n"
+    printf "║           RUNWAY CLEARED FOR TAKEOFF         ║\n"
+    printf "╚══════════════════════════════════════════════╝\n"
+    printf "${RESET}"
+
+  elif (( fail_count == 0 && warn_count > 0 )); then
+    printf "${YELLOW}${BOLD}"
+    printf "╔══════════════════════════════════════════════╗\n"
+    printf "║        RUNWAY CLEAR WITH ADVISORIES          ║\n"
+    printf "╚══════════════════════════════════════════════╝\n"
+    printf "${RESET}"
+
+  else
+    printf "${RED}${BOLD}"
+    printf "╔══════════════════════════════════════════════╗\n"
+    printf "║            RUNWAY NOT CLEARED                ║\n"
+    printf "╚══════════════════════════════════════════════╝\n"
+    printf "${RESET}"
+  fi
+
+  printf "\n"
+  printf "  ${GREEN}PASS${RESET}  Checks passed\n"
+  printf "  ${YELLOW}WARN${RESET}  %d issue(s)\n" "$warn_count"
+  printf "  ${RED}FAIL${RESET}  %d issue(s)\n" "$fail_count"
 
   if (( fail_count > 0 )); then
+    printf "\n${RED}${BOLD}Failures:${RESET}\n"
     for reason in "${FAIL_REASONS[@]}"; do
-      if [[ $first -eq 0 ]]; then
-        printf ", "
-      fi
-      printf "%q" "$reason"
-      first=0
+      printf "  ✖ %s\n" "$reason"
     done
   fi
 
   if (( warn_count > 0 )); then
+    printf "\n${YELLOW}${BOLD}Warnings:${RESET}\n"
     for reason in "${WARN_REASONS[@]}"; do
-      if [[ $first -eq 0 ]]; then
-        printf ", "
-      fi
-      printf "%q" "$reason"
-      first=0
+      printf "  ⚠ %s\n" "$reason"
     done
   fi
 
-  printf "]\n"
+  printf "\n"
 
-  if [[ "$RUNWAY_STATUS" != "OK" ]]; then
+  if (( fail_count > 0 )); then
     exit 1
   fi
 }
