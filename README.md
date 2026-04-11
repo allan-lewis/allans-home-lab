@@ -35,7 +35,7 @@ Each area has a clear responsibility and avoids overlap. This keeps systems easi
 
 ### Inventory-Driven Design
 
-All host definitions live in the `inventory/` directory as TOML files.
+All host definitions live in the [`inventory/`](inventory/) directory as TOML files.
 
 - The inventory is the single source of truth
 - Tool-specific configurations (Terraform, Ansible, NixOS inputs) are generated from it
@@ -67,14 +67,14 @@ The goal is to make rebuilding a host straightforward, predictable, and preferre
 
 For more details, see:
 
-- `nixos/`
-- `docs/nixos.md`
+- [`nixos/`](nixos/)
+- [`docs/nixos.md`](docs/nixos.md)
 
 ---
 
 ## Appliance VM Management (Proxmox + Terraform)
 
-Appliance VMs are managed separately from NixOS hosts and live under the `appliance/` directory.
+Appliance VMs are managed separately from NixOS hosts and live under the [`appliance/`](appliance/) directory.
 
 These include systems such as:
 
@@ -92,13 +92,13 @@ This approach treats appliances as reproducible infrastructure while respecting 
 
 For more details, see:
 
-- `docs/appliances.md`
+- [`docs/appliances.md`](docs/appliances.md)
 
 ---
 
 ## Legacy Linux VM Management (Ansible)
 
-Legacy Linux hosts (primarily Arch and Ubuntu) are managed under the `linux/` directory using Ansible.
+Legacy Linux hosts (primarily Arch and Ubuntu) are managed under the [`linux/`](linux/) directory using Ansible.
 
 These systems are retained for:
 
@@ -110,7 +110,7 @@ This is no longer the primary approach for managing infrastructure. NixOS has re
 
 For more details, see:
 
-- `docs/legacy.md`
+- [`docs/legacy.md`](docs/legacy.md)
 
 ---
 
@@ -118,7 +118,7 @@ For more details, see:
 
 The project is operated through a combination of:
 
-- The `Justfile` as the primary interface
+- The [`Justfile`](Justfile) as the primary interface
 - Supporting scripts located alongside the features they support
 - Tool-specific workflows (NixOS rebuilds, Terraform applies, Ansible runs)
 
@@ -132,7 +132,7 @@ Commands are intentionally routed through the Justfile to keep workflows consist
 
 For more details, see:
 
-- `docs/operations.md`
+- [`docs/operations.md`](docs/operations.md)
 
 ---
 
@@ -140,13 +140,13 @@ For more details, see:
 
 The repository is organized around the core areas of responsibility:
 
-- `inventory/` — Source of truth (TOML host definitions)
-- `nixos/` — NixOS configurations and modules
-- `appliance/` — Appliance VM workflows and definitions
-- `linux/` — Legacy Ansible-based systems
-- `shared/` — Cross-cutting logic and templates
-- `docs/` — Detailed documentation
-- `Justfile` — Operational entry point
+- [`inventory/`](inventory/) — Source of truth (TOML host definitions)
+- [`nixos/`](nixos/) — NixOS configurations and modules
+- [`appliance/`](appliance/) — Appliance VM workflows and definitions
+- [`linux/`](linux/) — Legacy Ansible-based systems
+- [`shared/`](shared/) — Cross-cutting logic and templates
+- [`docs/`](docs/) — Detailed documentation
+- [`Justfile`](Justfile) — Operational entry point
 
 ---
 
@@ -156,11 +156,11 @@ The README provides a high-level overview.
 
 For more detailed information:
 
-- NixOS → `docs/nixos.md`
-- Appliances → `docs/appliances.md`
-- Legacy → `docs/legacy.md`
-- Operations → `docs/operations.md`
-- Notes → `docs/notes.md`
+- NixOS → [`docs/nixos.md`](docs/nixos.md)
+- Appliances → [`docs/appliances.md`](docs/appliances.md)
+- Legacy → [`docs/legacy.md`](docs/legacy.md)
+- Operations → [`docs/operations.md`](docs/operations.md)
+- Notes → [`docs/notes.md`](docs/notes.md)
 
 Start here for context, then move into the relevant section based on what you are trying to do.
 
