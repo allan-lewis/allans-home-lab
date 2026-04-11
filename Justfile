@@ -35,17 +35,9 @@ all-cloud-init-isos os_iso ci_iso:
 all-clean:
   {{run_prefix}} shared/scripts/clean.sh
 
-# Runway checks (OS/persona independent)
-all-proxmox-runway:
-  {{run_prefix}} scripts/proxmox-runway.sh
-
-# Reboot a group of hosts (default: dryrun)
-all-reboot group action="dryrun":
-  {{run_prefix}} scripts/reboot.sh "{{group}}" "{{action}}"
-
-# Shut down a group of hosts
-all-shutdown group:
-  {{run_prefix}} scripts/shutdown.sh "{{group}}"
+# Perform runway checks to validate that VMs can be managed
+all-runway:
+  {{run_prefix}} shared/scripts/runway.sh
 
 #############################
 #### ARCH ###################
