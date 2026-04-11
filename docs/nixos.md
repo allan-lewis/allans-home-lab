@@ -362,29 +362,71 @@ That split makes it easier to reason about where a given value should live and h
 
 ## Secrets Handling
 
-Secrets are intentionally kept out of normal declarative config paths and out of the Nix store wherever possible.
+Secrets in this project are managed using `sops-nix`, with encrypted files stored directly in the repository and decrypted at runtime on the target host.
 
-In practice, this means the repo distinguishes between:
+### Where Secrets Live
 
-- declarative system configuration that is safe to commit and build
-- runtime or durable secret material that must land on the host securely
+All encrypted secret files are located under:
 
-The NixOS side uses `sops-nix` for secret delivery and wiring. That lets secrets remain encrypted in-repo while still being materialized on the host at the correct path, ownership, and permissions.
+- [`nixos/secrets/`](../nixos/secrets/)
 
-Common destination patterns include:
+These files are committed to the repo in encrypted form and are safe to version control.
 
-- `/run/secrets` for runtime-only material
-- `/var/lib/homelab-secrets` for durable host-local secret files
+---
 
-When documenting or troubleshooting secrets, the important questions are usually:
+### Editing and Managing Secrets
 
-- where is the source secret defined?
-- where does it land on disk?
-- what user or service needs access to it?
-- is the file mode correct?
-- is the consuming service pointed at the right path?
+The SOPS private key used for encryption and decryption is stored in Doppler.
 
-For this repo, secret handling is part of the host definition story, but it is still deliberately separate from normal package and service configuration.
+In practice, this means most secret management operations are performed using `doppler run` to inject the key at runtime.
+
+A typical command to create or edit a secret file looks like:
+
+```bash
+doppler run -- sops nixos/secrets/secret.yaml
+```
+
+This ensures:
+- the private key is not stored locally on disk
+- secrets can be safely edited without manual key management
+- the workflow remains consistent across environments
+
+---
+
+### How Secrets Are Used
+
+Secrets are decrypted and materialized on the host via `sops-nix` during system activation.
+
+They are not stored in the Nix store. Instead, they are written to controlled locations on the filesystem with explicit ownership and permissions.
+
+Common destination patterns:
+
+- `/run/secrets` — runtime-only, ephemeral secrets
+- `/var/lib/homelab-secrets` — durable, host-local secrets
+
+---
+
+### Things to Verify When Debugging
+
+If a secret is not working as expected, check:
+
+- the correct SOPS file is referenced
+- the secret is defined in [`nixos/secrets/`](../nixos/secrets/)
+- the destination path on the host is correct
+- file ownership and permissions are correct
+- the consuming service is pointing to the correct path
+
+---
+
+### Design Notes
+
+Secrets are intentionally kept separate from normal system configuration.
+
+- NixOS defines *how* secrets are used
+- SOPS defines *what* the secret values are
+- Doppler provides secure access to the decryption key
+
+This separation keeps sensitive data out of the Nix store while still allowing secrets to be managed declaratively.
 
 ---
 
