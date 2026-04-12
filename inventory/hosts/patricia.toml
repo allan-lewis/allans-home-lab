@@ -1,0 +1,39 @@
+name = "patricia"
+hostname = "patricia"
+
+platform = "nixos"
+variant = "nixos"
+
+role = "r stack"
+description = "NixOS R Stack"
+
+groups = ["nixos"]
+
+[management]
+provisioner = "terraform"
+converger = "nixos"
+
+[runtime]
+kind = "vm"
+hypervisor = "proxmox"
+node = "maturin"
+
+[resources.cpu]
+cores = 4
+sockets = 1
+
+[resources]
+memory_mb = 8192
+disk_gb = 64
+
+[network]
+mode = "static"
+dns = ["192.168.86.1"]
+
+[network.ipv4]
+address = "192.168.86.224"
+gateway = "192.168.86.222"
+
+[provisioning.terraform]
+cloud_init = true
+agent = true
