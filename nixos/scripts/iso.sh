@@ -23,8 +23,13 @@ if [[ "$IP_ADDR" == "$PREFIX" ]]; then
   exit 1
 fi
 
+USER_NAME="lab"
+STATE_VERSION="25.11"
+NIXPKGS_REF="nixos-25.11"
+
 echo "=== NixOS ISO build ==="
 echo "Host name             : ${HOSTNAME}"
+echo "Network interface     : ${IFACE}"
 echo "Disk                  : ${DISK}"
 echo "IP range              : ${IP_CIDR}"
 echo "IP address            : ${IP_ADDR}"
@@ -448,3 +453,4 @@ info "Done. USB stick is ready."
 
 info "Post-write blkid (best-effort):"
 $SUDO blkid "$USB_DISK" || true
+
