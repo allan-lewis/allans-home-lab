@@ -6,6 +6,22 @@ A GitOps-driven homelab centered on NixOS host management, with supporting workf
 
 ---
 
+## Documentation
+
+- **[NixOS](docs/nixos.md)**  
+  End-to-end management of NixOS hosts, including VM and bare metal workflows, rebuild strategies, and secrets handling.
+
+- **[Appliances](docs/appliances.md)**  
+  Managing Home Assistant and TrueNAS VMs using disk capture, templates, and Terraform-driven lifecycle.
+
+- **[Linux VMs](docs/linux.md)**  
+  Arch and Ubuntu virtual machines provisioned with Terraform and configured using Ansible.
+
+- **[Operations](docs/operations.md)**  
+  Command reference and common workflows for running and maintaining the homelab.
+
+---
+
 ## What This Project Does
 
 This project provides a structured system for managing homelab infrastructure with a strong emphasis on reproducibility and rebuildability.
