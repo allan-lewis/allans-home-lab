@@ -1,6 +1,10 @@
 { nasRootFolder, ... }:
 
 {
+  _module.args = {
+    prowlarrConfigDir = "/etc/prowlarr";
+  };
+
   imports = [
     ../../modules/r-stack.nix
   ];
