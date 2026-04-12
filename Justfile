@@ -37,10 +37,7 @@ all-inventory-build:
 
 #Apply or destroy a Proxmox VM using Terraform
 all-terraform host action approve="0": all-inventory-build
-  {{run_prefix}} shared/terraform/provision.sh \
-    "{{host}}" \
-    "{{action}}" \
-    "{{approve}}"
+  {{run_prefix}} shared/terraform/provision.sh "{{host}}" "{{action}}" "{{approve}}"
 
 #############################
 #### ARCH ###################
@@ -80,23 +77,21 @@ linux-converge tags="" limit="": all-inventory-build
 
 # Prepare a custom bootable ISO for installing NixOS on a bare metal VM
 nixos-iso hostname disk iface ip:
-  {{run_prefix}} scripts/nixos-iso.sh \
-    --out artifacts/nix-iso/{{hostname}} \
-    --hostname {{hostname}} \
-    --disk {{disk}} \
-    --iface {{iface}} \
-    --ip {{ip}}
+  {{run_prefix}} nixos/scripts/iso.sh {{hostname}} {{disk}} {{iface}} {{ip}}
 
 # Prepare a Proxmox VM template for cloning NixOS VMs
 nixos-vm-template update_stable="yes":
   {{run_prefix}} nixos/scripts/vm-template.sh {{update_stable}}
 
+# Check NixOS config/build without applying anything to the remote host
 nixos-check host: all-inventory-build
     ./nixos/scripts/converge.sh {{host}} check
 
+# Build and temporarily apply new configuration to a remote host
 nixos-test host: all-inventory-build
     {{run_prefix}} ./nixos/scripts/converge.sh {{host}} test
 
+# Build and permanently apply new configuration to a remote host
 nixos-switch host: all-inventory-build
     {{run_prefix}} ./nixos/scripts/converge.sh {{host}} switch
 
