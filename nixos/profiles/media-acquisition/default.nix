@@ -7,6 +7,8 @@
     bazarrConfigDir = "/etc/bazarr";
     lidarrConfigDir = "/etc/lidarr";
     prowlarrConfigDir = "/etc/prowlarr";
+    radarrConfigDir = "/etc/radarr";
+    sonarrConfigDir = "/etc/sonarr";
     transmissionConfigDir = "/etc/transmission";
     transmissionWatchDir = "/var/lib/transmission/watch";
   };
@@ -37,6 +39,24 @@
     prowlarrConfig = {
       local = "/etc/prowlarr";
       remote = "${nasRootFolder}/prowlarr/config";
+      restore = true;
+      backup = true;
+      owner = "lab";
+      group = "lab";
+      mode = "0755";
+    };
+    radarrConfig = {
+      local = "/etc/radarr";
+      remote = "${nasRootFolder}/radarr/config";
+      restore = true;
+      backup = true;
+      owner = "lab";
+      group = "lab";
+      mode = "0755";
+    };
+    sonarrConfig = {
+      local = "/etc/sonarr";
+      remote = "${nasRootFolder}/sonarr/config";
       restore = true;
       backup = true;
       owner = "lab";
