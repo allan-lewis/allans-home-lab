@@ -3,6 +3,8 @@
   bazarrConfigDir, 
   lidarrConfigDir, 
   prowlarrConfigDir, 
+  radarrConfigDir,
+  sonarrConfigDir,
   transmissionConfigDir, transmissionWatchDir,
   ... 
 }:
@@ -76,6 +78,54 @@
     extraOptions = [ "--replace" ];
   };
 
+  virtualisation.oci-containers.containers.radarr = {
+    image = "lscr.io/linuxserver/radarr:6.1.1@sha256:5e737ed81ecb66cd996a7e84a036e7715da7f2db278b7f80af48b01ad48d1a2e";
+
+    autoStart = true;
+
+    ports = [ "7878:7878" ];
+
+    volumes = [
+      "${radarrConfigDir}:/config"
+      "${mediaLibraryDir }/downloads:/downloads"
+      "${mediaLibraryDir }/movies:/movies"
+    ];
+
+    environment = {
+      PUID = toString config.users.users.lab.uid;
+      PGID = toString config.users.groups.lab.gid;
+      TZ = config.time.timeZone;
+    };
+
+    networks = [ "media" ];
+
+    extraOptions = [ "--replace" ];
+  };
+
+  virtualisation.oci-containers.containers.sonarr = {
+    image = "lscr.io/linuxserver/sonarr:4.0.16@sha256:a46a49daf0ee46601e70226c9ea1a94dec28166b398785fb8c59d399bd844652";
+
+    autoStart = true;
+
+    ports = [ "8989:8989" ];
+
+    volumes = [
+      "${sonarrConfigDir}:/config"
+      "${mediaLibraryDir }/downloads:/downloads"
+      "${mediaLibraryDir }/tv:/tv"
+    ];
+
+    environment = {
+      PUID = toString config.users.users.lab.uid;
+      PGID = toString config.users.groups.lab.gid;
+      TZ = config.time.timeZone;
+    };
+
+    networks = [ "media" ];
+
+    extraOptions = [ "--replace" ];
+  };
+
   virtualisation.oci-containers.containers.transmission = {
     image = "lscr.io/linuxserver/transmission:4.1.1@sha256:e8e4c55ea4b1ed0d7cea4d40160c94688d6cbbe3dba6d159c97c4f6641413c71";
 
@@ -106,6 +156,8 @@
     before = [ "podman-bazarr.service"
                "podman-lidarr.service"
                "podman-prowlarr.service"
+               "podman-radarr.service"
+               "podman-sonarr.service"
                "podman-transmission.service" 
     ];
     requires = [ "homelab-task-managed-state-restore.service" ];
@@ -141,6 +193,28 @@
   };
 
   systemd.services.podman-prowlarr = {
+    requires = [
+      "podman-network-media.service"
+      "homelab-task-managed-state-restore.service"
+    ];
+    after = [
+      "podman-network-media.service"
+      "homelab-task-managed-state-restore.service"
+    ];
+  };
+
+  systemd.services.podman-radarr = {
+    requires = [
+      "podman-network-media.service"
+      "homelab-task-managed-state-restore.service"
+    ];
+    after = [
+      "podman-network-media.service"
+      "homelab-task-managed-state-restore.service"
+    ];
+  };
+
+  systemd.services.podman-sonarr = {
     requires = [
       "podman-network-media.service"
       "homelab-task-managed-state-restore.service"
