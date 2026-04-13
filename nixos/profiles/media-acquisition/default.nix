@@ -2,7 +2,10 @@
 
 {
   _module.args = {
+    mediaLibraryDir = "/data/media-library";
+
     bazarrConfigDir = "/etc/bazarr";
+    lidarrConfigDir = "/etc/lidarr";
     prowlarrConfigDir = "/etc/prowlarr";
   };
 
@@ -11,25 +14,34 @@
   ];
 
   homelab.managedDirectories.entries = {
-  bazarrConfig = {
-    local = "/etc/bazarr";
-    remote = "${nasRootFolder}/bazarr/config";
-    restore = true;
-    backup = true;
-    owner = "lab";
-    group = "lab";
-    mode = "0755";
+    bazarrConfig = {
+      local = "/etc/bazarr";
+      remote = "${nasRootFolder}/bazarr/config";
+      restore = true;
+      backup = true;
+      owner = "lab";
+      group = "lab";
+      mode = "0755";
+    };
+    lidarrConfig = {
+      local = "/etc/lidarr";
+      remote = "${nasRootFolder}/lidarr/config";
+      restore = true;
+      backup = true;
+      owner = "lab";
+      group = "lab";
+      mode = "0755";
+    };
+    prowlarrConfig = {
+      local = "/etc/prowlarr";
+      remote = "${nasRootFolder}/prowlarr/config";
+      restore = true;
+      backup = true;
+      owner = "lab";
+      group = "lab";
+      mode = "0755";
+    };
   };
-  prowlarrConfig = {
-    local = "/etc/prowlarr";
-    remote = "${nasRootFolder}/prowlarr/config";
-    restore = true;
-    backup = true;
-    owner = "lab";
-    group = "lab";
-    mode = "0755";
-  };
-};
 
 fileSystems = {
   "/data/media-library" = {

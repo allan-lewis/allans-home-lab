@@ -1,4 +1,4 @@
-{ config, pkgs, bazarrConfigDir, prowlarrConfigDir, ... }:
+{ config, pkgs, mediaLibraryDir, bazarrConfigDir, lidarrConfigDir, prowlarrConfigDir, ... }:
 
 {
   virtualisation.oci-containers.containers.prowlarr = {
@@ -45,10 +45,34 @@
     extraOptions = [ "--replace" ];
   };
 
+  virtualisation.oci-containers.containers.lidarr = {
+    image = "lscr.io/linuxserver/lidarr:3.1.0@sha256:c47f24220fd018c4d114813d9e8d9682fdb6eb47fad99f9895dbe3a40203108f";
+
+    autoStart = true;
+
+    ports = [ "8686:8686" ];
+
+    volumes = [
+      "${lidarrConfigDir}:/config"
+      "${mediaLibraryDir }/downloads:/downloads"
+      "${mediaLibraryDir }/music:/music"
+    ];
+
+    environment = {
+      PUID = toString config.users.users.lab.uid;
+      PGID = toString config.users.groups.lab.gid;
+      TZ = config.time.timeZone;
+    };
+
+    networks = [ "media" ];
+
+    extraOptions = [ "--replace" ];
+  };
+
   systemd.services.podman-network-media = {
     description = "Create podman network: media";
     wantedBy = [ "multi-user.target" ];
-    before = [ "podman-bazarr.service" "podman-prowlarr.service" ];
+    before = [ "podman-bazarr.service" "podman-lidarr.service" "podman-prowlarr.service" ];
     requires = [ "homelab-task-managed-state-restore.service" ];
     after = [ "homelab-task-managed-state-restore.service" ];
 
@@ -60,6 +84,17 @@
   };
 
   systemd.services.podman-bazarr = {
+    requires = [
+      "podman-network-media.service"
+      "homelab-task-managed-state-restore.service"
+    ];
+    after = [
+      "podman-network-media.service"
+      "homelab-task-managed-state-restore.service"
+    ];
+  };
+
+  systemd.services.podman-lidarr = {
     requires = [
       "podman-network-media.service"
       "homelab-task-managed-state-restore.service"
