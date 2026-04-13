@@ -1,4 +1,11 @@
-{ config, pkgs, mediaLibraryDir, bazarrConfigDir, lidarrConfigDir, prowlarrConfigDir, ... }:
+{ config, pkgs, 
+  mediaLibraryDir, 
+  bazarrConfigDir, 
+  lidarrConfigDir, 
+  prowlarrConfigDir, 
+  transmissionConfigDir, transmissionWatchDir,
+  ... 
+}:
 
 {
   virtualisation.oci-containers.containers.prowlarr = {
@@ -69,10 +76,38 @@
     extraOptions = [ "--replace" ];
   };
 
+  virtualisation.oci-containers.containers.transmission = {
+    image = "lscr.io/linuxserver/transmission:4.1.1@sha256:e8e4c55ea4b1ed0d7cea4d40160c94688d6cbbe3dba6d159c97c4f6641413c71";
+
+    autoStart = true;
+
+    ports = [ "9091:9091" ];
+
+    volumes = [
+      "${transmissionConfigDir}:/config"
+      "${transmissionWatchDir}:/watch"
+      "${mediaLibraryDir }/downloads:/downloads"
+    ];
+
+    environment = {
+      PUID = toString config.users.users.lab.uid;
+      PGID = toString config.users.groups.lab.gid;
+      TZ = config.time.timeZone;
+    };
+
+    networks = [ "media" ];
+
+    extraOptions = [ "--replace" ];
+  };
+
   systemd.services.podman-network-media = {
     description = "Create podman network: media";
     wantedBy = [ "multi-user.target" ];
-    before = [ "podman-bazarr.service" "podman-lidarr.service" "podman-prowlarr.service" ];
+    before = [ "podman-bazarr.service"
+               "podman-lidarr.service"
+               "podman-prowlarr.service"
+               "podman-transmission.service" 
+    ];
     requires = [ "homelab-task-managed-state-restore.service" ];
     after = [ "homelab-task-managed-state-restore.service" ];
 
@@ -106,6 +141,17 @@
   };
 
   systemd.services.podman-prowlarr = {
+    requires = [
+      "podman-network-media.service"
+      "homelab-task-managed-state-restore.service"
+    ];
+    after = [
+      "podman-network-media.service"
+      "homelab-task-managed-state-restore.service"
+    ];
+  };
+
+  systemd.services.podman-transmission = {
     requires = [
       "podman-network-media.service"
       "homelab-task-managed-state-restore.service"
