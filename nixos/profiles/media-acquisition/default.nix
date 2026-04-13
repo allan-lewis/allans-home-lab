@@ -2,6 +2,7 @@
 
 {
   _module.args = {
+    bazarrConfigDir = "/etc/bazarr";
     prowlarrConfigDir = "/etc/prowlarr";
   };
 
@@ -10,7 +11,7 @@
   ];
 
   homelab.managedDirectories.entries = {
-  bazaarConfig = {
+  bazarrConfig = {
     local = "/etc/bazarr";
     remote = "${nasRootFolder}/bazarr/config";
     restore = true;
