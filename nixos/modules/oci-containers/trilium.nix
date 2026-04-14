@@ -14,7 +14,7 @@
   };
 
   virtualisation.oci-containers.containers.trilium = {
-    image = "triliumnext/trilium:v0.101.3@sha256:86c1fd689b86881c4c80a651eff39b9090d129ab578879579febcf3111815b59";
+    image = "triliumnext/trilium:v0.101.3@sha256:f9c978d08f24af19e58c7e3230218a5a6a0ab889ac261e25edb847ebd3762ff4";
 
     autoStart = true;
 
