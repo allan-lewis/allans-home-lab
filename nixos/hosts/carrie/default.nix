@@ -14,8 +14,8 @@ in
     ../../profiles/base
     ../../profiles/virtual-machine
 
-    ../../modules/trilium.nix
-    ../../modules/vaultwarden.nix
+    ../../modules/oci-containers/trilium.nix
+    ../../modules/oci-containers/vaultwarden.nix
   ];
 
   networking.hostName = hostName;
