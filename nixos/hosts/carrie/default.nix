@@ -17,5 +17,7 @@ in
 
   networking.hostName = hostName;
 
+  services.homelab.managedState.enable = lib.mkForce false;
+
   system.stateVersion = "25.11";
 }
