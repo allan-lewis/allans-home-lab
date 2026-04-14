@@ -1,4 +1,4 @@
-{ backupRemotePrefix, lib, ... }:
+{ backupRemotePrefix, ... }:
 
 let
   inventoryConfig = builtins.fromTOML (builtins.readFile ../../../inventory/hosts/misery.toml);
@@ -13,11 +13,11 @@ in
   imports = [
     ../../profiles/base
     ../../profiles/virtual-machine
+
+    ../../modules/oci-containers/tautulli.nix
   ];
 
   networking.hostName = hostName;
-
-  services.homelab.managedState.enable = lib.mkForce false;
 
   system.stateVersion = "25.11";
 }
