@@ -1,11 +1,11 @@
-name = "patricia"
-hostname = "patricia"
+name = "carrie"
+hostname = "carrie"
 
 platform = "nixos"
 variant = "nixos"
 
-role = "media"
-description = "NixOS R Stack"
+role = "apps"
+description = "NixOS Apps"
 
 groups = ["nixos"]
 
@@ -31,8 +31,8 @@ mode = "static"
 dns = ["192.168.86.1"]
 
 [network.ipv4]
-address = "192.168.86.224"
-gateway = "192.168.86.222"
+address = "192.168.86.228"
+gateway = "192.168.86.1"
 
 [provisioning.terraform]
 cloud_init = true

@@ -45,6 +45,7 @@
   {
     nixosConfigurations = {
       blaine = mkHost ./hosts/blaine;
+      carrie = mkHost ./hosts/carrie;
       cujo = mkHost ./hosts/cujo;
       flagg = mkHost ./hosts/flagg;
       langolier = mkHost ./hosts/langolier;
