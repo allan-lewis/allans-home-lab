@@ -7,12 +7,14 @@ let
       host = "129monroe.com";
       url = "http://192.168.86.228:35550";
       authentik = false;
+      excludeAdmin = true;
     }
     {
       name = "129-vault";
       host = "vault.129monroe.com";
       url = "http://192.168.86.228:35550";
       authentik = false;
+      excludeAdmin = true;
     }
     {
       name = "alertmanager";
@@ -77,7 +79,7 @@ let
     {
       name = "homepage";
       host = "homepage.nixos.allanshomelab.com";
-      url = "http://192.168.86.219:3007";
+      url = "http://192.168.86.228:3007";
       authentik = false;
     }
     {
@@ -89,7 +91,7 @@ let
     {
       name = "it-tools";
       host = "tools.nixos.allanshomelab.com";
-      url = "http://192.168.86.219:8386";
+      url = "http://192.168.86.228:8386";
       authentik = false;
     }
     {
@@ -119,13 +121,13 @@ let
     {
       name = "nginx";
       host = "nginx.nixos.allanshomelab.com";
-      url = "http://192.168.86.219";
+      url = "http://192.168.86.228";
       authentik = false;
     }
     {
       name = "no-geeks-brewing";
       host = "nogeeksbrewing.com";
-      url = "http://192.168.86.219:8083";
+      url = "http://192.168.86.228:8083";
       authentik = false;
     }
     {
@@ -199,6 +201,7 @@ let
       host = "vault.allanshomelab.com";
       url = "http://192.168.86.228:35550";
       authentik = false;
+      excludeAdmin = true;
     }
     {
       name = "whoami";
@@ -211,7 +214,10 @@ let
   mkRouter = service: {
     entryPoints = [ "websecure" ];
     service = "service-${service.name}";
-    rule = "Host(`${service.host}`)";
+    rule =
+      if service ? excludeAdmin && service.excludeAdmin
+      then "Host(`${service.host}`) && !PathPrefix(`/admin`)"
+      else "Host(`${service.host}`)";
     middlewares = lib.optionals (service.authentik or false) [ "authentik" ];
     tls.certResolver = "myresolver";
   };
@@ -244,10 +250,8 @@ in
   services.traefik = {
     enable = true;
 
-    # ACME state lives here
     dataDir = "/var/lib/traefik";
 
-    # used only for static config substitution
     environmentFiles = [ config.sops.templates."traefik.env".path ];
 
     staticConfigOptions = {
