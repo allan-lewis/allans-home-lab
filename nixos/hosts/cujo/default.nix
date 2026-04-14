@@ -8,8 +8,6 @@ in
   imports = [
     ../../profiles/bare-metal
     ../../profiles/base
-    ../../profiles/containers/homepage
-    ../../profiles/containers/twingate
     ../../profiles/devops
     ../../profiles/tailscale
   ];

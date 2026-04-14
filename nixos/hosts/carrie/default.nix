@@ -14,10 +14,12 @@ in
     ../../profiles/base
     ../../profiles/virtual-machine
 
+    ../../modules/oci-containers/homepage.nix
     ../../modules/oci-containers/it-tools.nix
     ../../modules/oci-containers/nginx.nix
     ../../modules/oci-containers/no-geeks-brewing.nix
     ../../modules/oci-containers/trilium.nix
+    ../../modules/oci-containers/twingate.nix
     ../../modules/oci-containers/vaultwarden.nix
   ];
 

@@ -13,12 +13,13 @@ in
     ../../profiles/bare-metal
     ../../profiles/base
     ../../profiles/cloudflare
-    ../../profiles/containers/twingate
     ../../profiles/gatus
     ../../profiles/grafana
     ../../profiles/prometheus
     ../../profiles/tailscale
     ../../profiles/traefik
+
+    ../../modules/oci-containers/twingate.nix
   ];
 
   networking.hostName = hostName;

@@ -1,11 +1,11 @@
 { config, lib, pkgs, ... }:
 
 let
-  homepageConfigSrc = ../../../assets/homepage;
+  homepageConfigSrc = ../../assets/homepage;
 in
 {
   sops.secrets.homepage_env = {
-    sopsFile = ../../../secrets/homepage.env;
+    sopsFile = ../../secrets/homepage.env;
     format = "dotenv";
     key = "";
   };
