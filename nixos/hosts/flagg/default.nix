@@ -18,8 +18,7 @@ in
     ../../profiles/prometheus
     ../../profiles/tailscale
     ../../profiles/traefik
-
-    ../../modules/oci-containers/twingate.nix
+    ../../profiles/twingate/modest-anteater.nix
   ];
 
   networking.hostName = hostName;
@@ -64,13 +63,6 @@ in
       group = "nogroup";
       mode = "0750";
     };
-  };
-
-  services.homelab.twingateConnector = {
-    enable = true;
-    connectorKey = "modestAnteater";
-    networkName = "allanshomelab";
-    image = "twingate/connector:1.86.0@sha256:0a74cb9ffcf00e02d22199c8b9b53e3d02aa577d10615542bc3138acf7bb68f5";
   };
 
   services.homelab.cloudflaredTunnel = {

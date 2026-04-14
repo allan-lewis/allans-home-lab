@@ -12,6 +12,7 @@ in
   
   imports = [
     ../../profiles/base
+    ../../profiles/twingate/valiant-stingray.nix
     ../../profiles/virtual-machine
 
     ../../modules/oci-containers/homepage.nix
@@ -19,7 +20,6 @@ in
     ../../modules/oci-containers/nginx.nix
     ../../modules/oci-containers/no-geeks-brewing.nix
     ../../modules/oci-containers/trilium.nix
-    ../../modules/oci-containers/twingate.nix
     ../../modules/oci-containers/vaultwarden.nix
   ];
 
