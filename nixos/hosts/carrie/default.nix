@@ -13,11 +13,12 @@ in
   imports = [
     ../../profiles/base
     ../../profiles/virtual-machine
+
+    ../../modules/trilium.nix
+    ../../modules/vaultwarden.nix
   ];
 
   networking.hostName = hostName;
-
-  services.homelab.managedState.enable = lib.mkForce false;
 
   system.stateVersion = "25.11";
 }
