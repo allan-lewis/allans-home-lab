@@ -7,12 +7,14 @@ let
       host = "129monroe.com";
       url = "http://192.168.86.228:35550";
       authentik = false;
+      excludeAdmin = true;
     }
     {
       name = "129-vault";
       host = "vault.129monroe.com";
       url = "http://192.168.86.228:35550";
       authentik = false;
+      excludeAdmin = true;
     }
     {
       name = "alertmanager";
@@ -199,6 +201,7 @@ let
       host = "vault.allanshomelab.com";
       url = "http://192.168.86.228:35550";
       authentik = false;
+      excludeAdmin = true;
     }
     {
       name = "whoami";
@@ -211,7 +214,10 @@ let
   mkRouter = service: {
     entryPoints = [ "websecure" ];
     service = "service-${service.name}";
-    rule = "Host(`${service.host}`)";
+    rule =
+      if service ? excludeAdmin && service.excludeAdmin
+      then "Host(`${service.host}`) && !PathPrefix(`/admin`)"
+      else "Host(`${service.host}`)";
     middlewares = lib.optionals (service.authentik or false) [ "authentik" ];
     tls.certResolver = "myresolver";
   };
@@ -244,10 +250,8 @@ in
   services.traefik = {
     enable = true;
 
-    # ACME state lives here
     dataDir = "/var/lib/traefik";
 
-    # used only for static config substitution
     environmentFiles = [ config.sops.templates."traefik.env".path ];
 
     staticConfigOptions = {
