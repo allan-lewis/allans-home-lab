@@ -1,0 +1,39 @@
+name = "misery"
+hostname = "misery"
+
+platform = "nixos"
+variant = "nixos"
+
+role = "media"
+description = "NixOS Media"
+
+groups = ["nixos"]
+
+[management]
+provisioner = "terraform"
+converger = "nixos"
+
+[runtime]
+kind = "vm"
+hypervisor = "proxmox"
+node = "maturin"
+
+[resources.cpu]
+cores = 4
+sockets = 1
+
+[resources]
+memory_mb = 8192
+disk_gb = 128
+
+[network]
+mode = "static"
+dns = ["192.168.86.1"]
+
+[network.ipv4]
+address = "192.168.86.227"
+gateway = "192.168.86.1"
+
+[provisioning.terraform]
+cloud_init = true
+agent = true

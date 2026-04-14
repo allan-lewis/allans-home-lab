@@ -49,6 +49,7 @@
       cujo = mkHost ./hosts/cujo;
       flagg = mkHost ./hosts/flagg;
       langolier = mkHost ./hosts/langolier;
+      misery = mkHost ./hosts/misery;
       patricia = mkHost ./hosts/patricia;
       roland = mkHost ./hosts/roland;
       todash = mkHost ./hosts/todash;
