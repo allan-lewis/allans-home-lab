@@ -89,7 +89,7 @@ let
     {
       name = "it-tools";
       host = "tools.nixos.allanshomelab.com";
-      url = "http://192.168.86.219:8386";
+      url = "http://192.168.86.228:8386";
       authentik = false;
     }
     {
@@ -119,13 +119,13 @@ let
     {
       name = "nginx";
       host = "nginx.nixos.allanshomelab.com";
-      url = "http://192.168.86.219";
+      url = "http://192.168.86.228";
       authentik = false;
     }
     {
       name = "no-geeks-brewing";
       host = "nogeeksbrewing.com";
-      url = "http://192.168.86.219:8083";
+      url = "http://192.168.86.228:8083";
       authentik = false;
     }
     {

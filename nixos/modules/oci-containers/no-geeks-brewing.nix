@@ -2,7 +2,7 @@
 
 {
   sops.secrets.ngb_env = {
-    sopsFile = ../../../secrets/no-geeks-brewing.env;
+    sopsFile = ../../secrets/no-geeks-brewing.env;
     format = "dotenv";
     key = "";
   };
