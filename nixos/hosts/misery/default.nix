@@ -8,12 +8,14 @@ in
 {
   _module.args = {
     hostIp = "192.168.86.227";
+    immichUploadLocation = "/data/immich";
     mediaLibraryDir = "/data/media-library";
     nasRootFolder = defaultRemoteNasPerHostBackupVolume;
   };
   
   imports = [
     ../../profiles/base
+    ../../profiles/immich.nix
     ../../profiles/virtual-machine
 
     ../../modules/oci-containers/jellyfin.nix
@@ -29,6 +31,17 @@ in
       fsType = "nfs";
       options = [
         "ro"
+        "nofail"
+        "_netdev"
+        "x-systemd.requires=network-online.target"
+        "x-systemd.after=network-online.target"
+      ];
+    };
+    "/data/immich" = {
+      device = "192.168.86.220:/mnt/pool1/immich";
+      fsType = "nfs";
+      options = [
+        "rw"
         "nofail"
         "_netdev"
         "x-systemd.requires=network-online.target"
