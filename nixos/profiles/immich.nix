@@ -38,7 +38,7 @@
   services.homelab.immichCompose = {
     enable = true;
 
-    version = "v2.5.6";
+    version = "v2.7.5";
     sopsFile = ../secrets/immich.yaml;
 
     uploadLocation = immichUploadLocation;
