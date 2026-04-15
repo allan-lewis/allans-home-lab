@@ -16,6 +16,7 @@ in
     ../../profiles/base
     ../../profiles/virtual-machine
 
+    ../../modules/oci-containers/jellyfin.nix
     ../../modules/oci-containers/plex.nix
     ../../modules/oci-containers/tautulli.nix
   ];
