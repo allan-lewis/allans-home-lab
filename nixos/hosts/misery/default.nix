@@ -25,6 +25,18 @@ in
 
   networking.hostName = hostName;
 
+  homelab.managedDirectories.entries = {
+    immichPostgresDbDumps = {
+      local = "/var/lib/postgres-db-dumps";
+      remote = "${defaultRemoteNasPerHostBackupVolume}/immich/db-dumps";
+      restore = true;
+      backup = true;
+      owner = "root";
+      group = "root";
+      mode = "0755";
+    };
+  };
+
   fileSystems = {
     "/data/media-library" = {
       device = "192.168.86.220:/mnt/pool1/media-library";

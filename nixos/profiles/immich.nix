@@ -11,8 +11,8 @@
       remote = "${nasRootFolder}/immich/postgres-volume";
       restore = false;
       backup = false;
-      owner = "root";
-      group = "root";
+      owner = "999";
+      group = "999";
       mode = "0755";
     };
     immichRedis = {
