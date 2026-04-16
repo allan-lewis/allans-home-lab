@@ -23,6 +23,8 @@ in
     ../../modules/oci-containers/tautulli.nix
   ];
 
+  homelab.managedStateSchedule = "*:40";
+
   networking.hostName = hostName;
 
   fileSystems = {
