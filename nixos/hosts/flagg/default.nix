@@ -26,6 +26,8 @@ in
   homelab.bareMetal.interface = "eth1";
   homelab.bareMetal.address = "192.168.86.204";
 
+  homelab.managedStateSchedule = "*:30";
+
   homelab.managedDirectories.entries = {
     postgres_backup = {
       local = "/var/lib/postgres-db-dumps";
