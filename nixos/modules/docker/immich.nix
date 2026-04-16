@@ -119,10 +119,6 @@ in
 
     systemd.tmpfiles.rules = [
       "d ${cfg.appDir} 0750 root root -"
-      "d ${cfg.uploadLocation} 0750 root root -"
-      "d ${cfg.dbDataLocation} 0750 root root -"
-      "d ${cfg.redisDataLocation} 0750 root root -"
-      "d ${cfg.modelCacheLocation} 0750 root root -"
     ];
 
     networking.firewall.allowedTCPPorts =
