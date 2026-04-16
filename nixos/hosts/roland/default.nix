@@ -12,11 +12,11 @@ in
 
   networking.hostName = "roland";
 
-  security.polkit.enable = true;
+  # security.polkit.enable = true;
 
-  hardware.bluetooth.enable = true;
-  hardware.bluetooth.powerOnBoot = true;
-  services.blueman.enable = true;
+  # hardware.bluetooth.enable = true;
+  # hardware.bluetooth.powerOnBoot = true;
+  # services.blueman.enable = true;
 
   time.timeZone = lib.mkForce "America/New_York";
 
@@ -27,346 +27,343 @@ in
   };
 
   # ---- USER ----
-  users.users.lab = {
-    isNormalUser = true;
-    extraGroups = [ "wheel" "video" "audio" ];
-  };
+  # users.users.lab = {
+  #   isNormalUser = true;
+  #   extraGroups = [ "wheel" "video" "audio" ];
+  # };
 
-  home-manager.users.lab = { ... }: {
-    xdg.configFile."hypr/hyprland.conf".source =
-      ../../assets/hypr/hyprland.conf;
+  # home-manager.users.lab = { ... }: {
+  #   xdg.configFile."hypr/hyprland.conf".source =
+  #     ../../assets/hypr/hyprland.conf;
 
-    xdg.configFile."hypr/hypridle.conf".source =
-      ../../assets/hypr/hypridle.conf;
+  #   xdg.configFile."hypr/hypridle.conf".source =
+  #     ../../assets/hypr/hypridle.conf;
 
-    xdg.configFile."hypr/hyprlock.conf".source =
-      ../../assets/hypr/hyprlock.conf;
+  #   xdg.configFile."hypr/hyprlock.conf".source =
+  #     ../../assets/hypr/hyprlock.conf;
 
-    xdg.configFile."ghostty/config".source =
-      ../../assets/ghostty/config.ghostty;
+  #   xdg.configFile."ghostty/config".source =
+  #     ../../assets/ghostty/config.ghostty;
 
-    home.file."wallpapers/default.png".source =
-      ../../assets/wallpaper/nix-wallpaper-binary-blue.png;
+  #   home.file."wallpapers/default.png".source =
+  #     ../../assets/wallpaper/nix-wallpaper-binary-blue.png;
 
-    xdg.configFile."hypr/hyprpaper.conf".text = ''
-      preload = /home/lab/wallpapers/default.png
-      wallpaper = ,/home/lab/wallpapers/default.png
-    '';
+  #   xdg.configFile."hypr/hyprpaper.conf".text = ''
+  #     preload = /home/lab/wallpapers/default.png
+  #     wallpaper = ,/home/lab/wallpapers/default.png
+  #   '';
 
-    xdg.userDirs = {
-      enable = true;
-      createDirectories = true;
-    };
+  #   xdg.userDirs = {
+  #     enable = true;
+  #     createDirectories = true;
+  #   };
 
-    home.packages = [
-      pkgs.polkit_gnome
-      pkgs.wlogout
-    ];
+  #   home.packages = [
+  #     pkgs.polkit_gnome
+  #     pkgs.wlogout
+  #   ];
 
-    programs.waybar = {
-      enable = true;
+  #   programs.waybar = {
+  #     enable = true;
 
-      settings = [
-        {
-          modules-left = [
-            "custom/power"
-            "custom/identity"
-            # "custom/launcher"
-            # "custom/files"
-            # "custom/ghostty"
-            # "custom/browser"
-          ];
+  #     settings = [
+  #       {
+  #         modules-left = [
+  #           "custom/power"
+  #           "custom/identity"
+  #           # "custom/launcher"
+  #           # "custom/files"
+  #           # "custom/ghostty"
+  #           # "custom/browser"
+  #         ];
 
-          modules-center = [
-            "clock"
-            # "clock#center"
-          ];
+  #         modules-center = [
+  #           "clock"
+  #           # "clock#center"
+  #         ];
 
-          modules-right = [
-            "cpu"
-            "memory"
-            "temperature"
-            "network"
-            # "bluetooth"
-            # "pulseaudio"
-          ];
+  #         modules-right = [
+  #           "cpu"
+  #           "memory"
+  #           "temperature"
+  #           "network"
+  #           # "bluetooth"
+  #           # "pulseaudio"
+  #         ];
 
-          "custom/launcher" = {
-            # format = "";
-            format = "";
-            tooltip = false;
-            on-click = "wofi --show drun";
-          };
+  #         "custom/launcher" = {
+  #           # format = "";
+  #           format = "";
+  #           tooltip = false;
+  #           on-click = "wofi --show drun";
+  #         };
 
-          "custom/ghostty" = {
-            # format = "";
-            format = "󰆍";
-            tooltip = false;
-            on-click = "ghostty";
-          };
+  #         "custom/ghostty" = {
+  #           # format = "";
+  #           format = "󰆍";
+  #           tooltip = false;
+  #           on-click = "ghostty";
+  #         };
         
-          "custom/browser" = {
-            format = "󰇧";
-            tooltip = false;
-            on-click = "google-chrome-stable";
-          };
+  #         "custom/browser" = {
+  #           format = "󰇧";
+  #           tooltip = false;
+  #           on-click = "google-chrome-stable";
+  #         };
 
-          "custom/files" = {
-            format = "󰉖";
-            tooltip = false;
-            on-click = "thunar";
-          };
+  #         "custom/files" = {
+  #           format = "󰉖";
+  #           tooltip = false;
+  #           on-click = "thunar";
+  #         };
 
-          "bluetooth" = {
-            format = "Bt {status}";
-            tooltip = false;
-            on-click = "blueman-manager";
-          };
+  #         "bluetooth" = {
+  #           format = "Bt {status}";
+  #           tooltip = false;
+  #           on-click = "blueman-manager";
+  #         };
 
-          "pulseaudio" = {
-            format = "Vol {volume}%";
-            format-muted = "Muted";
-            tooltip = false;
-            on-click = "pactl set-sink-mute @DEFAULT_SINK@ toggle";
-            on-click-right = "pavucontrol";
-            scroll-step = 5;
-          };
+  #         "pulseaudio" = {
+  #           format = "Vol {volume}%";
+  #           format-muted = "Muted";
+  #           tooltip = false;
+  #           on-click = "pactl set-sink-mute @DEFAULT_SINK@ toggle";
+  #           on-click-right = "pavucontrol";
+  #           scroll-step = 5;
+  #         };
 
-          "network" = {
-            format-wifi = "{ipaddr}";
-            format-ethernet = "{ipaddr}";
-            format-disconnected = "Offline";
-            interface = "enp4s0";
-            tooltip = false;
-          };
+  #         "network" = {
+  #           format-wifi = "{ipaddr}";
+  #           format-ethernet = "{ipaddr}";
+  #           format-disconnected = "Offline";
+  #           interface = "enp4s0";
+  #           tooltip = false;
+  #         };
 
-          "clock#center" = {
-            format = "{:%H:%M | %A %B %d}";
-            tooltip = false;
-          };
+  #         "clock#center" = {
+  #           format = "{:%H:%M | %A %B %d}";
+  #           tooltip = false;
+  #         };
 
-          "custom/identity" = {
-            exec = "echo \"$(whoami)@$(hostname)\"";
-            interval = 60;
-            tooltip = false;
-          };
+  #         "custom/identity" = {
+  #           exec = "echo \"$(whoami)@$(hostname)\"";
+  #           interval = 60;
+  #           tooltip = false;
+  #         };
 
-          "clock" = {
-            format = "{:%H:%M | %a %b %d}";
-            tooltip-format = "{:%Y-%m-%d %H:%M:%S}";
-            tooltip = false;
-          };
+  #         "clock" = {
+  #           format = "{:%H:%M | %a %b %d}";
+  #           tooltip-format = "{:%Y-%m-%d %H:%M:%S}";
+  #           tooltip = false;
+  #         };
 
-          "custom/power" = {
-            format = "⏻";
-            tooltip = false;
-            on-click = "${pkgs.wlogout}/bin/wlogout -l /home/lab/.config/wlogout/layout -C /home/lab/.config/wlogout/style.css -b 4";
-          };
+  #         "custom/power" = {
+  #           format = "⏻";
+  #           tooltip = false;
+  #           on-click = "${pkgs.wlogout}/bin/wlogout -l /home/lab/.config/wlogout/layout -C /home/lab/.config/wlogout/style.css -b 4";
+  #         };
 
-          "cpu" = {
-            format = "CPU {usage}%";
-            tooltip = false;
-          };
+  #         "cpu" = {
+  #           format = "CPU {usage}%";
+  #           tooltip = false;
+  #         };
 
-          "memory" = {
-            format = "Mem {}%";
-            tooltip = false;
-          };
+  #         "memory" = {
+  #           format = "Mem {}%";
+  #           tooltip = false;
+  #         };
 
-          "temperature" = {
-            hwmon-path = "/sys/class/hwmon/hwmon0/temp1_input";
-            critical-threshold = 80;
-            format = "Temp {temperatureC}°C";
-            format-critical = "TEMP {temperatureC}°C";
-            tooltip = false;
-          };
-        }
-      ];
+  #         "temperature" = {
+  #           hwmon-path = "/sys/class/hwmon/hwmon0/temp1_input";
+  #           critical-threshold = 80;
+  #           format = "Temp {temperatureC}°C";
+  #           format-critical = "TEMP {temperatureC}°C";
+  #           tooltip = false;
+  #         };
+  #       }
+  #     ];
 
-      style = ''
-        * {
-          font-family: "JetBrainsMono Nerd Font", "JetBrains Mono Nerd Font", monospace;
-          font-size: 14px;
-          color: rgb(255, 255, 255);
-          background-color: rgb(20, 30, 50);
-        }
+  #     style = ''
+  #       * {
+  #         font-family: "JetBrainsMono Nerd Font", "JetBrains Mono Nerd Font", monospace;
+  #         font-size: 14px;
+  #         color: rgb(255, 255, 255);
+  #         background-color: rgb(20, 30, 50);
+  #       }
 
-        #network {
+  #       #network {
         
-        }
+  #       }
 
-        #custom-identity {
-          padding-left: 16px;
-        }
+  #       #custom-identity {
+  #         padding-left: 16px;
+  #       }
 
-        #clock {
-        }
+  #       #clock {
+  #       }
 
-        #cpu,
-        #memory,
-        #temperature,
-        #network {
-          padding: 0 8px;
-        }
+  #       #cpu,
+  #       #memory,
+  #       #temperature,
+  #       #network {
+  #         padding: 0 8px;
+  #       }
 
-        #custom-power {
-          margin-left: 8px;
-        }
+  #       #custom-power {
+  #         margin-left: 8px;
+  #       }
 
-        #custom-browser,
-        #custom-files,
-        #custom-ghostty {
-          padding: 0 8px;
-        }
-      '';
-    };
-#          padding: 0 8px;
-    xdg.configFile."wlogout/layout".text = ''
-      {
-        "label" : "lock",
-        "action" : "hyprlock",
-        "text" : "lock",
-        "keybind" : "l"
-      }
-      {
-        "label" : "logout",
-        "action" : "hyprctl dispatch exit",
-        "text" : "logout",
-        "keybind" : "e"
-      }
-      {
-        "label" : "reboot",
-        "action" : "systemctl reboot",
-        "text" : "reboot",
-        "keybind" : "r"
-      }
-      {
-        "label" : "shutdown",
-        "action" : "systemctl poweroff",
-        "text" : "shutdown",
-        "keybind" : "s"
-      }
-    '';
+  #       #custom-browser,
+  #       #custom-files,
+  #       #custom-ghostty {
+  #         padding: 0 8px;
+  #       }
+  #     '';
+  #   };
 
-xdg.configFile."wlogout/style.css".text = ''
-  * {
-    font-family: "JetBrainsMono Nerd Font", "JetBrains Mono Nerd Font", monospace;
-    color: rgb(111, 141, 184);
-  }
+    # xdg.configFile."wlogout/layout".text = ''
+    #   {
+    #     "label" : "lock",
+    #     "action" : "hyprlock",
+    #     "text" : "lock",
+    #     "keybind" : "l"
+    #   }
+    #   {
+    #     "label" : "logout",
+    #     "action" : "hyprctl dispatch exit",
+    #     "text" : "logout",
+    #     "keybind" : "e"
+    #   }
+    #   {
+    #     "label" : "reboot",
+    #     "action" : "systemctl reboot",
+    #     "text" : "reboot",
+    #     "keybind" : "r"
+    #   }
+    #   {
+    #     "label" : "shutdown",
+    #     "action" : "systemctl poweroff",
+    #     "text" : "shutdown",
+    #     "keybind" : "s"
+    #   }
+    # '';
 
-  window {
-    background-color: rgba(20, 30, 50, 0.78);
-    background-image: url("/home/lab/wallpapers/default.png");
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-  }
+# xdg.configFile."wlogout/style.css".text = ''
+#   * {
+#     font-family: "JetBrainsMono Nerd Font", "JetBrains Mono Nerd Font", monospace;
+#     color: rgb(111, 141, 184);
+#   }
 
-  button {
-    margin: 20px;
-    padding: 24px;
-    border-radius: 12px;
-    border: 2px solid rgb(111, 141, 184);
-    background: rgb(30, 45, 74);
-    box-shadow: none;
-    outline: none;
-    min-width: 180px;
-    min-height: 180px;
-  }
+#   window {
+#     background-color: rgba(20, 30, 50, 0.78);
+#     background-image: url("/home/lab/wallpapers/default.png");
+#     background-position: center;
+#     background-repeat: no-repeat;
+#     background-size: cover;
+#   }
 
-  button:hover,
-  button:focus,
-  button:active {
-    background: rgb(111, 141, 184);
-    border-color: rgb(143, 168, 201);
-    box-shadow: none;
-    outline: none;
-  }
+#   button {
+#     margin: 20px;
+#     padding: 24px;
+#     border-radius: 12px;
+#     border: 2px solid rgb(111, 141, 184);
+#     background: rgb(30, 45, 74);
+#     box-shadow: none;
+#     outline: none;
+#     min-width: 180px;
+#     min-height: 180px;
+#   }
 
-  button label {
-    font-family: "JetBrainsMono Nerd Font", "JetBrains Mono Nerd Font", monospace;
-    font-size: 18px;
-    font-weight: 500;
-    color: rgb(111, 141, 184);
-  }
+#   button:hover,
+#   button:focus,
+#   button:active {
+#     background: rgb(111, 141, 184);
+#     border-color: rgb(143, 168, 201);
+#     box-shadow: none;
+#     outline: none;
+#   }
 
-  button:hover label,
-  button:focus label,
-  button:active label {
-    color: rgb(30, 45, 74);
-  }
+#   button label {
+#     font-family: "JetBrainsMono Nerd Font", "JetBrains Mono Nerd Font", monospace;
+#     font-size: 18px;
+#     font-weight: 500;
+#     color: rgb(111, 141, 184);
+#   }
 
-  #lock,
-  #logout,
-  #reboot,
-  #shutdown {
-    background-position: center 32px;
-    background-repeat: no-repeat;
-    background-size: 64px;
-    padding-top: 92px;
-  }
+#   button:hover label,
+#   button:focus label,
+#   button:active label {
+#     color: rgb(30, 45, 74);
+#   }
 
-  #lock {
-    background-image: image(url("${pkgs.wlogout}/share/wlogout/icons/lock.png"));
-  }
+#   #lock,
+#   #logout,
+#   #reboot,
+#   #shutdown {
+#     background-position: center 32px;
+#     background-repeat: no-repeat;
+#     background-size: 64px;
+#     padding-top: 92px;
+#   }
 
-  #logout {
-    background-image: image(url("${pkgs.wlogout}/share/wlogout/icons/logout.png"));
-  }
+#   #lock {
+#     background-image: image(url("${pkgs.wlogout}/share/wlogout/icons/lock.png"));
+#   }
 
-  #reboot {
-    background-image: image(url("${pkgs.wlogout}/share/wlogout/icons/reboot.png"));
-  }
+#   #logout {
+#     background-image: image(url("${pkgs.wlogout}/share/wlogout/icons/logout.png"));
+#   }
 
-  #shutdown {
-    background-image: image(url("${pkgs.wlogout}/share/wlogout/icons/shutdown.png"));
-  }
-'';
-  };
+#   #reboot {
+#     background-image: image(url("${pkgs.wlogout}/share/wlogout/icons/reboot.png"));
+#   }
+
+#   #shutdown {
+#     background-image: image(url("${pkgs.wlogout}/share/wlogout/icons/shutdown.png"));
+#   }
+# '';
+#   };
 
   # ---- HYPRLAND ----
-  programs.hyprland.enable = true;
+  # programs.hyprland.enable = true;
 
   # Wayland + portals
-  xdg.portal.enable = true;
-  xdg.portal.extraPortals = [
-    pkgs.xdg-desktop-portal-gtk
-  ];
+  # xdg.portal.enable = true;
+  # xdg.portal.extraPortals = [
+  #   pkgs.xdg-desktop-portal-gtk
+  # ];
 
   # ---- GREETD LOGIN MANAGER ----
-  systemd.defaultUnit = "graphical.target";
+  # systemd.defaultUnit = "graphical.target";
 
-  services.greetd = {
-    enable = true;
-    settings = {
-      default_session = {
-        command = "${pkgs.tuigreet}/bin/tuigreet --cmd Hyprland";
-        user = "greeter";
-      };
-    };
-  };
+  # services.greetd = {
+  #   enable = true;
+  #   settings = {
+  #     default_session = {
+  #       command = "${pkgs.tuigreet}/bin/tuigreet --cmd Hyprland";
+  #       user = "greeter";
+  #     };
+  #   };
+  # };
 
-  systemd.services."getty@tty1".enable = false;
-  systemd.services."autovt@tty1".enable = false;
+  # systemd.services."getty@tty1".enable = false;
+  # systemd.services."autovt@tty1".enable = false;
 
   # ---- AUDIO ----
-  services.pipewire = {
-    enable = true;
-    pulse.enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-  };
+  # services.pipewire = {
+  #   enable = true;
+  #   pulse.enable = true;
+  #   alsa.enable = true;
+  #   alsa.support32Bit = true;
+  # };
 
-  security.rtkit.enable = true;
+  # security.rtkit.enable = true;
 
-  fonts.packages = with pkgs; [
-    nerd-fonts.jetbrains-mono
-  ];
+  # fonts.packages = with pkgs; [
+  #   nerd-fonts.jetbrains-mono
+  # ];
 
-  # ---- OPENSSH ----
-  services.openssh.enable = true;
-
-  services.homelab.managedState.enable = lib.mkForce false;
+  # services.homelab.managedState.enable = lib.mkForce false;
 
   system.stateVersion = "25.11";
 }
