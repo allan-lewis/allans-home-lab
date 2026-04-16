@@ -18,5 +18,7 @@ in
 
   networking.hostName = hostName;
 
+  homelab.managedStateSchedule = "*:50";
+
   system.stateVersion = "25.11";
 }

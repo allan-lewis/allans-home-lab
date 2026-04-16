@@ -17,6 +17,8 @@ in
   homelab.bareMetal.interface = "eth1";
   homelab.bareMetal.address = "192.168.86.219";
 
+  homelab.managedStateSchedule = "*:20";
+
   homelab.managedDirectories.entries = {
     test_directory = {
       local = "/home/lab/backup-restore";

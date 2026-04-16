@@ -13,6 +13,8 @@ in
 
   networking.hostName = hostName;
 
+  homelab.managedStateSchedule = "*:55";
+
   homelab.managedDirectories.entries = {
     managed_dir_0 = {
       local = "/home/lab/managed-dir-0";
