@@ -1,66 +1,32 @@
-{ config, pkgs, lib, ... }:
+{ backupRemotePrefix, config, pkgs, lib, ... }:
+
 
 let
   cfg = config.homelab.bareMetal;
+  
+  inventoryConfig = builtins.fromTOML (builtins.readFile ../../../inventory/hosts/roland.toml);
+  
+  hostName = inventoryConfig.hostname;
+  ipAddress = inventoryConfig.network.ipv4.address;
+
+  defaultRemoteNasPerHostBackupVolume = "${backupRemotePrefix}/${hostName}";
 in
 {
   imports = [
     ../../profiles/bare-metal.nix
+    ../../profiles/desktop.nix
   ];
 
-  networking.hostName = "roland";
-
-  # security.polkit.enable = true;
-
-  # hardware.bluetooth.enable = true;
-  # hardware.bluetooth.powerOnBoot = true;
-  # services.blueman.enable = true;
-
-  time.timeZone = lib.mkForce "America/New_York";
+  networking.hostName = hostName;
 
   homelab.bareMetal = {
     interface = "enp4s0";
-    address = "192.168.86.206";
-    prefixLength = 24;
+    address = ipAddress;
   };
 
-  # ---- USER ----
-  # users.users.lab = {
-  #   isNormalUser = true;
-  #   extraGroups = [ "wheel" "video" "audio" ];
-  # };
+  time.timeZone = lib.mkForce "America/New_York";
 
   # home-manager.users.lab = { ... }: {
-  #   xdg.configFile."hypr/hyprland.conf".source =
-  #     ../../assets/hypr/hyprland.conf;
-
-  #   xdg.configFile."hypr/hypridle.conf".source =
-  #     ../../assets/hypr/hypridle.conf;
-
-  #   xdg.configFile."hypr/hyprlock.conf".source =
-  #     ../../assets/hypr/hyprlock.conf;
-
-  #   xdg.configFile."ghostty/config".source =
-  #     ../../assets/ghostty/config.ghostty;
-
-  #   home.file."wallpapers/default.png".source =
-  #     ../../assets/wallpaper/nix-wallpaper-binary-blue.png;
-
-  #   xdg.configFile."hypr/hyprpaper.conf".text = ''
-  #     preload = /home/lab/wallpapers/default.png
-  #     wallpaper = ,/home/lab/wallpapers/default.png
-  #   '';
-
-  #   xdg.userDirs = {
-  #     enable = true;
-  #     createDirectories = true;
-  #   };
-
-  #   home.packages = [
-  #     pkgs.polkit_gnome
-  #     pkgs.wlogout
-  #   ];
-
   #   programs.waybar = {
   #     enable = true;
 
@@ -321,45 +287,6 @@ in
 #   }
 # '';
 #   };
-
-  # ---- HYPRLAND ----
-  # programs.hyprland.enable = true;
-
-  # Wayland + portals
-  # xdg.portal.enable = true;
-  # xdg.portal.extraPortals = [
-  #   pkgs.xdg-desktop-portal-gtk
-  # ];
-
-  # ---- GREETD LOGIN MANAGER ----
-  # systemd.defaultUnit = "graphical.target";
-
-  # services.greetd = {
-  #   enable = true;
-  #   settings = {
-  #     default_session = {
-  #       command = "${pkgs.tuigreet}/bin/tuigreet --cmd Hyprland";
-  #       user = "greeter";
-  #     };
-  #   };
-  # };
-
-  # systemd.services."getty@tty1".enable = false;
-  # systemd.services."autovt@tty1".enable = false;
-
-  # ---- AUDIO ----
-  # services.pipewire = {
-  #   enable = true;
-  #   pulse.enable = true;
-  #   alsa.enable = true;
-  #   alsa.support32Bit = true;
-  # };
-
-  # security.rtkit.enable = true;
-
-  # fonts.packages = with pkgs; [
-  #   nerd-fonts.jetbrains-mono
-  # ];
 
   system.stateVersion = "25.11";
 }
