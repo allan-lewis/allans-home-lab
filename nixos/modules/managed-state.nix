@@ -620,10 +620,6 @@ in
         assertion = cfg.schedule != null;
         message = "services.homelab.managedState.schedule must be set when enable = true";
       }
-      {
-        assertion = (cfg.readablePaths != []) || (cfg.writablePaths != []);
-        message = "services.homelab.managedState requires readablePaths and/or writablePaths to be set.";
-      }
     ];
 
     services.homelab.tasks.enable = lib.mkDefault true;

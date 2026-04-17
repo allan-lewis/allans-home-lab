@@ -5,9 +5,7 @@ let
 in
 {
   imports = [
-    ../../profiles/bare-metal
-    ../../profiles/base
-    ../../profiles/desktop
+    ../../profiles/bare-metal.nix
   ];
 
   networking.hostName = "roland";
@@ -362,8 +360,6 @@ in
   # fonts.packages = with pkgs; [
   #   nerd-fonts.jetbrains-mono
   # ];
-
-  # services.homelab.managedState.enable = lib.mkForce false;
 
   system.stateVersion = "25.11";
 }

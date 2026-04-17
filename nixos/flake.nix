@@ -23,8 +23,7 @@
 
       # ./modules/dev-checkouts.nix
       # ./modules/doppler.nix
-      # ./modules/homelab-hello.nix
-      # ./modules/homelab-tasks.nix
+      # # ./modules/homelab-hello.nix
       # ./modules/managed-directories-config.nix
       # ./modules/managed-state.nix
       # ./modules/oci-containers.nix
