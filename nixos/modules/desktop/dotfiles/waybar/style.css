@@ -1,0 +1,34 @@
+* {
+  font-family: "JetBrainsMono Nerd Font", "JetBrains Mono Nerd Font", monospace;
+  font-size: 14px;
+  color: rgb(255, 255, 255);
+  background-color: rgb(20, 30, 50);
+}
+
+#network {
+
+}
+
+#custom-identity {
+  padding-left: 16px;
+}
+
+#clock {
+}
+
+#cpu,
+#memory,
+#temperature,
+#network {
+  padding: 0 8px;
+}
+
+#custom-power {
+  margin-left: 8px;
+}
+
+#custom-browser,
+#custom-files,
+#custom-ghostty {
+  padding: 0 8px;
+}

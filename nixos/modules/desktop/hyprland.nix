@@ -39,5 +39,19 @@
       wallpaper = ,/home/lab/wallpapers/default.png
     '';
 
+    xdg.configFile."wlogout/layout".source =
+      ./dotfiles/wlogout/layout;
+
+    xdg.configFile."wlogout/style.css".source =
+      ./dotfiles/wlogout/style.css;
+
+    programs.waybar = {
+      enable = true;
+
+      settings = import ./waybar-settings.nix { inherit pkgs; };
+
+      style = builtins.readFile ./dotfiles/waybar/style.css;
+    };
+
   };
 }
