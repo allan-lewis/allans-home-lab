@@ -12,8 +12,11 @@ in
 {
   _module.args = {
     backupRoot = backupLocation;
+
+    hostAddress = inventoryConfig.network.ipv4.address;
+    hostInterface = "enp4s0";
     hostName = inventoryConfig.hostname;
-    ipAddress = inventoryConfig.network.ipv4.address;
+    hostTimeZone = "America/New_York";
   };
 
   imports = [

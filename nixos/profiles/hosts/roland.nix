@@ -1,12 +1,12 @@
-{ hostName, ipAddress, lib, ... }:
+{ hostAddress, hostName, hostInterface, hostTimeZone, lib, ... }:
 
 {
-  time.timeZone = lib.mkForce "America/New_York"; ## TODO: Source this from args
+  time.timeZone = lib.mkForce hostTimeZone;
 
   networking.hostName = hostName;
 
   homelab.bareMetal = {
-    interface = "enp4s0"; ## TODO: Source this from args
-    address = ipAddress;
+    interface = hostInterface;
+    address = hostAddress;
   };
 }
