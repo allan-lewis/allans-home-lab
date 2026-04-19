@@ -23,7 +23,7 @@
   };
 
   virtualisation.oci-containers.containers.jellyfin = {
-    image = "jellyfin/jellyfin:2026041305@sha256:7381f54b16aa544e02d33193ae43fbe0d1bc7470e179d576ee5d8d874e4952ca";
+    image = "jellyfin/jellyfin:2026041305@sha256:cd19378e55b75ebcee70a911acb077c50c2fba08e0c31f1a941d3adfcb4e1a0f";
 
     autoStart = true;
 
