@@ -20,15 +20,6 @@
     commonModules = [
       home-manager.nixosModules.home-manager
       sops-nix.nixosModules.sops
-
-      ./modules/dev-checkouts.nix
-      ./modules/doppler.nix
-      ./modules/homelab-hello.nix
-      ./modules/homelab-tasks.nix
-      ./modules/managed-directories-config.nix
-      ./modules/managed-state.nix
-      ./modules/oci-containers.nix
-      ./modules/postgres-db-backup.nix
     ];
 
     mkHost = hostPath: nixpkgs.lib.nixosSystem {

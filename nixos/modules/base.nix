@@ -5,11 +5,13 @@ let
 in
 {
   imports = [
-    ../observability
-    ../podman
-
-    ./lab-user.nix
-    ./tmpfiles.nix
+    ./homelab-hello.nix
+    ./homelab-tasks.nix
+    ./managed-directories-config.nix
+    ./managed-state.nix
+    ./oci-containers.nix
+    ./oci-containers/homelab-metrics.nix
+    ./prometheus-node-exporter.nix
   ];
 
   options.homelab = {
@@ -24,7 +26,7 @@ in
     sops.age.keyFile = "/var/lib/sops-nix/key.txt";
 
     sops.secrets.root_ssh_private_key = {
-      sopsFile = ../../secrets/ssh.yaml;
+      sopsFile = ../secrets/ssh.yaml;
       key = "root_ssh_private_key";
       path = "/root/.ssh/id_ed25519";
       owner = "root";
@@ -87,6 +89,16 @@ in
       tree-sitter
       unzip
       wget
+    ];
+
+    systemd.tmpfiles.rules = [
+      "d /home/lab/.config 0755 lab lab -"
+      "d /home/lab/.config/zsh 0755 lab lab -"
+      "d /root/.ssh 0700 root root -"
+
+      "d /etc/allans-home-lab 0755 root root -"
+      "d /etc/allans-home-lab/managed-directories 0755 root root -"
+      "d /etc/allans-home-lab/secrets 0700 root root -"
     ];
 
     services.homelab.hello = {
