@@ -1,6 +1,10 @@
 { backupRoot, hostName, ... }:
 
 {
+  imports = [
+    ../profiles/virtual-machine.nix
+  ];
+
   networking.hostName = hostName;
 
   homelab.managedStateSchedule = "*:55";

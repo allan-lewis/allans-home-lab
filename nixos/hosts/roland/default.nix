@@ -21,9 +21,6 @@ in
 
   imports = [
     ../../profiles/hosts/roland.nix
-
-    ../../profiles/bare-metal.nix
-    ../../profiles/desktop.nix
   ];
 
   system.stateVersion = "25.11";
