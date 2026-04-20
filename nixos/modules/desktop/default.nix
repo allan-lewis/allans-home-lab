@@ -3,6 +3,7 @@
 {
   imports = [
     ./hyprland.nix
+    ./wlogout.nix
   ];
 
   environment.variables = {

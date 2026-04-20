@@ -54,24 +54,23 @@ button:active {
 button label {
   font-family: "JetBrainsMono Nerd Font", "JetBrains Mono Nerd Font", monospace;
   font-size: 18px;
-  font-weight: 500;
+  font-weight: 700;
   color: rgb(111, 141, 184);
+
+  /* remove GTK weirdness */
+  text-shadow: none;
 }
 
-button:hover label {
-  color: rgb(30, 45, 74);
+button:hover label,
+button:active label,
+button:hover:focus label {
+  color: #1e2d4a;
+  text-shadow: none;
 }
 
 button:focus label {
   color: rgb(111, 141, 184);
-}
-
-button:hover:focus label {
-  color: rgb(30, 45, 74);
-}
-
-button:active label {
-  color: rgb(30, 45, 74);
+  text-shadow: none;
 }
 
 #lock,
@@ -85,17 +84,17 @@ button:active label {
 }
 
 #lock {
-  background-image: image(url("/nix/store/i96n7zks96jymdmizsl0nssdk3n60xhm-wlogout-1.2.2/share/wlogout/icons/lock.png"));
+  background-image: image(url("/home/lab/.config/wlogout/icons/lock.png"));
 }
 
 #logout {
-  background-image: image(url("/nix/store/i96n7zks96jymdmizsl0nssdk3n60xhm-wlogout-1.2.2/share/wlogout/icons/logout.png"));
+  background-image: image(url("/home/lab/.config/wlogout/icons/logout.png"));
 }
 
 #reboot {
-  background-image: image(url("/nix/store/i96n7zks96jymdmizsl0nssdk3n60xhm-wlogout-1.2.2/share/wlogout/icons/reboot.png"));
+  background-image: image(url("/home/lab/.config/wlogout/icons/reboot.png"));
 }
 
 #shutdown {
-  background-image: image(url("/nix/store/i96n7zks96jymdmizsl0nssdk3n60xhm-wlogout-1.2.2/share/wlogout/icons/shutdown.png"));
+  background-image: image(url("/home/lab/.config/wlogout/icons/shutdown.png"));
 }
