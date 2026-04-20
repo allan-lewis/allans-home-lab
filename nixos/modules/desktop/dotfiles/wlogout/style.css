@@ -1,72 +1,101 @@
-  * {
-    font-family: "JetBrainsMono Nerd Font", "JetBrains Mono Nerd Font", monospace;
-    color: rgb(111, 141, 184);
-  }
+* {
+  font-family: "JetBrainsMono Nerd Font", "JetBrains Mono Nerd Font", monospace;
+  color: rgb(111, 141, 184);
+}
 
-  window {
-    background-color: rgba(20, 30, 50, 0.78);
-    background-image: url("/home/lab/wallpapers/default.png");
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-  }
+window {
+  background-color: rgba(20, 30, 50, 0.78);
+  background-image: url("/home/lab/wallpapers/default.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
 
-  button {
-    margin: 20px;
-    padding: 24px;
-    border-radius: 12px;
-    border: 2px solid rgb(111, 141, 184);
-    background: rgb(30, 45, 74);
-    box-shadow: none;
-    outline: none;
-    min-width: 180px;
-    min-height: 180px;
-  }
+button {
+  margin: 20px;
+  padding: 24px;
+  border-radius: 12px;
+  border: 2px solid rgb(111, 141, 184);
+  background: rgb(30, 45, 74);
+  box-shadow: none;
+  outline: none;
+  min-width: 180px;
+  min-height: 180px;
+}
 
-  button:hover,
-  button:focus,
-  button:active {
-    background: rgb(111, 141, 184);
-    border-color: rgb(143, 168, 201);
-    box-shadow: none;
-    outline: none;
-  }
+button:hover {
+  background: rgb(111, 141, 184);
+  border-color: rgb(143, 168, 201);
+  box-shadow: none;
+  outline: none;
+}
 
-  button label {
-    font-family: "JetBrainsMono Nerd Font", "JetBrains Mono Nerd Font", monospace;
-    font-size: 18px;
-    font-weight: 500;
-    color: rgb(111, 141, 184);
-  }
+button:focus {
+  background: rgb(30, 45, 74);
+  border-color: rgb(111, 141, 184);
+  box-shadow: none;
+  outline: none;
+}
 
-  button:hover label,
-  button:focus label,
-  button:active label {
-    color: rgb(30, 45, 74);
-  }
+button:hover:focus {
+  background: rgb(111, 141, 184);
+  border-color: rgb(143, 168, 201);
+  box-shadow: none;
+  outline: none;
+}
 
-  #lock,
-  #logout,
-  #reboot,
-  #shutdown {
-    background-position: center 32px;
-    background-repeat: no-repeat;
-    background-size: 64px;
-    padding-top: 92px;
-  }
+button:active {
+  background: rgb(111, 141, 184);
+  border-color: rgb(143, 168, 201);
+  box-shadow: none;
+  outline: none;
+}
 
-  #lock {
-    background-image: image(url("${pkgs.wlogout}/share/wlogout/icons/lock.png"));
-  }
+button label {
+  font-family: "JetBrainsMono Nerd Font", "JetBrains Mono Nerd Font", monospace;
+  font-size: 18px;
+  font-weight: 500;
+  color: rgb(111, 141, 184);
+}
 
-  #logout {
-    background-image: image(url("${pkgs.wlogout}/share/wlogout/icons/logout.png"));
-  }
+button:hover label {
+  color: rgb(30, 45, 74);
+}
 
-  #reboot {
-    background-image: image(url("${pkgs.wlogout}/share/wlogout/icons/reboot.png"));
-  }
+button:focus label {
+  color: rgb(111, 141, 184);
+}
 
-  #shutdown {
-    background-image: image(url("${pkgs.wlogout}/share/wlogout/icons/shutdown.png"));
-  }
+button:hover:focus label {
+  color: rgb(30, 45, 74);
+}
+
+button:active label {
+  color: rgb(30, 45, 74);
+}
+
+#lock,
+#logout,
+#reboot,
+#shutdown {
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 64px;
+  padding-top: 0;
+}
+
+#lock {
+  background-image: image(url("/nix/store/i96n7zks96jymdmizsl0nssdk3n60xhm-wlogout-1.2.2/share/wlogout/icons/lock.png"));
+}
+
+#logout {
+  background-image: image(url("/nix/store/i96n7zks96jymdmizsl0nssdk3n60xhm-wlogout-1.2.2/share/wlogout/icons/logout.png"));
+}
+
+#reboot {
+  background-image: image(url("/nix/store/i96n7zks96jymdmizsl0nssdk3n60xhm-wlogout-1.2.2/share/wlogout/icons/reboot.png"));
+}
+
+#shutdown {
+  background-image: image(url("/nix/store/i96n7zks96jymdmizsl0nssdk3n60xhm-wlogout-1.2.2/share/wlogout/icons/shutdown.png"));
+}
