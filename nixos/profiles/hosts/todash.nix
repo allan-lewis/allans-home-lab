@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ../profiles/virtual-machine.nix
+    ../virtual-machine.nix
   ];
 
   networking.hostName = hostName;
