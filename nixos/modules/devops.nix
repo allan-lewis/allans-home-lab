@@ -11,7 +11,6 @@
 
   environment.systemPackages = with pkgs; [
     ansible
-    awscli2 ## TODO: MOVE TO AWS PROFILE/MODULE
     clang
     gnumake
     just
@@ -61,5 +60,17 @@
         printf '%s\n' 'homelab-task-dev_checkouts_sync.service' >> /run/nixos/activation-restart-list
       fi
     '';
+  };
+
+  home-manager.users.lab = { ... }: {
+    programs.git = {
+      enable = true;
+      settings = {
+        user = {
+          name = "Allan Lewis";
+          email = "allan.e.lewis@gmail.com";
+        };
+      };
+    };
   };
 }
