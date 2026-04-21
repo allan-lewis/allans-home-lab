@@ -2,6 +2,7 @@
 
 {
   imports = [
+    ../modules/aws/lab.nix
     ../modules/devops.nix
     ../modules/doppler.nix
     ../modules/lab-keys.nix

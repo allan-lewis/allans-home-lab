@@ -5,8 +5,6 @@
     ../bare-metal.nix
     ../desktop.nix
     ../devops.nix
-
-    ../../modules/aws/lab.nix
   ];
 
   time.timeZone = lib.mkForce hostTimeZone;
