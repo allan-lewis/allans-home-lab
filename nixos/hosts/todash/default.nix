@@ -13,8 +13,6 @@ in
 
   imports = [
     ../../profiles/hosts/todash.nix
-
-    ../../profiles/virtual-machine.nix
   ];
 
   system.stateVersion = "25.11";

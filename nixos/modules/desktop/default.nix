@@ -1,8 +1,9 @@
-{ pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 {
   imports = [
     ./hyprland.nix
+    ./wlogout.nix
   ];
 
   environment.variables = {
@@ -33,11 +34,22 @@
     xfce.thunar-volman
   ];
 
-  users.users.lab = {
-    extraGroups = [ "wheel" "video" "audio" ];
+  sops.secrets.lab_password = {
+    sopsFile = ./secrets/passwords.yaml;
   };
 
-  security.polkit.enable = true;
+  users.mutableUsers = false;
+
+  users.users.lab = {
+    extraGroups = [ "wheel" "video" "audio" ];
+
+    initialPassword = lib.mkForce null;
+    initialHashedPassword = lib.mkForce null;
+    password = lib.mkForce null;
+    hashedPassword = lib.mkForce null;
+    hashedPasswordFile = lib.mkForce config.sops.secrets.lab_password.path;
+  };
+
   security.rtkit.enable = true;
 
   fonts.packages = with pkgs; [
@@ -57,7 +69,7 @@
     enable = true;
     settings = {
       default_session = {
-        command = "${pkgs.tuigreet}/bin/tuigreet --cmd Hyprland";
+        command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --asterisks --user-menu --cmd Hyprland";
         user = "greeter";
       };
     };

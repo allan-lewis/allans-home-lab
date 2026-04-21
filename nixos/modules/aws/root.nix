@@ -1,12 +1,13 @@
 { pkgs, ... }:
 
 {
+  
   environment.systemPackages = with pkgs; [
     awscli2
   ];
 
   sops.secrets.aws_credentials = {
-    sopsFile = ../secrets/aws.yaml;
+    sopsFile = ./secrets/aws.yaml;
     key = "aws_credentials";
     path = "/var/lib/homelab-secrets/aws/credentials";
     owner = "root";
@@ -22,14 +23,8 @@
   '';
 
   systemd.tmpfiles.rules = [
-    "d /var/lib/homelab-secrets/aws 0750 root aws -"
-
     "d /root/.aws 0700 root root -"
-
     "L+ /root/.aws/config - - - - /etc/aws-config"
     "L+ /root/.aws/credentials - - - - /var/lib/homelab-secrets/aws/credentials"
-    
-    ## TODO: MAKE OPTIONAL FOR LAB
-    # "L+ /home/lab/.aws/credentials - - - - /var/lib/homelab-secrets/aws/credentials"
   ];
 }

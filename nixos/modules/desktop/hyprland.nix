@@ -8,14 +8,21 @@
     pkgs.xdg-desktop-portal-gtk
   ];
 
+  security.polkit.enable = true;
+
   home-manager.users.lab = { ... }: {
+    services.mako.enable = true;
+
     xdg.userDirs = {
       enable = true;
       createDirectories = true;
     };
 
     home.packages = [
+      pkgs.libnotify
+      pkgs.pavucontrol
       pkgs.polkit_gnome
+      pkgs.wev
       pkgs.wlogout
     ];
 
@@ -44,6 +51,13 @@
 
     xdg.configFile."wlogout/style.css".source =
       ./dotfiles/wlogout/style.css;
+
+    xdg.mimeApps.defaultApplications = {
+      "inode/directory" = [ "thunar.desktop" ];
+      "text/plain" = [ "ghostty.desktop" ];
+      "x-scheme-handler/http" = [ "google-chrome.desktop" ];
+      "x-scheme-handler/https" = [ "google-chrome.desktop" ];
+    };
 
     programs.waybar = {
       enable = true;

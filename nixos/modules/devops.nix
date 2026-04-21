@@ -1,25 +1,23 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 
 {
   imports = [
-    ./lab-user.nix
-    ./secrets.nix
-    ./tmpfiles.nix
+    ./dev-checkouts.nix
   ];
+
+  virtualisation.docker.enable = true;
+
+  users.users.lab.extraGroups = [ "docker" ];
 
   environment.systemPackages = with pkgs; [
     ansible
-    awscli2
     clang
-    doppler
     gnumake
     just
     packer
     terraform
     uv
   ];
-    
-  virtualisation.docker.enable = true;
 
   services.homelab.devCheckouts = {
     enable = true;
@@ -64,15 +62,15 @@
     '';
   };
 
-  services.homelab.doppler = {
-    enable = true;
-
-    user = "lab";
-    scopeDir = "/home/lab/src";
-
-    tokenFile = "/var/lib/homelab-secrets/doppler/doppler_token";
-
-    project = "orchestrator";
-    dopplerConfig = "mat";
+  home-manager.users.lab = { ... }: {
+    programs.git = {
+      enable = true;
+      settings = {
+        user = {
+          name = "Allan Lewis";
+          email = "allan.e.lewis@gmail.com";
+        };
+      };
+    };
   };
 }
