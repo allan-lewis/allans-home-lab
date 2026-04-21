@@ -38,6 +38,8 @@
     sopsFile = ./secrets/passwords.yaml;
   };
 
+  users.mutableUsers = false;
+
   users.users.lab = {
     extraGroups = [ "wheel" "video" "audio" ];
 

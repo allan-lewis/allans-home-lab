@@ -94,6 +94,8 @@ in
     systemd.tmpfiles.rules = [
       "d /home/lab/.config 0755 lab lab -"
       "d /home/lab/.config/zsh 0755 lab lab -"
+      "d /home/lab/.ssh 0700 lab lab -"
+
       "d /root/.ssh 0700 root root -"
 
       "d /etc/allans-home-lab 0755 root root -"

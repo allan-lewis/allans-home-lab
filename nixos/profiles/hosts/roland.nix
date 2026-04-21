@@ -7,6 +7,12 @@
     ../devops.nix
   ];
 
+  _module.args = {
+    dopplerProject = "homelab";
+    dopplerConfig = "stg";
+    dopplerTokenKey = "homelab_stg";
+  };
+
   time.timeZone = lib.mkForce hostTimeZone;
 
   networking.hostName = hostName;
