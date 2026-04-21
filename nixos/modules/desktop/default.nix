@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 {
   imports = [
@@ -34,8 +34,18 @@
     xfce.thunar-volman
   ];
 
+  sops.secrets.lab_password = {
+    sopsFile = ./secrets/passwords.yaml;
+  };
+
   users.users.lab = {
     extraGroups = [ "wheel" "video" "audio" ];
+
+    initialPassword = lib.mkForce null;
+    initialHashedPassword = lib.mkForce null;
+    password = lib.mkForce null;
+    hashedPassword = lib.mkForce null;
+    hashedPasswordFile = lib.mkForce config.sops.secrets.lab_password.path;
   };
 
   security.rtkit.enable = true;
@@ -53,15 +63,15 @@
 
   systemd.defaultUnit = "graphical.target";
 
-services.greetd = {
-  enable = true;
-  settings = {
-    default_session = {
-      command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --asterisks --user-menu --cmd Hyprland";
-      user = "greeter";
+  services.greetd = {
+    enable = true;
+    settings = {
+      default_session = {
+        command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --asterisks --user-menu --cmd Hyprland";
+        user = "greeter";
+      };
     };
   };
-};
 
   services.pipewire = {
     enable = true;
