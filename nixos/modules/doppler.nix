@@ -50,6 +50,15 @@ in
       "d ${cfg.scopeDir} 0755 ${cfg.user} ${cfg.user} - -"
     ];
 
+    sops.secrets.doppler_token = {
+      sopsFile = ../secrets/doppler.yaml;
+      key = "doppler_token";
+      path = "/var/lib/homelab-secrets/doppler/doppler_token";
+      owner = "lab";
+      group = "lab";
+      mode = "0600";
+    };
+
     systemd.services.homelab-doppler-setup = {
       description = "Homelab: configure Doppler for scoped directory";
       after = [ "network-online.target" ];

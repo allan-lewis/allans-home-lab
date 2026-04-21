@@ -4,6 +4,7 @@
   imports = [
     ../bare-metal.nix
     ../desktop.nix
+    ../devops.nix
   ];
 
   time.timeZone = lib.mkForce hostTimeZone;
