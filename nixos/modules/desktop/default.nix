@@ -38,7 +38,6 @@
     extraGroups = [ "wheel" "video" "audio" ];
   };
 
-  security.polkit.enable = true;
   security.rtkit.enable = true;
 
   fonts.packages = with pkgs; [
@@ -54,15 +53,15 @@
 
   systemd.defaultUnit = "graphical.target";
 
-  services.greetd = {
-    enable = true;
-    settings = {
-      default_session = {
-        command = "${pkgs.tuigreet}/bin/tuigreet --cmd Hyprland";
-        user = "greeter";
-      };
+services.greetd = {
+  enable = true;
+  settings = {
+    default_session = {
+      command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --asterisks --user-menu --cmd Hyprland";
+      user = "greeter";
     };
   };
+};
 
   services.pipewire = {
     enable = true;
