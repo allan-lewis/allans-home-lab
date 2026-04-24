@@ -1,21 +1,18 @@
-{ lib, ... }:
+{ config, lib, ... }:
 
-let
-  hostName = "langolier";
+let  
+  inventoryConfig = builtins.fromTOML (builtins.readFile ../../../inventory/hosts/langolier.toml);
 in
 {
+  _module.args = {
+    hostAddress = inventoryConfig.network.ipv4.address;
+    hostInterface = "enp2s0";
+    hostName = inventoryConfig.hostname;
+  };
+
   imports = [
-    ../../profiles/bare-metal
-    ../../profiles/base
-    ../../profiles/pihole
+    ../../profiles/hosts/langolier.nix
   ];
-
-  networking.hostName = hostName;
-
-  homelab.bareMetal.interface = "enp2s0";
-  homelab.bareMetal.address = "192.168.86.218";
-
-  services.homelab.managedState.enable = lib.mkForce false;
 
   system.stateVersion = "25.11";
 }
