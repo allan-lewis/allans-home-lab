@@ -79,7 +79,7 @@
   };
 
   virtualisation.oci-containers.containers.radarr = {
-    image = "lscr.io/linuxserver/radarr:6.1.1@sha256:5e737ed81ecb66cd996a7e84a036e7715da7f2db278b7f80af48b01ad48d1a2e";
+    image = "lscr.io/linuxserver/radarr:6.1.1@sha256:139e2bff7cc3adda719137c372f6cdee996aea7100f732050cb413690f97ac6e";
 
     autoStart = true;
 
