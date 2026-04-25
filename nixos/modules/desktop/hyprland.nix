@@ -22,6 +22,7 @@
       pkgs.libnotify
       pkgs.pavucontrol
       pkgs.polkit_gnome
+      pkgs.vscodium
       pkgs.wev
       pkgs.wlogout
     ];
