@@ -12,9 +12,9 @@ set -euo pipefail
 #   PVE_SSH_IP        e.g. 10.0.0.10 (direct IP, not reverse proxy)
 #
 # Optional env:
-#   UBUNTU_CLOUD_IMAGE_URL  (default: Noble cloud image)
+#   UBUNTU_CLOUD_IMAGE_URL  (default: Resolute cloud image)
+#   UBUNTU_TEMPLATE_NAME    (default: ubuntu-YYYYMMDD)
 #   UBUNTU_TEMPLATE_VMID    (if unset, we call pvesh get /cluster/nextid)
-#   UBUNTU_TEMPLATE_NAME    (default: ubuntu-2204-cloud-base-YYYYMMDD)
 #   UPDATE_STABLE           (set to yes to update vm-template-stable.json)
 ###
 
@@ -24,9 +24,8 @@ set -euo pipefail
 : "${PVE_SSH_USER:?Missing PVE_SSH_USER}"
 : "${PVE_SSH_IP:?Missing PVE_SSH_IP}"
 
-UBUNTU_CLOUD_IMAGE_URL="${UBUNTU_CLOUD_IMAGE_URL:-https://cloud-images.ubuntu.com/noble/current/noble-server-cloudimg-amd64.img}"
-# If name not provided, include date so multiple runs don't collide
-UBUNTU_TEMPLATE_NAME="${UBUNTU_TEMPLATE_NAME:-ubuntu-noble-$(date -u +"%Y%m%d")}"
+UBUNTU_CLOUD_IMAGE_URL="${UBUNTU_CLOUD_IMAGE_URL:-https://cloud-images.ubuntu.com/resolute/current/resolute-server-cloudimg-amd64.img}"
+UBUNTU_TEMPLATE_NAME="${UBUNTU_TEMPLATE_NAME:-ubuntu-$(date -u +"%Y%m%d")}"
 UPDATE_STABLE="${1:-}"
 
 REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
@@ -161,7 +160,7 @@ MANIFEST_FILE="${ARTIFACT_DIR}/vm-template-$(date -u +"%Y%m%d-%H%M%S").json"
 cat >"${MANIFEST_FILE}" <<EOF
 {
   "created_at": "${TIMESTAMP_UTC}",
-  "description": "Ubuntu cloud-image base with qemu-guest-agent and cloud-init drive",
+  "description": "Ubuntu 26.04 Resolute Raccoon cloud-image base with qemu-guest-agent and cloud-init drive",
   "name": "${UBUNTU_TEMPLATE_NAME}",
   "node": "${PVE_NODE}",
   "storage": "${PVE_STORAGE_VM}",
