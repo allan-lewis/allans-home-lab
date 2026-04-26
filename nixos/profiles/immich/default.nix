@@ -1,15 +1,29 @@
-{ config, immichUploadLocation, nasRootFolder, ...}:
+{ config, backupRoot, ...}:
 
 {
   imports = [
-    ../modules/docker/immich.nix
-    ../modules/postgres-db-backup.nix
+    ../../modules/docker/immich.nix
+    ../../modules/postgres-db-backup.nix
   ];
+
+  fileSystems = {
+    "/data/immich" = {
+      device = "192.168.86.220:/mnt/pool1/immich";
+      fsType = "nfs";
+      options = [
+        "rw"
+        "nofail"
+        "_netdev"
+        "x-systemd.requires=network-online.target"
+        "x-systemd.after=network-online.target"
+      ];
+    };
+  };
 
   homelab.managedDirectories.entries = {
     immichPostgres = {
       local = "/srv/immich/postgres";
-      remote = "${nasRootFolder}/immich/postgres-volume";
+      remote = "${backupRoot}/immich/postgres-volume";
       restore = false;
       backup = false;
       owner = "999";
@@ -18,7 +32,7 @@
     };
     immichRedis = {
       local = "/srv/immich/redis";
-      remote = "${nasRootFolder}/immich/redis";
+      remote = "${backupRoot}/immich/redis";
       restore = false;
       backup = false;
       owner = "root";
@@ -27,7 +41,7 @@
     };
     immichModelCache = {
       local = "/srv/immich/model-cache";
-      remote = "${nasRootFolder}/immich/model-cache";
+      remote = "${backupRoot}/immich/model-cache";
       restore = false;
       backup = false;
       owner = "root";
@@ -36,7 +50,7 @@
     };
     immichPostgresDbDumps = {
       local = "/var/lib/postgres-db-dumps";
-      remote = "${nasRootFolder}/immich/db-dumps";
+      remote = "${backupRoot}/immich/db-dumps";
       restore = true;
       backup = true;
       owner = "root";
@@ -49,9 +63,9 @@
     enable = true;
 
     version = "v2.7.5";
-    sopsFile = ../secrets/immich.yaml;
+    sopsFile = ./secrets/immich.yaml;
 
-    uploadLocation = immichUploadLocation;
+    uploadLocation = "/data/immich";
     dbDataLocation = "/srv/immich/postgres";
     redisDataLocation = "/srv/immich/redis";
     modelCacheLocation = "/srv/immich/model-cache";
@@ -62,7 +76,7 @@
   };
 
   sops.secrets."immich/db_password" = {
-    sopsFile = ../secrets/immich.yaml;
+    sopsFile = ./secrets/immich.yaml;
   };
 
   services.homelab.postgresDbBackup = {

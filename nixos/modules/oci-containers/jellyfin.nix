@@ -1,10 +1,10 @@
-{ config, mediaLibraryDir, nasRootFolder, ... }:
+{ config, mediaLibraryDir, backupRoot, ... }:
 
 {
   homelab.managedDirectories.entries = {
     jellyfinConfig = {
       local = "/srv/jellyfin/config";
-      remote = "${nasRootFolder}/jellyfin/config";
+      remote = "${backupRoot}/jellyfin/config";
       restore = true;
       backup = true;
       owner = "lab";
@@ -13,7 +13,7 @@
     };
     jellyfinCache = {
       local = "/srv/jellyfin/cache";
-      remote = "${nasRootFolder}/jellyfin/cache";
+      remote = "${backupRoot}/jellyfin/cache";
       restore = false;
       backup = false;
       owner = "lab";

@@ -1,10 +1,10 @@
-{ config, nasRootFolder, ... }:
+{ config, backupRoot, ... }:
 
 {
   homelab.managedDirectories.entries = {
     vaultwarden = {
       local = "/etc/tautulli";
-      remote = "${nasRootFolder}/tautulli/config";
+      remote = "${backupRoot}/tautulli/config";
       restore = true;
       backup = true;
       owner = "lab";
