@@ -1,20 +1,8 @@
-{ config, nasRootFolder, ... }:
+{ config, ... }:
 
 {
-  homelab.managedDirectories.entries = {
-    vaultwarden = {
-      local = "/var/lib/vaultwarden";
-      remote = "${nasRootFolder}/vaultwarden";
-      restore = true;
-      backup = true;
-      owner = "root";
-      group = "root";
-      mode = "0755";
-    };
-  };
-
   sops.secrets.vaultwarden_env = {
-    sopsFile = ../../secrets/vaultwarden.env;
+    sopsFile = ./secrets/vaultwarden/vaultwarden.env;
     format = "dotenv";
     key = "";
   };

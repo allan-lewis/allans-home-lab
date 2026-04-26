@@ -1,18 +1,6 @@
-{ config, nasRootFolder, ... }:
+{ config, ... }:
 
 {
-  homelab.managedDirectories.entries = {
-    trilium = {
-      local = "/var/lib/trilium";
-      remote = "${nasRootFolder}/trilium";
-      restore = true;
-      backup = true;
-      owner = "root";
-      group = "root";
-      mode = "0755";
-    };
-  };
-
   virtualisation.oci-containers.containers.trilium = {
     image = "triliumnext/trilium:v0.101.3@sha256:86c1fd689b86881c4c80a651eff39b9090d129ab578879579febcf3111815b59";
 

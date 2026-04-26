@@ -3,29 +3,17 @@
 let
   inventoryConfig = builtins.fromTOML (builtins.readFile ../../../inventory/hosts/carrie.toml);
   hostName = inventoryConfig.hostname;
-  defaultRemoteNasPerHostBackupVolume = "${backupRemotePrefix}/${hostName}";
+  backupLocation = "${backupRemotePrefix}/${hostName}";
 in
 {
   _module.args = {
-    nasRootFolder = defaultRemoteNasPerHostBackupVolume;
+    backupRoot = backupLocation;
+    hostName = inventoryConfig.hostname;
   };
-  
+
   imports = [
-    ../../profiles/base
-    ../../profiles/twingate/valiant-stingray.nix
-    ../../profiles/virtual-machine
-
-    ../../modules/oci-containers/homepage.nix
-    ../../modules/oci-containers/it-tools.nix
-    ../../modules/oci-containers/nginx.nix
-    ../../modules/oci-containers/no-geeks-brewing.nix
-    ../../modules/oci-containers/trilium.nix
-    ../../modules/oci-containers/vaultwarden.nix
+    ../../profiles/hosts/carrie.nix
   ];
-
-  networking.hostName = hostName;
-
-  homelab.managedStateSchedule = "*:10";
 
   system.stateVersion = "25.11";
 }
