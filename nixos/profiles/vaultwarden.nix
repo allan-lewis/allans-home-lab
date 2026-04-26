@@ -1,6 +1,10 @@
 { backupRoot, ... }:
 
 {
+  imports = [
+    ../modules/oci-containers/vaultwarden.nix
+  ];
+
   homelab.managedDirectories.entries = {
     vaultwarden = {
       local = "/var/lib/vaultwarden";
