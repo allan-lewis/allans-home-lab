@@ -7,7 +7,7 @@
   ];
 
   sops.secrets.openvpn-auth = {
-    sopsFile = ../../secrets/openvpn.yaml;
+    sopsFile = ./secrets/openvpn.yaml;
     key = "auth.txt";
     path = "/run/secrets/openvpn/auth.txt";
     owner = "root";
@@ -16,7 +16,7 @@
   };
 
   sops.secrets.openvpn-client-crt = {
-    sopsFile = ../../secrets/openvpn.yaml;
+    sopsFile = ./secrets/openvpn.yaml;
     key = "client.crt";
     path = "/run/secrets/openvpn/client.crt";
     owner = "root";
@@ -25,7 +25,7 @@
   };
 
   sops.secrets.openvpn-client-key = {
-    sopsFile = ../../secrets/openvpn.yaml;
+    sopsFile = ./secrets/openvpn.yaml;
     key = "client.key";
     path = "/run/secrets/openvpn/client.key";
     owner = "root";
@@ -34,7 +34,7 @@
   };
 
   sops.secrets.openvpn-tls-auth = {
-    sopsFile = ../../secrets/openvpn.yaml;
+    sopsFile = ./secrets/openvpn.yaml;
     key = "tls-auth.key";
     path = "/run/secrets/openvpn/tls-auth.key";
     owner = "root";
@@ -43,7 +43,7 @@
   };
 
   sops.secrets.openvpn-ca-crt = {
-    sopsFile = ../../secrets/openvpn.yaml;
+    sopsFile = ./secrets/openvpn.yaml;
     key = "ca.crt";
     path = "/run/secrets/openvpn/ca.crt";
     owner = "root";
@@ -54,7 +54,7 @@
   services.homelab.openvpnClient = {
     enable = true;
     name = "expressvpn";
-    configFile = ../../assets/openvpn/expressvpn/client.conf;
+    configFile = ./assets/client.conf;
     restartDaily = true;
     restartTime = "06:00";
   };

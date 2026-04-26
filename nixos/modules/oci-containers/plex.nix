@@ -1,10 +1,10 @@
-{ config, nasRootFolder, mediaLibraryDir, hostIp, ... }:
+{ config, backupRoot, mediaLibraryDir, hostAddress, ... }:
 
 {
   homelab.managedDirectories.entries = {
     plexConfig = {
       local = "/srv/plex/config";
-      remote = "${nasRootFolder}/plex/config";
+      remote = "${backupRoot}/plex/config";
       restore = true;
       backup = true;
       owner = "lab";
@@ -13,7 +13,7 @@
     };
     plexTranscode = {
       local = "/srv/plex/transcode";
-      remote = "${nasRootFolder}/plex/transcode";
+      remote = "${backupRoot}/plex/transcode";
       restore = false;
       backup = false;
       owner = "lab";
@@ -50,7 +50,7 @@
       TZ = config.time.timeZone;
       PUID = toString config.users.users.lab.uid;
       PGID = toString config.users.groups.lab.gid;
-      ADVERTISE_IP = "http://${hostIp}:32400/";
+      ADVERTISE_IP = "http://${hostAddress}:32400/";
     };
 
     extraOptions = [ "--replace" ];

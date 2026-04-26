@@ -3,22 +3,17 @@
 let
   inventoryConfig = builtins.fromTOML (builtins.readFile ../../../inventory/hosts/patricia.toml);
   hostName = inventoryConfig.hostname;
-  defaultRemoteNasPerHostBackupVolume = "${backupRemotePrefix}/${hostName}";
+  backupLocation = "${backupRemotePrefix}/${hostName}";
 in
 {
   _module.args = {
-    nasRootFolder = defaultRemoteNasPerHostBackupVolume;
+    backupRoot = backupLocation;
+    hostName = inventoryConfig.hostname;
   };
-  
+
   imports = [
-    ../../profiles/base
-    ../../profiles/media-acquisition
-    ../../profiles/virtual-machine
+    ../../profiles/hosts/patricia.nix
   ];
-
-  networking.hostName = hostName;
-
-  homelab.managedStateSchedule = "*:50";
 
   system.stateVersion = "25.11";
 }

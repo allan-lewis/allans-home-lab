@@ -2,8 +2,6 @@
 
 
 let
-  cfg = config.homelab.bareMetal;
-  
   inventoryConfig = builtins.fromTOML (builtins.readFile ../../../inventory/hosts/roland.toml);
 
   hostName = inventoryConfig.hostname;

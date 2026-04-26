@@ -1,35 +1,23 @@
 { backupRemotePrefix, ... }:
 
 let
-  hostName = "cujo";
-  defaultRemoteNasPerHostBackupVolume = "${backupRemotePrefix}/${hostName}";
+  inventoryConfig = builtins.fromTOML (builtins.readFile ../../../inventory/hosts/cujo.toml);
+
+  hostName = inventoryConfig.hostname;
+  backupLocation = "${backupRemotePrefix}/${hostName}";
 in
 {
-  imports = [
-    ../../profiles/bare-metal
-    ../../profiles/base
-    ../../profiles/devops
-    ../../profiles/tailscale
-  ];
+  _module.args = {
+    backupRoot = backupLocation;
 
-  networking.hostName = hostName;
-
-  homelab.bareMetal.interface = "eth1";
-  homelab.bareMetal.address = "192.168.86.219";
-
-  homelab.managedStateSchedule = "*:20";
-
-  homelab.managedDirectories.entries = {
-    test_directory = {
-      local = "/home/lab/backup-restore";
-      remote = "${defaultRemoteNasPerHostBackupVolume}/backup-restore";
-      restore = true;
-      backup = true;
-      owner = "lab";
-      group = "lab";
-      mode = "0755";
-    };
+    hostAddress = inventoryConfig.network.ipv4.address;
+    hostInterface = "eth1";
+    hostName = inventoryConfig.hostname;
   };
+
+  imports = [
+    ../../profiles/hosts/cujo.nix
+  ];
 
   system.stateVersion = "25.11";
 }

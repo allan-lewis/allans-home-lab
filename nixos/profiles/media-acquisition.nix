@@ -1,4 +1,4 @@
-{ nasRootFolder, ... }:
+{ backupRoot, ... }:
 
 {
   _module.args = {
@@ -14,13 +14,13 @@
   };
 
   imports = [
-    ../../modules/r-stack.nix
+    ../modules/r-stack.nix
   ];
 
   homelab.managedDirectories.entries = {
     bazarrConfig = {
       local = "/etc/bazarr";
-      remote = "${nasRootFolder}/bazarr/config";
+      remote = "${backupRoot}/bazarr/config";
       restore = true;
       backup = true;
       owner = "lab";
@@ -29,7 +29,7 @@
     };
     lidarrConfig = {
       local = "/etc/lidarr";
-      remote = "${nasRootFolder}/lidarr/config";
+      remote = "${backupRoot}/lidarr/config";
       restore = true;
       backup = true;
       owner = "lab";
@@ -38,7 +38,7 @@
     };
     prowlarrConfig = {
       local = "/etc/prowlarr";
-      remote = "${nasRootFolder}/prowlarr/config";
+      remote = "${backupRoot}/prowlarr/config";
       restore = true;
       backup = true;
       owner = "lab";
@@ -47,7 +47,7 @@
     };
     radarrConfig = {
       local = "/etc/radarr";
-      remote = "${nasRootFolder}/radarr/config";
+      remote = "${backupRoot}/radarr/config";
       restore = true;
       backup = true;
       owner = "lab";
@@ -56,7 +56,7 @@
     };
     sonarrConfig = {
       local = "/etc/sonarr";
-      remote = "${nasRootFolder}/sonarr/config";
+      remote = "${backupRoot}/sonarr/config";
       restore = true;
       backup = true;
       owner = "lab";
@@ -65,7 +65,7 @@
     };
     transmissionConfig = {
       local = "/etc/transmission";
-      remote = "${nasRootFolder}/transmission/config";
+      remote = "${backupRoot}/transmission/config";
       restore = true;
       backup = true;
       owner = "lab";
@@ -74,7 +74,7 @@
     };
     transmissionWatch = {
       local = "/var/lib/transmission/watch";
-      remote = "${nasRootFolder}/transmission/watch";
+      remote = "${backupRoot}/transmission/watch";
       restore = false;
       backup = false;
       owner = "lab";
