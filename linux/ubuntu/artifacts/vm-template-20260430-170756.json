@@ -1,10 +1,10 @@
 {
-  "created_at": "2026-04-25T01:56:44Z",
+  "created_at": "2026-04-30T17:07:56Z",
   "description": "Ubuntu 26.04 Resolute Raccoon cloud-image base with qemu-guest-agent and cloud-init drive",
-  "name": "ubuntu-20260425",
+  "name": "ubuntu-20260430",
   "node": "maturin",
   "storage": "local-lvm",
-  "vmid": 106,
+  "vmid": 108,
   "cloud_image_url": "https://cloud-images.ubuntu.com/resolute/current/resolute-server-cloudimg-amd64.img",
   "cloud_image_sha256": "8ed228c9f08a50122fa72307623d9f88d9209ba26e7e849edd584fa675e34863"
 }
