@@ -33,7 +33,7 @@
   };
 
   virtualisation.oci-containers.containers.bazarr = {
-    image = "lscr.io/linuxserver/bazarr:1.5.6@sha256:2eeeaaccff97783fde4c34c0fe9690f9acd42964a2542b577381eb807793d492";
+    image = "lscr.io/linuxserver/bazarr:1.5.6@sha256:334d4284c869e9c76fc402e981be497176c79f7f89eae0d2df95bf9ad5184cd4";
 
     autoStart = true;
 
