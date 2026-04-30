@@ -8,7 +8,7 @@
   };
 
   virtualisation.oci-containers.containers.vaultwarden = {
-    image = "vaultwarden/server:1.35.4@sha256:73f9a159204917843875eb12c5ccd9acbcbf8f15ff7f2ce43cf912eef9f97eff";
+    image = "vaultwarden/server:1.35.8@sha256:1e6ebcede9be39fc1a7617eec4c984899edd954c09bd651b121cd89732e7aef4";
 
     autoStart = true;
 
