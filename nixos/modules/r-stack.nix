@@ -127,7 +127,7 @@
   };
 
   virtualisation.oci-containers.containers.transmission = {
-    image = "lscr.io/linuxserver/transmission:4.1.1@sha256:e8e4c55ea4b1ed0d7cea4d40160c94688d6cbbe3dba6d159c97c4f6641413c71";
+    image = "lscr.io/linuxserver/transmission:4.1.1@sha256:c677a6211a95b94bfc036ec1fe97b3222204eebe95cacbca0db930192ecf015a";
 
     autoStart = true;
 
