@@ -11,7 +11,7 @@
 
 {
   virtualisation.oci-containers.containers.prowlarr = {
-    image = "lscr.io/linuxserver/prowlarr:2.3.5.5327@sha256:b4204e18666179472225935b443a99cf6c66dcb7bbc2d35034427a3851f13135";
+    image = "ghcr.io/linuxserver/prowlarr:2.3.5.5327@sha256:b4204e18666179472225935b443a99cf6c66dcb7bbc2d35034427a3851f13135";
 
     autoStart = true;
 
@@ -33,7 +33,7 @@
   };
 
   virtualisation.oci-containers.containers.bazarr = {
-    image = "lscr.io/linuxserver/bazarr:1.5.6@sha256:cb57afc3bd35558e1e7062658f9d4d18a0b4c474f10afe55f0ccfd867025f24f";
+    image = "ghcr.io/linuxserver/bazarr:1.5.6@sha256:cb57afc3bd35558e1e7062658f9d4d18a0b4c474f10afe55f0ccfd867025f24f";
 
     autoStart = true;
 
@@ -55,7 +55,7 @@
   };
 
   virtualisation.oci-containers.containers.lidarr = {
-    image = "lscr.io/linuxserver/lidarr:3.1.0.4875@sha256:e9a275176e8158638395cc8574b02b7695006f70bde48830a09fa6ab5b6775df";
+    image = "ghcr.io/linuxserver/lidarr:3.1.0.4875@sha256:e9a275176e8158638395cc8574b02b7695006f70bde48830a09fa6ab5b6775df";
 
     autoStart = true;
 
@@ -79,7 +79,7 @@
   };
 
   virtualisation.oci-containers.containers.radarr = {
-    image = "lscr.io/linuxserver/radarr:6.1.1.10360@sha256:b01097ad2d948c9f5eca39eb60bb529e2e55b0738c4bf7db09383bef0abab59d";
+    image = "ghcr.io/linuxserver/radarr:6.1.1.10360@sha256:b01097ad2d948c9f5eca39eb60bb529e2e55b0738c4bf7db09383bef0abab59d";
 
     autoStart = true;
 
@@ -103,7 +103,7 @@
   };
 
   virtualisation.oci-containers.containers.sonarr = {
-    image = "lscr.io/linuxserver/sonarr:4.0.17.2952@sha256:3580aec3802c915f0f819a88d5099abce61734b925732b8393d176b5dc561020";
+    image = "ghcr.io/linuxserver/sonarr:4.0.17.2952@sha256:3580aec3802c915f0f819a88d5099abce61734b925732b8393d176b5dc561020";
 
     autoStart = true;
 
@@ -127,7 +127,7 @@
   };
 
   virtualisation.oci-containers.containers.transmission = {
-    image = "lscr.io/linuxserver/transmission:4.1.1@sha256:sha256:bf92decd1387527be35139dc03e2d8c2c078a727f927ab474aef0f21f684107a";
+    image = "ghcr.io/linuxserver/transmission:4.1.1@sha256:bf92decd1387527be35139dc03e2d8c2c078a727f927ab474aef0f21f684107a";
 
     autoStart = true;
 
