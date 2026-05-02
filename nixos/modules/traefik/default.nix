@@ -233,7 +233,7 @@ let
 in
 {
   sops.secrets.cloudflare_api_key = {
-    sopsFile = ../../secrets/traefik.yaml;
+    sopsFile = ./secrets/traefik.yaml;
     key = "CLOUDFLARE_API_KEY";
   };
 
