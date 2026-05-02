@@ -15,7 +15,7 @@ in
 
     tokenSopsFile = lib.mkOption {
       type = lib.types.path;
-      default = ../../secrets/cloudflare.yaml;
+      default = ./secrets/cloudflare.yaml;
       description = "SOPS file containing the Cloudflare tunnel token";
     };
 
