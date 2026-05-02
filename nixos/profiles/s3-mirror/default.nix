@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ../../modules/aws.nix
+    ../../modules/aws/root.nix
     ../../modules/s3-local-mirror.nix
   ];
 

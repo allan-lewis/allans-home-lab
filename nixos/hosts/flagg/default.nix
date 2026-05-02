@@ -19,7 +19,6 @@ in
 
   # imports = [
     # ../../profiles/authentik
-    # ../../profiles/s3-mirror
   # ];
 
   # networking.hostName = hostName;

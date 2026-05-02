@@ -44,11 +44,13 @@ in
 
     sopsFile = lib.mkOption {
       type = lib.types.path;
-      default = ../secrets/authentik.yaml;
+      default = ../profiles/authentik/secrets/authentik.yaml;
     };
   };
 
   config = lib.mkIf cfg.enable {
+    users.users.lab.extraGroups = [ "docker" ];
+
     virtualisation.docker.enable = true;
 
     environment.systemPackages = with pkgs; [

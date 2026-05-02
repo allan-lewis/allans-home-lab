@@ -8,6 +8,7 @@
     ../cloudflare.nix
     ../gatus.nix
     ../prometheus-stack
+    ../s3-mirror
     ../traefik.nix
     ../twingate/modest-anteater.nix
   ];
