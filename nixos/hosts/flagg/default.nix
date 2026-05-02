@@ -17,14 +17,5 @@ in
     ../../profiles/hosts/flagg.nix
   ];
 
-  # imports = [
-    # ../../profiles/authentik
-  # ];
-
-  # networking.hostName = hostName;
-
-  # homelab.bareMetal.interface = "eth1";
-  # homelab.bareMetal.address = "192.168.86.204";
-
   system.stateVersion = "25.11";
 }

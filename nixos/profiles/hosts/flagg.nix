@@ -11,6 +11,8 @@
     ../s3-mirror
     ../traefik.nix
     ../twingate/modest-anteater.nix
+
+    ../../modules/tailscale
   ];
 
   networking.hostName = hostName;
