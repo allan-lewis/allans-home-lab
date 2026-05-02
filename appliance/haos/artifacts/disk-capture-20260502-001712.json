@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-05-02T00:17:12Z",
+  "description": "Proxmox VM disk captured and exported to S3",
+  "os": "haos",
+  "node": "192.168.86.200",
+  "vmid": 101,
+  "hostname": "overlook",
+  "s3_uri": "s3://gitops-homelab-orchestrator-disks/proxmox-images/haos/boot-disk-export-101-20260502-001502.qcow2"
+}
