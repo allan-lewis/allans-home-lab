@@ -6,6 +6,7 @@
 
     ../gatus.nix
     ../traefik.nix
+    ../twingate/modest-anteater.nix
   ];
 
   networking.hostName = hostName;
