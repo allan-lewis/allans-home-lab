@@ -1,10 +1,12 @@
 { ... }:
 
 {
+  #: setup textfile collector directory
   systemd.tmpfiles.rules = [
     "d /var/lib/node_exporter/textfile_collector 0755 root root -"
   ];
 
+  #: configure and run the service
   services.prometheus.exporters.node = {
     enable = true;
     listenAddress = "0.0.0.0";

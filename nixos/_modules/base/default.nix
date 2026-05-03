@@ -1,7 +1,10 @@
 { pkgs, ... }:
 
 {
-  imports = [];
+  imports = [
+    ../homelab-modules
+    ../prometheus-node-exporter
+  ];
 
   config = {
     #: nixos settings
