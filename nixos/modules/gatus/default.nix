@@ -527,7 +527,7 @@ let
 in
 {
   sops.secrets.tautulli_api_key = {
-    sopsFile = ../../secrets/gatus.yaml;
+    sopsFile = ./secrets/gatus.yaml;
     key = "TAUTULLI_API_KEY";
   };
 

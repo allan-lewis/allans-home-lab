@@ -1,4 +1,4 @@
-{ config, ... }:
+{ backupRoot, config, ... }:
 
 {
   imports = [
@@ -14,7 +14,7 @@
   };
 
   sops.secrets."authentik/pg_pass" = {
-    sopsFile = ../../secrets/authentik.yaml;
+    sopsFile = ./secrets/authentik.yaml;
   };
 
   services.homelab.postgresDbBackup = {
@@ -26,6 +26,18 @@
     container = "authentik-postgresql-1";
     extraArgs = "";
     passwordFile = config.sops.secrets."authentik/pg_pass".path;
+  };
+
+  homelab.managedDirectories.entries = {
+    postgres_backup = {
+      local = "/var/lib/postgres-db-dumps";
+      remote = "${backupRoot}/authentik/db-dumps";
+      restore = true;
+      backup = true;
+      owner = "root";
+      group = "root";
+      mode = "0755";
+    };
   };
 
 }

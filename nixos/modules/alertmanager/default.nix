@@ -47,7 +47,7 @@ in
 
   config = lib.mkIf cfg.enable {
     environment.etc."alertmanager/config/telegram.tmpl".source =
-      ../../assets/alertmanager/telegram.tmpl;
+      ./assets/alertmanager/telegram.tmpl;
 
     services.prometheus.alertmanager = {
       enable = true;
