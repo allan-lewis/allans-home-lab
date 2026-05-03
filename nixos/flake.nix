@@ -14,8 +14,11 @@
   outputs = { nixpkgs, home-manager, sops-nix, ... }:
   let
     system = "x86_64-linux";  
-    backupRemotePrefix =
+    nasBasePath =
       "allan@192.168.86.220:/mnt/pool1/allans-home-lab/backups-automated";
+
+    versionCurrent = "25.11";
+    versionNext = "26.05";
 
     commonModules = [
       home-manager.nixosModules.home-manager
@@ -25,7 +28,9 @@
     mkHost = hostPath: nixpkgs.lib.nixosSystem {
       inherit system;
       specialArgs = {
-        inherit backupRemotePrefix;
+        inherit nasBasePath;
+        inherit versionCurrent;
+        inherit versionNext;
       };
       modules = commonModules ++ [
         (hostPath + "/hardware-configuration.nix")

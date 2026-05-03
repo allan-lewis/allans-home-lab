@@ -1,11 +1,14 @@
-{ pkgs, lib, ... }:
+{ pkgs, lib, nixosVersion, ... }:
 
 {
+  #: use zsh as the default shell
   programs.zsh.enable = true;
 
+  #: create default/empty groups here
   users.groups.lab = {};
   users.groups.aws = {};
 
+  #: setup lab user as a sudo user with no password 
   users.users.lab = {
     isNormalUser = true;
     group = "lab";
@@ -14,21 +17,17 @@
     hashedPassword = "!";
   };
 
+  #: enable and configure home manager
   home-manager.useGlobalPkgs = true;
   home-manager.useUserPackages = true;
   home-manager.backupFileExtension = "backup";
 
+  #: home manager files/configs/programs
   home-manager.users.lab = { pkgs, ... }: {
-    home.stateVersion = "25.11";
+    #: align with OS version from flake
+    home.stateVersion = nixosVersion;
 
-    xdg.configFile."zsh/zshrc.local".source = ../assets/zshrc.local;
-    xdg.configFile."starship.toml".source = ../assets/starship.toml;
-
-    xdg.configFile."nvim" = {
-      source = ../assets/nvim;
-      recursive = true;
-    };
-
+    #: zsh shell
     programs.zsh = {
       enable = true;
       autosuggestion.enable = true;
@@ -37,16 +36,27 @@
         source ~/.config/zsh/zshrc.local
       '';
     };
+    xdg.configFile."zsh/zshrc.local".source = ./dotfiles/zshrc.local;
 
+    #: starship
     programs.starship = {
       enable = true;
     };
+    xdg.configFile."starship.toml".source = ./dotfiles/starship.toml;
 
-    programs.tmux = {
-      enable = true;
-      extraConfig = builtins.readFile ../assets/tmux.conf;
+    #: neovim
+    xdg.configFile."nvim" = {
+      source = ./dotfiles/nvim;
+      recursive = true;
     };
 
+    #: tmux
+    programs.tmux = {
+      enable = true;
+      extraConfig = builtins.readFile ./dotfiles/tmux.conf;
+    };
+
+    #: packages
     home.packages = with pkgs; [
       fastfetch
       fd
@@ -57,6 +67,4 @@
       tmux
     ];
   };
-
-  environment.etc."tmux.conf".text = lib.mkForce "";
 }
