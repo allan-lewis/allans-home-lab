@@ -561,7 +561,7 @@ in
 
     schedule = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
-      default = null;
+      default = "hourly";
       description = "systemd OnCalendar schedule for normal mode.";
     };
 

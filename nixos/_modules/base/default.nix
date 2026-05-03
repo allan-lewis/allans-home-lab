@@ -2,7 +2,9 @@
 
 {
   imports = [
+    ../default-user
     ../homelab-modules
+    ../oci-containers
     ../prometheus-node-exporter
   ];
 
