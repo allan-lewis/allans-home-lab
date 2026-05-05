@@ -4,7 +4,7 @@
   imports = [
     ./dev-checkouts.nix
   ];
-
+\
   virtualisation.docker.enable = true;
 
   users.users.lab.extraGroups = [ "docker" ];

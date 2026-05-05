@@ -69,7 +69,7 @@
 
     #: root ssh keys
     sops.secrets.root_ssh_private_key = {
-      sopsFile = ./secrets/ssh.yaml;
+      sopsFile = ./ssh.yaml;
       key = "root_ssh_private_key";
       path = "/root/.ssh/id_ed25519";
       owner = "root";

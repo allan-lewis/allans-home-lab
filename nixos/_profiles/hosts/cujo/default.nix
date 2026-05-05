@@ -5,14 +5,14 @@
     ../../../_modules/bare-metal
     ../../../_modules/tailscale
 
-    # ../devops.nix
+    ../../../_profiles/doppler
   ];
 
-  # _module.args = {
-  #   dopplerProject = "homelab";
-  #   dopplerConfig = "prd";
-  #   dopplerTokenKey = "homelab_prd";
-  # };
+  _module.args = {
+    dopplerConfig = "prd";
+    dopplerProject = "homelab";
+    dopplerTokenKey = "homelab_prd";
+  };
 
   networking.hostName = hostName;
 

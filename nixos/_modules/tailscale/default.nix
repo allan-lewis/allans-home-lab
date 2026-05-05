@@ -2,7 +2,7 @@
 
 {
   sops.secrets.tailscale_authkey = {
-    sopsFile = ./secrets/tailscale.yaml;
+    sopsFile = ./tailscale.yaml;
     key = "tailscale_authkey";
     path = "/run/secrets/tailscale-authkey";
     owner = "root";
