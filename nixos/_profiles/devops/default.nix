@@ -1,14 +1,15 @@
-{ pkgs, ... }:
+{ dopplerConfig, dopplerProject, dopplerTokenKey, pkgs, ... }:
 
 {
   imports = [
-    ./dev-checkouts.nix
+    ../../_modules/doppler
   ];
-\
-  virtualisation.docker.enable = true;
 
+  #: enable docker and add lab to group
+  virtualisation.docker.enable = true;
   users.users.lab.extraGroups = [ "docker" ];
 
+  #: install system packages
   environment.systemPackages = with pkgs; [
     ansible
     clang
@@ -19,6 +20,7 @@
     uv
   ];
 
+  #: ensure that source code is up-to-date every hour
   services.homelab.devCheckouts = {
     enable = true;
 
@@ -52,6 +54,7 @@
     ];
   };
 
+  #: ensure that source code is checked out after any switch
   system.activationScripts.devCheckoutsAfterSwitch = {
     deps = [ "etc" ];
     text = ''
@@ -62,6 +65,7 @@
     '';
   };
 
+  #: setup the lab user to be able to commit to github
   home-manager.users.lab = { ... }: {
     programs.git = {
       enable = true;
@@ -72,5 +76,27 @@
         };
       };
     };
+  };
+
+  #: configure and enable doppler
+  sops.secrets.doppler_token = {
+    sopsFile = ./doppler.yaml;
+    key = dopplerTokenKey;
+    path = "/var/lib/homelab-secrets/doppler/doppler_token";
+    owner = "lab";
+    group = "lab";
+    mode = "0600";
+  };
+
+  services.homelab.doppler = {
+    enable = true;
+
+    user = "lab";
+    scopeDir = "/home/lab";
+
+    tokenFile = "/var/lib/homelab-secrets/doppler/doppler_token";
+
+    project = dopplerProject;
+    dopplerConfig = dopplerConfig;
   };
 }

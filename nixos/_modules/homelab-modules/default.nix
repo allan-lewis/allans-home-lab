@@ -6,6 +6,7 @@
     ./managed-state
     ./postgres-backup
     ./s3-mirror
+    ./source-code
     ./task-wrapper
   ];
 

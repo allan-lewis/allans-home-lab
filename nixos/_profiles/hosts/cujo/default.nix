@@ -5,7 +5,7 @@
     ../../../_modules/bare-metal
     ../../../_modules/tailscale
 
-    ../../../_profiles/doppler
+    ../../../_profiles/devops
   ];
 
   _module.args = {
@@ -22,6 +22,8 @@
   };
 
   services.homelab.managedState.schedule = "*:20";
+
+  homelab.sshKeyForLabUser = true;
 
   homelab.managedDirectories.entries = {
     test_directory = {
