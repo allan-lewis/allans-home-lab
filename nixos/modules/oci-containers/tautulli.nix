@@ -14,7 +14,7 @@
   };
 
   virtualisation.oci-containers.containers.tautulli = {
-    image = "ghcr.io/tautulli/tautulli:v2.17.0@sha256:1a82dcf8fcc715ad5f686fb04cad90969bab2dc28c971fd2d3089fbd9d467492";
+    image = "ghcr.io/tautulli/tautulli:v2.17.1@sha256:863398fe5278c54bec927269429cd853a6829f5e035abdf91cb3701ebceeaa03";
 
     autoStart = true;
 
