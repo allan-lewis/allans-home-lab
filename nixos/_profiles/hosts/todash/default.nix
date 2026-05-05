@@ -3,6 +3,8 @@
 {
   imports = [
     ../../../_modules/virtual-machine
+
+    ../../../_profiles/pihole
   ];
 
   networking.hostName = hostName;
