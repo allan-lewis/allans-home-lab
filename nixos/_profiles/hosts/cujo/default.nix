@@ -2,17 +2,17 @@
 
 {
   imports = [
-    ../bare-metal.nix
-    ../devops.nix
+    ../../../_modules/bare-metal
+    ../../../_modules/tailscale
 
-    ../../modules/tailscale
+    # ../devops.nix
   ];
 
-  _module.args = {
-    dopplerProject = "homelab";
-    dopplerConfig = "prd";
-    dopplerTokenKey = "homelab_prd";
-  };
+  # _module.args = {
+  #   dopplerProject = "homelab";
+  #   dopplerConfig = "prd";
+  #   dopplerTokenKey = "homelab_prd";
+  # };
 
   networking.hostName = hostName;
 
@@ -21,7 +21,7 @@
     address = hostAddress;
   };
 
-  homelab.managedStateSchedule = "*:20";
+  services.homelab.managedState.schedule = "*:20";
 
   homelab.managedDirectories.entries = {
     test_directory = {

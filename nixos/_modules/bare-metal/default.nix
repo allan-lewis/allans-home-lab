@@ -4,6 +4,10 @@ let
   cfg = config.homelab.bareMetal;
 in
 {
+  imports = [
+    ../base
+  ];
+
   options.homelab.bareMetal = {
     interface = lib.mkOption {
       type = lib.types.str;
