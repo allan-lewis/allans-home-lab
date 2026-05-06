@@ -1,16 +1,19 @@
-{ ... }:
+{ versionCurrent, ... }:
 
 let
-  inventoryConfig = builtins.fromTOML (builtins.readFile ../../../inventory/hosts/blaine.toml);
+  hostName = inventoryConfig.hostname;
+  inventoryConfig = builtins.fromTOML(builtins.readFile ../../../inventory/hosts/blaine.toml);
+  nixosVersion = versionCurrent;
 in
 {
   _module.args = {
     hostName = inventoryConfig.hostname;
+    nixosVersion = nixosVersion;
   };
 
   imports = [
-    ../../profiles/hosts/blaine.nix
+    ../../_profiles/hosts/blaine
   ];
 
-  system.stateVersion = "25.11";
+  system.stateVersion = nixosVersion;
 }
