@@ -1,23 +1,23 @@
-{ backupRemotePrefix, ... }:
+{ nasBasePath, versionCurrent, ... }:
 
 let
-  inventoryConfig = builtins.fromTOML (builtins.readFile ../../../inventory/hosts/cujo.toml);
-
+  backupLocation = "${nasBasePath}/${hostName}";
   hostName = inventoryConfig.hostname;
-  backupLocation = "${backupRemotePrefix}/${hostName}";
+  inventoryConfig = builtins.fromTOML (builtins.readFile ../../../inventory/hosts/cujo.toml);
+  nixosVersion = versionCurrent;
 in
 {
   _module.args = {
     backupRoot = backupLocation;
-
     hostAddress = inventoryConfig.network.ipv4.address;
     hostInterface = "eth1";
     hostName = inventoryConfig.hostname;
+    nixosVersion = nixosVersion;
   };
 
   imports = [
-    ../../profiles/hosts/cujo.nix
+    ../../_profiles/hosts/cujo
   ];
 
-  system.stateVersion = "25.11";
+  system.stateVersion = nixosVersion;
 }
