@@ -1,6 +1,10 @@
 { backupRoot, ... }:
 
 {
+  imports = [
+    ../../_modules/oci-containers/r-stack
+  ];
+
   _module.args = {
     mediaLibraryDir = "/data/media-library";
 
@@ -12,10 +16,6 @@
     transmissionConfigDir = "/etc/transmission";
     transmissionWatchDir = "/var/lib/transmission/watch";
   };
-
-  imports = [
-    ../modules/r-stack.nix
-  ];
 
   homelab.managedDirectories.entries = {
     bazarrConfig = {
