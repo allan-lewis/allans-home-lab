@@ -19,5 +19,5 @@ in
     ../../_profiles/hosts/cujo
   ];
 
-  system.stateVersion = versionCurrent;
+  system.stateVersion = nixosVersion;
 }
