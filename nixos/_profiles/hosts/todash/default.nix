@@ -5,6 +5,7 @@
     ../../../_modules/virtual-machine
 
     ../../../_profiles/gatus
+    ../../../_profiles/traefik
   ];
 
   networking.hostName = hostName;
