@@ -3,6 +3,8 @@
 {
   imports = [
     ../../../_modules/virtual-machine
+
+    ../../../_profiles/gatus
   ];
 
   networking.hostName = hostName;
