@@ -3,6 +3,7 @@
 {
   imports = [
     ../../../_modules/bare-metal
+    ../../../_modules/oci-containers/twingate
     ../../../_modules/tailscale
 
     ../../../_profiles/authentik
@@ -11,8 +12,7 @@
     ../../../_profiles/prometheus-stack
     ../../../_profiles/s3-mirror
     ../../../_profiles/traefik
-
-    # ../twingate/modest-anteater.nix
+    ../../../_profiles/twingate
   ];
 
   networking.hostName = hostName;
@@ -23,4 +23,9 @@
   };
 
   services.homelab.managedState.schedule = "*:30";
+
+  homelab.twingate = {
+    enable = true;
+    connectorName = "modestAnteater";
+  };
 }
