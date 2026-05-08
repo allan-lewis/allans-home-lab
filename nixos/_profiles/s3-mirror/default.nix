@@ -1,10 +1,17 @@
-{ ... }:
+{ backupRoot, ... }:
 
 {
-  imports = [
-    ../../modules/aws/root.nix
-    ../../modules/s3-local-mirror.nix
-  ];
+  homelab.managedDirectories.entries = {
+    s3_mirror = {
+      local = "/var/lib/s3-mirror";
+      remote = "${backupRoot}/s3-mirror";
+      restore = true;
+      backup = true;
+      owner = "root";
+      group = "root";
+      mode = "0755";
+    };
+  };
 
   services.homelab.s3LocalMirror = {
     enable = true;

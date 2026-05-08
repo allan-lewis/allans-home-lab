@@ -53,6 +53,10 @@ let
   '';
 in
 {
+  imports = [
+    ../../aws
+  ];
+
   options.services.homelab.s3LocalMirror = {
     enable = lib.mkEnableOption "Homelab S3 local mirror (aws s3 sync to local dir)";
 

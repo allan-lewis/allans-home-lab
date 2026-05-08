@@ -9,9 +9,9 @@
     ../../../_profiles/cloudflare
     ../../../_profiles/gatus
     ../../../_profiles/prometheus-stack
+    ../../../_profiles/s3-mirror
     ../../../_profiles/traefik
 
-    # ../s3-mirror
     # ../twingate/modest-anteater.nix
   ];
 
@@ -21,18 +21,6 @@
     interface = hostInterface;
     address = hostAddress;
   };
-
-  # homelab.managedDirectories.entries = {
-  #   s3_mirror = {
-  #     local = "/var/lib/s3-mirror";
-  #     remote = "${backupRoot}/s3-mirror";
-  #     restore = true;
-  #     backup = true;
-  #     owner = "root";
-  #     group = "root";
-  #     mode = "0755";
-  #   };
-  # };
 
   services.homelab.managedState.schedule = "*:30";
 }
