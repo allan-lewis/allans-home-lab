@@ -49,19 +49,27 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    users.groups.grafana = {};
+
+    users.users.grafana = {
+      isSystemUser = true;
+      group = "grafana";
+      home = cfg.dataDir;
+    };
+
     services.grafana = {
       enable = true;
 
       dataDir = cfg.dataDir;
 
       settings = {
-      server = {
-        protocol = cfg.protocol;
-        http_addr = cfg.addr;
-        http_port = cfg.port;
-        domain = cfg.domain;
-        root_url = "https://${cfg.domain}";
-      };
+        server = {
+          protocol = cfg.protocol;
+          http_addr = cfg.addr;
+          http_port = cfg.port;
+          domain = cfg.domain;
+          root_url = "https://${cfg.domain}";
+        };
 
         security = {
           admin_user = "admin";
