@@ -6,13 +6,11 @@
     ../../../_modules/oci-containers/nginx
     ../../../_modules/virtual-machine
 
+    ../../../_profiles/homepage
     ../../../_profiles/no-geeks-brewing
+    ../../../_profiles/trilium
     ../../../_profiles/twingate
-
-    # ../trilium.nix
-    # ../vaultwarden.nix
-    # ../../modules/oci-containers/homepage.nix
-    # ../../modules/oci-containers/no-geeks-brewing.nix
+    # ../../../_profiles/vaultwarden
   ];
 
   networking.hostName = hostName;

@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ../modules/oci-containers/trilium.nix
+    ../../_modules/oci-containers/trilium
   ];
 
   homelab.managedDirectories.entries = {
