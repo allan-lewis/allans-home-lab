@@ -42,13 +42,21 @@ in
       default = true;
     };
 
-    sopsFile = lib.mkOption {
-      type = lib.types.path;
-      default = ../profiles/authentik/secrets/authentik.yaml;
+    environmentFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      description = "Environment file for Authentik Docker Compose.";
     };
   };
 
   config = lib.mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = cfg.environmentFile != null;
+        message = "services.homelab.authentikCompose.environmentFile must be set when Authentik is enabled.";
+      }
+    ];
+
     users.users.lab.extraGroups = [ "docker" ];
 
     virtualisation.docker.enable = true;
@@ -57,35 +65,6 @@ in
       docker-compose
       curl
     ];
-
-    sops.secrets.authentik_pg_pass = {
-      sopsFile = cfg.sopsFile;
-      key = "authentik/pg_pass";
-      owner = "root";
-      group = "root";
-      mode = "0400";
-    };
-
-    sops.secrets.authentik_secret_key = {
-      sopsFile = cfg.sopsFile;
-      key = "authentik/secret_key";
-      owner = "root";
-      group = "root";
-      mode = "0400";
-    };
-
-    sops.templates."authentik.env" = {
-      owner = "root";
-      group = "root";
-      mode = "0400";
-      content = ''
-        AUTHENTIK_TAG=${cfg.version}
-        COMPOSE_PORT_HTTP=${toString cfg.httpPort}
-        COMPOSE_PORT_HTTPS=${toString cfg.httpsPort}
-        PG_PASS=${config.sops.placeholder.authentik_pg_pass}
-        AUTHENTIK_SECRET_KEY=${config.sops.placeholder.authentik_secret_key}
-      '';
-    };
 
     systemd.tmpfiles.rules = [
       "d ${cfg.appDir} 0750 root root -"
@@ -116,7 +95,7 @@ in
       preStart = ''
         install -d -m 0750 ${cfg.appDir}
         curl -fsSL ${lib.escapeShellArg cfg.composeUrl} -o ${cfg.appDir}/docker-compose.yml
-        install -m 0400 ${config.sops.templates."authentik.env".path} ${cfg.appDir}/.env
+        install -m 0400 ${cfg.environmentFile} ${cfg.appDir}/.env
       '';
 
       script = ''

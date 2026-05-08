@@ -4,15 +4,13 @@
   imports = [
     ../../../_modules/bare-metal
     ../../../_modules/tailscale
-    # ../bare-metal.nix
 
+    ../../../_profiles/authentik
     ../../../_profiles/cloudflare
     ../../../_profiles/gatus
     ../../../_profiles/prometheus-stack
     ../../../_profiles/traefik
 
-    # ../authentik
-    # ../prometheus-stack
     # ../s3-mirror
     # ../twingate/modest-anteater.nix
   ];
