@@ -10,7 +10,7 @@
     ../../../_profiles/no-geeks-brewing
     ../../../_profiles/trilium
     ../../../_profiles/twingate
-    # ../../../_profiles/vaultwarden
+    ../../../_profiles/vaultwarden
   ];
 
   networking.hostName = hostName;
