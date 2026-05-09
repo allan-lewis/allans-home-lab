@@ -2,18 +2,17 @@
 
 {
   imports = [
-    ../bare-metal.nix
-    ../desktop.nix
-    ../devops.nix
+    ../../../_modules/bare-metal
+    ../../../_modules/tailscale
+
+    ../../../_profiles/devops
   ];
 
   _module.args = {
-    dopplerProject = "homelab";
     dopplerConfig = "stg";
+    dopplerProject = "homelab";
     dopplerTokenKey = "homelab_stg";
   };
-
-  time.timeZone = lib.mkForce hostTimeZone;
 
   networking.hostName = hostName;
 
@@ -21,4 +20,10 @@
     interface = hostInterface;
     address = hostAddress;
   };
+
+  time.timeZone = lib.mkForce hostTimeZone;
+
+  services.homelab.managedState.schedule = "*:05";
+
+  homelab.sshKeyForLabUser = true;
 }
