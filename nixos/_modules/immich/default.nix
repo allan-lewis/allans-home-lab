@@ -33,44 +33,10 @@ in
       example = "https://github.com/immich-app/immich/releases/download/v1.132.3/docker-compose.yml";
     };
 
-    uploadLocation = lib.mkOption {
-      type = lib.types.str;
-      default = "/data/immich";
-    };
-
-    dbDataLocation = lib.mkOption {
-      type = lib.types.str;
-      default = "/srv/immich/postgres";
-    };
-
-    redisDataLocation = lib.mkOption {
-      type = lib.types.str;
-      default = "/srv/immich/redis";
-    };
-
-    modelCacheLocation = lib.mkOption {
-      type = lib.types.str;
-      default = "/srv/immich/model-cache";
-    };
-
-    composeProjectName = lib.mkOption {
-      type = lib.types.str;
-      default = "immich";
-    };
-
-    dbUsername = lib.mkOption {
-      type = lib.types.str;
-      default = "postgres";
-    };
-
-    dbDatabaseName = lib.mkOption {
-      type = lib.types.str;
-      default = "immich";
-    };
-
-    sopsFile = lib.mkOption {
-      type = lib.types.path;
-      default = ../secrets/immich.yaml;
+    environmentFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      description = "Environment file for the Immich Docker Compose stack.";
     };
 
     openFirewall = lib.mkOption {
@@ -85,39 +51,21 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = cfg.environmentFile != null;
+        message = "services.homelab.immichCompose.environmentFile must be set when Immich is enabled.";
+      }
+    ];
+
     virtualisation.docker.enable = true;
-    
+
     users.users.lab.extraGroups = [ "docker" ];
 
     environment.systemPackages = with pkgs; [
       docker-compose
       curl
     ];
-
-    sops.secrets.immich_db_password = {
-      sopsFile = cfg.sopsFile;
-      key = "immich/db_password";
-      owner = "root";
-      group = "root";
-      mode = "0400";
-    };
-
-    sops.templates."immich.env" = {
-      owner = "root";
-      group = "root";
-      mode = "0400";
-      content = ''
-        IMMICH_VERSION=${cfg.version}
-        UPLOAD_LOCATION=${cfg.uploadLocation}
-        DB_DATA_LOCATION=${cfg.dbDataLocation}
-        REDIS_DATA_LOCATION=${cfg.redisDataLocation}
-        MODEL_CACHE_LOCATION=${cfg.modelCacheLocation}
-        COMPOSE_PROJECT_NAME=${cfg.composeProjectName}
-        DB_USERNAME=${cfg.dbUsername}
-        DB_DATABASE_NAME=${cfg.dbDatabaseName}
-        DB_PASSWORD=${config.sops.placeholder.immich_db_password}
-      '';
-    };
 
     systemd.tmpfiles.rules = [
       "d ${cfg.appDir} 0750 root root -"
@@ -148,7 +96,7 @@ in
       preStart = ''
         install -d -m 0750 ${cfg.appDir}
         curl -fsSL ${lib.escapeShellArg composeUrl} -o ${cfg.appDir}/docker-compose.yml
-        install -m 0400 ${config.sops.templates."immich.env".path} ${cfg.appDir}/.env
+        install -m 0400 ${cfg.environmentFile} ${cfg.appDir}/.env
       '';
 
       script = ''

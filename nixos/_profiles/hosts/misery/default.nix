@@ -4,7 +4,7 @@
   imports = [
     ../../../_modules/virtual-machine
 
-    # ../../../_profiles/immich
+    ../../../_profiles/immich
     ../../../_profiles/jellyfin
     ../../../_profiles/plex
     ../../../_profiles/tautulli
