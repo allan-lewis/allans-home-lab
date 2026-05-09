@@ -1,27 +1,6 @@
-{ config, mediaLibraryDir, backupRoot, ... }:
+{ config, mediaLibraryDir, ... }:
 
 {
-  homelab.managedDirectories.entries = {
-    jellyfinConfig = {
-      local = "/srv/jellyfin/config";
-      remote = "${backupRoot}/jellyfin/config";
-      restore = true;
-      backup = true;
-      owner = "lab";
-      group = "lab";
-      mode = "0755";
-    };
-    jellyfinCache = {
-      local = "/srv/jellyfin/cache";
-      remote = "${backupRoot}/jellyfin/cache";
-      restore = false;
-      backup = false;
-      owner = "lab";
-      group = "lab";
-      mode = "0755";
-    };
-  };
-
   virtualisation.oci-containers.containers.jellyfin = {
     image = "jellyfin/jellyfin:2026041305@sha256:7381f54b16aa544e02d33193ae43fbe0d1bc7470e179d576ee5d8d874e4952ca";
 

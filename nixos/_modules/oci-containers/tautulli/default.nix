@@ -1,18 +1,6 @@
-{ config, backupRoot, ... }:
+{ config, ... }:
 
 {
-  homelab.managedDirectories.entries = {
-    vaultwarden = {
-      local = "/etc/tautulli";
-      remote = "${backupRoot}/tautulli/config";
-      restore = true;
-      backup = true;
-      owner = "lab";
-      group = "lab";
-      mode = "0755";
-    };
-  };
-
   virtualisation.oci-containers.containers.tautulli = {
     image = "ghcr.io/tautulli/tautulli:v2.17.0@sha256:1a82dcf8fcc715ad5f686fb04cad90969bab2dc28c971fd2d3089fbd9d467492";
 

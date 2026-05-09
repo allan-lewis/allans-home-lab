@@ -1,39 +1,23 @@
-{ backupRemotePrefix, ... }:
+{ nasBasePath, versionCurrent, ... }:
 
 let
-  inventoryConfig = builtins.fromTOML (builtins.readFile ../../../inventory/hosts/misery.toml);
+  backupLocation = "${nasBasePath}/${hostName}";
   hostName = inventoryConfig.hostname;
-  backupLocation = "${backupRemotePrefix}/${hostName}";
+  inventoryConfig = builtins.fromTOML(builtins.readFile ../../../inventory/hosts/misery.toml);
+  nixosVersion = versionCurrent;
 in
 {
-  # _module.args = {
-  #   nasRootFolder = defaultRemoteNasPerHostBackupVolume;
-  # };
-  
-  # imports = [
-  #   ../../profiles/base
-  #   ../../profiles/immich.nix
-  #   ../../profiles/virtual-machine
-
-  #   ../../modules/oci-containers/jellyfin.nix
-  #   ../../modules/oci-containers/plex.nix
-  #   ../../modules/oci-containers/tautulli.nix
-  # ];
-
-  # homelab.managedStateSchedule = "*:40";
-
-  # networking.hostName = hostName;
-
   _module.args = {
     backupRoot = backupLocation;
     hostName = inventoryConfig.hostname;
     hostAddress = inventoryConfig.network.ipv4.address;
     mediaLibraryDir = "/data/media-library";
+    nixosVersion = nixosVersion;
   };
 
   imports = [
-    ../../profiles/hosts/misery.nix
+    ../../_profiles/hosts/misery
   ];
 
-  system.stateVersion = "25.11";
+  system.stateVersion = nixosVersion;
 }

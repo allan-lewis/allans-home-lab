@@ -2,12 +2,12 @@
 
 {
   imports = [
-    ../immich
-    ../virtual-machine.nix
+    ../../../_modules/virtual-machine
 
-    ../../modules/oci-containers/jellyfin.nix
-    ../../modules/oci-containers/plex.nix
-    ../../modules/oci-containers/tautulli.nix
+    # ../../../_profiles/immich
+    ../../../_profiles/jellyfin
+    ../../../_profiles/plex
+    ../../../_profiles/tautulli
   ];
 
   fileSystems = {
@@ -26,5 +26,5 @@
 
   networking.hostName = hostName;
 
-  homelab.managedStateSchedule = "*:40";
+  services.homelab.managedState.schedule  = "*:40";
 }

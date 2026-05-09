@@ -1,27 +1,6 @@
-{ config, backupRoot, mediaLibraryDir, hostAddress, ... }:
+{ config, mediaLibraryDir, hostAddress, ... }:
 
 {
-  homelab.managedDirectories.entries = {
-    plexConfig = {
-      local = "/srv/plex/config";
-      remote = "${backupRoot}/plex/config";
-      restore = true;
-      backup = true;
-      owner = "lab";
-      group = "lab";
-      mode = "0755";
-    };
-    plexTranscode = {
-      local = "/srv/plex/transcode";
-      remote = "${backupRoot}/plex/transcode";
-      restore = false;
-      backup = false;
-      owner = "lab";
-      group = "lab";
-      mode = "0755";
-    };
-  };
-
   virtualisation.oci-containers.containers.plex = {
     image = "lscr.io/linuxserver/plex:1.43.1@sha256:ffed84c09e3b99ae191d665fc4408ece0e83fe4a9ca74e27d109c22b1395d573";
 
