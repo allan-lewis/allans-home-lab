@@ -1,10 +1,10 @@
 { config, lib, pkgs, ... }:
 
 {
-  # imports = [
-  #   ./hyprland.nix
-  #   ./wlogout.nix
-  # ];
+  imports = [
+    ./default-user
+    ./hyprland
+  ];
 
   #: set environment variables for desktop
   environment.variables = {
@@ -13,6 +13,15 @@
     EDITOR = "nvim";
     TERMINAL = "ghostty";
   };
+
+  #: enable the xdg desktop portal framework
+  xdg.portal.enable = true;
+  xdg.portal.extraPortals = [
+    pkgs.xdg-desktop-portal-gtk
+  ];
+
+  #: enable policy kit
+  security.polkit.enable = true;
 
   #: setup the lab user with a password
   users.mutableUsers = false;
