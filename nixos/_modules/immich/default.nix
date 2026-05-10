@@ -10,6 +10,10 @@ let
       "https://github.com/immich-app/immich/releases/download/${cfg.version}/docker-compose.yml";
 in
 {
+  imports = [
+    ../docker
+  ];
+
   options.services.homelab.immichCompose = {
     enable = lib.mkEnableOption "Immich via upstream Docker Compose";
 
@@ -61,11 +65,6 @@ in
     virtualisation.docker.enable = true;
 
     users.users.lab.extraGroups = [ "docker" ];
-
-    environment.systemPackages = with pkgs; [
-      docker-compose
-      curl
-    ];
 
     systemd.tmpfiles.rules = [
       "d ${cfg.appDir} 0750 root root -"
