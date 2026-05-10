@@ -5,6 +5,7 @@
     ../../../_modules/bare-metal
     ../../../_modules/tailscale
 
+    ../../../_profiles/desktop
     ../../../_profiles/devops
   ];
 
