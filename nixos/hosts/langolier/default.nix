@@ -13,7 +13,7 @@ in
   };
 
   imports = [
-    ../../_profiles/hosts/langolier
+    ../../profiles/hosts/langolier
   ];
 
   system.stateVersion = nixosVersion;

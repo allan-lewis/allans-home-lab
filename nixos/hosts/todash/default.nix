@@ -14,7 +14,7 @@ in
   };
 
   imports = [
-    ../../_profiles/hosts/todash
+    ../../profiles/hosts/todash
   ];
 
   system.stateVersion = nixosVersion;

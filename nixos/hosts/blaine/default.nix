@@ -12,7 +12,7 @@ in
   };
 
   imports = [
-    ../../_profiles/hosts/blaine
+    ../../profiles/hosts/blaine
   ];
 
   system.stateVersion = nixosVersion;

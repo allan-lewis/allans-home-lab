@@ -16,7 +16,7 @@ in
   };
 
   imports = [
-    ../../_profiles/hosts/roland
+    ../../profiles/hosts/roland
   ];
 
   system.stateVersion = nixosVersion;

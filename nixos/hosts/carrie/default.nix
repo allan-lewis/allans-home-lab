@@ -14,7 +14,7 @@ in
   };
 
   imports = [
-    ../../_profiles/hosts/carrie
+    ../../profiles/hosts/carrie
   ];
 
   system.stateVersion = nixosVersion;
