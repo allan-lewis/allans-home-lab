@@ -4,6 +4,10 @@ let
   cfg = config.services.homelab.authentikCompose;
 in
 {
+  imports = [
+    ../docker
+  ];
+  
   options.services.homelab.authentikCompose = {
     enable = lib.mkEnableOption "Authentik via upstream Docker Compose";
 
@@ -55,15 +59,6 @@ in
         assertion = cfg.environmentFile != null;
         message = "services.homelab.authentikCompose.environmentFile must be set when Authentik is enabled.";
       }
-    ];
-
-    users.users.lab.extraGroups = [ "docker" ];
-
-    virtualisation.docker.enable = true;
-
-    environment.systemPackages = with pkgs; [
-      docker-compose
-      curl
     ];
 
     systemd.tmpfiles.rules = [

@@ -3,12 +3,9 @@
 {
   imports = [
     ../../_modules/aws
+    ../../_modules/docker
     ../../_modules/doppler
   ];
-
-  #: enable docker and add lab to group
-  virtualisation.docker.enable = true;
-  users.users.lab.extraGroups = [ "docker" ];
 
   #: enable aws for the lab user
   homelab.awsCredentialsForLabUser = true;
