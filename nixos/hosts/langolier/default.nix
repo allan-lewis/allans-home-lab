@@ -1,20 +1,17 @@
-{ versionCurrent, ... }:
+{ hostIp4Address, hostName, hostInterface, nixosVersion, ... }:
 
-let  
-  inventoryConfig = builtins.fromTOML (builtins.readFile ../../../inventory/hosts/langolier.toml);
-  nixosVersion = versionCurrent;
-in
 {
-  _module.args = {
-    hostAddress = inventoryConfig.network.ipv4.address;
-    hostInterface = "enp2s0";
-    hostName = inventoryConfig.hostname;
-    nixosVersion = nixosVersion;
-  };
-
   imports = [
-    ../../_profiles/hosts/langolier
+    ../../modules/bare-metal
+
+    ../../profiles/pihole
   ];
 
+  networking.hostName = hostName;
   system.stateVersion = nixosVersion;
+
+  homelab.bareMetal = {
+    interface = hostInterface;
+    address = hostIp4Address;
+  };
 }

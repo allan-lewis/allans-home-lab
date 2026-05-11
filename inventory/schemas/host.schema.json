@@ -273,7 +273,7 @@
             "dhcp-reservation"
           ]
         },
-        "primary_interface": {
+        "interface": {
           "type": "string",
           "minLength": 1
         },
@@ -391,5 +391,46 @@
         }
       }
     }
-  }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "runtime": {
+            "properties": {
+              "kind": {
+                "const": "baremetal"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          }
+        },
+        "required": [
+          "runtime"
+        ]
+      },
+      "then": {
+        "properties": {
+          "network": {
+            "required": [
+              "interface"
+            ]
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "network": {
+            "not": {
+              "required": [
+                "interface"
+              ]
+            }
+          }
+        }
+      }
+    }
+  ]
 }

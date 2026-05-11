@@ -1,39 +1,39 @@
-{ backupRemotePrefix, ... }:
+{ hostIp4Address, hostName, nixosVersion, ... }:
 
-let
-  inventoryConfig = builtins.fromTOML (builtins.readFile ../../../inventory/hosts/misery.toml);
-  hostName = inventoryConfig.hostname;
-  backupLocation = "${backupRemotePrefix}/${hostName}";
-in
 {
-  # _module.args = {
-  #   nasRootFolder = defaultRemoteNasPerHostBackupVolume;
-  # };
-  
-  # imports = [
-  #   ../../profiles/base
-  #   ../../profiles/immich.nix
-  #   ../../profiles/virtual-machine
+  imports = [
+    ../../modules/virtual-machine
 
-  #   ../../modules/oci-containers/jellyfin.nix
-  #   ../../modules/oci-containers/plex.nix
-  #   ../../modules/oci-containers/tautulli.nix
-  # ];
-
-  # homelab.managedStateSchedule = "*:40";
-
-  # networking.hostName = hostName;
+    ../../profiles/immich
+    ../../profiles/jellyfin
+    ../../profiles/plex
+    ../../profiles/tautulli
+  ];
 
   _module.args = {
-    backupRoot = backupLocation;
-    hostName = inventoryConfig.hostname;
-    hostAddress = inventoryConfig.network.ipv4.address;
+    #: needed by plex
+    hostAddress = hostIp4Address;
+    #: needed by jellyfin and plex
     mediaLibraryDir = "/data/media-library";
   };
 
-  imports = [
-    ../../profiles/hosts/misery.nix
-  ];
+  networking.hostName = hostName;
+  system.stateVersion = nixosVersion;
 
-  system.stateVersion = "25.11";
+  fileSystems = {
+    "/data/media-library" = {
+      device = "192.168.86.220:/mnt/pool1/media-library";
+      fsType = "nfs";
+
+      options = [
+        "ro"
+        "nofail"
+        "_netdev"
+        "x-systemd.requires=network-online.target"
+        "x-systemd.after=network-online.target"
+      ];
+    };
+  };
+
+  services.homelab.managedState.schedule = "*:40";
 }

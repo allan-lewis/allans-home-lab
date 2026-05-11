@@ -13,16 +13,10 @@ in
       description = "cloudflared package to run";
     };
 
-    tokenSopsFile = lib.mkOption {
-      type = lib.types.path;
-      default = ./secrets/cloudflare.yaml;
-      description = "SOPS file containing the Cloudflare tunnel token";
-    };
-
-    tokenSopsKey = lib.mkOption {
-      type = lib.types.str;
-      default = "cloudflared/tunnel_token";
-      description = "Key within the SOPS file containing the tunnel token";
+    environmentFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      description = "Environment file containing CLOUDFLARE_TUNNEL_TOKEN.";
     };
 
     metricsAddress = lib.mkOption {
@@ -45,22 +39,12 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    sops.secrets.cloudflared_tunnel_token = {
-      sopsFile = cfg.tokenSopsFile;
-      key = cfg.tokenSopsKey;
-      owner = "root";
-      group = "root";
-      mode = "0400";
-    };
-
-    sops.templates."cloudflared.env" = {
-      owner = "root";
-      group = "root";
-      mode = "0400";
-      content = ''
-        CLOUDFLARE_TUNNEL_TOKEN=${config.sops.placeholder.cloudflared_tunnel_token}
-      '';
-    };
+    assertions = [
+      {
+        assertion = cfg.environmentFile != null;
+        message = "services.homelab.cloudflaredTunnel.environmentFile must be set when Cloudflare Tunnel is enabled.";
+      }
+    ];
 
     networking.firewall.allowedTCPPorts =
       lib.mkIf cfg.openFirewall [ 2000 ];
@@ -78,7 +62,7 @@ in
         Restart = "always";
         RestartSec = "5s";
 
-        EnvironmentFile = config.sops.templates."cloudflared.env".path;
+        EnvironmentFile = cfg.environmentFile;
 
         ExecStart = pkgs.writeShellScript "cloudflared-tunnel-start" ''
           set -euo pipefail

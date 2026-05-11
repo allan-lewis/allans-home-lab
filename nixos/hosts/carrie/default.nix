@@ -1,19 +1,25 @@
-{ backupRemotePrefix, lib, ... }:
+{ hostName, nixosVersion, ... }:
 
-let
-  inventoryConfig = builtins.fromTOML (builtins.readFile ../../../inventory/hosts/carrie.toml);
-  hostName = inventoryConfig.hostname;
-  backupLocation = "${backupRemotePrefix}/${hostName}";
-in
 {
-  _module.args = {
-    backupRoot = backupLocation;
-    hostName = inventoryConfig.hostname;
-  };
-
   imports = [
-    ../../profiles/hosts/carrie.nix
+    ../../modules/oci-containers/it-tools
+    ../../modules/oci-containers/nginx
+    ../../modules/virtual-machine
+
+    ../../profiles/homepage
+    ../../profiles/no-geeks-brewing
+    ../../profiles/trilium
+    ../../profiles/twingate
+    ../../profiles/vaultwarden
   ];
 
-  system.stateVersion = "25.11";
+  networking.hostName = hostName;
+  system.stateVersion = nixosVersion;
+
+  services.homelab.managedState.schedule = "*:10";
+
+  homelab.twingate = {
+    enable = true;
+    connectorName = "valiantStingray";
+  };
 }

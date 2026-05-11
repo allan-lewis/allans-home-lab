@@ -1,25 +1,31 @@
-{ backupRemotePrefix, config, pkgs, lib, ... }:
+{ hostIp4Address, hostName, hostInterface, nixosVersion, lib, ... }:
 
-
-let
-  inventoryConfig = builtins.fromTOML (builtins.readFile ../../../inventory/hosts/roland.toml);
-
-  hostName = inventoryConfig.hostname;
-  backupLocation = "${backupRemotePrefix}/${hostName}";
-in
 {
-  _module.args = {
-    backupRoot = backupLocation;
-
-    hostAddress = inventoryConfig.network.ipv4.address;
-    hostInterface = "enp4s0";
-    hostName = inventoryConfig.hostname;
-    hostTimeZone = "America/New_York";
-  };
-
   imports = [
-    ../../profiles/hosts/roland.nix
+    ../../modules/bare-metal
+    ../../modules/tailscale
+
+    ../../profiles/desktop
+    ../../profiles/devops
   ];
 
-  system.stateVersion = "25.11";
+  _module.args = {
+    dopplerConfig = "stg";
+    dopplerProject = "homelab";
+    dopplerTokenKey = "homelab_stg";
+  };
+
+  networking.hostName = hostName;
+  system.stateVersion = nixosVersion;
+
+  homelab.bareMetal = {
+    interface = hostInterface;
+    address = hostIp4Address;
+  };
+
+  time.timeZone = lib.mkForce "America/New_York";
+
+  services.homelab.managedState.schedule = "*:05";
+
+  homelab.sshKeyForLabUser = true;
 }

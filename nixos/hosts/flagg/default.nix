@@ -1,21 +1,32 @@
-{ backupRemotePrefix, config, ... }:
+{ hostIp4Address, hostInterface, hostName, nixosVersion, ... }:
 
-let
-  hostName = inventoryConfig.hostname;
-  backupLocation = "${backupRemotePrefix}/${hostName}";
-  inventoryConfig = builtins.fromTOML (builtins.readFile ../../../inventory/hosts/flagg.toml);
-in
 {
-  _module.args = {
-    backupRoot = backupLocation;
-    hostAddress = inventoryConfig.network.ipv4.address;
-    hostInterface = "eth1";
-    hostName = hostName;
-  };
-
   imports = [
-    ../../profiles/hosts/flagg.nix
+    ../../modules/bare-metal
+    ../../modules/oci-containers/twingate
+    ../../modules/tailscale
+
+    ../../profiles/authentik
+    ../../profiles/cloudflare
+    ../../profiles/gatus
+    ../../profiles/prometheus-stack
+    ../../profiles/s3-mirror
+    ../../profiles/traefik
+    ../../profiles/twingate
   ];
 
-  system.stateVersion = "25.11";
+  networking.hostName = hostName;
+  system.stateVersion = nixosVersion;
+
+  homelab.bareMetal = {
+    interface = hostInterface;
+    address = hostIp4Address;
+  };
+
+  services.homelab.managedState.schedule = "*:30";
+
+  homelab.twingate = {
+    enable = true;
+    connectorName = "modestAnteater";
+  };
 }

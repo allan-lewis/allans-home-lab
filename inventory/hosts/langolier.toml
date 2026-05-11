@@ -27,6 +27,7 @@ disk_gb = 1
 [network]
 mode = "static"
 dns = ["192.168.86.1"]
+interface = "enp2s0"
 
 [network.ipv4]
 address = "192.168.86.218"

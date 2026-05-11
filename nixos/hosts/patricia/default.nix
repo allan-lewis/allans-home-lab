@@ -1,21 +1,14 @@
-{ nasBasePath, versionCurrent, ... }:
+{ hostName, nixosVersion, ... }:
 
-let
-  backupLocation = "${nasBasePath}/${hostName}";
-  hostName = inventoryConfig.hostname;
-  inventoryConfig = builtins.fromTOML(builtins.readFile ../../../inventory/hosts/patricia.toml);
-  nixosVersion = versionCurrent;
-in
 {
-  _module.args = {
-    backupRoot = backupLocation;
-    hostName = inventoryConfig.hostname;
-    nixosVersion = nixosVersion;
-  };
-
   imports = [
-    ../../_profiles/hosts/patricia
+    ../../modules/virtual-machine
+
+    ../../profiles/media-acquisition
   ];
 
+  networking.hostName = hostName;
   system.stateVersion = nixosVersion;
+
+  services.homelab.managedState.schedule = "*:50";
 }
