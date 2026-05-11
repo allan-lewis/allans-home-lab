@@ -1,4 +1,4 @@
-{ backupRoot, config, ... }:
+{ remoteBackupRoot, config, ... }:
 
 {
   imports = [
@@ -43,7 +43,7 @@
   homelab.managedDirectories.entries = {
     immichPostgres = {
       local = "/srv/immich/postgres";
-      remote = "${backupRoot}/immich/postgres-volume";
+      remote = "${remoteBackupRoot}/immich/postgres-volume";
       restore = false;
       backup = false;
       owner = "999";
@@ -52,7 +52,7 @@
     };
     immichRedis = {
       local = "/srv/immich/redis";
-      remote = "${backupRoot}/immich/redis";
+      remote = "${remoteBackupRoot}/immich/redis";
       restore = false;
       backup = false;
       owner = "root";
@@ -61,7 +61,7 @@
     };
     immichModelCache = {
       local = "/srv/immich/model-cache";
-      remote = "${backupRoot}/immich/model-cache";
+      remote = "${remoteBackupRoot}/immich/model-cache";
       restore = false;
       backup = false;
       owner = "root";
@@ -70,7 +70,7 @@
     };
     immichPostgresDbDumps = {
       local = "/var/lib/postgres-db-dumps";
-      remote = "${backupRoot}/immich/db-dumps";
+      remote = "${remoteBackupRoot}/immich/db-dumps";
       restore = true;
       backup = true;
       owner = "root";

@@ -1,4 +1,4 @@
-{ backupRoot, ... }:
+{ remoteBackupRoot, ... }:
 
 {
   imports = [
@@ -8,7 +8,7 @@
   homelab.managedDirectories.entries = {
     vaultwarden = {
       local = "/etc/tautulli";
-      remote = "${backupRoot}/tautulli/config";
+      remote = "${remoteBackupRoot}/tautulli/config";
       restore = true;
       backup = true;
       owner = "lab";

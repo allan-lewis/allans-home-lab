@@ -1,4 +1,4 @@
-{ backupRoot, ... }:
+{ remoteBackupRoot, ... }:
 
 {
   imports = [
@@ -20,7 +20,7 @@
   homelab.managedDirectories.entries = {
     bazarrConfig = {
       local = "/etc/bazarr";
-      remote = "${backupRoot}/bazarr/config";
+      remote = "${remoteBackupRoot}/bazarr/config";
       restore = true;
       backup = true;
       owner = "lab";
@@ -29,7 +29,7 @@
     };
     lidarrConfig = {
       local = "/etc/lidarr";
-      remote = "${backupRoot}/lidarr/config";
+      remote = "${remoteBackupRoot}/lidarr/config";
       restore = true;
       backup = true;
       owner = "lab";
@@ -38,7 +38,7 @@
     };
     prowlarrConfig = {
       local = "/etc/prowlarr";
-      remote = "${backupRoot}/prowlarr/config";
+      remote = "${remoteBackupRoot}/prowlarr/config";
       restore = true;
       backup = true;
       owner = "lab";
@@ -47,7 +47,7 @@
     };
     radarrConfig = {
       local = "/etc/radarr";
-      remote = "${backupRoot}/radarr/config";
+      remote = "${remoteBackupRoot}/radarr/config";
       restore = true;
       backup = true;
       owner = "lab";
@@ -56,7 +56,7 @@
     };
     sonarrConfig = {
       local = "/etc/sonarr";
-      remote = "${backupRoot}/sonarr/config";
+      remote = "${remoteBackupRoot}/sonarr/config";
       restore = true;
       backup = true;
       owner = "lab";
@@ -65,7 +65,7 @@
     };
     transmissionConfig = {
       local = "/etc/transmission";
-      remote = "${backupRoot}/transmission/config";
+      remote = "${remoteBackupRoot}/transmission/config";
       restore = true;
       backup = true;
       owner = "lab";
@@ -74,7 +74,7 @@
     };
     transmissionWatch = {
       local = "/var/lib/transmission/watch";
-      remote = "${backupRoot}/transmission/watch";
+      remote = "${remoteBackupRoot}/transmission/watch";
       restore = false;
       backup = false;
       owner = "lab";

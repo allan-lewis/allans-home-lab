@@ -1,4 +1,4 @@
-{ backupRoot, ... }:
+{ remoteBackupRoot, ... }:
 
 {
   imports = [
@@ -8,7 +8,7 @@
   homelab.managedDirectories.entries = {
     plexConfig = {
       local = "/srv/plex/config";
-      remote = "${backupRoot}/plex/config";
+      remote = "${remoteBackupRoot}/plex/config";
       restore = true;
       backup = true;
       owner = "lab";
@@ -17,7 +17,7 @@
     };
     plexTranscode = {
       local = "/srv/plex/transcode";
-      remote = "${backupRoot}/plex/transcode";
+      remote = "${remoteBackupRoot}/plex/transcode";
       restore = false;
       backup = false;
       owner = "lab";
