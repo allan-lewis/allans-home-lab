@@ -1,4 +1,4 @@
-{ backupRoot, ... }:
+{ remoteBackupRoot, ... }:
 
 {
   imports = [
@@ -8,7 +8,7 @@
   homelab.managedDirectories.entries = {
     trilium = {
       local = "/var/lib/trilium";
-      remote = "${backupRoot}/trilium";
+      remote = "${remoteBackupRoot}/trilium";
       restore = true;
       backup = true;
       owner = "root";

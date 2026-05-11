@@ -1,4 +1,4 @@
-{ backupRoot, config, ... }:
+{ remoteBackupRoot, config, ... }:
 
 {
   imports = [
@@ -8,7 +8,7 @@
   homelab.managedDirectories.entries = {
     vaultwarden = {
       local = "/var/lib/vaultwarden";
-      remote = "${backupRoot}/vaultwarden";
+      remote = "${remoteBackupRoot}/vaultwarden";
       restore = true;
       backup = true;
       owner = "root";

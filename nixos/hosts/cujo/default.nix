@@ -1,23 +1,40 @@
-{ nasBasePath, versionCurrent, ... }:
+{ hostIp4Address, hostInterface, hostName, nixosVersion, remoteBackupRoot, ... }:
 
-let
-  backupLocation = "${nasBasePath}/${hostName}";
-  hostName = inventoryConfig.hostname;
-  inventoryConfig = builtins.fromTOML (builtins.readFile ../../../inventory/hosts/cujo.toml);
-  nixosVersion = versionCurrent;
-in
 {
-  _module.args = {
-    backupRoot = backupLocation;
-    hostAddress = inventoryConfig.network.ipv4.address;
-    hostInterface = "eth1";
-    hostName = inventoryConfig.hostname;
-    nixosVersion = nixosVersion;
-  };
-
   imports = [
-    ../../profiles/hosts/cujo
+    ../../modules/bare-metal
+    ../../modules/tailscale
+
+    ../../profiles/devops
   ];
 
+  _module.args = {
+    dopplerConfig = "prd";
+    dopplerProject = "homelab";
+    dopplerTokenKey = "homelab_prd";
+  };
+
+  networking.hostName = hostName;
   system.stateVersion = nixosVersion;
+
+  homelab.bareMetal = {
+    interface = hostInterface;
+    address = hostIp4Address;
+  };
+
+  services.homelab.managedState.schedule = "*:20";
+
+  homelab.sshKeyForLabUser = true;
+
+  homelab.managedDirectories.entries = {
+    test_directory = {
+      local = "/home/lab/backup-restore";
+      remote = "${remoteBackupRoot}/backup-restore";
+      restore = true;
+      backup = true;
+      owner = "lab";
+      group = "lab";
+      mode = "0755";
+    };
+  };
 }

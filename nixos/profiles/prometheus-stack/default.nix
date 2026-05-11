@@ -1,4 +1,4 @@
-{ backupRoot, config, ... }:
+{ remoteBackupRoot, config, ... }:
 
 let
   friendlyRelabelConfigs = [
@@ -25,7 +25,7 @@ in
   homelab.managedDirectories.entries = {
     alertmanager = {
       local = "/var/lib/alertmanager";
-      remote = "${backupRoot}/alertmanager";
+      remote = "${remoteBackupRoot}/alertmanager";
       restore = true;
       backup = true;
       owner = "nobody";
@@ -34,7 +34,7 @@ in
     };
     grafana = {
       local = "/var/lib/grafana";
-      remote = "${backupRoot}/grafana";
+      remote = "${remoteBackupRoot}/grafana";
       restore = true;
       backup = true;
       owner = "grafana";

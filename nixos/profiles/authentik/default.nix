@@ -1,4 +1,4 @@
-{ backupRoot, config, ... }:
+{ remoteBackupRoot, config, ... }:
 
 {
   imports = [
@@ -56,7 +56,7 @@
   homelab.managedDirectories.entries = {
     postgres_backup = {
       local = "/var/lib/postgres-db-dumps";
-      remote = "${backupRoot}/authentik/db-dumps";
+      remote = "${remoteBackupRoot}/authentik/db-dumps";
       restore = true;
       backup = true;
       owner = "root";

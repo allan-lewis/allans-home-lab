@@ -1,23 +1,32 @@
-{ nasBasePath, versionCurrent, ... }:
+{ hostIp4Address, hostInterface, hostName, nixosVersion, ... }:
 
-let
-  backupLocation = "${nasBasePath}/${hostName}";
-  hostName = inventoryConfig.hostname;
-  inventoryConfig = builtins.fromTOML (builtins.readFile ../../../inventory/hosts/flagg.toml);
-  nixosVersion = versionCurrent;
-in
 {
-  _module.args = {
-    backupRoot = backupLocation;
-    hostAddress = inventoryConfig.network.ipv4.address;
-    hostInterface = "eth1";
-    hostName = hostName;
-    nixosVersion = nixosVersion;
-  };
-
   imports = [
-    ../../profiles/hosts/flagg
+    ../../modules/bare-metal
+    ../../modules/oci-containers/twingate
+    ../../modules/tailscale
+
+    ../../profiles/authentik
+    ../../profiles/cloudflare
+    ../../profiles/gatus
+    ../../profiles/prometheus-stack
+    ../../profiles/s3-mirror
+    ../../profiles/traefik
+    ../../profiles/twingate
   ];
 
+  networking.hostName = hostName;
   system.stateVersion = nixosVersion;
+
+  homelab.bareMetal = {
+    interface = hostInterface;
+    address = hostIp4Address;
+  };
+
+  services.homelab.managedState.schedule = "*:30";
+
+  homelab.twingate = {
+    enable = true;
+    connectorName = "modestAnteater";
+  };
 }

@@ -1,10 +1,10 @@
-{ backupRoot, ... }:
+{ remoteBackupRoot, ... }:
 
 {
   homelab.managedDirectories.entries = {
     s3_mirror = {
       local = "/var/lib/s3-mirror";
-      remote = "${backupRoot}/s3-mirror";
+      remote = "${remoteBackupRoot}/s3-mirror";
       restore = true;
       backup = true;
       owner = "root";
