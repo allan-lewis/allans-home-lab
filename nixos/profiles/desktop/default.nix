@@ -23,21 +23,9 @@
   #: enable policy kit
   security.polkit.enable = true;
 
-  #: setup the lab user with a password
-  users.mutableUsers = false;
-
-  sops.secrets.lab_password = {
-    sopsFile = ./passwords.yaml;
-  };
-
+  #: add the lab user to the audio and video groups
   users.users.lab = {
-    extraGroups = [ "wheel" "video" "audio" ];
-
-    initialPassword = lib.mkForce null;
-    initialHashedPassword = lib.mkForce null;
-    password = lib.mkForce null;
-    hashedPassword = lib.mkForce null;
-    hashedPasswordFile = lib.mkForce config.sops.secrets.lab_password.path;
+    extraGroups = [ "video" "audio" ];
   };
 
   #: install desktop packages
