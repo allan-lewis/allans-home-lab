@@ -24,9 +24,10 @@
     xdg.configFile."ghostty/config".source =
       ./dotfiles/ghostty/config.ghostty;
 
-    #: configure desktop theming
+    #: configure desktop variables
     home.sessionVariables = {
       GTK_THEME = "Gruvbox-Dark";
+      NIXOS_OZONE_WL = "1";
     };
 
     gtk = {
