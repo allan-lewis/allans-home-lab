@@ -28,4 +28,6 @@
   services.homelab.managedState.schedule = "*:05";
 
   homelab.sshKeyForLabUser = true;
+
+  homelab.labUser.enablePassword = true;
 }
