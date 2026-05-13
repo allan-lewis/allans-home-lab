@@ -94,7 +94,7 @@
     "custom/power" = {
       format = "⏻";
       tooltip = false;
-      on-click = "${pkgs.wlogout}/bin/wlogout -l /home/lab/.config/wlogout/layout -C /home/lab/.config/wlogout/style.css -b 4";
+      on-click = "${pkgs.wlogout}/bin/wlogout -l /home/lab/.config/wlogout/layout -C /home/lab/.config/wlogout/style.css -b 3";
     };
 
     "cpu" = {

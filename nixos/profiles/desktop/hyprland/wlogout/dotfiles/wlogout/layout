@@ -5,12 +5,6 @@
   "keybind" : "l"
 }
 {
-  "label" : "logout",
-  "action" : "hyprctl dispatch exit",
-  "text" : "logout",
-  "keybind" : "e"
-}
-{
   "label" : "reboot",
   "action" : "systemctl reboot",
   "text" : "reboot",

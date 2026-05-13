@@ -77,16 +77,23 @@
   #: login to a graphical target by default
   systemd.defaultUnit = "graphical.target";
 
-  #: use greetd and tuigreet for a lightweight login prompt
+  #: discourage default login prompts
   systemd.services."getty@tty1".enable = false;
   systemd.services."autovt@tty1".enable = false;
 
+  #: automatically log in the lab user (hyprland will lock the screen)
   services.greetd = {
     enable = true;
+
     settings = {
+      initial_session = {
+        command = "${pkgs.hyprland}/bin/Hyprland";
+        user = "lab";
+      };
+
       default_session = {
-        command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --asterisks --user-menu --cmd Hyprland";
-        user = "greeter";
+        command = "${pkgs.hyprland}/bin/Hyprland";
+        user = "lab";
       };
     };
   };
