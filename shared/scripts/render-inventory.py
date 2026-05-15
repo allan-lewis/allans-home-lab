@@ -204,6 +204,7 @@ def build_terraform_host_json(host: dict[str, Any]) -> dict[str, Any]:
             host["name"]: {
                 "platform": host["platform"],
                 "variant": host["variant"],
+                "kind": host["runtime"]["kind"],
                 "terraform": build_tf_host_payload(host),
             }
         }
