@@ -48,8 +48,8 @@ just nixos-switch <host>
 ### Create an Appliance VM (HAOS / TrueNAS)
 
 ```bash
-haos-boot-disk-capture <vmid>
-haos-vm-template
+just haos-boot-disk-capture <vmid>
+just haos-vm-template
 just terraform <host> apply 1
 ```
 
@@ -74,6 +74,8 @@ just arch-vm-template
 just terraform <host> apply 1
 just linux-converge "" "<host>"
 ```
+
+(Ubuntu commands follow the same pattern minus the ISO step)
 
 ---
 
@@ -100,11 +102,11 @@ just terraform <host> destroy 1
 
 ### Appliances
 
-- `haos-boot-disk-capture <vmid>`
-- `haos-vm-template`
-- `truenas-boot-disk-capture <vmid>`
-- `truenas-vm-template`
-- `truenas-attach-disks <vmid>`
+- `just haos-boot-disk-capture <vmid>`
+- `just haos-vm-template`
+- `just truenas-boot-disk-capture <vmid>`
+- `just truenas-vm-template`
+- `just truenas-attach-disks <vmid>`
 
 ---
 
@@ -135,7 +137,7 @@ Typical flow:
 Differences by system:
 
 - NixOS → converged via Nix
-- Appliances → no convergence step
+- Appliances → minimal convergence steps (e.g. TrueNAS disks)
 - Linux → converged via Ansible
 
 ---
@@ -188,15 +190,9 @@ This is a custom script used to synchronize media data. It is specific to this e
 
 ---
 
-## Restore a Postgres DB Dump
-
-```bash
-docker run --rm   --network authentik_default   -v "/path/to/backups:/backups:ro"   -e PGPASSWORD='YOUR_DB_PASSWORD'   postgres:16   pg_restore     -h <postgres_service_name_or_container_name>     -U <db_user>     -d <db_name>     --clean --if-exists     --no-owner --no-privileges     --exit-on-error     /backups/authentik.dump
-```
-
----
-
 ## Run Node Exporter on Asustor NAS
+
+This can be slightly picky across host reboots/upgrades.  The commands below will reliably get things back to a good state.
 
 Cleanup existing container:
 
@@ -208,4 +204,32 @@ Run Node Exporter:
 
 ```bash
 sudo docker run -d --name node_exporter -p 9100:9100 --restart unless-stopped prom/node-exporter
+```
+
+---
+
+## Restore a Postgres DB Dump
+
+### Authentik
+
+```bash
+docker exec -i authentik-postgresql-1 pg_restore \
+  -U authentik \
+  -d authentik \
+  --clean --if-exists \
+  --no-owner --no-privileges \
+  --exit-on-error \
+  < /var/lib/postgres-db-dumps/authentik-20260507-050020.dump
+```
+
+### Immich
+
+```bash
+docker exec -i immich_postgres pg_restore \
+  -U postgres \
+  -d immich \
+  --clean --if-exists \
+  --no-owner --no-privileges \
+  --exit-on-error \
+  < /var/lib/postgres-db-dumps/immich-xxx.dump
 ```

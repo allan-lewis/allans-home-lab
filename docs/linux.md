@@ -26,7 +26,7 @@ These are primarily used for experimentation and non-production workloads.
 Linux VMs follow a simple lifecycle:
 
 1. Define host in [`inventory/hosts/`](../inventory/hosts/)
-2. Build ISO or template
+2. Build ISO and/or template
 3. Provision VM using Terraform
 4. Converge system using Ansible
 
@@ -49,7 +49,7 @@ Unlike NixOS, convergence is procedural and may require multiple runs or debuggi
 just arch-iso
 ```
 
-Downloads Arch and creates a custom cloud-init ISO.
+Downloads Arch, creates a custom cloud-init ISO, and uploads it to Proxmox.  By default ISO details will be recorded in `linux/arch/spec/iso-manifest-stable.json`.
 
 ---
 
@@ -59,7 +59,7 @@ Downloads Arch and creates a custom cloud-init ISO.
 just arch-vm-template
 ```
 
-Creates a Proxmox VM template using the custom ISO.
+Creates a Proxmox VM template using the custom ISO. By default template details will be recorded in `linux/arch/spec/vm-template-stable.json`.
 
 ---
 
@@ -80,6 +80,16 @@ just linux-converge "" "<hostname>"
 ```
 
 Runs Ansible convergence for the host.
+
+---
+
+### 5. Remove VM
+
+```bash
+just terraform <hostname> destroy 1
+```
+
+- Use `0` instead of `1` for a dry run
 
 ---
 
@@ -125,7 +135,7 @@ just linux-converge "" "<hostname>"
 just ubuntu-vm-template
 ```
 
-Creates a Proxmox VM template using a standard Ubuntu ISO.
+Downloads a standard Ubuntu ISO and creates a Proxmox VM template. By default template details will be recorded in `linux/arch/spec/vm-template-stable.json`.
 
 ---
 
@@ -185,7 +195,7 @@ Defined in:
 
 ## Template / ISO Creation
 
-- Arch uses `arch-iso`
+- Arch uses `arch-iso` and `arch-vm-template`
 - Ubuntu uses `ubuntu-vm-template`
 
 ---
@@ -203,11 +213,33 @@ just terraform <hostname> destroy 1
 
 ## Ansible Convergence
 
+### Converge All Linux Hosts
+
 ```bash
-just linux-converge "" "<hostname>"
+just linux-converge
 ```
 
+### Converge A Subset of Hosts
+
 Responsible for system configuration.
+
+Limits can be applied by host or group.
+
+```bash
+just linux-converge "" "host1,host2"
+```
+
+```bash
+just linux-converge "" "arch"
+```
+
+### Converge A Subset of Steps
+
+```bash
+just linux-converge "step1,step2" ""
+```
+
+Limits by step and host/group could be combined to control convergence at the desired granularity.
 
 ---
 

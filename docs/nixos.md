@@ -2,11 +2,11 @@
 
 ## Quick Start : Create a NixOS VM
 
-This walkthrough shows the full lifecycle of creating and converging a NixOS VM using the `todash` host as an example.
+This walkthrough shows the full lifecycle of creating and converging a NixOS VM using the NixOS sandbox host `todash` as an example.
 
 It assumes:
 - Proxmox is reachable
-- Required credentials are already in place
+- Required credentials/secrets are accessible (typically via Doppler)
 - You are running commands from the repo root
 
 ---
@@ -19,7 +19,7 @@ Build and register a reusable NixOS template in Proxmox:
 just nixos-vm-template
 ```
 
-This produces the base image used for all NixOS VMs and records its details in a JSON manifest for later use.
+This produces the base image used for all NixOS VMs and records its details in a JSON manifest for later use.  By default template details will be recorded in `nixos/spec/vm-template-stable.json`.
 
 ---
 
@@ -75,7 +75,56 @@ This wires the host into the NixOS build system.
 
 ---
 
-### 4. Create the VM (Terraform)
+### 4. Create Per-host Configuration Files
+
+Each host requires that two files be present in `nixos/hosts/<hostname>`:
+- default.nix 
+- hardware-configuration.nix
+
+#### Minimal default.nix (Bare Metal)
+```nix
+{ hostIp4Address, hostInterface, hostName, nixosVersion, ... }:
+
+{
+  imports = [
+    ../../modules/bare-metal
+  ];
+
+  networking.hostName = hostName;
+  system.stateVersion = nixosVersion;
+
+  homelab.bareMetal = {
+    interface = hostInterface;
+    address = hostIp4Address;
+  };
+}
+```
+
+#### Minimal default.nix (Virtual Machine)
+```nix
+{ hostName, nixosVersion, ... }:
+
+{
+  imports = [
+    ../../modules/virtual-machine
+  ];
+
+  networking.hostName = hostName;
+  system.stateVersion = nixosVersion;
+}
+```
+
+#### Creating/updating hardware-configuration.nix
+
+For bare metal hosts, the hardware configuration will automatically be retrieved from the remote host.
+
+For virtual machines, the hardware configuration will be created based on a hypervisor-specific template, since VMs will share predicatable state.
+
+Note that rebuilds/switches may produce changes that need to be commmitted and pushed to GitHub.
+
+---
+
+### 5. Create the VM (Terraform)
 
 Provision the VM in Proxmox:
 
@@ -85,10 +134,11 @@ just terraform todash apply 1
 
 - Use `0` instead of `1` for a dry run
 - This step creates the VM from the template defined earlier
+- Host will have a default NixOS profile, known IP address, and a default user who can login via SSH
 
 ---
 
-### 5. Converge the Host (NixOS)
+### 6. Converge the Host (NixOS)
 
 Build and deploy the system configuration:
 
@@ -102,20 +152,33 @@ This uses remote builds — artifacts are built on the target host, not locally.
 
 ---
 
-### 6. Validate the Host
+### 7. Validate the Host
 
 Confirm the system is up and exporting metrics:
 
 ```
 http://<ip>:9100/metrics
+http://<ip>:9102/metrics
 ```
 
-If this endpoint responds, the host is:
+If these endpoint respond, the host is:
 - reachable
 - successfully converged
 - running baseline services
 
-Node Exporter is enabled by default via shared modules.
+Node Exporter and custom homelab metrics are enabled by default via shared modules.
+
+---
+
+### 8. Delete the VM (Terraform)
+
+Provision the VM in Proxmox:
+
+```bash
+just terraform todash destroy 1
+```
+
+- Use `0` instead of `1` for a dry run
 
 ---
 
@@ -128,7 +191,8 @@ This flow represents the standard lifecycle for NixOS VM management:
 3. Register in flake  
 4. Provision VM  
 5. Deploy configuration  
-6. Validate  
+6. Validate
+7. Remove VM  
 
 ---
 
@@ -323,7 +387,7 @@ Things to verify when rebuilding:
 
 If any of these drift from reality, rebuilds can fail in ways that look like NixOS issues but are actually hardware mismatches.
 
-When in doubt, regenerate the hardware configuration and revalidate the assumptions before re-running `nixos-switch`.
+When in doubt, run `nixos-switch`.
 
 ---
 
@@ -366,9 +430,7 @@ Secrets in this project are managed using `sops-nix`, with encrypted files store
 
 ### Where Secrets Live
 
-All encrypted secret files are located under:
-
-- [`nixos/secrets/`](../nixos/secrets/)
+Secrets are typically located in module folders alongside the features that use them.
 
 These files are committed to the repo in encrypted form and are safe to version control.
 
@@ -380,10 +442,10 @@ The SOPS private key used for encryption and decryption is stored in Doppler.
 
 In practice, this means most secret management operations are performed using `doppler run` to inject the key at runtime.
 
-A typical command to create or edit a secret file looks like:
+The project's Justfile supports running Doppler along with the Just recipe, so to add/edit a secret, use:
 
 ```bash
-doppler run -- sops nixos/secrets/secret.yaml
+just nixos-sops-secret <path_to_secret>
 ```
 
 This ensures:
@@ -411,7 +473,7 @@ Common destination patterns:
 If a secret is not working as expected, check:
 
 - the correct SOPS file is referenced
-- the secret is defined in [`nixos/secrets/`](../nixos/secrets/)
+- the secret file exists at the correct path
 - the destination path on the host is correct
 - file ownership and permissions are correct
 - the consuming service is pointing to the correct path
@@ -420,7 +482,7 @@ If a secret is not working as expected, check:
 
 ### Design Notes
 
-Secrets are intentionally kept separate from normal system configuration.
+Secrets are intentionally handled with more care than "normal" system configuration.
 
 - NixOS defines *how* secrets are used
 - SOPS defines *what* the secret values are
@@ -508,7 +570,7 @@ journalctl -xe --no-pager
 
 ### Metrics Validation
 
-Because Node Exporter is enabled by default, `http://<ip>:9100/metrics` is a useful quick validation step after convergence. It is not the only check, but it is a good baseline signal that the machine is up and core services are running.
+Because Node Exporter and homelab metrics are enabled by default, `http://<ip>:9100/metrics` `http://<ip>:9102/metrics` are useful quick validations step after convergence. It is not the only check, but it is a good baseline signal that the machine is up and core services are running.
 
 ---
 
