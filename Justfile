@@ -89,11 +89,15 @@ nixos-check host: all-inventory-build
 
 # Build and temporarily apply new configuration to a remote host
 nixos-test host: all-inventory-build
-    {{run_prefix}} ./nixos/scripts/converge.sh {{host}} test
+  {{run_prefix}} ./nixos/scripts/converge.sh {{host}} test
 
 # Build and permanently apply new configuration to a remote host
 nixos-switch host: all-inventory-build
-    {{run_prefix}} ./nixos/scripts/converge.sh {{host}} switch
+  {{run_prefix}} ./nixos/scripts/converge.sh {{host}} switch
+
+# Create or edit a SOPS-encrypted secret
+nixos-sops-secret secret:
+  {{run_prefix}} sops {{secret}}
 
 #############################
 #### TRUENAS ################
