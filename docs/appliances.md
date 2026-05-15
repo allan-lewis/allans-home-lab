@@ -43,10 +43,10 @@ The appliance manages its own internal state.
 Capture a known-good HAOS VM boot disk and upload it to S3:
 
 ```bash
-haos-boot-disk-capture 101
+just haos-boot-disk-capture 101
 ```
 
-Argument is the Proxmox VM ID.
+Argument is the Proxmox VM ID, and the VM at the target id must be stopped propr to running this command.  By default S3 details will be recorded in `appliance/haos/spec/disk-capture-stable.json`.
 
 ---
 
@@ -55,10 +55,10 @@ Argument is the Proxmox VM ID.
 Create a Proxmox VM template from the captured disk:
 
 ```bash
-haos-vm-template
+just haos-vm-template
 ```
 
-This pulls the disk from S3 and registers a reusable template.
+This pulls the disk from S3 and registers a reusable template.  By default template details will be recorded in `appliance/haos/spec/vm-template-stable.json`.
 
 ---
 
@@ -80,7 +80,7 @@ just terraform <hostname> apply 1
 Once created:
 
 - Access the HAOS web UI
-- Complete any first-boot setup if required
+- Complete any post-boot setup if required (it generally won't be)
 
 ---
 
@@ -116,8 +116,10 @@ This recreates the VM from the current template.
 Capture a known-good TrueNAS boot disk:
 
 ```bash
-truenas-boot-disk-capture 100
+just truenas-boot-disk-capture 100
 ```
+
+By default S3 details will be recorded in `appliance/truenas/spec/disk-capture-stable.json`.
 
 ---
 
@@ -126,8 +128,10 @@ truenas-boot-disk-capture 100
 Create a template from the captured disk:
 
 ```bash
-truenas-vm-template
+just truenas-vm-template
 ```
+
+By default template details will be recorded in `appliance/truenas/spec/vm-template-stable.json`.
 
 ---
 
@@ -148,7 +152,7 @@ just terraform <hostname> apply 1
 Attach physical disks for storage pools:
 
 ```bash
-truenas-attach-disks 101
+just truenas-attach-disks 101
 ```
 
 Argument is the VM ID.
@@ -180,7 +184,7 @@ just terraform <hostname> apply 1
 Then reattach disks:
 
 ```bash
-truenas-attach-disks <vmid>
+just truenas-attach-disks <vmid>
 ```
 
 Important:
@@ -206,8 +210,8 @@ Important:
 Commands:
 
 ```bash
-truenas-boot-disk-capture <vmid>
-haos-boot-disk-capture <vmid>
+just truenas-boot-disk-capture <vmid>
+just haos-boot-disk-capture <vmid>
 ```
 
 This:
@@ -215,6 +219,7 @@ This:
 - extracts the VM boot disk
 - uploads it to S3
 - prepares it for template creation
+- writes S3 disk coordinates to a JSON manifest
 
 ---
 
@@ -223,8 +228,8 @@ This:
 Commands:
 
 ```bash
-truenas-vm-template
-haos-vm-template
+just truenas-vm-template
+just haos-vm-template
 ```
 
 This:
@@ -232,6 +237,7 @@ This:
 - downloads the disk from S3
 - registers a Proxmox template
 - makes it available to Terraform
+- writes template coordinates to a JSON manifest
 
 ---
 
@@ -251,7 +257,6 @@ just terraform <hostname> destroy 1
 
 - Use `0` for dry runs
 - Terraform controls VM lifecycle only
-- No OS-level convergence step exists for appliances
 
 ---
 
