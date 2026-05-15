@@ -2,7 +2,7 @@
 
 ## Overview
 
-A GitOps-driven homelab centered on NixOS host management, with supporting workflows for appliance and legacy VMs — all driven from a unified TOML inventory.
+A GitOps-driven homelab centered on NixOS host management, with supporting workflows for appliance and Linux VMs — all driven from a unified TOML inventory.
 
 ---
 
@@ -30,7 +30,7 @@ Core capabilities:
 
 - NixOS remote build and deployment (bare metal and virtual machines)
 - Appliance VM lifecycle management using Proxmox and Terraform
-- Legacy Linux VM management using Ansible (non-production use)
+- Linux VM management using Ansible (mostly non-production/experimental use)
 - Inventory-driven configuration generation (TOML → tool-specific configs)
 
 ---
@@ -112,9 +112,9 @@ For more details, see:
 
 ---
 
-## Legacy Linux VM Management (Ansible)
+## Linux VM Management (Ansible)
 
-Legacy Linux hosts (primarily Arch and Ubuntu) are managed under the [`linux/`](linux/) directory using Ansible.
+Linux hosts (primarily Arch and Ubuntu) are managed under the [`linux/`](linux/) directory using Ansible.
 
 These systems are retained for:
 
@@ -176,7 +176,6 @@ For more detailed information:
 - Appliances → [`docs/appliances.md`](docs/appliances.md)
 - Legacy → [`docs/legacy.md`](docs/legacy.md)
 - Operations → [`docs/operations.md`](docs/operations.md)
-- Notes → [`docs/notes.md`](docs/notes.md)
 
 Start here for context, then move into the relevant section based on what you are trying to do.
 
