@@ -2,12 +2,22 @@
 
 let
   cfg = config.services.homelab.authentikCompose;
+
+  composeSeriesVersion = lib.versions.majorMinor cfg.version;
+
+  resolvedComposeUrl =
+    if cfg.composeUrl != null then
+      cfg.composeUrl
+    else if lib.versionAtLeast composeSeriesVersion "2026.2" then
+      "https://goauthentik.io/version/${composeSeriesVersion}/lifecycle/container/compose.yml"
+    else
+      "https://goauthentik.io/version/${composeSeriesVersion}/docker-compose.yml";
 in
 {
   imports = [
     ../docker
   ];
-  
+
   options.services.homelab.authentikCompose = {
     enable = lib.mkEnableOption "Authentik via upstream Docker Compose";
 
@@ -23,12 +33,18 @@ in
 
     version = lib.mkOption {
       type = lib.types.str;
-      default = "2025.10.3";
     };
 
     composeUrl = lib.mkOption {
-      type = lib.types.str;
-      default = "https://docs.goauthentik.io/compose.yml";
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      description = ''
+        Optional explicit Authentik Docker Compose URL.
+
+        If unset, this module uses the minor-series compose URL derived from
+        services.homelab.authentikCompose.version, for example:
+        https://goauthentik.io/version/2025.12/docker-compose.yml
+      '';
     };
 
     httpPort = lib.mkOption {
@@ -63,6 +79,7 @@ in
 
     systemd.tmpfiles.rules = [
       "d ${cfg.appDir} 0750 root root -"
+      "d ${cfg.appDir}/data 0750 root root -"
     ];
 
     networking.firewall.allowedTCPPorts =
@@ -89,7 +106,16 @@ in
 
       preStart = ''
         install -d -m 0750 ${cfg.appDir}
-        curl -fsSL ${lib.escapeShellArg cfg.composeUrl} -o ${cfg.appDir}/docker-compose.yml
+        install -d -m 0750 ${cfg.appDir}/data
+
+        if [[ -d ${cfg.appDir}/media && ! -e ${cfg.appDir}/data/media ]]; then
+          echo "Migrating Authentik media directory from ${cfg.appDir}/media to ${cfg.appDir}/data/media"
+          mv ${cfg.appDir}/media ${cfg.appDir}/data/media
+        elif [[ -d ${cfg.appDir}/media && -e ${cfg.appDir}/data/media ]]; then
+          echo "WARNING: Both ${cfg.appDir}/media and ${cfg.appDir}/data/media exist; leaving both unchanged"
+        fi
+
+        curl -fsSL ${lib.escapeShellArg resolvedComposeUrl} -o ${cfg.appDir}/docker-compose.yml
         install -m 0400 ${cfg.environmentFile} ${cfg.appDir}/.env
       '';
 

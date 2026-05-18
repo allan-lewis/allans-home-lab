@@ -1,5 +1,8 @@
 { remoteBackupRoot, config, ... }:
 
+let
+  authentikVersion = "2026.2.3";
+in
 {
   imports = [
     ../../modules/authentik
@@ -26,7 +29,7 @@
     group = "root";
     mode = "0400";
     content = ''
-      AUTHENTIK_TAG=2025.10.3
+      AUTHENTIK_TAG=${authentikVersion}
       COMPOSE_PORT_HTTP=9180
       COMPOSE_PORT_HTTPS=9143
       PG_PASS=${config.sops.placeholder.authentik_pg_pass}
@@ -36,7 +39,7 @@
 
   services.homelab.authentikCompose = {
     enable = true;
-    version = "2025.10.3";
+    version = authentikVersion;
     httpPort = 9180;
     httpsPort = 9143;
     environmentFile = config.sops.templates."authentik.env".path;
