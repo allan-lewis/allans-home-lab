@@ -34,6 +34,10 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    networking.firewall.allowedTCPPorts = [
+      cfg.port
+    ];
+
     virtualisation.oci-containers.containers.vaultwarden = {
       image = cfg.image;
 
