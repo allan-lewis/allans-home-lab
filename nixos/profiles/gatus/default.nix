@@ -411,7 +411,7 @@
       conditions = [
         "[STATUS] == 200"
         "[CERTIFICATE_EXPIRATION] > 168h"
-        "[BODY] == pat(*OK*)"
+        "[BODY] == pat(*authentik*)"
       ];
     }
     {
@@ -441,7 +441,7 @@
       conditions = [
         "[STATUS] == 200"
         "[CERTIFICATE_EXPIRATION] > 168h"
-        "[BODY] == pat(*OK*)"
+        "[BODY] == pat(*authentik*)"
       ];
     }
     {
@@ -451,7 +451,7 @@
       conditions = [
         "[STATUS] == 200"
         "[CERTIFICATE_EXPIRATION] > 168h"
-        "[BODY] == pat(*OK*)"
+        "[BODY] == pat(*authentik*)"
       ];
     }
     {
@@ -461,7 +461,7 @@
       conditions = [
         "[STATUS] == 200"
         "[CERTIFICATE_EXPIRATION] > 168h"
-        "[BODY] == pat(*OK*)"
+        "[BODY] == pat(*authentik*)"
       ];
     }
     {
@@ -471,7 +471,7 @@
       conditions = [
         "[STATUS] == 200"
         "[CERTIFICATE_EXPIRATION] > 168h"
-        "[BODY] == pat(*Bazarr*)"
+        "[BODY] == pat(*authentik*)"
       ];
     }
     {
