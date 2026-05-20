@@ -59,7 +59,7 @@
       name = "bazarr";
       host = "bazarr.media.allanshomelab.com";
       url = "http://192.168.86.224:6767";
-      authentik = false;
+      authentik = true;
     }
     {
       name = "derry";
@@ -125,7 +125,7 @@
       name = "lidarr";
       host = "lidarr.media.allanshomelab.com";
       url = "http://192.168.86.224:8686";
-      authentik = false;
+      authentik = true;
     }
     {
       name = "maturin";
@@ -173,19 +173,19 @@
       name = "prowlarr";
       host = "prowlarr.media.allanshomelab.com";
       url = "http://192.168.86.224:9696";
-      authentik = false;
+      authentik = true;
     }
     {
       name = "radarr";
       host = "radarr.media.allanshomelab.com";
       url = "http://192.168.86.224:7878";
-      authentik = false;
+      authentik = true;
     }
     {
       name = "sonarr";
       host = "sonarr.media.allanshomelab.com";
       url = "http://192.168.86.224:8989";
-      authentik = false;
+      authentik = true;
     }
     {
       name = "tautulli";
