@@ -9,7 +9,6 @@ in
 
     image = lib.mkOption {
       type = lib.types.str;
-      default = "allanelewis/ngb-go:v2026.04.0@sha256:32261fc7b13d58ccb6bf8f43ea7e07bd60a9213598a05d0ea462fc223bb83ec2";
     };
 
     port = lib.mkOption {
