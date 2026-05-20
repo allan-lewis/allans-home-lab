@@ -17,6 +17,7 @@
     gnumake
     just
     packer
+    sops
     terraform
     uv
   ];

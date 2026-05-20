@@ -1,0 +1,18 @@
+trilium:
+    oauth_client_id: ENC[AES256_GCM,data:FRHKl2g4J/yeSGLrLWKdbMFUU69sJhTdDNENLe/q6qoUi4LY3AUwhA==,iv:JdiMaLgnBDqJUzgzPGrdJdpz/6hCuDkm7ykrotKRjAg=,tag:hbAcMsY9YdY1n5T3EWRR9w==,type:str]
+    oauth_client_secret: ENC[AES256_GCM,data:q58cT1SFw5d0JAvjfplkQJpT3poAeJC3+8DKJ+ynVA+3Bb+WUIV5rbH55vaFiN5kb+NaqcjaUcDTV/vvHm/wG8loTxX8koVD3Y0ZpodafX/mQ4N/1/t4Quq4qvyJ/D+EcYgmuSqMCawNuIFulGH+3HJ3P51dVGAAO9PTKTDDKis=,iv:V3DtB42xRB9SqoHVWYf6XlvmhkP8drcGaYb/rIog5z4=,tag:+O9HvpCIepWGT+jk1DAEDQ==,type:str]
+sops:
+    age:
+        - recipient: age1rsa3wqfhq3fxjmkqf3809wln39f64qvlqgwxy4usx9jng7t545xs8ts3dp
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSAyOFg4UG5neGVzaUYvZUhM
+            Y3FndG9paEMrRmN6blNjZnpkVWI1Y1RSUlVvCjY0UzEvSlB4WTJSQVR3UjFEZEZi
+            UkwzYjRTeTJVMTZFTGxySlJGNjBzaWsKLS0tIHVaVmVoSmcyQUpSaE8rcUlFSEZy
+            Qm8reWQ0UU1uWUR5T2RTM3VDV2R4WFEKYzOjVMz3Af43FlDbZEn6DWGtozH0wk3i
+            4liOGAhmjY2Y2yrXrvpNS02X2nU8DHNnKJn2y9dLDsGg7qLZnPfl+g==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2026-05-20T15:07:42Z"
+    mac: ENC[AES256_GCM,data:q0PAfvfg2J6+54Cl7hKR1UidKREZmAieeJRkBLAjqtztILP16OTXPloxIFTu2mm3Vu6Igtz58YoogOGRC/oacecduiPzkksHcwzbiK5t8OpmfSQPzTPq6K6AJtQ5kBRlyMpNHXFJgZQv10o6vWfiJ4qs92PSTDI7kMDEFupSMXQ=,iv:5/hgpgvWdOJhj2n7mML2oOpcu80Laorqc1PMGBgxEjQ=,tag:NpCeomqDpQWYv+ucTclbHA==,type:str]
+    unencrypted_suffix: _unencrypted
+    version: 3.12.1
