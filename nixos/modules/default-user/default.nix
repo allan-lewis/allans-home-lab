@@ -72,7 +72,7 @@ in
         enable = true;
       };
 
-      xdg.configFile."starship.toml".source = ./dotfiles/starship.toml;
+      xdg.configFile."starship.toml".source = ../../../dotfiles/starship/starship.toml;
 
       #: neovim
       xdg.configFile."nvim" = {

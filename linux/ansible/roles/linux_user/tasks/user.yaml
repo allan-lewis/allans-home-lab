@@ -50,3 +50,19 @@
     chdir: "{{ dotfiles_dest }}"
   loop: "{{ user_stow_packages }}"
   changed_when: false
+
+- name: Ensure Starship config directory exists
+  ansible.builtin.file:
+    path: "/home/{{ dot_user }}/.config"
+    state: directory
+    owner: "{{ dot_user }}"
+    group: "{{ dot_user }}"
+    mode: "0755"
+
+- name: Copy starship.toml to remote host
+  ansible.builtin.copy:
+    src: "../../../dotfiles/starship/starship.toml"
+    dest: "/home/{{ dot_user }}/.config/starship.toml"
+    owner: "{{ dot_user }}"
+    group: "{{ dot_user }}"
+    mode: "0644"
