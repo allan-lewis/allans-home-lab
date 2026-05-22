@@ -76,3 +76,12 @@
     owner: "{{ ansible_user }}"
     group: "{{ ansible_user }}"
     mode: "0644"
+
+#: configure lazy vim
+- name: Copy nvim config folder to remote host
+  ansible.builtin.copy:
+    src: "../../../dotfiles/nvim"
+    dest: "/home/lab/.config"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "0644"
