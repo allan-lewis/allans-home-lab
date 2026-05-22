@@ -51,6 +51,16 @@
   loop: "{{ user_stow_packages }}"
   changed_when: false
 
+#: tmux
+- name: Copy tmux.conf to remote host
+  ansible.builtin.copy:
+    src: "../../../dotfiles/tmux/tmux.conf"
+    dest: "/home/{{ dot_user }}/.tmux.conf"
+    owner: "{{ dot_user }}"
+    group: "{{ dot_user }}"
+    mode: "0644"
+
+#: starship
 - name: Ensure Starship config directory exists
   ansible.builtin.file:
     path: "/home/{{ dot_user }}/.config"
