@@ -19,6 +19,11 @@ in
 
   config = mkMerge [
     {
+      environment.variables = {
+        EDITOR = "nvim";
+        VISUAL = "nvim";
+      };
+
       #: nixos settings
       nix.settings.experimental-features = [ "nix-command" "flakes" ];
       nixpkgs.config.allowUnfree = true;

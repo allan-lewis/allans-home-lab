@@ -65,7 +65,7 @@ in
         '';
       };
 
-      xdg.configFile."zsh/zshrc.local".source = ./dotfiles/zshrc.local;
+      xdg.configFile."zsh/zshrc.local".source = ../../../dotfiles/zsh/zshrc.local;
 
       #: starship
       programs.starship = {
