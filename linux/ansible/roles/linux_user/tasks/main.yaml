@@ -1,16 +1,87 @@
 ---
-- name: Set stow package list for Arch
-  ansible.builtin.set_fact:
-    user_stow_packages: "{{ linux_user_stow_packages_arch }}"
-  when: is_arch
+#: use zsh as user shell
+- name: "Ensure login shell for {{ ansible_user }} is zsh"
+  become: true
+  ansible.builtin.user:
+    name: "{{ ansible_user }}"
+    shell: "/usr/bin/zsh"
 
-- name: Set stow package list for Ubuntu
-  ansible.builtin.set_fact:
-    user_stow_packages: "{{ linux_user_stow_packages_ubuntu }}"
-  when: is_ubuntu
+#: configure plugins (e.g. highlighting, suggestions)
+- name: "Ensure plugins directory exists under ZDOTDIR for {{ ansible_user }}"
+  become: true
+  become_user: "{{ ansible_user }}"
+  ansible.builtin.file:
+    path: "/home/lab/.config/zsh/plugins"
+    state: directory
+    mode: "0755"
 
-- name: Apply user setup
-  ansible.builtin.include_tasks: user.yaml
-  vars:
-    dot_user: lab
-    dotfiles_stow_packages: "{{ user_stow_packages }}"
+- name: "Clone/update zsh plugins for {{ ansible_user }}"
+  become: true
+  become_user: "{{ ansible_user }}"
+  ansible.builtin.git:
+    repo: "{{ item.repo }}"
+    dest: "/home/lab/.config/zsh/plugins/{{ item.name }}"
+    version: "{{ item.version | default('HEAD') }}"
+    update: true
+    force: true
+  loop: "{{ zsh_plugins }}"
+
+#: configure zsh
+- name: Copy .zshenv to remote host
+  ansible.builtin.copy:
+    src: "../../../dotfiles/zsh/.zshenv"
+    dest: "/home/lab/.zshenv"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "0644"
+
+- name: Copy .zshrc to remote host
+  ansible.builtin.copy:
+    src: "../../../dotfiles/zsh/.zshrc"
+    dest: "/home/lab/.config/zsh/.zshrc"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "0644"
+
+- name: Copy zshrc.local to remote host
+  ansible.builtin.copy:
+    src: "../../../dotfiles/zsh/zshrc.local"
+    dest: "/home/lab/.config/zsh/zshrc.local"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "0644"
+
+#: configure tmux
+- name: Copy tmux.conf to remote host
+  ansible.builtin.copy:
+    src: "../../../dotfiles/tmux/tmux.conf"
+    dest: "/home/lab/.tmux.conf"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "0644"
+
+#: configure starship
+- name: Ensure Starship config directory exists
+  ansible.builtin.file:
+    path: "/home/lab/.config"
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "0755"
+
+- name: Copy starship.toml to remote host
+  ansible.builtin.copy:
+    src: "../../../dotfiles/starship/starship.toml"
+    dest: "/home/lab/.config/starship.toml"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "0644"
+
+#: configure lazy vim
+- name: Copy nvim config folder to remote host
+  ansible.builtin.copy:
+    src: "../../../dotfiles/nvim"
+    dest: "/home/lab/.config"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "0644"

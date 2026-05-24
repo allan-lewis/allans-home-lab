@@ -162,6 +162,7 @@ The repository is organized around the core areas of responsibility:
 - [`linux/`](linux/) — Legacy Ansible-based systems
 - [`shared/`](shared/) — Cross-cutting logic and templates
 - [`docs/`](docs/) — Detailed documentation
+- [`dotfiles/`](dotfiles/) — Configuration files used across all operating systems
 - [`Justfile`](Justfile) — Operational entry point
 
 ---

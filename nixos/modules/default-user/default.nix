@@ -65,25 +65,25 @@ in
         '';
       };
 
-      xdg.configFile."zsh/zshrc.local".source = ./dotfiles/zshrc.local;
+      xdg.configFile."zsh/zshrc.local".source = ../../../dotfiles/zsh/zshrc.local;
 
       #: starship
       programs.starship = {
         enable = true;
       };
 
-      xdg.configFile."starship.toml".source = ./dotfiles/starship.toml;
+      xdg.configFile."starship.toml".source = ../../../dotfiles/starship/starship.toml;
 
       #: neovim
       xdg.configFile."nvim" = {
-        source = ./dotfiles/nvim;
+        source = ../../../dotfiles/nvim;
         recursive = true;
       };
 
       #: tmux
       programs.tmux = {
         enable = true;
-        extraConfig = builtins.readFile ./dotfiles/tmux.conf;
+        extraConfig = builtins.readFile ../../../dotfiles/tmux/tmux.conf;
       };
 
       #: packages
