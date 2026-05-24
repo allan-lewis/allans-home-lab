@@ -12,9 +12,11 @@
 
   #: install system packages
   environment.systemPackages = with pkgs; [
+    air
     ansible
     clang
     gnumake
+    go
     just
     packer
     sops
