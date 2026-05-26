@@ -19,7 +19,6 @@ arch_base_packages:
   - ripgrep
   - rsync
   - starship
-  - stow
   - sudo
   - tar
   - tmux
@@ -39,7 +38,6 @@ ubuntu_base_packages:
   - net-tools
   - nfs-common
   - software-properties-common
-  - stow
   - sudo
   - tar
   - tmux
