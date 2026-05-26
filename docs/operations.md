@@ -233,3 +233,60 @@ docker exec -i immich_postgres pg_restore \
   --exit-on-error \
   < /var/lib/postgres-db-dumps/immich-xxx.dump
 ```
+
+---
+
+## Merge a Git Branch with Main
+
+Checkout and update the main branch.
+
+```
+git checkout main
+git pull origin main
+```
+
+Checkout target branch
+
+```
+git checkout <branch>
+```
+
+Merge with main.
+
+```
+git merge main
+```
+
+Push changes to the remote branch.
+
+```
+git push
+```
+
+---
+
+## Tag a Docker Hub Release
+
+Login to Docker Hub.
+
+```
+docker login -u allanelewis
+```
+
+Pull the version of the container to be tagged.
+
+```
+docker pull allanelewis/homelab-metrics:latest
+```
+
+Add a new tag to the version.
+
+```
+docker tag allanelewis/homelab-metrics:latest allanelewis/homelab-metrics:v2026.05.1
+```
+
+Push changes to Docker Hub.
+
+```
+docker push allanelewis/homelab-metrics:v2026.05.1 
+```
