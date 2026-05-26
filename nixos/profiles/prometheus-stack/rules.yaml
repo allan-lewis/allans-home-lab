@@ -33,7 +33,7 @@ groups:
         expr: |
           count(count_values("ip", homelab_public_ip_numeric)) != 2
           or
-          min(count_values("ip", homelab_public_ip_numeric)) != 1
+          min(count_values("ip", homelab_public_ip_numeric)) != 2
         for: 5m
         labels:
           severity: critical
@@ -171,3 +171,19 @@ groups:
             instance="{{ $labels.instance }}"
             task="{{ $labels.task }}"
             utilization="{{ printf "%.2f" $value }}"
+
+      - alert: NixOSCurrentGenerationNotBooted
+        expr: |
+          nixos_system_booted_is_current == 0
+        for: 15m
+        labels:
+          severity: info
+          rulegroup: homelabRules
+        annotations:
+          summary: "NixOS host pending reboot: {{ $labels.instance }}"
+          description: |
+            Host {{ $labels.instance }} is running a different booted generation
+            than the currently active NixOS generation.
+
+            This usually means a nixos-rebuild switch has occurred and the host
+            has not yet rebooted into the latest generation.

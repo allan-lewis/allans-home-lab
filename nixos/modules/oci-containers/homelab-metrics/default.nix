@@ -1,3 +1,5 @@
+{ lib, ... }:
+
 {
   services.homelab.containers.homelab-metrics = {
     image = "docker.io/allanelewis/homelab-metrics:v2026.05.1@sha256:ade6c0e969afde26b0c63b37f23844f4c23d213a90545311288eeb2f61f41c40";
@@ -13,6 +15,13 @@
       "/nix/var/nix/profiles:/nix/var/nix/profiles:ro"
       "/run/current-system:/run/current-system:ro"
       "/run/booted-system:/run/booted-system:ro"
+    ];
+  };
+
+  virtualisation.oci-containers.containers.homelab-metrics = {
+    ports = lib.mkForce [];
+    extraOptions = [
+      "--network=host"
     ];
   };
 }

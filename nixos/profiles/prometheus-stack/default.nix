@@ -183,6 +183,10 @@ in
             targets = [ "192.168.86.224:9102" ];
             labels.__meta_friendly_instance = "patricia";
           }
+          {
+            targets = [ "192.168.86.222:9102" ];
+            labels.__meta_friendly_instance = "blaine";
+          }
         ];
         relabel_configs = friendlyRelabelConfigs;
       }
