@@ -1,6 +1,8 @@
 { config, pkgs, lib, ... }:
 
 {
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+
   services.openssh.enable = true;
 
   services.qemuGuest.enable = true;

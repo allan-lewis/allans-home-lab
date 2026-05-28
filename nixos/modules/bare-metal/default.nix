@@ -8,6 +8,8 @@ in
     ../base
   ];
 
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+
   options.homelab.bareMetal = {
     interface = lib.mkOption {
       type = lib.types.str;
