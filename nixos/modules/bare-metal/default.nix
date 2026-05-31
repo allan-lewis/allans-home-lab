@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 
 let
   cfg = config.homelab.bareMetal;
@@ -7,8 +7,6 @@ in
   imports = [
     ../base
   ];
-
-  boot.kernelPackages = pkgs.linuxPackages_latest;
 
   options.homelab.bareMetal = {
     interface = lib.mkOption {
@@ -29,6 +27,8 @@ in
   };
 
   config = {
+    boot.kernelPackages = pkgs.linuxPackages_latest;
+
     boot.loader.systemd-boot.enable = true;
     boot.loader.efi.canTouchEfiVariables = true;
 
