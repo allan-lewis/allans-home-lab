@@ -46,7 +46,7 @@
     {
       name = "allans-home-lab";
       host = "allanshomelab.com";
-      url = "http://192.168.86.219:3007";
+      url = "http://192.168.86.228:3007";
       authentik = true;
     }
     {

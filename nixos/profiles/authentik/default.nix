@@ -1,7 +1,7 @@
 { remoteBackupRoot, config, ... }:
 
 let
-  authentikVersion = "2026.2.3";
+  authentikVersion = "2026.5.2";
 in
 {
   imports = [
@@ -34,6 +34,9 @@ in
       COMPOSE_PORT_HTTPS=9143
       PG_PASS=${config.sops.placeholder.authentik_pg_pass}
       AUTHENTIK_SECRET_KEY=${config.sops.placeholder.authentik_secret_key}
+      # Explicit IPv4 bind for Authentik 2026.5+ compatibility.
+      AUTHENTIK_LISTEN__HTTP=0.0.0.0:9000
+      AUTHENTIK_LISTEN__HTTPS=0.0.0.0:9443
     '';
   };
 
