@@ -2,7 +2,7 @@
 
 {
   services.homelab.containers.homelab-metrics = {
-    image = "docker.io/allanelewis/homelab-metrics:v2026.06.0@sha256:c53e10fd8423a8b768f712615c37a9a03fbcceb4cc6fe20d33f9ddc0a9ba7ecf";
+    image = "allanelewis/homelab-metrics:v2026.06.0@sha256:c53e10fd8423a8b768f712615c37a9a03fbcceb4cc6fe20d33f9ddc0a9ba7ecf";
 
     port = 9102;
 
