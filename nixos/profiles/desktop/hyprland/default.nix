@@ -6,17 +6,21 @@
   ];
 
   #: enable hyrpland
-  programs.hyprland.enable = true;
+  programs.hyprland = {
+    enable = true;
+    xwayland.enable = true;
+    withUWSM = true; 
+  };
 
-  home-manager.users.lab = { ... }: {
-    #: set the current desktop environment to hyprland
-    home.sessionVariables = {
-      XDG_CURRENT_DESKTOP = "Hyprland";
-    };
+  home-manager.users.lab = { config, ... }: {
+    #: export home-manager session variables for uwsm
+    xdg.configFile."uwsm/env".source =
+      "${config.home.sessionVariablesPackage}/etc/profile.d/hm-session-vars.sh";
 
     #: install hyprland-specific packages
     home.packages = with pkgs; [
       wev
+      hyprpaper
     ];
 
     #: register default applications by type
@@ -28,16 +32,24 @@
     };
 
     #: configure hyprland
-    xdg.configFile."hypr/hyprland.conf".source =
-      ./dotfiles/hypr/hyprland.conf;
+    xdg.configFile."hypr/hyprland.conf".text =
+      builtins.replaceStrings
+        [ "\${pkgs.polkit_gnome}" ]
+        [ "${pkgs.polkit_gnome}" ]
+        (builtins.readFile ./dotfiles/hypr/hyprland.conf);
 
     #: configure wallpaper
     home.file."wallpapers/default.png".source =
       ./dotfiles/wallpaper/nix-wallpaper-binary-blue.png;
 
     xdg.configFile."hypr/hyprpaper.conf".text = ''
-      preload = /home/lab/wallpapers/default.png
-      wallpaper = ,/home/lab/wallpapers/default.png
+      splash = false
+      
+      wallpaper {
+          monitor =
+          path = /home/lab/wallpapers/default.png
+          fit_mode = cover
+      }
     '';
 
     #: configure idle and lock screens

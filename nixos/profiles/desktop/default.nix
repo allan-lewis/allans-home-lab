@@ -49,9 +49,9 @@
     waybar
     wl-clipboard
     wofi
-    xfce.thunar
-    xfce.thunar-archive-plugin
-    xfce.thunar-volman
+    thunar
+    thunar-archive-plugin
+    thunar-volman
   ];
 
   #: install fonts
@@ -87,12 +87,12 @@
 
     settings = {
       initial_session = {
-        command = "${pkgs.hyprland}/bin/Hyprland";
+        command = "${pkgs.uwsm}/bin/uwsm start -eD Hyprland hyprland.desktop";
         user = "lab";
       };
 
       default_session = {
-        command = "${pkgs.hyprland}/bin/Hyprland";
+        command = "${pkgs.uwsm}/bin/uwsm start -eD Hyprland hyprland.desktop";
         user = "lab";
       };
     };
