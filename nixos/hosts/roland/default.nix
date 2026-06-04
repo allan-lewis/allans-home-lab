@@ -1,4 +1,4 @@
-{ hostIp4Address, hostName, hostInterface, nixosVersion, lib, ... }:
+{ hostIp4Address, hostName, hostInterface, nixosVersion, lib, remoteBackupRoot, ... }:
 
 {
   imports = [
@@ -31,4 +31,16 @@
   homelab.sshKeyForLabUser = true;
 
   homelab.labUser.enablePassword = true;
+ 
+  homelab.managedDirectories.entries = {
+    test_directory = {
+      local = "/home/lab/rust-playground/";
+      remote = "${remoteBackupRoot}/rust-playground";
+      restore = false;
+      backup = true;
+      owner = "lab";
+      group = "lab";
+      mode = "0755";
+    };
+  };
 }
