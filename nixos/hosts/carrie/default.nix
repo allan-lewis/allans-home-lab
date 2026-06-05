@@ -7,7 +7,6 @@
     ../../modules/virtual-machine
 
     ../../profiles/homepage
-    ../../profiles/no-geeks-brewing
     ../../profiles/trilium
     ../../profiles/twingate
     ../../profiles/vaultwarden

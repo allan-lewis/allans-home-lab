@@ -142,8 +142,8 @@
     {
       name = "no-geeks-brewing";
       host = "nogeeksbrewing.com";
-      url = "http://192.168.86.228:8083";
-      authentik = false;
+      url = "http://192.168.86.228";
+      authentik = true;
     }
     {
       name = "pennywise";
