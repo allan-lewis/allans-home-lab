@@ -46,8 +46,8 @@
     {
       name = "allans-home-lab";
       host = "allanshomelab.com";
-      url = "http://192.168.86.228:3007";
-      authentik = true;
+      url = "http://192.168.86.228:8976";
+      authentik = false;
     }
     {
       name = "authentik";
@@ -142,8 +142,8 @@
     {
       name = "no-geeks-brewing";
       host = "nogeeksbrewing.com";
-      url = "http://192.168.86.228:8083";
-      authentik = false;
+      url = "http://192.168.86.228";
+      authentik = true;
     }
     {
       name = "pennywise";
@@ -222,6 +222,12 @@
       name = "whoami";
       host = "whoami.nixos.allanshomelab.com";
       url = "http://127.0.0.1:8180";
+      authentik = false;
+    }
+    {
+      name = "homelab-dev";
+      host = "homelab-dev.nixos.allanshomelab.com";
+      url = "http://192.168.86.206:3000";
       authentik = false;
     }
   ];
