@@ -6,8 +6,8 @@
     ../../modules/oci-containers/nginx
     ../../modules/virtual-machine
 
+    ../../profiles/homelab-dashboard
     ../../profiles/homepage
-    ../../profiles/no-geeks-brewing
     ../../profiles/trilium
     ../../profiles/twingate
     ../../profiles/vaultwarden

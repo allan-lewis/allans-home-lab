@@ -251,7 +251,7 @@
       conditions = [
         "[STATUS] == 200"
         "[CERTIFICATE_EXPIRATION] > 168h"
-        "[BODY] == pat(*authentik*)"
+        "[BODY] == pat(*Dashboard*)"
       ];
     }
     {
@@ -261,7 +261,7 @@
       conditions = [
         "[STATUS] == 200"
         "[CERTIFICATE_EXPIRATION] > 168h"
-        "[BODY] == pat(*authentik*)"
+        "[BODY] == pat(*Dashboard*)"
       ];
     }
     {
@@ -371,7 +371,7 @@
       conditions = [
         "[STATUS] == 200"
         "[CERTIFICATE_EXPIRATION] > 168h"
-        "[BODY] == pat(*No Geeks Brewing*)"
+        "[BODY] == pat(*authentik*)"
       ];
     }
     {
@@ -381,7 +381,7 @@
       conditions = [
         "[STATUS] == 200"
         "[CERTIFICATE_EXPIRATION] > 168h"
-        "[BODY] == pat(*No Geeks Brewing*)"
+        "[BODY] == pat(*authentik*)"
       ];
     }
     {

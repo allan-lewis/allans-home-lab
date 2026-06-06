@@ -37,6 +37,7 @@
     "alertmanager.nixos.allanshomelab.com,nixos.allanshomelab.com"
     "dns.nixos.allanshomelab.com,nixos.allanshomelab.com"
     "gatus.nixos.allanshomelab.com,nixos.allanshomelab.com"
+    "homelab-dev.nixos.allanshomelab.com,nixos.allanshomelab.com"
     "homepage.nixos.allanshomelab.com,nixos.allanshomelab.com"
     "nginx.nixos.allanshomelab.com,nixos.allanshomelab.com"
     "prometheus.nixos.allanshomelab.com,nixos.allanshomelab.com"
