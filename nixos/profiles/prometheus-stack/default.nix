@@ -56,10 +56,19 @@ in
   };
 
   #: configure grafana
+  sops.secrets.grafana_secret_key = {
+    sopsFile = ./grafana.yaml;
+    key = "grafana/secret_key";
+    owner = "grafana";
+    group = "grafana";
+    mode = "0400";
+  };
+
   services.homelab.grafana = {
     enable = true;
     port = 3071;
     domain = "grafana.allanshomelab.com";
+    secretKeyFile = config.sops.secrets.grafana_secret_key.path;
   };
 
   #: configure prometheus
