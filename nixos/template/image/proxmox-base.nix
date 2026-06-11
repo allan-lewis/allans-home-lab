@@ -1,6 +1,8 @@
 { config, pkgs, lib, ... }:
 
 {
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+
   services.openssh.enable = true;
 
   services.qemuGuest.enable = true;
@@ -29,6 +31,6 @@
     python3
   ];
 
-  system.stateVersion = "25.11";
+  system.stateVersion = "26.05";
 }
 

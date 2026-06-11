@@ -1,8 +1,9 @@
-{ hostIp4Address, hostName, hostInterface, nixosVersion, lib, ... }:
+{ hostIp4Address, hostName, hostInterface, nixosVersion, lib, remoteBackupRoot, ... }:
 
 {
   imports = [
     ../../modules/bare-metal
+    ../../modules/rust
     ../../modules/tailscale
 
     ../../profiles/desktop

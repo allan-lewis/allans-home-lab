@@ -41,18 +41,13 @@
         version = "main";
       }
       {
-        repo = "git@github.com:allan-lewis/dotfiles.git";
-        dest = "dotfiles";
+        repo = "git@github.com:allan-lewis/homelab-dashboard.git";
+        dest = "homelab-dashboard";
         version = "main";
       }
       {
         repo = "git@github.com:allan-lewis/homelab-metrics.git";
         dest = "homelab-metrics";
-        version = "main";
-      }
-      {
-        repo = "git@github.com:allan-lewis/no-geeks-brewing-go.git";
-        dest = "no-geeks-brewing-go";
         version = "main";
       }
     ];

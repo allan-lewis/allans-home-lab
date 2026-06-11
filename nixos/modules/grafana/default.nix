@@ -46,6 +46,11 @@ in
       type = lib.types.str;
       default = "Prometheus";
     };
+
+    secretKeyFile = lib.mkOption {
+      type = lib.types.path;
+      description = "Path to Grafana secret_key file.";
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -73,6 +78,7 @@ in
 
         security = {
           admin_user = "admin";
+          secret_key = "$__file{${cfg.secretKeyFile}}";
         };
       };
 
