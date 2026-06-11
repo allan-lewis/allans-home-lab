@@ -11,7 +11,7 @@
 
 {
   virtualisation.oci-containers.containers.prowlarr = {
-    image = "ghcr.io/linuxserver/prowlarr:2.3.5@sha256:b4204e18666179472225935b443a99cf6c66dcb7bbc2d35034427a3851f13135";
+    image = "ghcr.io/linuxserver/prowlarr:2.4.0@sha256:a46d0ce0a8236bc4e065fe7c91a55d026c9d849620c5845250519b977d8857f3";
 
     autoStart = true;
 
