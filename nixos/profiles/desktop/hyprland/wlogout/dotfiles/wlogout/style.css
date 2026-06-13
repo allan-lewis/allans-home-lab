@@ -1,10 +1,10 @@
 * {
   font-family: "JetBrainsMono Nerd Font", "JetBrains Mono Nerd Font", monospace;
-  color: rgb(111, 141, 184);
+  color: @TEXT@;
 }
 
 window {
-  background-color: rgba(20, 30, 50, 0.78);
+  background-color: @WINDOW@;
   background-image: url("/home/lab/wallpapers/default.png");
   background-position: center;
   background-repeat: no-repeat;
@@ -15,8 +15,8 @@ button {
   margin: 20px;
   padding: 24px;
   border-radius: 12px;
-  border: 2px solid rgb(111, 141, 184);
-  background: rgb(30, 45, 74);
+  border: 2px solid @BORDER@;
+  background: @BUTTON@;
   box-shadow: none;
   outline: none;
   min-width: 180px;
@@ -24,29 +24,29 @@ button {
 }
 
 button:hover {
-  background: rgb(111, 141, 184);
-  border-color: rgb(143, 168, 201);
+  background: @BUTTON_HOVER@;
+  border-color: @BORDER_HOVER@;
   box-shadow: none;
   outline: none;
 }
 
 button:focus {
-  background: rgb(30, 45, 74);
-  border-color: rgb(111, 141, 184);
+  background: @BUTTON@;
+  border-color: @BORDER@;
   box-shadow: none;
   outline: none;
 }
 
 button:hover:focus {
-  background: rgb(111, 141, 184);
-  border-color: rgb(143, 168, 201);
+  background: @BUTTON_HOVER@;
+  border-color: @BORDER_HOVER@;
   box-shadow: none;
   outline: none;
 }
 
 button:active {
-  background: rgb(111, 141, 184);
-  border-color: rgb(143, 168, 201);
+  background: @BUTTON_HOVER@;
+  border-color: @BORDER_HOVER@;
   box-shadow: none;
   outline: none;
 }
@@ -55,25 +55,24 @@ button label {
   font-family: "JetBrainsMono Nerd Font", "JetBrains Mono Nerd Font", monospace;
   font-size: 18px;
   font-weight: 700;
-  color: rgb(111, 141, 184);
-
-  /* remove GTK weirdness */
+  color: @TEXT@;
   text-shadow: none;
 }
 
 button:hover label,
 button:active label,
 button:hover:focus label {
-  color: #1e2d4a;
+  color: @BUTTON_HOVER_TEXT@;
   text-shadow: none;
 }
 
 button:focus label {
-  color: rgb(111, 141, 184);
+  color: @TEXT@;
   text-shadow: none;
 }
 
 #lock,
+#logout,
 #reboot,
 #shutdown {
   background-position: center center;

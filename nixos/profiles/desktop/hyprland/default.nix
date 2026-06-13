@@ -1,6 +1,7 @@
 { config, lib, pkgs, ... }:
 let 
   activeTheme = config.homelab.desktop.themes.gruvbox-dark;
+  # activeTheme = config.homelab.desktop.themes.nix-blue;
 
   starshipToml = builtins.readFile ../../../../dotfiles/starship/starship.toml;
 
@@ -14,6 +15,8 @@ in
     ./themes
     ./wlogout
   ];
+
+  homelab.desktop.wlogout.colors = activeTheme.colors;
 
   #: enable hyrpland
   programs.hyprland = {
