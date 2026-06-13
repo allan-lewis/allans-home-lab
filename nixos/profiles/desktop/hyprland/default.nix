@@ -1,7 +1,10 @@
-{ pkgs, ... }:
-
+{ config, pkgs, ... }:
+let 
+  activeTheme = config.homelab.desktop.themes.gruvbox-dark;
+in
 {
   imports = [
+    ./themes
     ./wlogout
   ];
 
@@ -39,8 +42,7 @@
         (builtins.readFile ./dotfiles/hypr/hyprland.conf);
 
     #: configure wallpaper
-    home.file."wallpapers/default.png".source =
-      ./dotfiles/wallpaper/nix-wallpaper-binary-blue.png;
+    home.file."wallpapers/default.png".source = activeTheme.wallpaper;
 
     xdg.configFile."hypr/hyprpaper.conf".text = ''
       splash = false
