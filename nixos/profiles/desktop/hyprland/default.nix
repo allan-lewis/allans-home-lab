@@ -1,6 +1,13 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 let 
   activeTheme = config.homelab.desktop.themes.gruvbox-dark;
+
+  starshipToml = builtins.readFile ../../../../dotfiles/starship/starship.toml;
+
+  renderedStarshipToml = builtins.replaceStrings
+    [ ''palette = "gruvbox_dark_hard"'' ]
+    [ ''palette = "${activeTheme.starshipPalette}"'' ]
+    starshipToml;
 in
 {
   imports = [
@@ -16,6 +23,11 @@ in
   };
 
   home-manager.users.lab = { config, ... }: {
+    #: customize starship palette
+    xdg.configFile."starship.toml" = lib.mkForce {
+      text = renderedStarshipToml;
+    };
+
     #: export home-manager session variables for uwsm
     xdg.configFile."uwsm/env".source =
       "${config.home.sessionVariablesPackage}/etc/profile.d/hm-session-vars.sh";
