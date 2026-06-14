@@ -25,6 +25,10 @@
           lockInputOuter = "rgb(111, 141, 184)";
           lockInputCheck = "rgb(143, 168, 201)";
           lockInputFail = "rgb(111, 141, 184)";
+
+          # waybar colors
+          waybarText = "rgb(255, 255, 255)";
+          waybarBackground = "rgb(20, 30, 50)";
         };
       };
 
@@ -49,6 +53,10 @@
           lockInputOuter = "rgb(214, 93, 14)";
           lockInputCheck = "rgb(250, 189, 47)";
           lockInputFail = "rgb(204, 36, 29)";
+
+          # waybar colors
+          waybarText = "rgb(235, 219, 178)";
+          waybarBackground = "rgb(40, 40, 40)";
         };
       };
     };

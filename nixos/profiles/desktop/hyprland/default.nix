@@ -30,6 +30,19 @@ let
       activeTheme.colors.lockInputFail
     ]
     hyprlockConf;
+
+  waybarCss = builtins.readFile ./dotfiles/waybar/style.css;
+
+  renderedWaybarCss = builtins.replaceStrings
+    [
+      "@WAYBAR_TEXT@"
+      "@WAYBAR_BACKGROUND@"
+    ]
+    [
+      activeTheme.colors.waybarText
+      activeTheme.colors.waybarBackground
+    ]
+    waybarCss;
 in
 {
   imports = [
@@ -103,7 +116,7 @@ in
 
       settings = import ./waybar-settings.nix { inherit pkgs; };
 
-      style = builtins.readFile ./dotfiles/waybar/style.css;
+      style = renderedWaybarCss;
     };
   };
 }
