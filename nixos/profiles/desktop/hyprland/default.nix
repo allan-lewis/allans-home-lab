@@ -9,6 +9,27 @@ let
     [ ''palette = "gruvbox_dark_hard"'' ]
     [ ''palette = "${activeTheme.starshipPalette}"'' ]
     starshipToml;
+
+  hyprlockConf = builtins.readFile ./dotfiles/hypr/hyprlock.conf;
+
+  renderedHyprlockConf = builtins.replaceStrings
+    [
+      "@LOCK_TIME@"
+      "@LOCK_INPUT_TEXT@"
+      "@LOCK_INPUT_INNER@"
+      "@LOCK_INPUT_OUTER@"
+      "@LOCK_INPUT_CHECK@"
+      "@LOCK_INPUT_FAIL@"
+    ]
+    [
+      activeTheme.colors.lockTime
+      activeTheme.colors.lockInputText
+      activeTheme.colors.lockInputInner
+      activeTheme.colors.lockInputOuter
+      activeTheme.colors.lockInputCheck
+      activeTheme.colors.lockInputFail
+    ]
+    hyprlockConf;
 in
 {
   imports = [
@@ -73,8 +94,8 @@ in
     xdg.configFile."hypr/hypridle.conf".source =
       ./dotfiles/hypr/hypridle.conf;
 
-    xdg.configFile."hypr/hyprlock.conf".source =
-      ./dotfiles/hypr/hyprlock.conf;
+    xdg.configFile."hypr/hyprlock.conf".text =
+      renderedHyprlockConf;
 
     #: enable and configure waybar
     programs.waybar = {
