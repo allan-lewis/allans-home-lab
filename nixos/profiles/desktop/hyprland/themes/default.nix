@@ -8,7 +8,7 @@
         wallpaper = ../dotfiles/wallpaper/nix-wallpaper-binary-blue.png;
         starshipPalette = "catppuccin_mocha";
 
-        colors = {
+        colors = rec {
           # existing wlogout colors...
           text = "rgb(111, 141, 184)";
           border = "rgb(111, 141, 184)";
@@ -29,6 +29,11 @@
           # waybar colors
           waybarText = "rgb(255, 255, 255)";
           waybarBackground = "rgb(20, 30, 50)";
+          waybarIdentity = waybarText;
+          waybarPower = waybarText;
+          waybarClock = waybarText;
+          waybarNetwork = waybarText;
+          waybarStats = waybarText;
         };
       };
 
@@ -36,7 +41,15 @@
         wallpaper = ../dotfiles/wallpaper/gruvbox-rainbow-nix.png;
         starshipPalette = "gruvbox_dark_hard";
 
-        colors = {
+        colors = rec {
+          gruvboxBackground = "rgb(50, 48, 47)";      # #32302f
+          gruvboxRed = "rgb(220, 50, 47)";            # #dc322f
+          gruvboxOrange = "rgb(254, 152, 24)";        # #fe9818
+          gruvboxYellow = "rgb(223, 170, 40)";        # #dfaa28
+          gruvboxGreen = "rgb(193, 194, 43)";         # #c1c22b
+          gruvboxAqua = "rgb(104, 157, 166)";         # #689da6
+          gruvboxPurple = "rgb(211, 154, 169)";       # #d39aa9
+
           # existing wlogout colors...
           text = "rgb(235, 219, 178)";
           border = "rgb(214, 93, 14)";
@@ -57,6 +70,11 @@
           # waybar colors
           waybarText = "rgb(235, 219, 178)";
           waybarBackground = "rgb(40, 40, 40)";
+          waybarIdentity = gruvboxOrange;
+          waybarPower = gruvboxRed;
+          waybarClock = gruvboxGreen;
+          waybarNetwork = gruvboxAqua;
+          waybarStats = gruvboxPurple;
         };
       };
     };

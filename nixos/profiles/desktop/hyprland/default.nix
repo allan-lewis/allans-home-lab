@@ -37,10 +37,20 @@ let
     [
       "@WAYBAR_TEXT@"
       "@WAYBAR_BACKGROUND@"
+      "@WAYBAR_IDENTITY@"
+      "@WAYBAR_POWER@"
+      "@WAYBAR_CLOCK@"
+      "@WAYBAR_NETWORK@"
+      "@WAYBAR_STATS@"
     ]
     [
       activeTheme.colors.waybarText
       activeTheme.colors.waybarBackground
+      activeTheme.colors.waybarIdentity
+      activeTheme.colors.waybarPower
+      activeTheme.colors.waybarClock
+      activeTheme.colors.waybarNetwork
+      activeTheme.colors.waybarStats
     ]
     waybarCss;
 in
