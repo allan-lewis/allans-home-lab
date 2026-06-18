@@ -40,7 +40,7 @@
       conditions = [ "[CONNECTED] == true" ];
     }
     {
-      name = "Christine (Windows 11)";
+      name = "Christine (Windows 11 Daily Driver)";
       group = "Hosts";
       enabled = true;
       url = "icmp://192.168.86.212";
@@ -75,7 +75,7 @@
       conditions = [ "[CONNECTED] == true" ];
     }
     {
-      name = "Gan (MacOS)";
+      name = "Gan (MacOS Daily Driver)";
       group = "Hosts";
       enabled = true;
       url = "icmp://192.168.86.211";
