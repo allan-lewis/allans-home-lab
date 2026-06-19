@@ -227,7 +227,7 @@
     {
       name = "homelab-dev";
       host = "homelab-dev.nixos.allanshomelab.com";
-      url = "http://192.168.86.206:3000";
+      url = "http://192.168.86.219:3000";
       authentik = false;
     }
   ];
