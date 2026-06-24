@@ -3,7 +3,6 @@
 {
   imports = [
     ../../modules/bare-metal
-    ../../modules/rust
     ../../modules/tailscale
 
     ../../profiles/desktop

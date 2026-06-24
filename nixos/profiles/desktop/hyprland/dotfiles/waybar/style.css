@@ -1,24 +1,32 @@
 * {
   font-family: "JetBrainsMono Nerd Font", "JetBrains Mono Nerd Font", monospace;
   font-size: 14px;
-  color: rgb(255, 255, 255);
-  background-color: rgb(20, 30, 50);
+  color: @WAYBAR_TEXT@;
+  background-color: @WAYBAR_BACKGROUND@;
 }
 
 #custom-identity {
   padding: 0;
+  color: @WAYBAR_IDENTITY@;
 }
 
 #custom-power {
   padding: 0 12px 0 16px;
+  color: @WAYBAR_POWER@;
 }
 
 #cpu,
 #memory,
 #temperature {
   padding-right: 12px;
+  color: @WAYBAR_STATS@;
 }
 
 #network {
   padding-right: 16px;
+  color: @WAYBAR_NETWORK@;
+}
+
+#clock {
+  color: @WAYBAR_CLOCK@;
 }
