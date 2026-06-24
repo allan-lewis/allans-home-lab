@@ -5,6 +5,7 @@
     ../../modules/aws
     ../../modules/docker
     ../../modules/doppler
+    ../../modules/rust
   ];
 
   #: enable aws for the lab user
