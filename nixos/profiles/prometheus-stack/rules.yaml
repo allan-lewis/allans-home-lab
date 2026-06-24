@@ -113,7 +113,7 @@ groups:
 
       - alert: PrometheusTargetDown
         expr: |
-          max_over_time(up[5m]) == 0
+          max_over_time(up{job!="todo"}[5m]) == 0
         for: 5m
         labels:
           severity: critical
@@ -177,7 +177,7 @@ groups:
           nixos_system_booted_is_current == 0
         for: 15m
         labels:
-          severity: info
+          severity: warning
           rulegroup: homelabRules
         annotations:
           summary: "NixOS host pending reboot: {{ $labels.instance }}"

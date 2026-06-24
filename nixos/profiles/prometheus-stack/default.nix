@@ -155,6 +155,21 @@ in
       }
 
       {
+        job_name = "todo";
+        static_configs = [
+          {
+            targets = [ "192.168.86.212:9100" ];
+            labels.__meta_friendly_instance = "christine";
+          }
+          {
+            targets = [ "192.168.86.211:9100" ];
+            labels.__meta_friendly_instance = "gan";
+          }
+        ];
+        relabel_configs = friendlyRelabelConfigs;
+      }
+
+      {
         job_name = "gatus";
         static_configs = [
           {
