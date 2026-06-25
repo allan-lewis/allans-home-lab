@@ -60,12 +60,13 @@
           window = "rgba(29, 32, 33, 0.78)";
 
           # hyprlock colors
-          lockTime = "rgb(250, 189, 47)";
-          lockInputText = "rgb(235, 219, 178)";
+          # lockTime = "rgb(250, 189, 47)";
+          lockTime = gruvboxGreen;
+          lockInputText = gruvboxAqua;
           lockInputInner = "rgb(40, 40, 40)";
-          lockInputOuter = "rgb(214, 93, 14)";
-          lockInputCheck = "rgb(250, 189, 47)";
-          lockInputFail = "rgb(204, 36, 29)";
+          lockInputOuter = gruvboxPurple;
+          lockInputCheck = gruvboxOrange;
+          lockInputFail = gruvboxRed;
 
           # waybar colors
           waybarText = "rgb(235, 219, 178)";
