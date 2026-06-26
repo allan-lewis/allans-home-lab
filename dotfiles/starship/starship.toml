@@ -41,7 +41,7 @@ format = '([\[$all_status$ahead_behind\]]($style) )'
 # ---------- Username ----------
 [username]
 show_always = true
-style_user = "bold fg:mauve"
+style_user = "bold fg:peach"
 style_root = "bold fg:red"
 format = "[$user]($style) "
 
@@ -54,7 +54,7 @@ format = "on [$hostname]($style) "
 # ---------- Command Duration ----------
 [cmd_duration]
 min_time = 200
-style = "fg:peach"
+style = "fg:red"
 format = "took [$duration]($style) "
 
 # ---------- Time ----------
