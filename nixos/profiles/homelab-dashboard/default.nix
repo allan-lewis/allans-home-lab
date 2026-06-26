@@ -14,6 +14,6 @@
   services.homelab.dashboard = {
     enable = true;
     environmentFile = config.sops.secrets.dashboard_env.path;
-    image = "allanelewis/homelab-dashboard:v2026.06.5@sha256:e2ab0c16c61d9c535c5b47d0fbffc67a2924cde8af2340ee829d2664d87ef712";
+    image = "allanelewis/homelab-dashboard:v2026.06.6@sha256:e0575c153947e92f85e2c5b57e9efef9410dc0ecef93c27643091ad1d29e4ac7";
   };
 }
