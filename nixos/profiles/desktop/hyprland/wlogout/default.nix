@@ -40,10 +40,11 @@ let
 
       magick "$src" \
         -channel RGB \
-        -fill white \
+        -fill '${wlogoutColors.icon}' \
         -colorize 100 \
         +channel \
         "$out/$icon.png"
+
     done
   '';
 in

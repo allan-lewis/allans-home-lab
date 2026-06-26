@@ -6,7 +6,7 @@ let
   starshipToml = builtins.readFile ../../../../dotfiles/starship/starship.toml;
 
   renderedStarshipToml = builtins.replaceStrings
-    [ ''palette = "gruvbox_dark_hard"'' ]
+    [ ''palette = "gruvbox_rainbow_nix"'' ]
     [ ''palette = "${activeTheme.starshipPalette}"'' ]
     starshipToml;
 
