@@ -9,7 +9,7 @@ command_timeout = 1000
 format = "$directory$git_branch$git_status$line_break$username$hostname$cmd_duration$time$character"
 
 # ----------- Active Palette -----------
-palette = "gruvbox_dark_hard"
+palette = "gruvbox_rainbow_nix"
 
 # ===========================================================
 # MODULES
@@ -202,3 +202,36 @@ sapphire  = "#458588"
 rosewater = "#ebdbb2"
 flamingo  = "#d5c4a1"
 pink      = "#b16286"
+
+# -----------------------------------------------------------
+# Gruvbox Dark — Rainbow Nix
+# Matches gruvbox-rainbow-nix wallpaper accents
+# -----------------------------------------------------------
+[palettes.gruvbox_rainbow_nix]
+base      = "#32302f"
+mantle    = "#282828"
+crust     = "#1d2021"
+surface0  = "#3c3836"
+surface1  = "#504945"
+surface2  = "#665c54"
+overlay0  = "#7c6f64"
+overlay1  = "#928374"
+overlay2  = "#a89984"
+text      = "#ebdbb2"
+subtext1  = "#d5c4a1"
+subtext0  = "#bdae93"
+
+red       = "#dc322f"
+maroon    = "#cc241d"
+green     = "#c1c22b"
+yellow    = "#dfaa28"
+blue      = "#689da6"
+mauve     = "#d39aa9"
+teal      = "#689da6"
+peach     = "#fe9818"
+lavender  = "#d39aa9"
+sky       = "#689da6"
+sapphire  = "#689da6"
+rosewater = "#ebdbb2"
+flamingo  = "#d5c4a1"
+pink      = "#d39aa9"

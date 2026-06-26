@@ -40,7 +40,7 @@
 
       gruvbox-dark = {
         wallpaper = ../dotfiles/wallpaper/gruvbox-rainbow-nix.png;
-        starshipPalette = "gruvbox_dark_hard";
+        starshipPalette = "gruvbox_rainbow_nix";
 
         colors = rec {
           gruvboxBackground = "rgb(50, 48, 47)";      # #32302f
