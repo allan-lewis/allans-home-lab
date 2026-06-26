@@ -16,6 +16,7 @@
           button = "rgb(30, 45, 74)";
           buttonHover = "rgb(111, 141, 184)";
           buttonHoverText = "#1e2d4a";
+          icon = "rgb(255, 255, 255)";
           window = "rgba(20, 30, 50, 0.78)";
 
           # hyprlock colors
@@ -51,12 +52,13 @@
           gruvboxPurple = "rgb(211, 154, 169)";       # #d39aa9
 
           # existing wlogout colors...
-          text = "rgb(235, 219, 178)";
-          border = "rgb(214, 93, 14)";
-          borderHover = "rgb(250, 189, 47)";
-          button = "rgb(40, 40, 40)";
-          buttonHover = "rgb(214, 93, 14)";
-          buttonHoverText = "rgb(40, 40, 40)";
+          text = gruvboxGreen;
+          border = gruvboxYellow;
+          borderHover = gruvboxPurple;
+          button = "rgba(40, 40, 40, .78)";
+          buttonHover = "rgba(104, 157, 166, .40)";     # aqua + transparency
+          buttonHoverText = gruvboxRed;
+          icon = gruvboxOrange;
           window = "rgba(29, 32, 33, 0.78)";
 
           # hyprlock colors
