@@ -6,7 +6,6 @@
     ../../modules/oci-containers/nginx
     ../../modules/virtual-machine
 
-    ../../profiles/homelab-dashboard
     ../../profiles/homepage
     ../../profiles/trilium
     ../../profiles/twingate
