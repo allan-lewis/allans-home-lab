@@ -94,7 +94,7 @@
     {
       name = "homepage";
       host = "homepage.nixos.allanshomelab.com";
-      url = "http://192.168.86.228:3007";
+      url = "http://192.168.86.227:3007";
       authentik = false;
     }
     {
@@ -106,7 +106,7 @@
     {
       name = "it-tools";
       host = "tools.nixos.allanshomelab.com";
-      url = "http://192.168.86.228:8386";
+      url = "http://192.168.86.227:8386";
       authentik = false;
     }
     {
@@ -136,13 +136,13 @@
     {
       name = "nginx";
       host = "nginx.nixos.allanshomelab.com";
-      url = "http://192.168.86.228";
+      url = "http://192.168.86.227";
       authentik = false;
     }
     {
       name = "no-geeks-brewing";
       host = "nogeeksbrewing.com";
-      url = "http://192.168.86.228";
+      url = "http://192.168.86.227";
       authentik = true;
     }
     {
@@ -208,7 +208,7 @@
     {
       name = "trilium";
       host = "notes.allanshomelab.com";
-      url = "http://192.168.86.228:8376";
+      url = "http://192.168.86.227:8376";
       authentik = false;
     }
     {

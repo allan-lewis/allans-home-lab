@@ -2,12 +2,7 @@
 
 {
   imports = [
-    ../../modules/oci-containers/it-tools
-    ../../modules/oci-containers/nginx
     ../../modules/virtual-machine
-
-    ../../profiles/homepage
-    ../../profiles/trilium
   ];
 
   networking.hostName = hostName;
