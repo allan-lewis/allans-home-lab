@@ -14,6 +14,7 @@
     ../../profiles/s3-mirror
     ../../profiles/traefik
     ../../profiles/twingate
+    ../../profiles/vaultwarden
   ];
 
   networking.hostName = hostName;

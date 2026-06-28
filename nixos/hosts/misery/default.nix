@@ -8,6 +8,7 @@
     ../../profiles/jellyfin
     ../../profiles/plex
     ../../profiles/tautulli
+    ../../profiles/twingate
   ];
 
   _module.args = {
@@ -36,4 +37,10 @@
   };
 
   services.homelab.managedState.schedule = "*:40";
+
+  homelab.twingate = {
+    enable = true;
+    connectorName = "valiantStingray";
+  };
+
 }

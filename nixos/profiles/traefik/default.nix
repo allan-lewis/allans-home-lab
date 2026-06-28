@@ -20,14 +20,14 @@
     {
       name = "129-monroe";
       host = "129monroe.com";
-      url = "http://192.168.86.228:35550";
+      url = "http://192.168.86.204:35550";
       authentik = false;
       excludeAdmin = true;
     }
     {
       name = "129-vault";
       host = "vault.129monroe.com";
-      url = "http://192.168.86.228:35550";
+      url = "http://192.168.86.204:35550";
       authentik = false;
       excludeAdmin = true;
     }
@@ -214,7 +214,7 @@
     {
       name = "vaultwarden";
       host = "vault.allanshomelab.com";
-      url = "http://192.168.86.228:35550";
+      url = "http://192.168.86.204:35550";
       authentik = false;
       excludeAdmin = true;
     }

@@ -8,17 +8,10 @@
 
     ../../profiles/homepage
     ../../profiles/trilium
-    ../../profiles/twingate
-    ../../profiles/vaultwarden
   ];
 
   networking.hostName = hostName;
   system.stateVersion = nixosVersion;
 
   services.homelab.managedState.schedule = "*:10";
-
-  homelab.twingate = {
-    enable = true;
-    connectorName = "valiantStingray";
-  };
 }
