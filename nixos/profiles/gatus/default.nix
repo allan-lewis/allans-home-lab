@@ -33,13 +33,6 @@
       conditions = [ "[CONNECTED] == true" ];
     }
     {
-      name = "Carrie (NixOS Apps)";
-      group = "Hosts";
-      enabled = true;
-      url = "icmp://192.168.86.228";
-      conditions = [ "[CONNECTED] == true" ];
-    }
-    {
       name = "Christine (Windows 11 Daily Driver)";
       group = "Hosts";
       enabled = true;
@@ -89,7 +82,7 @@
       conditions = [ "[CONNECTED] == true" ];
     }
     {
-      name = "Langolier (NixOS Pi-hole)";
+      name = "Carrie (NixOS Pi-hole)";
       group = "Hosts";
       enabled = true;
       url = "icmp://192.168.86.218";

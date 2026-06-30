@@ -1,12 +1,17 @@
-{ hostName, nixosVersion, ... }:
+{ hostIp4Address, hostName, hostInterface, nixosVersion, ... }:
 
 {
   imports = [
-    ../../modules/virtual-machine
+    ../../modules/bare-metal
+
+    ../../profiles/pihole
   ];
 
   networking.hostName = hostName;
   system.stateVersion = nixosVersion;
 
-  services.homelab.managedState.schedule = "*:10";
+  homelab.bareMetal = {
+    interface = hostInterface;
+    address = hostIp4Address;
+  };
 }
