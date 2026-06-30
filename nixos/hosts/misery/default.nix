@@ -11,7 +11,7 @@
     ../../profiles/jellyfin
     ../../profiles/plex
     ../../profiles/tautulli
-    # ../../profiles/trilium
+    ../../profiles/trilium
     ../../profiles/twingate
   ];
 
