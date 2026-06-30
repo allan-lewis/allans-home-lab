@@ -88,10 +88,6 @@ in
             labels.__meta_friendly_instance = "blaine";
           }
           {
-            targets = [ "192.168.86.228:9100" ];
-            labels.__meta_friendly_instance = "carrie";
-          }
-          {
             targets = [ "192.168.86.219:9100" ];
             labels.__meta_friendly_instance = "cujo";
           }
@@ -113,7 +109,7 @@ in
           }
           {
             targets = [ "192.168.86.218:9100" ];
-            labels.__meta_friendly_instance = "langolier";
+            labels.__meta_friendly_instance = "carrie";
           }
           {
             targets = [ "192.168.86.200:9100" ];
@@ -183,10 +179,6 @@ in
       {
         job_name = "homelab-metrics";
         static_configs = [
-          {
-            targets = [ "192.168.86.228:9102" ];
-            labels.__meta_friendly_instance = "carrie";
-          }
           {
             targets = [ "192.168.86.219:9102" ];
             labels.__meta_friendly_instance = "cujo";

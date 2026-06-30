@@ -19,12 +19,12 @@ hypervisor = "proxmox"
 node = "maturin"
 
 [resources.cpu]
-cores = 4
+cores = 8
 sockets = 1
 
 [resources]
-memory_mb = 8192
-disk_gb = 128
+memory_mb = 16384
+disk_gb = 256
 
 [network]
 mode = "static"

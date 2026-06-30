@@ -1,25 +1,17 @@
-{ hostName, nixosVersion, ... }:
+{ hostIp4Address, hostName, hostInterface, nixosVersion, ... }:
 
 {
   imports = [
-    ../../modules/oci-containers/it-tools
-    ../../modules/oci-containers/nginx
-    ../../modules/virtual-machine
+    ../../modules/bare-metal
 
-    ../../profiles/homelab-dashboard
-    ../../profiles/homepage
-    ../../profiles/trilium
-    ../../profiles/twingate
-    ../../profiles/vaultwarden
+    ../../profiles/pihole
   ];
 
   networking.hostName = hostName;
   system.stateVersion = nixosVersion;
 
-  services.homelab.managedState.schedule = "*:10";
-
-  homelab.twingate = {
-    enable = true;
-    connectorName = "valiantStingray";
+  homelab.bareMetal = {
+    interface = hostInterface;
+    address = hostIp4Address;
   };
 }

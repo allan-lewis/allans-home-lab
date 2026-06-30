@@ -2,12 +2,17 @@
 
 {
   imports = [
+    ../../modules/oci-containers/it-tools
+    ../../modules/oci-containers/nginx
     ../../modules/virtual-machine
 
+    ../../profiles/homepage
     ../../profiles/immich
     ../../profiles/jellyfin
     ../../profiles/plex
     ../../profiles/tautulli
+    ../../profiles/trilium
+    ../../profiles/twingate
   ];
 
   _module.args = {
@@ -36,4 +41,10 @@
   };
 
   services.homelab.managedState.schedule = "*:40";
+
+  homelab.twingate = {
+    enable = true;
+    connectorName = "valiantStingray";
+  };
+
 }
