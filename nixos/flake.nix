@@ -64,7 +64,6 @@
       carrie = mkHost "carrie";
       cujo = mkHost "cujo";
       flagg = mkHost "flagg";
-      langolier = mkHost "langolier";
       misery = mkHost "misery";
       patricia = mkHost "patricia";
       roland = mkHost "roland";

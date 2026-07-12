@@ -1,8 +1,8 @@
 {
-  "created_at": "2026-05-30T13:34:06Z",
+  "created_at": "2026-06-29T12:36:33Z",
   "description": "Arch base (BIOS) with qemu-guest-agent, cloud-init; custom autorun ISO",
-  "name": "arch-20260530",
+  "name": "arch-20260629",
   "node": "maturin",
   "storage": "local-lvm",
-  "vmid": 116
+  "vmid": 104
 }

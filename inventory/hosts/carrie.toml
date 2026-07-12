@@ -4,36 +4,35 @@ hostname = "carrie"
 platform = "nixos"
 variant = "nixos"
 
-role = "apps"
-description = "NixOS Apps"
+role = "core"
+description = "NixOS Pi-hole"
 
-groups = ["nixos"]
+groups = []
 
 [management]
 provisioner = "terraform"
 converger = "nixos"
 
 [runtime]
-kind = "vm"
-hypervisor = "proxmox"
-node = "maturin"
+kind = "baremetal"
 
 [resources.cpu]
-cores = 4
+cores = 1
 sockets = 1
 
 [resources]
-memory_mb = 8192
-disk_gb = 64
+memory_mb = 128
+disk_gb = 1
 
 [network]
 mode = "static"
 dns = ["192.168.86.1"]
+interface = "enp2s0"
 
 [network.ipv4]
-address = "192.168.86.228"
+address = "192.168.86.218"
 gateway = "192.168.86.1"
 
 [provisioning.terraform]
-cloud_init = true
-agent = true
+cloud_init = false
+agent = false

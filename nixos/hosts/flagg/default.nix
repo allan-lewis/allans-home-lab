@@ -9,10 +9,12 @@
     ../../profiles/authentik
     ../../profiles/cloudflare
     ../../profiles/gatus
+    ../../profiles/homelab-dashboard
     ../../profiles/prometheus-stack
     ../../profiles/s3-mirror
     ../../profiles/traefik
     ../../profiles/twingate
+    ../../profiles/vaultwarden
   ];
 
   networking.hostName = hostName;
