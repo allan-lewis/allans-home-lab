@@ -103,7 +103,7 @@
   };
 
   virtualisation.oci-containers.containers.sonarr = {
-    image = "ghcr.io/linuxserver/sonarr:4.0.19@sha256:fbb15bb4fb14d1ffe017f6be0e3fed8f1b300e4687e329767da0b61f36ba1eed";
+    image = "ghcr.io/linuxserver/sonarr:4.0.19@sha256:24acea2956a0ccb11f103877d9f4f8576600fb34bff34820ed749c2256dab89f";
 
     autoStart = true;
 
