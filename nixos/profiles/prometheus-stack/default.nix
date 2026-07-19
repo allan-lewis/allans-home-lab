@@ -189,7 +189,7 @@ in
           }
           {
             targets = [ "192.168.86.218:9102" ];
-            labels.__meta_friendly_instance = "langolier";
+            labels.__meta_friendly_instance = "carrie";
           }
           {
             targets = [ "192.168.86.227:9102" ];
