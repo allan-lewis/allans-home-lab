@@ -3,7 +3,15 @@
 {
   imports = [
     ../../modules/virtual-machine
+
+    ../../profiles/devops
   ];
+
+  _module.args = {
+    dopplerConfig = "stg";
+    dopplerProject = "homelab";
+    dopplerTokenKey = "homelab_stg";
+  };
 
   networking.hostName = hostName;
   system.stateVersion = nixosVersion;

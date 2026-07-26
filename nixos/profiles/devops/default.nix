@@ -8,6 +8,14 @@
     ../../modules/rust
   ];
 
+  #: open firewall ports for local development
+  networking.firewall.allowedTCPPorts = [
+    3000 # homelab-dashboard
+    9203 # homelab-metrics
+  ];
+
+  homelab.sshKeyForLabUser = true;
+
   #: enable aws for the lab user
   homelab.awsCredentialsForLabUser = true;
 
