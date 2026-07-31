@@ -24,8 +24,6 @@
 
   services.homelab.managedState.schedule = "*:20";
 
-  homelab.sshKeyForLabUser = true;
-
   homelab.managedDirectories.entries = {
     test_directory = {
       local = "/home/lab/backup-restore";
