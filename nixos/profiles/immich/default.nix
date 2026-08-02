@@ -1,5 +1,8 @@
 { remoteBackupRoot, config, ... }:
 
+let
+  immichVersion = "v3.1.0";
+in 
 {
   imports = [
     ../../modules/immich
@@ -20,7 +23,7 @@
     group = "root";
     mode = "0400";
     content = ''
-      IMMICH_VERSION=v2.7.5
+      IMMICH_VERSION=${immichVersion}
       UPLOAD_LOCATION=/data/immich
       DB_DATA_LOCATION=/srv/immich/postgres
       REDIS_DATA_LOCATION=/srv/immich/redis
@@ -35,7 +38,7 @@
   #: run the immich docker compose service
   services.homelab.immichCompose = {
     enable = true;
-    version = "v2.7.5";
+    version = immichVersion;
     environmentFile = config.sops.templates."immich.env".path;
   };
 
