@@ -21,7 +21,7 @@ resource "proxmox_virtual_environment_vm" "vm" {
   # --- CPU / Memory / Agent ---
   cpu {
     cores   = var.cores
-    type    = "kvm64"
+    type    = "host"
     sockets = 1
   }
 

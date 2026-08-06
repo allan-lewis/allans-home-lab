@@ -99,6 +99,7 @@ in
       '';
 
       script = ''
+        docker-compose -f ${cfg.appDir}/docker-compose.yml pull
         docker-compose -f ${cfg.appDir}/docker-compose.yml up -d
       '';
 

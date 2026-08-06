@@ -92,6 +92,10 @@ in
       wants = [ "docker.service" "network-online.target" ];
       restartIfChanged = true;
 
+      restartTriggers = [
+        (pkgs.writeText "authentik-version" cfg.version)
+      ];
+
       path = with pkgs; [
         docker-compose
         curl
@@ -120,6 +124,7 @@ in
       '';
 
       script = ''
+        docker-compose -f ${cfg.appDir}/docker-compose.yml pull
         docker-compose -f ${cfg.appDir}/docker-compose.yml up -d
       '';
 
