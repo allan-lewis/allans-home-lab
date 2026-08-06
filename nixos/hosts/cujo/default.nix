@@ -2,6 +2,7 @@
 
 {
   imports = [
+    ../../modules/oci-containers/frigate
     ../../modules/bare-metal
     ../../modules/tailscale
 

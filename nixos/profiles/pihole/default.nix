@@ -24,6 +24,7 @@
 
     ## MEDIA
     "bazarr.media.allanshomelab.com,media.allanshomelab.com"
+    "frigate.media.allanshomelab.com,media.allanshomelab.com"
     "jellyfin.media.allanshomelab.com,media.allanshomelab.com"
     "lidarr.media.allanshomelab.com,media.allanshomelab.com"
     "plex.media.allanshomelab.com,media.allanshomelab.com"
