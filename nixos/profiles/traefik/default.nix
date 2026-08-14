@@ -56,6 +56,12 @@
       authentik = false;
     }
     {
+      name = "frigate";
+      host = "pvr.allanshomelab.com";
+      url = "https://192.168.86.219:8971";
+      authentik = false;
+    }
+    {
       name = "bazarr";
       host = "bazarr.media.allanshomelab.com";
       url = "http://192.168.86.224:6767";
