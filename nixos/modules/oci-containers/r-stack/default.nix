@@ -33,7 +33,7 @@
   };
 
   virtualisation.oci-containers.containers.bazarr = {
-    image = "ghcr.io/linuxserver/bazarr:1.6.0@sha256:5d916d07404296ec35ee726e13e0e558f05952724cf494a7f009d913fb2b12f3";
+    image = "ghcr.io/linuxserver/bazarr:1.6.0@sha256:45a0ba295f5ca41c2cf1853ecedc099fb6f23dabbc80b8c1a73cd85eb195b60c";
 
     autoStart = true;
 
