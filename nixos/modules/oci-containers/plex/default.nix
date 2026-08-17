@@ -2,7 +2,7 @@
 
 {
   virtualisation.oci-containers.containers.plex = {
-    image = "lscr.io/linuxserver/plex:1.43.3@sha256:e2de8b6305fd59fcb4a2fe38c84d7b6089a74afbe1f80e495d9ad6d1f6b407c7";
+    image = "lscr.io/linuxserver/plex:1.43.3@sha256:953c0cfddb066cda0fb4ba867948d66da7063564c33af928ff0f2b0166e37386";
 
     autoStart = true;
 
