@@ -10,6 +10,7 @@
     ../../profiles/cloudflare
     ../../profiles/gatus
     ../../profiles/homelab-dashboard
+    ../../profiles/homepage
     ../../profiles/prometheus-stack
     ../../profiles/s3-mirror
     ../../profiles/traefik
