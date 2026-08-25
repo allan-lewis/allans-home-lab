@@ -420,11 +420,11 @@
     {
       name = "Homepage";
       group = "Sites (NixOS)";
-      url = "https://homepage.nixos.allanshomelab.com";
+      url = "https://homepage.nixos.allanshomelab.com/auth/signin";
       conditions = [
         "[STATUS] == 200"
         "[CERTIFICATE_EXPIRATION] > 168h"
-        "[BODY] == pat(*Homepage*)"
+        "[BODY] == pat(*Home Lab*)"
       ];
     }
     {
