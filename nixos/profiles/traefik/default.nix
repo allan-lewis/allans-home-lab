@@ -100,7 +100,7 @@
     {
       name = "homepage";
       host = "homepage.nixos.allanshomelab.com";
-      url = "http://192.168.86.227:3007";
+      url = "http://192.168.86.204:3007";
       authentik = false;
     }
     {

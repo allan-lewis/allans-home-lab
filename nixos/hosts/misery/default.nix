@@ -6,7 +6,6 @@
     ../../modules/oci-containers/nginx
     ../../modules/virtual-machine
 
-    ../../profiles/homepage
     ../../profiles/immich
     ../../profiles/jellyfin
     ../../profiles/plex
