@@ -13,7 +13,7 @@ in
 
   config = {
     virtualisation.oci-containers.containers.trilium = {
-      image = "triliumnext/trilium:v0.104.1@sha256:1c5ef078d61c57be26a6fd018384f0a4b039cbfa1c49b207b91e909da956f090";
+      image = "triliumnext/trilium:v0.105.0@sha256:1d8492b82e461f9d8cba1acab2bf89d0182821318a1fc1277656e688a6fb4ee4";
 
       autoStart = true;
 
