@@ -58,7 +58,7 @@
     {
       name = "frigate";
       host = "nvr.allanshomelab.com";
-      url = "https://192.168.86.219:8971";
+      url = "http://192.168.86.219:8971";
       authentik = false;
     }
     {
