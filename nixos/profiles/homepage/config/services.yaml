@@ -222,6 +222,16 @@
         description: Secrets management
 
 - Home Automation:
+    - Frigate:
+        icon: frigate.png
+        href: https://nvr.allanshomelab.com
+        description: Open source NVR
+        widget:
+          type: frigate
+          url: https://nvr.allanshomelab.com
+          enableRecentEvents: true
+          username: "{{HOMEPAGE_VAR_FRIGATE_USERNAME}}"
+          password: "{{HOMEPAGE_VAR_FRIGATE_PASSWORD}}"
     - Homeassistant:
         icon: home-assistant.png
         href: https://home.allanandvaia.com
