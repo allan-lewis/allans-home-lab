@@ -1,0 +1,8 @@
+{
+  "iso_name": "archlinux-2026.09.05-x86_64.iso",
+  "built_at": "2026-09-05T11:18:24Z",
+  "git_sha": "de9f71620686531e86286794dad16f19feb65974",
+  "proxmox_node": "maturin",
+  "proxmox_storage": "local",
+  "uploader_host": "cujo"
+}

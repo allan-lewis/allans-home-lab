@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, remoteBackupRoot, ... }:
 
 {
   virtualisation.oci-containers.containers.frigate = {
@@ -32,6 +32,18 @@
       "--shm-size=256m"
       "--tmpfs=/tmp/cache:rw,size=1000000000"
     ];
+  };
+
+  homelab.managedDirectories.entries = {
+    frigate_config = {
+      local = "/srv/frigate/config";
+      remote = "${remoteBackupRoot}/frigate";
+      restore = true;
+      backup = true;
+      owner = "lab";
+      group = "lab";
+      mode = "0755";
+    };
   };
 
   systemd.tmpfiles.rules = [
