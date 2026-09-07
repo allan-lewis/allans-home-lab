@@ -6,21 +6,12 @@
     - Allan's Home Lab:
         - abbr: AH
           href: https://github.com/allan-lewis/allans-home-lab
-    - Dotfiles:
-        - abbr: DF
-          href: https://github.com/allan-lewis/dotfiles
-    - Gitops Home Lab:
-        - abbr: GH
-          href: https://github.com/allan-lewis/gitops-homelab
-    - Gitops Home Lab Orchestrator:
-        - abbr: GO
-          href: https://github.com/allan-lewis/gitops-homelab-orchestrator
+    - Homelab Dashboard:
+        - abbr: HD
+          href: https://github.com/allan-lewis/homelab-dashboard
     - Homelab Metrics:
         - abbr: HM
           href: https://github.com/allan-lewis/homelab-metrics
-    - No Geeks Brewing:
-        - abbr: NG
-          href: https://github.com/allan-lewis/no-geeks-brewing-go
 - GitOps:
     - Docker Hub:
         - abbr: DH
