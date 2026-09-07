@@ -5,23 +5,39 @@
     state: directory
     mode: "0755"
 
-- name: Add Docker’s official GPG key
+- name: Add Docker's official GPG key
   ansible.builtin.get_url:
     url: https://download.docker.com/linux/ubuntu/gpg
     dest: /etc/apt/keyrings/docker.asc
     mode: "0644"
 
+- name: Remove legacy Docker apt repository file
+  ansible.builtin.file:
+    path: /etc/apt/sources.list.d/docker.list
+    state: absent
+
 - name: Add Docker apt repository
-  ansible.builtin.apt_repository:
-    repo: >-
-      deb [arch={{ ansible_architecture | replace('x86_64', 'amd64') }}
-      signed-by=/etc/apt/keyrings/docker.asc]
-      https://download.docker.com/linux/ubuntu
-      {{ ansible_distribution_release }}
-      stable
-    filename: docker
+  ansible.builtin.deb822_repository:
+    name: docker
+    types:
+      - deb
+    uris:
+      - https://download.docker.com/linux/ubuntu
+    suites:
+      - "{{ ansible_facts['distribution_release'] }}"
+    components:
+      - stable
+    architectures:
+      - "{{ ansible_facts['architecture'] | replace('x86_64', 'amd64') }}"
+    signed_by: /etc/apt/keyrings/docker.asc
     state: present
+    enabled: true
+  register: docker_repo
+
+- name: Update apt cache after Docker repository change
+  ansible.builtin.apt:
     update_cache: true
+  when: docker_repo.changed
 
 - name: Install Docker Engine + Compose plugin
   ansible.builtin.apt:
@@ -39,14 +55,14 @@
     name: docker
     state: present
 
-- name: Add user to the Docker group.
+- name: Add user to the Docker group
   ansible.builtin.user:
-    name: "lab"
-    groups: 
+    name: lab
+    groups:
       - docker
-    append: yes
+    append: true
 
-- name: Start the Docker service.
+- name: Start the Docker service
   ansible.builtin.service:
     name: docker
     enabled: true

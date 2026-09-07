@@ -31,7 +31,7 @@ mode = "static"
 dns = ["192.168.86.1"]
 
 [network.ipv4]
-address = "192.168.86.214"
+address = "192.168.86.208"
 gateway = "192.168.86.1"
 
 [provisioning.terraform]
