@@ -1,4 +1,4 @@
-{ hostIp4Address, hostName, hostInterface, nixosVersion, lib, remoteBackupRoot, ... }:
+{ hostIp4Address, hostIp4Gateway, hostName, hostInterface, nixosVersion, lib, remoteBackupRoot, ... }:
 
 {
   imports = [
@@ -21,6 +21,7 @@
   homelab.bareMetal = {
     interface = hostInterface;
     address = hostIp4Address;
+    gateway = hostIp4Gateway;
   };
 
   time.timeZone = lib.mkForce "America/New_York";
