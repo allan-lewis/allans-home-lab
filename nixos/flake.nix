@@ -65,6 +65,7 @@
       bellatrix = mkHost "bellatrix";
       blaine = mkHost "blaine";
       carrie = mkHost "carrie";
+      castor = mkHost "castor";
       cujo = mkHost "cujo";
       flagg = mkHost "flagg";
       misery = mkHost "misery";
