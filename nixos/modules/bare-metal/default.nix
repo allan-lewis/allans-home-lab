@@ -35,10 +35,10 @@ in
     networking.useNetworkd = false;
     networking.useDHCP = false;
 
-    networking.nameservers = [ "192.168.86.1" ];
+    networking.nameservers = [ "192.168.10.1" ];
 
     networking.defaultGateway = {
-      address = "192.168.86.1";
+      address = "192.168.10.1";
       interface = cfg.interface;
     };
 

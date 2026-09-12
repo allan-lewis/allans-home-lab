@@ -60,6 +60,7 @@
   in
   {
     nixosConfigurations = {
+      bellatrix = mkHost "bellatrix";
       blaine = mkHost "blaine";
       carrie = mkHost "carrie";
       cujo = mkHost "cujo";
