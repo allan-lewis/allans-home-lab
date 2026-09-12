@@ -35,6 +35,7 @@
         actualHostName = inventoryConfig.hostname;
         hostInterface = inventoryConfig.network.interface;
         hostIp4Address = inventoryConfig.network.ipv4.address;
+        hostIp4Gateway = inventoryConfig.network.ipv4.gateway;
         remoteBackupRoot = 
           "allan@192.168.86.220:/mnt/pool1/allans-home-lab/backups-automated/${actualHostName}";
       in
@@ -45,6 +46,7 @@
           inherit
             hostInterface
             hostIp4Address
+            hostIp4Gateway
             remoteBackupRoot
             nixosVersion
             ;
@@ -60,6 +62,7 @@
   in
   {
     nixosConfigurations = {
+      bellatrix = mkHost "bellatrix";
       blaine = mkHost "blaine";
       carrie = mkHost "carrie";
       cujo = mkHost "cujo";
