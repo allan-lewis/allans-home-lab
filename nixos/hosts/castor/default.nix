@@ -4,11 +4,11 @@
   imports = [
     ../../modules/bare-metal
     # ../../modules/oci-containers/twingate
-    # ../../modules/tailscale
+    ../../modules/tailscale
     #
     # ../../profiles/authentik
     # ../../profiles/cloudflare
-    # ../../profiles/gatus
+    ../../profiles/gatus
     # ../../profiles/homelab-dashboard
     # ../../profiles/homepage
     # ../../profiles/prometheus-stack
@@ -34,7 +34,7 @@
   #   connectorName = "modestAnteater";
   # };
   #
-  # homelab.gatus.endpoints = secrets: [
+  homelab.gatus.endpoints = secrets: [
   #   {
   #     name = "Barlow (Ubuntu Sandbox)";
   #     group = "Hosts";
@@ -63,13 +63,20 @@
   #     url = "icmp://192.168.86.212";
   #     conditions = [ "[CONNECTED] == true" ];
   #   }
-  #   {
-  #     name = "Cujo (NixOS DevOps)";
-  #     group = "Hosts";
-  #     enabled = true;
-  #     url = "icmp://192.168.86.219";
-  #     conditions = [ "[CONNECTED] == true" ];
-  #   }
+    {
+      name = "Bellatrix (NixOS DevOps)";
+      group = "Hosts";
+      enabled = true;
+      url = "icmp://192.168.10.101";
+      conditions = [ "[CONNECTED] == true" ];
+    }
+    {
+      name = "Castor (NixOS Applications)";
+      group = "Hosts";
+      enabled = true;
+      url = "icmp://192.168.10.102";
+      conditions = [ "[CONNECTED] == true" ];
+    }
   #   {
   #     name = "Dandelo (Retro Gaming)";
   #     group = "Hosts";
@@ -550,7 +557,7 @@
   #       "[BODY] == pat(*authentik*)"
   #     ];
   #   }
-  # ];
+  ];
 
 }
 
