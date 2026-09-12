@@ -19,6 +19,11 @@ in
       description = "Static IPv4 address for this bare-metal host.";
     };
 
+    gateway = lib.mkOption {
+      type = lib.types.str;
+      description = "IPv4 gateway for this bare-metal host.";
+    };
+
     prefixLength = lib.mkOption {
       type = lib.types.int;
       default = 24;
@@ -35,10 +40,10 @@ in
     networking.useNetworkd = false;
     networking.useDHCP = false;
 
-    networking.nameservers = [ "192.168.10.1" ];
+    networking.nameservers = [ cfg.gateway ];
 
     networking.defaultGateway = {
-      address = "192.168.10.1";
+      address = cfg.gateway;
       interface = cfg.interface;
     };
 
