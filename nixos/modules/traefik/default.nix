@@ -118,7 +118,14 @@ in
         providers.file.watch = true;
 
         certificatesResolvers.myresolver.acme = {
-          dnsChallenge.provider = "cloudflare";
+          dnsChallenge = {
+            provider = "cloudflare";
+            resolvers = [
+              "1.1.1.1:53"
+              "8.8.8.8:53"
+            ];
+          };
+
           email = cfg.email;
           storage = "${config.services.traefik.dataDir}/acme.json";
         };

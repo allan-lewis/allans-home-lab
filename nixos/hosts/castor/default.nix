@@ -10,10 +10,10 @@
     # ../../profiles/cloudflare
     ../../profiles/gatus
     # ../../profiles/homelab-dashboard
-    # ../../profiles/homepage
+    ../../profiles/homepage
     # ../../profiles/prometheus-stack
     # ../../profiles/s3-mirror
-    # ../../profiles/traefik
+    ../../profiles/traefik
     # ../../profiles/twingate
     # ../../profiles/vaultwarden
   ];
@@ -67,14 +67,14 @@
       name = "Bellatrix (NixOS DevOps)";
       group = "Hosts";
       enabled = true;
-      url = "icmp://192.168.10.101";
+      url = "icmp://bellatrix.ip.allanshomelab.com";
       conditions = [ "[CONNECTED] == true" ];
     }
     {
       name = "Castor (NixOS Applications)";
       group = "Hosts";
       enabled = true;
-      url = "icmp://192.168.10.102";
+      url = "icmp://castor.ip.allanshomelab.com";
       conditions = [ "[CONNECTED] == true" ];
     }
   #   {
@@ -105,13 +105,14 @@
   #     url = "icmp://192.168.86.211";
   #     conditions = [ "[CONNECTED] == true" ];
   #   }
-  #   {
-  #     name = "Gilead (Remote Backup)";
-  #     group = "Hosts";
-  #     enabled = true;
-  #     url = "icmp://100.95.108.6";
-  #     conditions = [ "[CONNECTED] == true" ];
-  #   }
+      {
+        name = "Gilead (Remote Backup)";
+        group = "Hosts";
+        enabled = true;
+        url = "icmp://gilead.ip.allanshomelab.com";
+        # url = "icmp://100.95.108.6";
+        conditions = [ "[CONNECTED] == true" ];
+      }
   #   {
   #     name = "Carrie (NixOS Pi-hole)";
   #     group = "Hosts";
@@ -147,13 +148,13 @@
   #     url = "icmp://192.168.86.224";
   #     conditions = [ "[CONNECTED] == true" ];
   #   }
-  #   {
-  #     name = "Pennywise (NAS)";
-  #     group = "Hosts";
-  #     enabled = true;
-  #     url = "icmp://192.168.86.220";
-  #     conditions = [ "[CONNECTED] == true" ];
-  #   }
+      {
+        name = "Pennywise (NAS)";
+        group = "Hosts";
+        enabled = true;
+        url = "icmp://pennywise.ip.allanshomelab.com";
+        conditions = [ "[CONNECTED] == true" ];
+      }
   #   # {
   #   #   name = "Roland (NixOS Daily Driver)";
   #   #   group = "Hosts";
@@ -167,17 +168,16 @@
   #     url = "icmp://192.168.86.216";
   #     conditions = [ "[CONNECTED] == true" ];
   #   }
-  #
-  #   {
-  #     name = "Gatus";
-  #     group = "Sites (NixOS)";
-  #     url = "https://gatus.nixos.allanshomelab.com";
-  #     conditions = [
-  #       "[STATUS] == 200"
-  #       "[CERTIFICATE_EXPIRATION] > 168h"
-  #       "[BODY] == pat(*Gatus*)"
-  #     ];
-  #   }
+      {
+        name = "Gatus";
+        group = "Sites (NixOS)";
+        url = "https://gatus.nixos.allanshomelab.com";
+        conditions = [
+          "[STATUS] == 200"
+          "[CERTIFICATE_EXPIRATION] > 168h"
+          "[BODY] == pat(*Gatus*)"
+        ];
+      }
   #   {
   #     name = "Pi-hole";
   #     group = "Sites (NixOS)";
@@ -188,16 +188,16 @@
   #       "[BODY] == pat(*Pi-hole*)"
   #     ];
   #   }
-  #   {
-  #     name = "Traefik";
-  #     group = "Sites (NixOS)";
-  #     url = "https://traefik.nixos.allanshomelab.com/dashboard/#/";
-  #     conditions = [
-  #       "[STATUS] == 200"
-  #       "[CERTIFICATE_EXPIRATION] > 168h"
-  #       "[BODY] == pat(*Traefik*)"
-  #     ];
-  #   }
+      {
+        name = "Traefik";
+        group = "Sites (NixOS)";
+        url = "https://traefik.nixos.allanshomelab.com/dashboard/#/";
+        conditions = [
+          "[STATUS] == 200"
+          "[CERTIFICATE_EXPIRATION] > 168h"
+          "[BODY] == pat(*Traefik*)"
+        ];
+      }
   #   {
   #     name = "Plex";
   #     group = "Sites (Media)";
@@ -248,26 +248,26 @@
   #       "[BODY] == pat(*Proxmox*)"
   #     ];
   #   }
-  #   {
-  #     name = "Pennywise";
-  #     group = "Sites (Hosts)";
-  #     url = "https://pennywise.hosts.allanshomelab.com/ui/";
-  #     conditions = [
-  #       "[STATUS] == 200"
-  #       "[CERTIFICATE_EXPIRATION] > 168h"
-  #       "[BODY] == pat(*ix-root*)"
-  #     ];
-  #   }
-  #   {
-  #     name = "Gilead";
-  #     group = "Sites (Hosts)";
-  #     url = "https://gilead.hosts.allanshomelab.com/ui/";
-  #     conditions = [
-  #       "[STATUS] == 200"
-  #       "[CERTIFICATE_EXPIRATION] > 168h"
-  #       "[BODY] == pat(*ix-root*)"
-  #     ];
-  #   }
+      {
+        name = "Pennywise";
+        group = "Sites (Hosts)";
+        url = "https://pennywise.hosts.allanshomelab.com/ui/";
+        conditions = [
+          "[STATUS] == 200"
+          "[CERTIFICATE_EXPIRATION] > 168h"
+          "[BODY] == pat(*ix-root*)"
+        ];
+      }
+      {
+        name = "Gilead";
+        group = "Sites (Hosts)";
+        url = "https://gilead.hosts.allanshomelab.com/ui/";
+        conditions = [
+          "[STATUS] == 200"
+          "[CERTIFICATE_EXPIRATION] > 168h"
+          "[BODY] == pat(*ix-root*)"
+        ];
+      }
   #   {
   #     name = "Allan's Home Lab";
   #     group = "Sites (Allan's Home Lab)";
@@ -448,16 +448,16 @@
   #       "[BODY] == pat(*authentik*)"
   #     ];
   #   }
-  #   {
-  #     name = "Homepage";
-  #     group = "Sites (NixOS)";
-  #     url = "https://homepage.nixos.allanshomelab.com/auth/signin";
-  #     conditions = [
-  #       "[STATUS] == 200"
-  #       "[CERTIFICATE_EXPIRATION] > 168h"
-  #       "[BODY] == pat(*Home Lab*)"
-  #     ];
-  #   }
+      {
+        name = "Homepage";
+        group = "Sites (NixOS)";
+        url = "https://homepage.nixos.allanshomelab.com/auth/signin";
+        conditions = [
+          "[STATUS] == 200"
+          "[CERTIFICATE_EXPIRATION] > 168h"
+          "[BODY] == pat(*Home Lab*)"
+        ];
+      }
   #   {
   #     name = "Prometheus";
   #     group = "Sites (NixOS)";
@@ -558,6 +558,43 @@
   #     ];
   #   }
   ];
+
+  homelab.traefik = {
+    authentikIpAddress = "192.168.10.102";
+
+    services = [
+      {
+        name = "gatus";
+        host = "gatus.nixos.allanshomelab.com";
+        url = "http://castor.ip.allanshomelab.com:8080";
+        authentik = false;
+      }
+      {
+        name = "gilead";
+        host = "gilead.hosts.allanshomelab.com";
+        url = "http://gilead.ip.allanshomelab.com";
+        authentik = false;
+      }
+      {
+        name = "homepage";
+        host = "homepage.nixos.allanshomelab.com";
+        url = "http://castor.ip.allanshomelab.com:3007";
+        authentik = false;
+      }
+      {
+        name = "pennywise";
+        host = "pennywise.hosts.allanshomelab.com";
+        url = "https://pennywise.ip.allanshomelab.com";
+        authentik = false;
+      }
+      {
+        name = "traefik";
+        host = "traefik.nixos.allanshomelab.com";
+        url = "http://castor.ip.allanshomelab.com:8088";
+        authentik = false;
+      }
+    ];
+  };
 
 }
 
