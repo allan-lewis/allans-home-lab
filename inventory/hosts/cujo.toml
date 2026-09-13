@@ -14,25 +14,26 @@ provisioner = "terraform"
 converger = "nixos"
 
 [runtime]
-kind = "baremetal"
+kind = "vm"
+hypervisor = "proxmox"
+node = "maturin"
 
 [resources.cpu]
-cores = 1
+cores = 4
 sockets = 1
 
 [resources]
-memory_mb = 128
-disk_gb = 1
+memory_mb = 4096
+disk_gb = 32
 
 [network]
 mode = "static"
 dns = ["192.168.86.1"]
-interface = "eth1"
 
 [network.ipv4]
 address = "192.168.86.219"
 gateway = "192.168.86.1"
 
 [provisioning.terraform]
-cloud_init = false
-agent = false
+cloud_init = true
+agent = true

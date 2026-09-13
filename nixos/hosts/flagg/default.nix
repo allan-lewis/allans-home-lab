@@ -271,16 +271,16 @@
         "[BODY] == pat(*Dashboard*)"
       ];
     }
-    {
-      name = "Frigate";
-      group = "Sites (Allan's Home Lab)";
-      url = "https://nvr.allanshomelab.com";
-      conditions = [
-        "[STATUS] == 200"
-        "[CERTIFICATE_EXPIRATION] > 168h"
-        "[BODY] == pat(*Frigate*)"
-      ];
-    }
+    # {
+    #   name = "Frigate";
+    #   group = "Sites (Allan's Home Lab)";
+    #   url = "https://nvr.allanshomelab.com";
+    #   conditions = [
+    #     "[STATUS] == 200"
+    #     "[CERTIFICATE_EXPIRATION] > 168h"
+    #     "[BODY] == pat(*Frigate*)"
+    #   ];
+    # }
     {
       name = "Allan's Home Lab (www)";
       group = "Sites (Allan's Home Lab)";

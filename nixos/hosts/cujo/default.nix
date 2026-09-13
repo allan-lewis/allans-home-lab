@@ -2,9 +2,9 @@
 
 {
   imports = [
-    ../../modules/oci-containers/frigate
-    ../../modules/bare-metal
-    ../../modules/tailscale
+    # ../../modules/oci-containers/frigate
+    ../../modules/virtual-machine
+    # ../../modules/tailscale
 
     ../../profiles/devops
   ];
@@ -17,11 +17,6 @@
 
   networking.hostName = hostName;
   system.stateVersion = nixosVersion;
-
-  homelab.bareMetal = {
-    interface = hostInterface;
-    address = hostIp4Address;
-  };
 
   services.homelab.managedState.schedule = "*:20";
 
