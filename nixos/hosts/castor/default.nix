@@ -474,6 +474,12 @@
         authentik = false;
       }
       {
+        name = "frigate";
+        host = "nvr.allanshomelab.com";
+        url = "http://192.168.86.219:8971";
+        authentik = false;
+      }
+      {
         name = "gatus";
         host = "gatus.nixos.allanshomelab.com";
         url = "http://castor.ip.allanshomelab.com:8080";
@@ -498,9 +504,21 @@
         authentik = false;
       }
       {
+        name = "it-tools";
+        host = "tools.nixos.allanshomelab.com";
+        url = "http://pollux.ip.allanshomelab.com:8386";
+        authentik = false;
+      }
+      {
         name = "jellyfin";
         host = "jellyfin.media.allanshomelab.com";
         url = "http://misery.ip.allanshomelab.com:8096";
+        authentik = false;
+      }
+      {
+        name = "nginx";
+        host = "nginx.nixos.allanshomelab.com";
+        url = "http://pollux.ip.allanshomelab.com";
         authentik = false;
       }
       {
@@ -531,6 +549,12 @@
         name = "traefik";
         host = "traefik.nixos.allanshomelab.com";
         url = "http://castor.ip.allanshomelab.com:8088";
+        authentik = false;
+      }
+      {
+        name = "trilium";
+        host = "notes.allanshomelab.com";
+        url = "http://pollux.ip.allanshomelab.com:8376";
         authentik = false;
       }
       {

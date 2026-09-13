@@ -70,6 +70,7 @@
       flagg = mkHost "flagg";
       misery = mkHost "misery";
       patricia = mkHost "patricia";
+      pollux = mkHost "pollux";
       roland = mkHost "roland";
       todash = mkHost "todash";
     };
