@@ -2,11 +2,12 @@
 
 {
   imports = [
-    # ../../modules/oci-containers/frigate
     ../../modules/virtual-machine
-    # ../../modules/tailscale
+    ../../modules/tailscale
 
     ../../profiles/devops
+    ../../profiles/gatus
+    ../../profiles/traefik
   ];
 
   _module.args = {

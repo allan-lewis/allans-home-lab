@@ -1,4 +1,4 @@
-{ hostIp4Address, hostName, hostInterface, nixosVersion, ... }:
+{ hostIp4Address, hostIp4Gateway, hostName, hostInterface, nixosVersion, ... }:
 
 {
   imports = [
@@ -13,5 +13,6 @@
   homelab.bareMetal = {
     interface = hostInterface;
     address = hostIp4Address;
+    gateway = hostIp4Gateway;
   };
 }
