@@ -476,7 +476,7 @@
       {
         name = "frigate";
         host = "nvr.allanshomelab.com";
-        url = "http://192.168.86.219:8971";
+        url = "http://pollux.ip.allanshomelab.com:8971";
         authentik = false;
       }
       {
@@ -510,12 +510,6 @@
         authentik = false;
       }
       {
-        name = "jellyfin";
-        host = "jellyfin.media.allanshomelab.com";
-        url = "http://misery.ip.allanshomelab.com:8096";
-        authentik = false;
-      }
-      {
         name = "nginx";
         host = "nginx.nixos.allanshomelab.com";
         url = "http://pollux.ip.allanshomelab.com";
@@ -531,12 +525,6 @@
         name = "pennywise";
         host = "pennywise.hosts.allanshomelab.com";
         url = "https://pennywise.ip.allanshomelab.com";
-        authentik = false;
-      }
-      {
-        name = "plex";
-        host = "plex.media.allanshomelab.com";
-        url = "http://misery.ip.allanshomelab.com:32400";
         authentik = false;
       }
       {
