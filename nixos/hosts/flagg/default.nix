@@ -3,18 +3,17 @@
 {
   imports = [
     ../../modules/bare-metal
-    ../../modules/oci-containers/twingate
     ../../modules/tailscale
 
     ../../profiles/authentik
     ../../profiles/cloudflare
     ../../profiles/gatus
-    ../../profiles/homelab-dashboard
+    # ../../profiles/homelab-dashboard
     ../../profiles/homepage
     ../../profiles/prometheus-stack
     ../../profiles/s3-mirror
     ../../profiles/traefik
-    ../../profiles/twingate
+    # ../../profiles/twingate
     ../../profiles/vaultwarden
   ];
 
@@ -29,10 +28,10 @@
 
   services.homelab.managedState.schedule = "*:30";
 
-  homelab.twingate = {
-    enable = true;
-    connectorName = "modestAnteater";
-  };
+  # homelab.twingate = {
+  #   enable = true;
+  #   connectorName = "modestAnteater";
+  # };
 
   homelab.gatus.endpoints = secrets: [
     {
