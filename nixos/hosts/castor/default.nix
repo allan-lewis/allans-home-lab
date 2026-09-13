@@ -4,17 +4,17 @@
   imports = [
     ../../modules/bare-metal
     ../../modules/tailscale
-    #
-    # ../../profiles/authentik
+
+    ../../profiles/authentik
     ../../profiles/cloudflare
     ../../profiles/gatus
     ../../profiles/homelab-dashboard
     ../../profiles/homepage
-    # ../../profiles/prometheus-stack
-    # ../../profiles/s3-mirror
+    ../../profiles/prometheus-stack
+    ../../profiles/s3-mirror
     ../../profiles/traefik
     ../../profiles/twingate
-    # ../../profiles/vaultwarden
+    ../../profiles/vaultwarden
   ];
 
   networking.hostName = hostName;
@@ -458,13 +458,19 @@
       {
         name = "alertmanager";
         host = "alertmanager.nixos.allanshomelab.com";
-        url = "http://flagg.ip.allanshomelab.com:3070";
+        url = "http://castor.ip.allanshomelab.com:3070";
         authentik = false;
       }
       {
         name = "allans-home-lab";
         host = "allanshomelab.com";
         url = "http://castor.ip.allanshomelab.com:8976";
+        authentik = false;
+      }
+      {
+        name = "authentik";
+        host = "authn.allanshomelab.com";
+        url = "http://castor.ip.allanshomelab.com:9180";
         authentik = false;
       }
       {
@@ -480,6 +486,12 @@
         authentik = false;
       }
       {
+        name = "grafana";
+        host = "grafana.allanshomelab.com";
+        url = "http://castor.ip.allanshomelab.com:3071";
+        authentik = false;
+      }
+      {
         name = "homepage";
         host = "homepage.nixos.allanshomelab.com";
         url = "http://castor.ip.allanshomelab.com:3007";
@@ -490,6 +502,12 @@
         host = "jellyfin.media.allanshomelab.com";
         url = "http://misery.ip.allanshomelab.com:8096";
         authentik = false;
+      }
+      {
+        name = "no-geeks-brewing";
+        host = "nogeeksbrewing.com";
+        url = "http://pollux.ip.allanshomelab.com";
+        authentik = true;
       }
       {
         name = "pennywise";
@@ -506,7 +524,7 @@
       {
         name = "prometheus";
         host = "prometheus.nixos.allanshomelab.com";
-        url = "http://flagg.ip.allanshomelab.com:3072";
+        url = "http://castor.ip.allanshomelab.com:3072";
         authentik = false;
       }
       {
@@ -514,6 +532,27 @@
         host = "traefik.nixos.allanshomelab.com";
         url = "http://castor.ip.allanshomelab.com:8088";
         authentik = false;
+      }
+      {
+        name = "vault0";
+        host = "129monroe.com";
+        url = "http://castor.ip.allanshomelab.com:35550";
+        authentik = false;
+        excludeAdmin = true;
+      }
+      {
+        name = "vault1";
+        host = "vault.129monroe.com";
+        url = "http://castor.ip.allanshomelab.com:35550";
+        authentik = false;
+        excludeAdmin = true;
+      }
+      {
+        name = "vault2";
+        host = "vault.allanshomelab.com";
+        url = "http://castor.ip.allanshomelab.com:35550";
+        authentik = false;
+        excludeAdmin = true;
       }
       {
         name = "whoami";
