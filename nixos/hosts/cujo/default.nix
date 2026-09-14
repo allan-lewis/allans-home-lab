@@ -180,16 +180,16 @@
         "[BODY] == pat(*Plex*)"
       ];
     }
-    {
-      name = "Jellyfin";
-      group = "Sites (Media)";
-      url = "https://jellyfin.media.allanshomelab.com/web/";
-      conditions = [
-        "[STATUS] == 200"
-        "[CERTIFICATE_EXPIRATION] > 168h"
-        "[BODY] == pat(*Jellyfin*)"
-      ];
-    }
+    # {
+    #   name = "Jellyfin";
+    #   group = "Sites (Media)";
+    #   url = "https://jellyfin.media.allanshomelab.com/web/";
+    #   conditions = [
+    #     "[STATUS] == 200"
+    #     "[CERTIFICATE_EXPIRATION] > 168h"
+    #     "[BODY] == pat(*Jellyfin*)"
+    #   ];
+    # }
     {
       name = "Whoami";
       group = "Sites (NixOS)";
@@ -440,16 +440,16 @@
         "[BODY] == pat(*authentik*)"
       ];
     }
-    {
-      name = "Tautulli";
-      group = "Sites (Media)";
-      url = "https://tautulli.media.allanshomelab.com/api/v2?apikey=${secrets.tautulli_api_key}&cmd=status";
-      conditions = [
-        "[STATUS] == 200"
-        "[CERTIFICATE_EXPIRATION] > 168h"
-        "[BODY] == pat(*Ok*)"
-      ];
-    }
+    # {
+    #   name = "Tautulli";
+    #   group = "Sites (Media)";
+    #   url = "https://tautulli.media.allanshomelab.com/api/v2?apikey=${secrets.tautulli_api_key}&cmd=status";
+    #   conditions = [
+    #     "[STATUS] == 200"
+    #     "[CERTIFICATE_EXPIRATION] > 168h"
+    #     "[BODY] == pat(*Ok*)"
+    #   ];
+    # }
     {
       name = "Transmission";
       group = "Sites (Media)";

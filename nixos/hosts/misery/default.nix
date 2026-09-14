@@ -8,9 +8,9 @@
     ../../modules/virtual-machine
 
     ../../profiles/immich
-    ../../profiles/jellyfin
+    # ../../profiles/jellyfin
     ../../profiles/plex
-    ../../profiles/tautulli
+    # ../../profiles/tautulli
     # ../../profiles/trilium
     # ../../profiles/twingate
   ];
