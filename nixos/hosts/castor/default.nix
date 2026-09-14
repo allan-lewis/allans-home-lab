@@ -90,26 +90,26 @@
           "[BODY] == pat(*Traefik*)"
         ];
       }
-      {
-        name = "Plex";
-        group = "Sites (Media)";
-        url = "https://plex.media.allanshomelab.com/web/index.html";
-        conditions = [
-          "[STATUS] == 200"
-          "[CERTIFICATE_EXPIRATION] > 168h"
-          "[BODY] == pat(*Plex*)"
-        ];
-      }
-      {
-        name = "Jellyfin";
-        group = "Sites (Media)";
-        url = "https://jellyfin.media.allanshomelab.com/web/";
-        conditions = [
-          "[STATUS] == 200"
-          "[CERTIFICATE_EXPIRATION] > 168h"
-          "[BODY] == pat(*Jellyfin*)"
-        ];
-      }
+      # {
+      #   name = "Plex";
+      #   group = "Sites (Media)";
+      #   url = "https://plex.media.allanshomelab.com/web/index.html";
+      #   conditions = [
+      #     "[STATUS] == 200"
+      #     "[CERTIFICATE_EXPIRATION] > 168h"
+      #     "[BODY] == pat(*Plex*)"
+      #   ];
+      # }
+      # {
+      #   name = "Jellyfin";
+      #   group = "Sites (Media)";
+      #   url = "https://jellyfin.media.allanshomelab.com/web/";
+      #   conditions = [
+      #     "[STATUS] == 200"
+      #     "[CERTIFICATE_EXPIRATION] > 168h"
+      #     "[BODY] == pat(*Jellyfin*)"
+      #   ];
+      # }
       {
         name = "Whoami";
         group = "Sites (NixOS)";
@@ -120,26 +120,26 @@
           "[BODY] == pat(*whoami.nixos.allanshomelab.com*)"
         ];
       }
-      {
-        name = "Derry";
-        group = "Sites (Hosts)";
-        url = "https://derry.hosts.allanshomelab.com";
-        conditions = [
-          "[STATUS] == 200"
-          "[CERTIFICATE_EXPIRATION] > 168h"
-          "[BODY] == pat(*portal*)"
-        ];
-      }
-      {
-        name = "Maturin";
-        group = "Sites (Hosts)";
-        url = "https://maturin.hosts.allanshomelab.com";
-        conditions = [
-          "[STATUS] == 200"
-          "[CERTIFICATE_EXPIRATION] > 168h"
-          "[BODY] == pat(*Proxmox*)"
-        ];
-      }
+      # {
+      #   name = "Derry";
+      #   group = "Sites (Hosts)";
+      #   url = "https://derry.hosts.allanshomelab.com";
+      #   conditions = [
+      #     "[STATUS] == 200"
+      #     "[CERTIFICATE_EXPIRATION] > 168h"
+      #     "[BODY] == pat(*portal*)"
+      #   ];
+      # }
+      # {
+      #   name = "Maturin";
+      #   group = "Sites (Hosts)";
+      #   url = "https://maturin.hosts.allanshomelab.com";
+      #   conditions = [
+      #     "[STATUS] == 200"
+      #     "[CERTIFICATE_EXPIRATION] > 168h"
+      #     "[BODY] == pat(*Proxmox*)"
+      #   ];
+      # }
       {
         name = "Pennywise";
         group = "Sites (Hosts)";
@@ -330,16 +330,16 @@
           "[BODY] == pat(*Alertmanager*)"
         ];
       }
-      {
-        name = "Prowlarr";
-        group = "Sites (Media)";
-        url = "https://prowlarr.media.allanshomelab.com/ping";
-        conditions = [
-          "[STATUS] == 200"
-          "[CERTIFICATE_EXPIRATION] > 168h"
-          "[BODY] == pat(*authentik*)"
-        ];
-      }
+      # {
+      #   name = "Prowlarr";
+      #   group = "Sites (Media)";
+      #   url = "https://prowlarr.media.allanshomelab.com/ping";
+      #   conditions = [
+      #     "[STATUS] == 200"
+      #     "[CERTIFICATE_EXPIRATION] > 168h"
+      #     "[BODY] == pat(*authentik*)"
+      #   ];
+      # }
       {
         name = "Homepage";
         group = "Sites (NixOS)";
@@ -360,76 +360,76 @@
           "[BODY] == pat(*Prometheus*)"
         ];
       }
-      {
-        name = "Sonarr";
-        group = "Sites (Media)";
-        url = "https://sonarr.media.allanshomelab.com/ping";
-        conditions = [
-          "[STATUS] == 200"
-          "[CERTIFICATE_EXPIRATION] > 168h"
-          "[BODY] == pat(*authentik*)"
-        ];
-      }
-      {
-        name = "Radarr";
-        group = "Sites (Media)";
-        url = "https://radarr.media.allanshomelab.com/ping";
-        conditions = [
-          "[STATUS] == 200"
-          "[CERTIFICATE_EXPIRATION] > 168h"
-          "[BODY] == pat(*authentik*)"
-        ];
-      }
-      {
-        name = "Lidarr";
-        group = "Sites (Media)";
-        url = "https://lidarr.media.allanshomelab.com/ping";
-        conditions = [
-          "[STATUS] == 200"
-          "[CERTIFICATE_EXPIRATION] > 168h"
-          "[BODY] == pat(*authentik*)"
-        ];
-      }
-      {
-        name = "Bazarr";
-        group = "Sites (Media)";
-        url = "https://bazarr.media.allanshomelab.com";
-        conditions = [
-          "[STATUS] == 200"
-          "[CERTIFICATE_EXPIRATION] > 168h"
-          "[BODY] == pat(*authentik*)"
-        ];
-      }
-      {
-        name = "Tautulli";
-        group = "Sites (Media)";
-        url = "https://tautulli.media.allanshomelab.com/api/v2?apikey=${secrets.tautulli_api_key}&cmd=status";
-        conditions = [
-          "[STATUS] == 200"
-          "[CERTIFICATE_EXPIRATION] > 168h"
-          "[BODY] == pat(*Ok*)"
-        ];
-      }
-      {
-        name = "Transmission";
-        group = "Sites (Media)";
-        url = "https://transmission.media.allanshomelab.com/transmission/web/";
-        conditions = [
-          "[STATUS] == 200"
-          "[CERTIFICATE_EXPIRATION] > 168h"
-          "[BODY] == pat(*Transmission*)"
-        ];
-      }
-      {
-        name = "KVM (Maturin)";
-        group = "Sites (KVM)";
-        url = "https://maturin.kvm.allanshomelab.com";
-        conditions = [
-          "[STATUS] == 200"
-          "[CERTIFICATE_EXPIRATION] > 168h"
-          "[BODY] == pat(*JetKVM*)"
-        ];
-      }
+      # {
+      #   name = "Sonarr";
+      #   group = "Sites (Media)";
+      #   url = "https://sonarr.media.allanshomelab.com/ping";
+      #   conditions = [
+      #     "[STATUS] == 200"
+      #     "[CERTIFICATE_EXPIRATION] > 168h"
+      #     "[BODY] == pat(*authentik*)"
+      #   ];
+      # }
+      # {
+      #   name = "Radarr";
+      #   group = "Sites (Media)";
+      #   url = "https://radarr.media.allanshomelab.com/ping";
+      #   conditions = [
+      #     "[STATUS] == 200"
+      #     "[CERTIFICATE_EXPIRATION] > 168h"
+      #     "[BODY] == pat(*authentik*)"
+      #   ];
+      # }
+      # {
+      #   name = "Lidarr";
+      #   group = "Sites (Media)";
+      #   url = "https://lidarr.media.allanshomelab.com/ping";
+      #   conditions = [
+      #     "[STATUS] == 200"
+      #     "[CERTIFICATE_EXPIRATION] > 168h"
+      #     "[BODY] == pat(*authentik*)"
+      #   ];
+      # }
+      # {
+      #   name = "Bazarr";
+      #   group = "Sites (Media)";
+      #   url = "https://bazarr.media.allanshomelab.com";
+      #   conditions = [
+      #     "[STATUS] == 200"
+      #     "[CERTIFICATE_EXPIRATION] > 168h"
+      #     "[BODY] == pat(*authentik*)"
+      #   ];
+      # }
+      # {
+      #   name = "Tautulli";
+      #   group = "Sites (Media)";
+      #   url = "https://tautulli.media.allanshomelab.com/api/v2?apikey=${secrets.tautulli_api_key}&cmd=status";
+      #   conditions = [
+      #     "[STATUS] == 200"
+      #     "[CERTIFICATE_EXPIRATION] > 168h"
+      #     "[BODY] == pat(*Ok*)"
+      #   ];
+      # }
+      # {
+      #   name = "Transmission";
+      #   group = "Sites (Media)";
+      #   url = "https://transmission.media.allanshomelab.com/transmission/web/";
+      #   conditions = [
+      #     "[STATUS] == 200"
+      #     "[CERTIFICATE_EXPIRATION] > 168h"
+      #     "[BODY] == pat(*Transmission*)"
+      #   ];
+      # }
+      # {
+      #   name = "KVM (Maturin)";
+      #   group = "Sites (KVM)";
+      #   url = "https://maturin.kvm.allanshomelab.com";
+      #   conditions = [
+      #     "[STATUS] == 200"
+      #     "[CERTIFICATE_EXPIRATION] > 168h"
+      #     "[BODY] == pat(*JetKVM*)"
+      #   ];
+      # }
       {
         name = "Nginx";
         group = "Sites (NixOS)";
