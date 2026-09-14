@@ -8,17 +8,18 @@
     ../../modules/oci-containers/nginx
     ../../modules/tailscale
 
-    # ../../profiles/authentik
-    # ../../profiles/cloudflare
-    # ../../profiles/gatus
-    # ../../profiles/homelab-dashboard
-    # ../../profiles/homepage
-    # ../../profiles/prometheus-stack
-    # ../../profiles/s3-mirror
+    ../../profiles/jellyfin
+    ../../profiles/tautulli
     ../../profiles/trilium
     ../../profiles/twingate
-    # ../../profiles/vaultwarden
   ];
+
+  _module.args = {
+    #: needed by plex
+    hostAddress = hostIp4Address;
+    #: needed by jellyfin and plex
+    mediaLibraryDir = "/data/media-library";
+  };
 
   networking.hostName = hostName;
   system.stateVersion = nixosVersion;
@@ -35,4 +36,20 @@
     enable = true;
     connectorName = "valiantStingray";
   };
+
+  fileSystems = {
+    "/data/media-library" = {
+      device = "pennywise.ip.allanshomelab.com:/mnt/pool1/media-library";
+      fsType = "nfs";
+
+      options = [
+        "ro"
+        "nofail"
+        "_netdev"
+        "x-systemd.requires=network-online.target"
+        "x-systemd.after=network-online.target"
+      ];
+    };
+  };
+
 }

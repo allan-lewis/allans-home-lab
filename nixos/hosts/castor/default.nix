@@ -90,26 +90,26 @@
           "[BODY] == pat(*Traefik*)"
         ];
       }
-      # {
-      #   name = "Plex";
-      #   group = "Sites (Media)";
-      #   url = "https://plex.media.allanshomelab.com/web/index.html";
-      #   conditions = [
-      #     "[STATUS] == 200"
-      #     "[CERTIFICATE_EXPIRATION] > 168h"
-      #     "[BODY] == pat(*Plex*)"
-      #   ];
-      # }
-      # {
-      #   name = "Jellyfin";
-      #   group = "Sites (Media)";
-      #   url = "https://jellyfin.media.allanshomelab.com/web/";
-      #   conditions = [
-      #     "[STATUS] == 200"
-      #     "[CERTIFICATE_EXPIRATION] > 168h"
-      #     "[BODY] == pat(*Jellyfin*)"
-      #   ];
-      # }
+      {
+        name = "Plex";
+        group = "Sites (Media)";
+        url = "https://plex.media.allanshomelab.com/web/index.html";
+        conditions = [
+          "[STATUS] == 200"
+          "[CERTIFICATE_EXPIRATION] > 168h"
+          "[BODY] == pat(*Plex*)"
+        ];
+      }
+      {
+        name = "Jellyfin";
+        group = "Sites (Media)";
+        url = "https://jellyfin.media.allanshomelab.com/web/";
+        conditions = [
+          "[STATUS] == 200"
+          "[CERTIFICATE_EXPIRATION] > 168h"
+          "[BODY] == pat(*Jellyfin*)"
+        ];
+      }
       {
         name = "Whoami";
         group = "Sites (NixOS)";
@@ -400,16 +400,16 @@
       #     "[BODY] == pat(*authentik*)"
       #   ];
       # }
-      # {
-      #   name = "Tautulli";
-      #   group = "Sites (Media)";
-      #   url = "https://tautulli.media.allanshomelab.com/api/v2?apikey=${secrets.tautulli_api_key}&cmd=status";
-      #   conditions = [
-      #     "[STATUS] == 200"
-      #     "[CERTIFICATE_EXPIRATION] > 168h"
-      #     "[BODY] == pat(*Ok*)"
-      #   ];
-      # }
+        {
+          name = "Tautulli";
+          group = "Sites (Media)";
+          url = "https://tautulli.media.allanshomelab.com/api/v2?apikey=${secrets.tautulli_api_key}&cmd=status";
+          conditions = [
+            "[STATUS] == 200"
+            "[CERTIFICATE_EXPIRATION] > 168h"
+            "[BODY] == pat(*Ok*)"
+          ];
+        }
       # {
       #   name = "Transmission";
       #   group = "Sites (Media)";
@@ -510,6 +510,12 @@
         authentik = false;
       }
       {
+        name = "jellyfin";
+        host = "jellyfin.media.allanshomelab.com";
+        url = "http://pollux.ip.allanshomelab.com:8096";
+        authentik = false;
+      }
+      {
         name = "nginx";
         host = "nginx.nixos.allanshomelab.com";
         url = "http://pollux.ip.allanshomelab.com";
@@ -528,9 +534,21 @@
         authentik = false;
       }
       {
+        name = "plex";
+        host = "plex.media.allanshomelab.com";
+        url = "http://pollux.ip.allanshomelab.com:32400";
+        authentik = false;
+      }
+      {
         name = "prometheus";
         host = "prometheus.nixos.allanshomelab.com";
         url = "http://castor.ip.allanshomelab.com:3072";
+        authentik = false;
+      }
+      {
+        name = "tautulli";
+        host = "tautulli.media.allanshomelab.com";
+        url = "http://pollux.ip.allanshomelab.com:8181";
         authentik = false;
       }
       {
