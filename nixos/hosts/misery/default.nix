@@ -2,16 +2,16 @@
 
 {
   imports = [
-    ../../modules/oci-containers/it-tools
-    ../../modules/oci-containers/nginx
-    ../../modules/tailscale
+    # ../../modules/oci-containers/it-tools
+    # ../../modules/oci-containers/nginx
+    # ../../modules/tailscale
     ../../modules/virtual-machine
 
     ../../profiles/immich
     ../../profiles/jellyfin
     ../../profiles/plex
     ../../profiles/tautulli
-    ../../profiles/trilium
+    # ../../profiles/trilium
     # ../../profiles/twingate
   ];
 
