@@ -14,7 +14,7 @@
 
   homelab.traefik.cloudflareApiKey = secrets: secrets.cloudflare_api_key;
 
-  homelab.traefik.authentikIpAddress = "192.168.86.204";
+  homelab.traefik.authentikIpAddress = "100.67.37.22";
 
   homelab.traefik.services = [
     # {
