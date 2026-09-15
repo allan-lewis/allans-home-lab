@@ -8,7 +8,9 @@
     ../../modules/oci-containers/nginx
     ../../modules/tailscale
 
+    ../../profiles/immich
     ../../profiles/jellyfin
+    ../../profiles/plex
     ../../profiles/tautulli
     ../../profiles/trilium
     ../../profiles/twingate

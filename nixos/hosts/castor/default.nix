@@ -511,6 +511,12 @@
         authentik = false;
       }
       {
+        name = "immich";
+        host = "photos.allanandvaia.com";
+        url = "http://pollux.ip.allanshomelab.com:2283";
+        authentik = false;
+      }
+      {
         name = "it-tools";
         host = "tools.nixos.allanshomelab.com";
         url = "http://pollux.ip.allanshomelab.com:8386";

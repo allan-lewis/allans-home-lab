@@ -84,7 +84,7 @@ in
 
   #: mount the nfs filesystem
   fileSystems."/data/immich" = {
-    device = "192.168.86.220:/mnt/pool1/immich";
+    device = "pennywise.ip.allanshomelab.com:/mnt/pool1/immich";
     fsType = "nfs";
     options = [
       "rw"
