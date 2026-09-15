@@ -62,6 +62,7 @@
   in
   {
     nixosConfigurations = {
+      alnitak = mkHost "alnitak";
       bellatrix = mkHost "bellatrix";
       blaine = mkHost "blaine";
       carrie = mkHost "carrie";

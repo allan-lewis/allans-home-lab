@@ -1,0 +1,40 @@
+name = "alnitak"
+hostname = "alnitak"
+
+platform = "nixos"
+variant = "nixos"
+
+role = "applications"
+description = "NixOS VPN"
+
+groups = []
+
+[management]
+provisioner = "terraform"
+converger = "nixos"
+
+[runtime]
+kind = "baremetal"
+
+[resources.cpu]
+cores = 1
+sockets = 1
+
+[resources]
+memory_mb = 128
+disk_gb = 1
+
+[network]
+mode = "static"
+dns = ["192.168.10.1"]
+interface = "enp2s0"
+
+[network.ipv4]
+address = "192.168.10.104"
+gateway = "192.168.10.1"
+
+[provisioning.terraform]
+cloud_init = false
+agent = false
+
+

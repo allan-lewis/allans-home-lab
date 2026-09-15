@@ -35,6 +35,13 @@
 
   homelab.gatus.endpoints = secrets: [
     {
+      name = "Alnitak (NixOS VPN)";
+      group = "Hosts";
+      enabled = true;
+      url = "icmp://alnitak.ip.allanshomelab.com";
+      conditions = [ "[CONNECTED] == true" ];
+    }
+    {
       name = "Bellatrix (NixOS DevOps)";
       group = "Hosts";
       enabled = true;
