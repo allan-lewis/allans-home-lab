@@ -37,4 +37,3 @@ gateway = "192.168.10.1"
 cloud_init = false
 agent = false
 
-

@@ -62,12 +62,19 @@
       url = "icmp://pollux.ip.allanshomelab.com";
       conditions = [ "[CONNECTED] == true" ];
     }
+    {
+      name = "Regulus (NixOS R Stack)";
+      group = "Hosts";
+      enabled = true;
+      url = "icmp://regulus.ip.allanshomelab.com";
+      conditions = [ "[CONNECTED] == true" ];
+    }
+
       {
         name = "Gilead (Remote Backup)";
         group = "Hosts";
         enabled = true;
         url = "icmp://gilead.ip.allanshomelab.com";
-        # url = "icmp://100.95.108.6";
         conditions = [ "[CONNECTED] == true" ];
       }
       {

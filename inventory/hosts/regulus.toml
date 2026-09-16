@@ -1,5 +1,5 @@
-name = "patricia"
-hostname = "patricia"
+name = "regulus"
+hostname = "regulus"
 
 platform = "nixos"
 variant = "nixos"
@@ -14,26 +14,26 @@ provisioner = "terraform"
 converger = "nixos"
 
 [runtime]
-kind = "vm"
-hypervisor = "proxmox"
-node = "maturin"
+kind = "baremetal"
 
 [resources.cpu]
-cores = 4
+cores = 1
 sockets = 1
 
 [resources]
-memory_mb = 8192
-disk_gb = 64
+memory_mb = 128
+disk_gb = 1
 
 [network]
 mode = "static"
-dns = ["192.168.86.1"]
+dns = ["192.168.10.1"]
+interface = "enp2s0"
 
 [network.ipv4]
-address = "192.168.86.224"
-gateway = "192.168.86.222"
+address = "192.168.10.104"
+gateway = "192.168.10.105"
 
 [provisioning.terraform]
-cloud_init = true
-agent = true
+cloud_init = false
+agent = false
+
