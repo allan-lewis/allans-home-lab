@@ -104,8 +104,8 @@ in
             labels.__meta_friendly_instance = "pollux";
           }
           {
-            targets = [ "alnitak.ip.allanshomelab.com:9100" ];
-            labels.__meta_friendly_instance = "alnitak";
+            targets = [ "capella.ip.allanshomelab.com:9100" ];
+            labels.__meta_friendly_instance = "capella";
           }
         ];
         relabel_configs = friendlyRelabelConfigs;
@@ -164,8 +164,8 @@ in
             labels.__meta_friendly_instance = "pollux";
           }
           {
-            targets = [ "alnitak.ip.allanshomelab.com:9102" ];
-            labels.__meta_friendly_instance = "alnitak";
+            targets = [ "capella.ip.allanshomelab.com:9102" ];
+            labels.__meta_friendly_instance = "capella";
           }
         ];
         relabel_configs = friendlyRelabelConfigs;

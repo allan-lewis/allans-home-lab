@@ -1,5 +1,5 @@
-name = "alnitak"
-hostname = "alnitak"
+name = "capella"
+hostname = "capella"
 
 platform = "nixos"
 variant = "nixos"
@@ -30,7 +30,7 @@ dns = ["192.168.10.1"]
 interface = "enp2s0"
 
 [network.ipv4]
-address = "192.168.10.104"
+address = "192.168.10.105"
 gateway = "192.168.10.1"
 
 [provisioning.terraform]
