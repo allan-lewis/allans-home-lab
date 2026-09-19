@@ -71,10 +71,10 @@
     }
 
       {
-        name = "Gilead (Remote Backup)";
+        name = "Rigel (Remote Backup)";
         group = "Hosts";
         enabled = true;
-        url = "icmp://gilead.ip.allanshomelab.com";
+        url = "icmp://rigel.ip.allanshomelab.com";
         conditions = [ "[CONNECTED] == true" ];
       }
       {
@@ -165,9 +165,9 @@
         ];
       }
       {
-        name = "Gilead";
+        name = "Rigel";
         group = "Sites (Hosts)";
-        url = "https://gilead.hosts.allanshomelab.com/ui/";
+        url = "https://rigel.hosts.allanshomelab.com/ui/";
         conditions = [
           "[STATUS] == 200"
           "[CERTIFICATE_EXPIRATION] > 168h"
@@ -500,9 +500,9 @@
         authentik = false;
       }
       {
-        name = "gilead";
-        host = "gilead.hosts.allanshomelab.com";
-        url = "http://gilead.ip.allanshomelab.com";
+        name = "rigel";
+        host = "rigel.hosts.allanshomelab.com";
+        url = "http://rigel.ip.allanshomelab.com";
         authentik = false;
       }
       {

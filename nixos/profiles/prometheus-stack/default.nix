@@ -84,8 +84,8 @@ in
         job_name = "node-exporter";
         static_configs = [
           {
-            targets = [ "gilead.ip.allanshomelab.com:9100" ];
-            labels.__meta_friendly_instance = "gilead";
+            targets = [ "rigel.ip.allanshomelab.com:9100" ];
+            labels.__meta_friendly_instance = "rigel";
           }
           {
             targets = [ "castor.ip.allanshomelab.com:9100" ];

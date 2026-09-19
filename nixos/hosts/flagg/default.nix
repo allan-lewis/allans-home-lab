@@ -99,13 +99,6 @@
       conditions = [ "[CONNECTED] == true" ];
     }
     {
-      name = "Gilead (Remote Backup)";
-      group = "Hosts";
-      enabled = true;
-      url = "icmp://100.95.108.6";
-      conditions = [ "[CONNECTED] == true" ];
-    }
-    {
       name = "Carrie (NixOS Pi-hole)";
       group = "Hosts";
       enabled = true;
@@ -252,15 +245,6 @@
       ];
     }
     {
-      name = "Gilead";
-      group = "Sites (Hosts)";
-      url = "https://gilead.hosts.allanshomelab.com/ui/";
-      conditions = [
-        "[STATUS] == 200"
-        "[CERTIFICATE_EXPIRATION] > 168h"
-        "[BODY] == pat(*ix-root*)"
-      ];
-    }
     {
       name = "Allan's Home Lab";
       group = "Sites (Allan's Home Lab)";

@@ -73,12 +73,6 @@
   #     url = "http://192.168.86.210:8000";
   #     authentik = false;
   #   }
-      # {
-      #   name = "gilead";
-      #   host = "gilead.hosts.allanshomelab.com";
-      #   url = "http://gilead.ip.allanshomelab.com:80";
-      #   authentik = false;
-      # }
   #   {
   #     name = "gatus";
   #     host = "gatus.nixos.allanshomelab.com";

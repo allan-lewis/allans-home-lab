@@ -15,7 +15,6 @@
   homelab.pihole.cnameRecords = [
     ## HOSTS
     "derry.hosts.allanshomelab.com,hosts.allanshomelab.com"
-    "gilead.hosts.allanshomelab.com,hosts.allanshomelab.com"
     "maturin.hosts.allanshomelab.com,hosts.allanshomelab.com"
     "pennywise.hosts.allanshomelab.com,hosts.allanshomelab.com"
 

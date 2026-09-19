@@ -96,8 +96,8 @@ groups:
       - alert: HomelabHighMemoryUsage
         expr: |
           100 - (
-            (node_memory_MemAvailable_bytes{job="node-exporter", instance!~"pennywise|gilead"} * 100)
-            / node_memory_MemTotal_bytes{job="node-exporter", instance!~"pennywise|gilead"}
+            (node_memory_MemAvailable_bytes{job="node-exporter", instance!~"pennywise|rigel"} * 100)
+            / node_memory_MemTotal_bytes{job="node-exporter", instance!~"pennywise|rigel"}
           ) > 90
         for: 5m
         labels:
