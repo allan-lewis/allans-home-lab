@@ -36,6 +36,7 @@
         hostInterface = inventoryConfig.network.interface;
         hostIp4Address = inventoryConfig.network.ipv4.address;
         hostIp4Gateway = inventoryConfig.network.ipv4.gateway;
+        hostDns = inventoryConfig.network.dns;
         remoteBackupRoot = 
           "allan@pennywise.ip.allanshomelab.com:/mnt/pool1/allans-home-lab/backups-automated/${actualHostName}";
       in
@@ -44,6 +45,7 @@
 
         specialArgs = {
           inherit
+            hostDns
             hostInterface
             hostIp4Address
             hostIp4Gateway

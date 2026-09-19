@@ -1,4 +1,4 @@
-{ hostIp4Address, hostIp4Gateway, hostInterface, hostName, nixosVersion, ... }:
+{ hostDns, hostIp4Address, hostIp4Gateway, hostInterface, hostName, nixosVersion, ... }:
 
 {
   imports = [
@@ -14,6 +14,7 @@
     interface = hostInterface;
     address = hostIp4Address;
     gateway = hostIp4Gateway;
+    dns = hostDns;
   };
 
   services.homelab.managedState.schedule = "*:50";

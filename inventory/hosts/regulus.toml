@@ -31,7 +31,7 @@ interface = "enp2s0"
 
 [network.ipv4]
 address = "192.168.10.104"
-gateway = "192.168.10.1"
+gateway = "192.168.10.105"
 
 [provisioning.terraform]
 cloud_init = false
