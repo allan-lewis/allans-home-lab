@@ -344,16 +344,16 @@
           "[BODY] == pat(*Alertmanager*)"
         ];
       }
-      # {
-      #   name = "Prowlarr";
-      #   group = "Sites (Media)";
-      #   url = "https://prowlarr.media.allanshomelab.com/ping";
-      #   conditions = [
-      #     "[STATUS] == 200"
-      #     "[CERTIFICATE_EXPIRATION] > 168h"
-      #     "[BODY] == pat(*authentik*)"
-      #   ];
-      # }
+        {
+          name = "Prowlarr";
+          group = "Sites (Media)";
+          url = "https://prowlarr.media.allanshomelab.com/ping";
+          conditions = [
+            "[STATUS] == 200"
+            "[CERTIFICATE_EXPIRATION] > 168h"
+            "[BODY] == pat(*authentik*)"
+          ];
+        }
       {
         name = "Homepage";
         group = "Sites (NixOS)";
@@ -374,46 +374,46 @@
           "[BODY] == pat(*Prometheus*)"
         ];
       }
-      # {
-      #   name = "Sonarr";
-      #   group = "Sites (Media)";
-      #   url = "https://sonarr.media.allanshomelab.com/ping";
-      #   conditions = [
-      #     "[STATUS] == 200"
-      #     "[CERTIFICATE_EXPIRATION] > 168h"
-      #     "[BODY] == pat(*authentik*)"
-      #   ];
-      # }
-      # {
-      #   name = "Radarr";
-      #   group = "Sites (Media)";
-      #   url = "https://radarr.media.allanshomelab.com/ping";
-      #   conditions = [
-      #     "[STATUS] == 200"
-      #     "[CERTIFICATE_EXPIRATION] > 168h"
-      #     "[BODY] == pat(*authentik*)"
-      #   ];
-      # }
-      # {
-      #   name = "Lidarr";
-      #   group = "Sites (Media)";
-      #   url = "https://lidarr.media.allanshomelab.com/ping";
-      #   conditions = [
-      #     "[STATUS] == 200"
-      #     "[CERTIFICATE_EXPIRATION] > 168h"
-      #     "[BODY] == pat(*authentik*)"
-      #   ];
-      # }
-      # {
-      #   name = "Bazarr";
-      #   group = "Sites (Media)";
-      #   url = "https://bazarr.media.allanshomelab.com";
-      #   conditions = [
-      #     "[STATUS] == 200"
-      #     "[CERTIFICATE_EXPIRATION] > 168h"
-      #     "[BODY] == pat(*authentik*)"
-      #   ];
-      # }
+        {
+          name = "Sonarr";
+          group = "Sites (Media)";
+          url = "https://sonarr.media.allanshomelab.com/ping";
+          conditions = [
+            "[STATUS] == 200"
+            "[CERTIFICATE_EXPIRATION] > 168h"
+            "[BODY] == pat(*authentik*)"
+          ];
+        }
+        {
+          name = "Radarr";
+          group = "Sites (Media)";
+          url = "https://radarr.media.allanshomelab.com/ping";
+          conditions = [
+            "[STATUS] == 200"
+            "[CERTIFICATE_EXPIRATION] > 168h"
+            "[BODY] == pat(*authentik*)"
+          ];
+        }
+        {
+          name = "Lidarr";
+          group = "Sites (Media)";
+          url = "https://lidarr.media.allanshomelab.com/ping";
+          conditions = [
+            "[STATUS] == 200"
+            "[CERTIFICATE_EXPIRATION] > 168h"
+            "[BODY] == pat(*authentik*)"
+          ];
+        }
+        {
+          name = "Bazarr";
+          group = "Sites (Media)";
+          url = "https://bazarr.media.allanshomelab.com";
+          conditions = [
+            "[STATUS] == 200"
+            "[CERTIFICATE_EXPIRATION] > 168h"
+            "[BODY] == pat(*authentik*)"
+          ];
+        }
         {
           name = "Tautulli";
           group = "Sites (Media)";
@@ -424,16 +424,16 @@
             "[BODY] == pat(*Ok*)"
           ];
         }
-      # {
-      #   name = "Transmission";
-      #   group = "Sites (Media)";
-      #   url = "https://transmission.media.allanshomelab.com/transmission/web/";
-      #   conditions = [
-      #     "[STATUS] == 200"
-      #     "[CERTIFICATE_EXPIRATION] > 168h"
-      #     "[BODY] == pat(*Transmission*)"
-      #   ];
-      # }
+        {
+          name = "Transmission";
+          group = "Sites (Media)";
+          url = "https://transmission.media.allanshomelab.com/transmission/web/";
+          conditions = [
+            "[STATUS] == 200"
+            "[CERTIFICATE_EXPIRATION] > 168h"
+            "[BODY] == pat(*Transmission*)"
+          ];
+        }
       # {
       #   name = "KVM (Maturin)";
       #   group = "Sites (KVM)";
@@ -536,6 +536,12 @@
         authentik = false;
       }
       {
+        name = "lidarr";
+        host = "lidarr.media.allanshomelab.com";
+        url = "http://regulus.ip.allanshomelab.com:8686";
+        authentik = true;
+      }
+      {
         name = "nginx";
         host = "nginx.nixos.allanshomelab.com";
         url = "http://pollux.ip.allanshomelab.com";
@@ -564,6 +570,18 @@
         host = "prometheus.nixos.allanshomelab.com";
         url = "http://castor.ip.allanshomelab.com:3072";
         authentik = false;
+      }
+      {
+        name = "radarr";
+        host = "radarr.media.allanshomelab.com";
+        url = "http://regulus.ip.allanshomelab.com:7878";
+        authentik = true;
+      }
+      {
+        name = "sonarr";
+        host = "sonarr.media.allanshomelab.com";
+        url = "http://regulus.ip.allanshomelab.com:8989";
+        authentik = true;
       }
       {
         name = "tautulli";
