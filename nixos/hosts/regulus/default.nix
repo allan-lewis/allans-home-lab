@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ../../modules/virtual-machine
+    ../../modules/bare-metal
 
     # ../../profiles/media-acquisition
   ];

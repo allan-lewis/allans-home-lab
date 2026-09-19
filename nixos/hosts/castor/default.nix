@@ -610,6 +610,18 @@
         url = "http://localhost:8180";
         authentik = false;
       }
+      {
+        name = "home-assistant-0";
+        host = "home.allanandvaia.com";
+        url = "http://100.67.41.102:8123";
+        authentik = false;
+      }
+      {
+        name = "home-assistant-1";
+        host = "allanandvaia.com";
+        url = "http://100.67.41.102:8123";
+        authentik = false;
+      }
     ];
   };
 
