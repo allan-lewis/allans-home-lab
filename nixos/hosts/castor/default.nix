@@ -488,6 +488,12 @@
         authentik = false;
       }
       {
+        name = "bazarr";
+        host = "bazarr.media.allanshomelab.com";
+        url = "http://regulus.ip.allanshomelab.com:6767";
+        authentik = true;
+      }
+      {
         name = "frigate";
         host = "nvr.allanshomelab.com";
         url = "http://pollux.ip.allanshomelab.com:8971";
@@ -572,6 +578,12 @@
         authentik = false;
       }
       {
+        name = "prowlarr";
+        host = "prowlarr.media.allanshomelab.com";
+        url = "http://regulus.ip.allanshomelab.com:9696";
+        authentik = true;
+      }
+      {
         name = "radarr";
         host = "radarr.media.allanshomelab.com";
         url = "http://regulus.ip.allanshomelab.com:7878";
@@ -593,6 +605,12 @@
         name = "traefik";
         host = "traefik.nixos.allanshomelab.com";
         url = "http://castor.ip.allanshomelab.com:8088";
+        authentik = false;
+      }
+      {
+        name = "transmission";
+        host = "transmission.media.allanshomelab.com";
+        url = "http://regulus.ip.allanshomelab.com:9091";
         authentik = false;
       }
       {
