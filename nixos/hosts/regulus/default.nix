@@ -3,8 +3,9 @@
 {
   imports = [
     ../../modules/bare-metal
+    ../../modules/tailscale
 
-    # ../../profiles/media-acquisition
+    ../../profiles/media-acquisition
   ];
 
   networking.hostName = hostName;
