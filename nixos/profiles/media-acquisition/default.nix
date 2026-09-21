@@ -85,7 +85,7 @@
 
   fileSystems = {
     "/data/media-library" = {
-      device = "pennywise.ip.allanshomelab.com:/mnt/pool1/media-acquisition";
+      device = "polaris.ip.allanshomelab.com:/mnt/pool1/media-acquisition";
       fsType = "nfs";
       options = [
         "rw"
