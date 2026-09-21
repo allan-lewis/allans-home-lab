@@ -79,10 +79,10 @@
         conditions = [ "[CONNECTED] == true" ];
       }
       {
-        name = "Pennywise (NAS)";
+        name = "Sirius (NAS)";
         group = "Hosts";
         enabled = true;
-        url = "icmp://pennywise.ip.allanshomelab.com";
+        url = "icmp://sirius.ip.allanshomelab.com";
         conditions = [ "[CONNECTED] == true" ];
       }
       {
@@ -145,26 +145,26 @@
       #     "[BODY] == pat(*portal*)"
       #   ];
       # }
-      # {
-      #   name = "Maturin";
-      #   group = "Sites (Hosts)";
-      #   url = "https://maturin.hosts.allanshomelab.com";
-      #   conditions = [
-      #     "[STATUS] == 200"
-      #     "[CERTIFICATE_EXPIRATION] > 168h"
-      #     "[BODY] == pat(*Proxmox*)"
-      #   ];
-      # }
       {
-        name = "Pennywise";
+        name = "Sirius";
         group = "Sites (Hosts)";
-        url = "https://pennywise.hosts.allanshomelab.com/ui/";
+        url = "https://sirius.hosts.allanshomelab.com";
         conditions = [
           "[STATUS] == 200"
           "[CERTIFICATE_EXPIRATION] > 168h"
-          "[BODY] == pat(*ix-root*)"
+          "[BODY] == pat(*Proxmox*)"
         ];
       }
+      # {
+      #   name = "Sirius";
+      #   group = "Sites (Hosts)";
+      #   url = "https://sirius.hosts.allanshomelab.com/ui/";
+      #   conditions = [
+      #     "[STATUS] == 200"
+      #     "[CERTIFICATE_EXPIRATION] > 168h"
+      #     "[BODY] == pat(*ix-root*)"
+      #   ];
+      # }
       {
         name = "Rigel";
         group = "Sites (Hosts)";
@@ -589,6 +589,12 @@
         host = "radarr.media.allanshomelab.com";
         url = "http://regulus.ip.allanshomelab.com:7878";
         authentik = true;
+      }
+      {
+        name = "sirius";
+        host = "sirius.hosts.allanshomelab.com";
+        url = "https://sirius.ip.allanshomelab.com:8006";
+        authentik = false;
       }
       {
         name = "sonarr";
