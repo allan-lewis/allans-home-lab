@@ -42,7 +42,7 @@
 
   fileSystems = {
     "/data/media-library" = {
-      device = "pennywise.ip.allanshomelab.com:/mnt/pool1/media-library";
+      device = "polaris.ip.allanshomelab.com:/mnt/pool1/media-library";
       fsType = "nfs";
 
       options = [

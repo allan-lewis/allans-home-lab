@@ -96,8 +96,8 @@ in
             labels.__meta_friendly_instance = "bellatrix";
           }
           {
-            targets = [ "pennywise.ip.allanshomelab.com:9100" ];
-            labels.__meta_friendly_instance = "pennywise";
+            targets = [ "polaris.ip.allanshomelab.com:9100" ];
+            labels.__meta_friendly_instance = "polaris";
           }
           {
             targets = [ "pollux.ip.allanshomelab.com:9100" ];

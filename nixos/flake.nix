@@ -38,7 +38,7 @@
         hostIp4Gateway = inventoryConfig.network.ipv4.gateway;
         hostDns = inventoryConfig.network.dns;
         remoteBackupRoot = 
-          "allan@pennywise.ip.allanshomelab.com:/mnt/pool1/allans-home-lab/backups-automated/${actualHostName}";
+          "allan@polaris.ip.allanshomelab.com:/mnt/pool1/allans-home-lab/backups-automated/${actualHostName}";
       in
       nixpkgs.lib.nixosSystem {
         inherit system;

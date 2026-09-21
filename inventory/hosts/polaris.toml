@@ -1,5 +1,5 @@
-name = "pennywise"
-hostname = "pennywise"
+name = "polaris"
+hostname = "polaris"
 
 platform = "appliance"
 variant = "truenas"
@@ -16,7 +16,7 @@ converger = "none"
 [runtime]
 kind = "vm"
 hypervisor = "proxmox"
-node = "maturin"
+node = "sirius"
 
 [resources.cpu]
 cores = 8
@@ -24,14 +24,14 @@ sockets = 1
 
 [resources]
 memory_mb = 32768
-disk_gb = 16
+disk_gb = 32
 
 [network]
 mode = "dhcp-reservation"
-dns = ["192.168.86.1"]
+dns = ["192.168.10.1"]
 
 [network.reservation]
-ip = "192.168.86.220"
+ip = "192.168.10.106"
 mac = "02:42:AC:11:00:04"
 
 [provisioning.terraform]

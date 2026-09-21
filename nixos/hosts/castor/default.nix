@@ -57,6 +57,13 @@
       conditions = [ "[CONNECTED] == true" ];
     }
     {
+      name = "Polaris (NAS)";
+      group = "Hosts";
+      enabled = true;
+      url = "icmp://polaris.ip.allanshomelab.com";
+      conditions = [ "[CONNECTED] == true" ];
+    }
+    {
       name = "Pollux (NixOS Applications)";
       group = "Hosts";
       enabled = true;
@@ -79,7 +86,7 @@
         conditions = [ "[CONNECTED] == true" ];
       }
       {
-        name = "Sirius (NAS)";
+        name = "Sirius (Hypervisor)";
         group = "Hosts";
         enabled = true;
         url = "icmp://sirius.ip.allanshomelab.com";
@@ -155,16 +162,16 @@
           "[BODY] == pat(*Proxmox*)"
         ];
       }
-      # {
-      #   name = "Sirius";
-      #   group = "Sites (Hosts)";
-      #   url = "https://sirius.hosts.allanshomelab.com/ui/";
-      #   conditions = [
-      #     "[STATUS] == 200"
-      #     "[CERTIFICATE_EXPIRATION] > 168h"
-      #     "[BODY] == pat(*ix-root*)"
-      #   ];
-      # }
+      {
+        name = "Polaris";
+        group = "Sites (Hosts)";
+        url = "https://polaris.hosts.allanshomelab.com/ui/";
+        conditions = [
+          "[STATUS] == 200"
+          "[CERTIFICATE_EXPIRATION] > 168h"
+          "[BODY] == pat(*ix-root*)"
+        ];
+      }
       {
         name = "Rigel";
         group = "Sites (Hosts)";
@@ -510,6 +517,12 @@
         name = "rigel";
         host = "rigel.hosts.allanshomelab.com";
         url = "http://rigel.ip.allanshomelab.com";
+        authentik = false;
+      }
+      {
+        name = "polaris";
+        host = "polaris.hosts.allanshomelab.com";
+        url = "http://polaris.ip.allanshomelab.com";
         authentik = false;
       }
       {
