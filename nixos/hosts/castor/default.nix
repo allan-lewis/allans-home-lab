@@ -442,16 +442,16 @@
             "[BODY] == pat(*Transmission*)"
           ];
         }
-      # {
-      #   name = "KVM (Maturin)";
-      #   group = "Sites (KVM)";
-      #   url = "https://maturin.kvm.allanshomelab.com";
-      #   conditions = [
-      #     "[STATUS] == 200"
-      #     "[CERTIFICATE_EXPIRATION] > 168h"
-      #     "[BODY] == pat(*JetKVM*)"
-      #   ];
-      # }
+      {
+        name = "KVM (Sirius)";
+        group = "Sites (KVM)";
+        url = "https://sirius.kvm.allanshomelab.com";
+        conditions = [
+          "[STATUS] == 200"
+          "[CERTIFICATE_EXPIRATION] > 168h"
+          "[BODY] == pat(*JetKVM*)"
+        ];
+      }
       {
         name = "Nginx";
         group = "Sites (NixOS)";
@@ -607,6 +607,12 @@
         name = "sirius";
         host = "sirius.hosts.allanshomelab.com";
         url = "https://sirius.ip.allanshomelab.com:8006";
+        authentik = false;
+      }
+      {
+        name = "sirius-kvm";
+        host = "sirius.kvm.allanshomelab.com";
+        url = "http://sirius-kvm.hosts.allanshomelab.com";
         authentik = false;
       }
       {
