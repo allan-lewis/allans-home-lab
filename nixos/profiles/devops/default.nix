@@ -63,14 +63,14 @@
   };
 
   #: ensure that source code is checked out after any switch
-  system.activationScripts.devCheckoutsAfterSwitch = {
-    deps = [ "etc" ];
-    text = ''
-      mkdir -p /run/nixos
-      if ! grep -qxF 'homelab-task-dev_checkouts_sync.service' /run/nixos/activation-restart-list 2>/dev/null; then
-        printf '%s\n' 'homelab-task-dev_checkouts_sync.service' >> /run/nixos/activation-restart-list
-      fi
-    '';
+  systemd.targets.devCheckoutsReactivation = {
+    description = "Sync development checkouts during NixOS reactivation";
+
+    wantedBy = [ "sysinit-reactivation.target" ];
+    before = [ "sysinit-reactivation.target" ];
+
+    wants = [ "homelab-task-dev_checkouts_sync.service" ];
+    after = [ "homelab-task-dev_checkouts_sync.service" ];
   };
 
   #: setup the lab user to be able to commit to github
