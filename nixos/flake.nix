@@ -72,16 +72,10 @@
     nixosConfigurations = {
       capella = mkHost "capella";
       bellatrix = mkHost "bellatrix";
-      blaine = mkHost "blaine";
-      carrie = mkHost "carrie";
       castor = mkHost "castor";
-      cujo = mkHost "cujo";
-      flagg = mkHost "flagg";
-      misery = mkHost "misery";
       regulus = mkHost "regulus";
       pollux = mkHost "pollux";
-      roland = mkHost "roland";
-      todash = mkHost "todash";
+      deneb = mkHost "deneb";
     };
   };
 }

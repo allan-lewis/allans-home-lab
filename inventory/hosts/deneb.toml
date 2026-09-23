@@ -1,5 +1,5 @@
-name = "todash"
-hostname = "todash"
+name = "deneb"
+hostname = "deneb"
 
 platform = "nixos"
 variant = "nixos"
@@ -16,7 +16,7 @@ converger = "nixos"
 [runtime]
 kind = "vm"
 hypervisor = "proxmox"
-node = "maturin"
+node = "sirius"
 
 [resources.cpu]
 cores = 4
@@ -28,11 +28,11 @@ disk_gb = 32
 
 [network]
 mode = "static"
-dns = ["192.168.86.1"]
+dns = ["192.168.10.1"]
 
 [network.ipv4]
-address = "192.168.86.216"
-gateway = "192.168.86.1"
+address = "192.168.10.108"
+gateway = "192.168.10.1"
 
 [provisioning.terraform]
 cloud_init = true
