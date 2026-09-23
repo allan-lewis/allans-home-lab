@@ -17,11 +17,11 @@ if [[ ! -d "${HOST_DIR}" ]]; then
 fi
 
 case "${MODE}" in
-  check|test|switch) ;;
-  *)
-    echo "ERROR: MODE must be one of: check, test, switch" >&2
-    exit 2
-    ;;
+check | test | switch) ;;
+*)
+  echo "ERROR: MODE must be one of: check, test, switch" >&2
+  exit 2
+  ;;
 esac
 
 if [[ "${MODE}" == "check" ]]; then
@@ -93,7 +93,7 @@ fetch_hardware_configuration() {
 
     tmp_file="$(mktemp)"
 
-    if ! ssh "${target}" 'sudo cat /etc/nixos/hardware-configuration.nix' > "${tmp_file}"; then
+    if ! ssh "${target}" 'sudo cat /etc/nixos/hardware-configuration.nix' >"${tmp_file}"; then
       echo "WARNING: Failed to fetch hardware-configuration.nix; continuing" >&2
       rm -f "${tmp_file}"
       return 0
@@ -134,7 +134,7 @@ bootstrap_sops_age_key() {
   ssh "${target}" 'sudo install -d -m 0700 -o root -g root /var/lib/sops-nix'
 
   # Write exact multiline key contents with root ownership and 0600 perms.
-  ssh "${target}" 'sudo tee /var/lib/sops-nix/key.txt >/dev/null && sudo chown root:root /var/lib/sops-nix/key.txt && sudo chmod 0600 /var/lib/sops-nix/key.txt' <<< "${SOPS_AGE_KEY}"
+  ssh "${target}" 'sudo tee /var/lib/sops-nix/key.txt >/dev/null && sudo chown root:root /var/lib/sops-nix/key.txt && sudo chmod 0600 /var/lib/sops-nix/key.txt' <<<"${SOPS_AGE_KEY}"
 }
 
 fetch_hardware_configuration "${TARGET}" "${HOST_HARDWARE_CONFIG_PATH}" "${TARGET_KIND}"
@@ -142,8 +142,8 @@ bootstrap_sops_age_key "${HOST_DIR}" "${TARGET}"
 
 exec nix run nixpkgs#nixos-rebuild -- \
   "${MODE}" \
-  --fast \
+  --no-reexec \
   --flake "${FLAKE_REF}" \
   --build-host "${TARGET}" \
   --target-host "${TARGET}" \
-  --use-remote-sudo
+  --sudo
