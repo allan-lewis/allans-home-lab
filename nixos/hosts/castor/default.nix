@@ -1,4 +1,4 @@
-{ hostDns, hostIp4Address, hostIp4Gateway, hostInterface, hostName, nixosVersion, ... }:
+{ authentikHost, hostDns, hostIp4Address, hostIp4Gateway, hostInterface, hostName, nixosVersion, ... }:
 
 {
   imports = [

@@ -1,4 +1,4 @@
-{ hostDns, hostIp4Address, hostIp4Gateway, hostInterface, hostName, nixosVersion, ... }:
+{ defaultSubnet, hostDns, hostIp4Address, hostIp4Gateway, hostInterface, hostName, nixosVersion, ... }:
 
 {
   imports = [
@@ -16,4 +16,20 @@
     gateway = hostIp4Gateway;
     dns = hostDns;
   };
+
+  services.homelab.vpnKillSwitch = {
+    wanInterface = hostInterface;
+   
+    lanSubnets = [ defaultSubnet ];
+
+    # lanSubnets = [ "192.168.10.0/24" ];
+
+    vpnEndpointIps = [
+      "185.208.9.158"
+      "185.208.9.189"
+      "45.84.216.183"
+      "45.84.216.83"
+    ];
+  };
+
 }

@@ -62,17 +62,16 @@
   services.homelab.vpnKillSwitch = {
     enable = true;
 
-    wanInterface = "enp2s0";
-    vpnInterface = "tun0";
+    # wanInterface = "enp2s0";
 
-    lanSubnets = [ "192.168.10.0/24" ];
+    # lanSubnets = [ "192.168.10.0/24" ];
 
-    vpnEndpointIps = [
-      "185.208.9.158"
-      "185.208.9.189"
-      "45.84.216.183"
-      "45.84.216.83"
-    ];
+    # vpnEndpointIps = [
+    #   "185.208.9.158"
+    #   "185.208.9.189"
+    #   "45.84.216.183"
+    #   "45.84.216.83"
+    # ];
 
     vpnPort = 1195;
     vpnProtocol = "udp";

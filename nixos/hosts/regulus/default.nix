@@ -1,4 +1,4 @@
-{ hostDns, hostIp4Address, hostIp4Gateway, hostInterface, hostName, nixosVersion, ... }:
+{ defaultNasHost, hostDns, hostIp4Address, hostIp4Gateway, hostInterface, hostName, nixosVersion, ... }:
 
 {
   imports = [
@@ -7,6 +7,8 @@
 
     ../../profiles/media-acquisition
   ];
+
+  _module.args.defaultNasHost = defaultNasHost;
 
   networking.hostName = hostName;
   system.stateVersion = nixosVersion;

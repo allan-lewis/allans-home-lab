@@ -347,7 +347,8 @@ in
       ${pkgs.nixos-install-tools}/bin/nixos-install --no-root-passwd
 
       echo
-      echo "Install complete. Rebooting..."
+      echo "Install complete. Remove the installation media, then press Enter to reboot..."
+      read -r
       ${pkgs.systemd}/bin/reboot
     '';
   };

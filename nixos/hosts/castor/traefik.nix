@@ -1,4 +1,4 @@
-{ hostDns, hostIp4Address, hostIp4Gateway, hostInterface, hostName, nixosVersion, ... }:
+{ authentikHost, hostDns, hostIp4Address, hostIp4Gateway, hostInterface, hostName, nixosVersion, ... }:
 
 {
   imports = [
@@ -6,7 +6,7 @@
   ];
 
   homelab.traefik = {
-    authentikIpAddress = "192.168.10.102";
+    authentikIpAddress = authentikHost;
 
     services = [
       {

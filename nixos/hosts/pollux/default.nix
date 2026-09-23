@@ -1,4 +1,4 @@
-{ hostDns, hostIp4Address, hostIp4Gateway, hostInterface, hostName, nixosVersion, ... }:
+{ defaultNasHost, hostDns, hostIp4Address, hostIp4Gateway, hostInterface, hostName, nixosVersion, ... }:
 
 {
   imports = [
@@ -42,7 +42,7 @@
 
   fileSystems = {
     "/data/media-library" = {
-      device = "polaris.ip.allanshomelab.com:/mnt/pool1/media-library";
+      device = "${defaultNasHost}:/mnt/pool1/media-library";
       fsType = "nfs";
 
       options = [
