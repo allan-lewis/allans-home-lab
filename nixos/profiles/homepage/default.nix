@@ -37,7 +37,7 @@ in
     configDir = "/var/lib/homepage/config";
     allowedHosts = "homepage.nixos.allanshomelab.com,allanshomelab.com";
     environmentFile = config.sops.secrets.homepage_env.path;
-    image = "ghcr.io/gethomepage/homepage:v2.2.0@sha256:753eeb0cc22ab7baad39ed47cbd1aae14e193dd1b264e965f193a9ea1d1e1bdd";
+    image = "ghcr.io/gethomepage/homepage:v2.4.0@sha256:643bd0be730d40f69d58028a55d1a896739333e8815786df42bc97f109ecbe61";
   };
 
   systemd.services.podman-homepage.restartTriggers = [
