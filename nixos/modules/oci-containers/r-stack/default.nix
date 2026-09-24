@@ -55,7 +55,7 @@
   };
 
   virtualisation.oci-containers.containers.lidarr = {
-    image = "ghcr.io/linuxserver/lidarr:3.1.0@sha256:e9a275176e8158638395cc8574b02b7695006f70bde48830a09fa6ab5b6775df";
+    image = "ghcr.io/linuxserver/lidarr:3.1.0@sha256:044d616beb43c5e7810991242c6a9c42b93ff238c8c0850684939634ea751208";
 
     autoStart = true;
 
@@ -79,7 +79,7 @@
   };
 
   virtualisation.oci-containers.containers.radarr = {
-    image = "ghcr.io/linuxserver/radarr:6.3.0@sha256:2b2c1c05eb3f648d2c80dfab9486147dd7bb0ad4d77fa972fc1c5de8f1da3738";
+    image = "ghcr.io/linuxserver/radarr:6.4.4@sha256:adb6c09d6b729ea5e642c99cea35af72702ef476bf4763f153299ac5db9f0b4f";
 
     autoStart = true;
 
