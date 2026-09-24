@@ -51,6 +51,13 @@
       conditions = [ "[CONNECTED] == true" ];
     }
     {
+      name = "Procyon (Home Automation)";
+      group = "Hosts";
+      enabled = true;
+      url = "icmp://procyon.ip.allanshomelab.com";
+      conditions = [ "[CONNECTED] == true" ];
+    }
+    {
       name = "Regulus (NixOS R Stack)";
       group = "Hosts";
       enabled = true;
@@ -310,6 +317,16 @@
           "[STATUS] == 200"
           "[CERTIFICATE_EXPIRATION] > 168h"
           "[BODY] == pat(*Dashboard*)"
+        ];
+      }
+      {
+        name = "Home Assistant";
+        group = "Sites (Allan's Home Lab)";
+        url = "https://home.allanshomelab.com";
+        conditions = [
+          "[STATUS] == 200"
+          "[CERTIFICATE_EXPIRATION] > 168h"
+          "[BODY] == pat(*Home Assistant*)"
         ];
       }
       {

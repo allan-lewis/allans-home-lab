@@ -222,6 +222,12 @@
         url = "http://100.67.41.102:8123";
         authentik = false;
       }
+      {
+        name = "home-assistant-2";
+        host = "home.allanshomelab.com";
+        url = "http://procyon.ip.allanshomelab.com:8123";
+        authentik = false;
+      }
     ];
   };
 
