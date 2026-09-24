@@ -46,6 +46,12 @@
         authentik = false;
       }
       {
+        name = "canopus";
+        host = "canopus.hosts.allanshomelab.com";
+        url = "http://canopus.ip.allanshomelab.com:8000";
+        authentik = false;
+      }
+      {
         name = "rigel";
         host = "rigel.hosts.allanshomelab.com";
         url = "http://rigel.ip.allanshomelab.com";

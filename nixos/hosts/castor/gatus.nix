@@ -16,6 +16,13 @@
       conditions = [ "[CONNECTED] == true" ];
     }
     {
+      name = "Canopus (Local Backup)";
+      group = "Hosts";
+      enabled = true;
+      url = "icmp://canopus.ip.allanshomelab.com";
+      conditions = [ "[CONNECTED] == true" ];
+    }
+    {
       name = "Capella (NixOS VPN)";
       group = "Hosts";
       enabled = true;
@@ -235,16 +242,16 @@
         "[BODY] == pat(*whoami.nixos.allanshomelab.com*)"
       ];
     }
-      # {
-      #   name = "Derry";
-      #   group = "Sites (Hosts)";
-      #   url = "https://derry.hosts.allanshomelab.com";
-      #   conditions = [
-      #     "[STATUS] == 200"
-      #     "[CERTIFICATE_EXPIRATION] > 168h"
-      #     "[BODY] == pat(*portal*)"
-      #   ];
-      # }
+    {
+      name = "Canopus";
+      group = "Sites (Hosts)";
+      url = "https://canopus.hosts.allanshomelab.com";
+      conditions = [
+        "[STATUS] == 200"
+        "[CERTIFICATE_EXPIRATION] > 168h"
+        "[BODY] == pat(*portal*)"
+      ];
+    }
       {
         name = "Sirius";
         group = "Sites (Hosts)";

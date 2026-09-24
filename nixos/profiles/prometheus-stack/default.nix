@@ -115,6 +115,10 @@ in
             targets = [ "sirius.ip.allanshomelab.com:9100" ];
             labels.__meta_friendly_instance = "sirius";
           }
+          {
+            targets = [ "canopus.ip.allanshomelab.com:9100" ];
+            labels.__meta_friendly_instance = "canopus";
+          }
         ];
         relabel_configs = friendlyRelabelConfigs;
       }
