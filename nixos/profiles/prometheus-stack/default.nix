@@ -84,57 +84,37 @@ in
         job_name = "node-exporter";
         static_configs = [
           {
-            targets = [ "192.168.86.222:9100" ];
-            labels.__meta_friendly_instance = "blaine";
+            targets = [ "rigel.ip.allanshomelab.com:9100" ];
+            labels.__meta_friendly_instance = "rigel";
           }
           {
-            targets = [ "192.168.86.219:9100" ];
-            labels.__meta_friendly_instance = "cujo";
+            targets = [ "castor.ip.allanshomelab.com:9100" ];
+            labels.__meta_friendly_instance = "castor";
           }
           {
-            targets = [ "192.168.86.217:9100" ];
-            labels.__meta_friendly_instance = "dandelo";
+            targets = [ "bellatrix.ip.allanshomelab.com:9100" ];
+            labels.__meta_friendly_instance = "bellatrix";
           }
           {
-            targets = [ "192.168.86.210:9100" ];
-            labels.__meta_friendly_instance = "derry";
+            targets = [ "polaris.ip.allanshomelab.com:9100" ];
+            labels.__meta_friendly_instance = "polaris";
           }
           {
-            targets = [ "192.168.86.204:9100" ];
-            labels.__meta_friendly_instance = "flagg";
+            targets = [ "pollux.ip.allanshomelab.com:9100" ];
+            labels.__meta_friendly_instance = "pollux";
           }
           {
-            targets = [ "100.95.108.6:9100" ];
-            labels.__meta_friendly_instance = "gilead";
+            targets = [ "capella.ip.allanshomelab.com:9100" ];
+            labels.__meta_friendly_instance = "capella";
           }
           {
-            targets = [ "192.168.86.218:9100" ];
-            labels.__meta_friendly_instance = "carrie";
+            targets = [ "regulus.ip.allanshomelab.com:9100" ];
+            labels.__meta_friendly_instance = "regulus";
           }
           {
-            targets = [ "192.168.86.200:9100" ];
-            labels.__meta_friendly_instance = "maturin";
+            targets = [ "sirius.ip.allanshomelab.com:9100" ];
+            labels.__meta_friendly_instance = "sirius";
           }
-          {
-            targets = [ "192.168.86.227:9100" ];
-            labels.__meta_friendly_instance = "misery";
-          }
-          {
-            targets = [ "192.168.86.229:9100" ];
-            labels.__meta_friendly_instance = "overlook";
-          }
-          {
-            targets = [ "192.168.86.224:9100" ];
-            labels.__meta_friendly_instance = "patricia";
-          }
-          {
-            targets = [ "192.168.86.220:9100" ];
-            labels.__meta_friendly_instance = "pennywise";
-          }
-          # {
-          #   targets = [ "192.168.86.206:9100" ];
-          #   labels.__meta_friendly_instance = "roland";
-          # }
         ];
         relabel_configs = friendlyRelabelConfigs;
       }
@@ -143,8 +123,8 @@ in
         job_name = "cloudflare";
         static_configs = [
           {
-            targets = [ "192.168.86.204:2000" ];
-            labels.__meta_friendly_instance = "flagg";
+            targets = [ "castor.ip.allanshomelab.com:2000" ];
+            labels.__meta_friendly_instance = "castor";
           }
         ];
         relabel_configs = friendlyRelabelConfigs;
@@ -169,8 +149,8 @@ in
         job_name = "gatus";
         static_configs = [
           {
-            targets = [ "192.168.86.204:8080" ];
-            labels.__meta_friendly_instance = "flagg";
+            targets = [ "castor.ip.allanshomelab.com:8080" ];
+            labels.__meta_friendly_instance = "castor";
           }
         ];
         relabel_configs = friendlyRelabelConfigs;
@@ -180,33 +160,25 @@ in
         job_name = "homelab-metrics";
         static_configs = [
           {
-            targets = [ "192.168.86.219:9102" ];
-            labels.__meta_friendly_instance = "cujo";
+            targets = [ "bellatrix.ip.allanshomelab.com:9102" ];
+            labels.__meta_friendly_instance = "bellatrix";
           }
           {
-            targets = [ "192.168.86.204:9102" ];
-            labels.__meta_friendly_instance = "flagg";
+            targets = [ "castor.ip.allanshomelab.com:9102" ];
+            labels.__meta_friendly_instance = "castor";
           }
           {
-            targets = [ "192.168.86.218:9102" ];
-            labels.__meta_friendly_instance = "carrie";
+            targets = [ "pollux.ip.allanshomelab.com:9102" ];
+            labels.__meta_friendly_instance = "pollux";
           }
           {
-            targets = [ "192.168.86.227:9102" ];
-            labels.__meta_friendly_instance = "misery";
+            targets = [ "capella.ip.allanshomelab.com:9102" ];
+            labels.__meta_friendly_instance = "capella";
           }
           {
-            targets = [ "192.168.86.224:9102" ];
-            labels.__meta_friendly_instance = "patricia";
+            targets = [ "regulus.ip.allanshomelab.com:9102" ];
+            labels.__meta_friendly_instance = "regulus";
           }
-          {
-            targets = [ "192.168.86.222:9102" ];
-            labels.__meta_friendly_instance = "blaine";
-          }
-          # {
-          #   targets = [ "192.168.86.206:9102" ];
-          #   labels.__meta_friendly_instance = "roland";
-          # }
         ];
         relabel_configs = friendlyRelabelConfigs;
       }

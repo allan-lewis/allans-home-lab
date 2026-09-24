@@ -32,18 +32,26 @@
             builtins.readFile ../inventory/hosts/${hostName}.toml
           );
 
+        defaultSubnet = "192.168.10.0/24";
+        defaultNasHost = "polaris.ip.allanshomelab.com";
+        authentikHost = "castor.ip.allanshomelab.com";
         actualHostName = inventoryConfig.hostname;
         hostInterface = inventoryConfig.network.interface;
         hostIp4Address = inventoryConfig.network.ipv4.address;
         hostIp4Gateway = inventoryConfig.network.ipv4.gateway;
+        hostDns = inventoryConfig.network.dns;
         remoteBackupRoot = 
-          "allan@192.168.86.220:/mnt/pool1/allans-home-lab/backups-automated/${actualHostName}";
+          "allan@${defaultNasHost}:/mnt/pool1/allans-home-lab/backups-automated/${actualHostName}";
       in
       nixpkgs.lib.nixosSystem {
         inherit system;
 
         specialArgs = {
           inherit
+            defaultSubnet
+            defaultNasHost
+            authentikHost
+            hostDns
             hostInterface
             hostIp4Address
             hostIp4Gateway
@@ -62,15 +70,12 @@
   in
   {
     nixosConfigurations = {
+      capella = mkHost "capella";
       bellatrix = mkHost "bellatrix";
-      blaine = mkHost "blaine";
-      carrie = mkHost "carrie";
-      cujo = mkHost "cujo";
-      flagg = mkHost "flagg";
-      misery = mkHost "misery";
-      patricia = mkHost "patricia";
-      roland = mkHost "roland";
-      todash = mkHost "todash";
+      castor = mkHost "castor";
+      regulus = mkHost "regulus";
+      pollux = mkHost "pollux";
+      deneb = mkHost "deneb";
     };
   };
 }

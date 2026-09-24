@@ -1,4 +1,4 @@
-{ remoteBackupRoot, config, ... }:
+{ defaultNasHost, remoteBackupRoot, config, ... }:
 
 let
   immichVersion = "v3.1.0";
@@ -84,7 +84,7 @@ in
 
   #: mount the nfs filesystem
   fileSystems."/data/immich" = {
-    device = "192.168.86.220:/mnt/pool1/immich";
+    device = "${defaultNasHost}:/mnt/pool1/immich";
     fsType = "nfs";
     options = [
       "rw"

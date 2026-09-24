@@ -1,4 +1,4 @@
-{ hostIp4Address, hostIp4Gateway, hostName, hostInterface, nixosVersion, lib, remoteBackupRoot, ... }:
+{ hostDns, hostIp4Address, hostIp4Gateway, hostName, hostInterface, nixosVersion, lib, remoteBackupRoot, ... }:
 
 {
   imports = [
@@ -22,6 +22,7 @@
     interface = hostInterface;
     address = hostIp4Address;
     gateway = hostIp4Gateway;
+    dns = hostDns;
   };
 
   time.timeZone = lib.mkForce "America/New_York";

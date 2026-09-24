@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 
 {
   imports = [
@@ -22,13 +22,14 @@
   };
 
   #: restore managed directories after any switch
-  system.activationScripts.managedStateRestoreAfterSwitch = lib.mkIf config.services.homelab.managedState.enable {
-    deps = [ "rootSshPublicKey" "etc" ];
-    text = ''
-      mkdir -p /run/nixos
-      if ! grep -qxF 'homelab-task-managed-state-restore.service' /run/nixos/activation-restart-list 2>/dev/null; then
-        printf '%s\n' 'homelab-task-managed-state-restore.service' >> /run/nixos/activation-restart-list
-      fi
-    '';
-  };
+  systemd.targets.homelab-managed-state-reactivation =
+    lib.mkIf config.services.homelab.managedState.enable {
+      description = "Restore homelab managed state during NixOS reactivation";
+
+      wantedBy = [ "sysinit-reactivation.target" ];
+      before = [ "sysinit-reactivation.target" ];
+
+      wants = [ "homelab-task-managed-state-restore.service" ];
+      after = [ "homelab-task-managed-state-restore.service" ];
+    };
 }

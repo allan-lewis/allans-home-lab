@@ -32,8 +32,6 @@ groups:
       - alert: HomelabPublicIPPatternInvalid
         expr: |
           count(count_values("ip", homelab_public_ip_numeric)) != 2
-          or
-          min(count_values("ip", homelab_public_ip_numeric)) != 2
         for: 5m
         labels:
           severity: critical
@@ -98,8 +96,8 @@ groups:
       - alert: HomelabHighMemoryUsage
         expr: |
           100 - (
-            (node_memory_MemAvailable_bytes{job="node-exporter", instance!~"pennywise|gilead"} * 100)
-            / node_memory_MemTotal_bytes{job="node-exporter", instance!~"pennywise|gilead"}
+            (node_memory_MemAvailable_bytes{job="node-exporter", instance!~"polaris|rigel"} * 100)
+            / node_memory_MemTotal_bytes{job="node-exporter", instance!~"polaris|rigel"}
           ) > 90
         for: 5m
         labels:
@@ -127,16 +125,16 @@ groups:
 
       - alert: HomelabTaskMetricsCountMismatch
         expr: |
-          count(homelab_task_last_run_unix{task!~"^(hello|managed_state_restore|managed_dirs_rehydrate|dev_checkouts_sync)$"}) != 10
+          count(homelab_task_last_run_unix{task!~"^(hello|managed_state_restore|managed_dirs_rehydrate|dev_checkouts_sync)$"}) != 9
         labels:
           severity: critical
           rulegroup: homelabRules
         annotations:
-          summary: "Homelab task metric count mismatch (expected 10, got {{ $value }})"
+          summary: "Homelab task metric count mismatch (expected 9, got {{ $value }})"
           description: |
             The global count of published homelab task metrics does not match the expected value.
             This usually indicates that one or more tasks are missing, duplicated, or misconfigured.
-            expected="10", observed="{{ $value }}"
+            expected="9", observed="{{ $value }}"
 
       - alert: HomelabTaskFailed
         expr: |

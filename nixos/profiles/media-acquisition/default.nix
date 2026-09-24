@@ -1,4 +1,4 @@
-{ remoteBackupRoot, ... }:
+{ defaultNasHost, remoteBackupRoot, ... }:
 
 {
   imports = [
@@ -85,7 +85,7 @@
 
   fileSystems = {
     "/data/media-library" = {
-      device = "192.168.86.220:/mnt/pool1/media-acquisition";
+      device = "${defaultNasHost}:/mnt/pool1/media-acquisition";
       fsType = "nfs";
       options = [
         "rw"

@@ -24,6 +24,11 @@ in
       description = "IPv4 gateway for this bare-metal host.";
     };
 
+    dns = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      description = "Default DNS name server for this bare-metal host.";
+    };
+
     prefixLength = lib.mkOption {
       type = lib.types.int;
       default = 24;
@@ -40,7 +45,7 @@ in
     networking.useNetworkd = false;
     networking.useDHCP = false;
 
-    networking.nameservers = [ cfg.gateway ];
+    networking.nameservers = cfg.dns;
 
     networking.defaultGateway = {
       address = cfg.gateway;

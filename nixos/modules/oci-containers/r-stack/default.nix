@@ -153,7 +153,8 @@
   systemd.services.podman-network-media = {
     description = "Create podman network: media";
     wantedBy = [ "multi-user.target" ];
-    before = [ "podman-bazarr.service"
+    before = [ 
+               "podman-bazarr.service"
                "podman-lidarr.service"
                "podman-prowlarr.service"
                "podman-radarr.service"
