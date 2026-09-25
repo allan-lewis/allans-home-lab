@@ -225,7 +225,7 @@
       {
         name = "home-assistant-2";
         host = "home.allanshomelab.com";
-        url = "http://procyon.ip.allanshomelab.com:8123";
+        url = "http://procyon.ip.allanshomelab.com";
         authentik = false;
       }
     ];

@@ -119,6 +119,10 @@ in
             targets = [ "canopus.ip.allanshomelab.com:9100" ];
             labels.__meta_friendly_instance = "canopus";
           }
+          {
+            targets = [ "procyon.ip.allanshomelab.com:9100" ];
+            labels.__meta_friendly_instance = "procyon";
+          }
         ];
         relabel_configs = friendlyRelabelConfigs;
       }
