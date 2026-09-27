@@ -3,7 +3,6 @@
 {
   imports = [
     ../../modules/bare-metal
-    ../../modules/tailscale
 
     ../../profiles/media-acquisition
   ];

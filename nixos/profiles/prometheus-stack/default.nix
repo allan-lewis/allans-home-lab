@@ -123,6 +123,10 @@ in
             targets = [ "procyon.ip.allanshomelab.com:9100" ];
             labels.__meta_friendly_instance = "procyon";
           }
+          {
+            targets = [ "arcturus.ip.allanshomelab.com:9100" ];
+            labels.__meta_friendly_instance = "arcturus";
+          }
         ];
         relabel_configs = friendlyRelabelConfigs;
       }
