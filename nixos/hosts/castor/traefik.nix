@@ -54,7 +54,7 @@
       {
         name = "rigel";
         host = "rigel.hosts.allanshomelab.com";
-        url = "http://rigel.ip.allanshomelab.com";
+        url = "http://rigel.ts.allanshomelab.com";
         authentik = false;
       }
       {

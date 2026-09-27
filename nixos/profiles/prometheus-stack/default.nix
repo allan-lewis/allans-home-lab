@@ -84,7 +84,7 @@ in
         job_name = "node-exporter";
         static_configs = [
           {
-            targets = [ "rigel.ip.allanshomelab.com:9100" ];
+            targets = [ "rigel.ts.allanshomelab.com:9100" ];
             labels.__meta_friendly_instance = "rigel";
           }
           {

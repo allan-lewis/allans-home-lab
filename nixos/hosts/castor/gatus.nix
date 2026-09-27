@@ -7,75 +7,111 @@
 
 
   homelab.gatus.endpoints = secrets: [
-    ## HOSTS
+    ## HOSTS (LOCAL)
     {
       name = "Bellatrix (NixOS DevOps)";
-      group = "Hosts";
+      group = "Hosts (Local)";
       enabled = true;
       url = "icmp://bellatrix.ip.allanshomelab.com";
       conditions = [ "[CONNECTED] == true" ];
     }
     {
       name = "Canopus (Local Backup)";
-      group = "Hosts";
+      group = "Hosts (Local)";
       enabled = true;
       url = "icmp://canopus.ip.allanshomelab.com";
       conditions = [ "[CONNECTED] == true" ];
     }
     {
       name = "Capella (NixOS VPN)";
-      group = "Hosts";
+      group = "Hosts (Local)";
       enabled = true;
       url = "icmp://capella.ip.allanshomelab.com";
       conditions = [ "[CONNECTED] == true" ];
     }
     {
       name = "Castor (NixOS Applications)";
-      group = "Hosts";
+      group = "Hosts (Local)";
       enabled = true;
       url = "icmp://castor.ip.allanshomelab.com";
       conditions = [ "[CONNECTED] == true" ];
     }
     {
       name = "Polaris (NAS)";
-      group = "Hosts";
+      group = "Hosts (Local)";
       enabled = true;
       url = "icmp://polaris.ip.allanshomelab.com";
       conditions = [ "[CONNECTED] == true" ];
     }
     {
       name = "Pollux (NixOS Applications)";
-      group = "Hosts";
+      group = "Hosts (Local)";
       enabled = true;
       url = "icmp://pollux.ip.allanshomelab.com";
       conditions = [ "[CONNECTED] == true" ];
     }
     {
       name = "Procyon (Home Automation)";
-      group = "Hosts";
+      group = "Hosts (Local)";
       enabled = true;
       url = "icmp://procyon.ip.allanshomelab.com";
       conditions = [ "[CONNECTED] == true" ];
     }
     {
       name = "Regulus (NixOS R Stack)";
-      group = "Hosts";
+      group = "Hosts (Local)";
       enabled = true;
       url = "icmp://regulus.ip.allanshomelab.com";
       conditions = [ "[CONNECTED] == true" ];
     }
     {
-      name = "Rigel (Remote Backup)";
-      group = "Hosts";
+      name = "Arcturus (Retro Gaming)";
+      group = "Hosts (Local)";
       enabled = true;
-      url = "icmp://rigel.ip.allanshomelab.com";
+      url = "icmp://arcturus.ip.allanshomelab.com";
       conditions = [ "[CONNECTED] == true" ];
     }
     {
       name = "Sirius (Hypervisor)";
-      group = "Hosts";
+      group = "Hosts (Local)";
       enabled = true;
       url = "icmp://sirius.ip.allanshomelab.com";
+      conditions = [ "[CONNECTED] == true" ];
+    }
+    ## HOSTS (TAILSCALE)
+    {
+      name = "Bellatrix (NixOS DevOps)";
+      group = "Hosts (Tailscale)";
+      enabled = true;
+      url = "icmp://bellatrix.ts.allanshomelab.com";
+      conditions = [ "[CONNECTED] == true" ];
+    }
+    {
+      name = "Castor (NixOS Applications)";
+      group = "Hosts (Tailscale)";
+      enabled = true;
+      url = "icmp://castor.ts.allanshomelab.com";
+      conditions = [ "[CONNECTED] == true" ];
+    }
+    {
+      name = "Polaris (NAS)";
+      group = "Hosts (Tailscale)";
+      enabled = true;
+      url = "icmp://polaris.ts.allanshomelab.com";
+      conditions = [ "[CONNECTED] == true" ];
+    }
+    {
+      name = "Pollux (NixOS Applications)";
+      group = "Hosts (Tailscale)";
+      enabled = true;
+      url = "icmp://pollux.ts.allanshomelab.com";
+      conditions = [ "[CONNECTED] == true" ];
+    }
+    {
+      name = "Rigel (Remote Backup)";
+      group = "Hosts (Tailscale)";
+      enabled = true;
+      url = "icmp://rigel.ts.allanshomelab.com";
       conditions = [ "[CONNECTED] == true" ];
     }
     ## SITES (MEDIA)
