@@ -347,9 +347,10 @@ in
       ${pkgs.nixos-install-tools}/bin/nixos-install --no-root-passwd
 
       echo
-      echo "Install complete. Remove the installation media, then press Enter to reboot..."
+      echo "Install complete, press any key to power off."
       read -r
-      ${pkgs.systemd}/bin/reboot
+      echo "Powering off the system..."
+      ${pkgs.systemd}/bin/poweroff
     '';
   };
 }
