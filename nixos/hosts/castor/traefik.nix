@@ -228,7 +228,11 @@
         url = "http://procyon.ip.allanshomelab.com";
         authentik = false;
       }
+      {
+        name = "homelab-dev";
+        host = "homelab-dev.nixos.allanshomelab.com";
+        url = "http://bellatrix.ip.allanshomelab.com:3000";
+      }
     ];
   };
-
 }

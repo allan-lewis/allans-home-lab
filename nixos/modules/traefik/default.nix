@@ -124,10 +124,6 @@ in
               "1.1.1.1:53"
               "8.8.8.8:53"
             ];
-
-            # propagation = {
-            #   delayBeforeChecks = "120m";
-            # };
           };
 
           email = cfg.email;
