@@ -116,7 +116,7 @@
     }
     ## SITES (MEDIA)
     {
-      name = "Prowlarr";
+      name = "Prowlarr (Traefik)";
       group = "Sites (Media)";
       url = "https://prowlarr.media.allanshomelab.com/ping";
       conditions = [
@@ -126,7 +126,16 @@
       ];
     }
     {
-      name = "Sonarr";
+      name = "Prowlarr (Host)";
+      group = "Sites (Media)";
+      url = "http://regulus.ip.allanshomelab.com:9696/ping";
+      conditions = [
+        "[STATUS] == 200"
+        "[BODY] == pat(*OK*)"
+      ];
+    }
+    {
+      name = "Sonarr (Traefik)";
       group = "Sites (Media)";
       url = "https://sonarr.media.allanshomelab.com/ping";
       conditions = [
@@ -136,7 +145,16 @@
       ];
     }
     {
-      name = "Radarr";
+      name = "Sonarr (Host)";
+      group = "Sites (Media)";
+      url = "http://regulus.ip.allanshomelab.com:8989/ping";
+      conditions = [
+        "[STATUS] == 200"
+        "[BODY] == pat(*OK*)"
+      ];
+    }
+    {
+      name = "Radarr (Traefik)";
       group = "Sites (Media)";
       url = "https://radarr.media.allanshomelab.com/ping";
       conditions = [
@@ -146,7 +164,16 @@
       ];
     }
     {
-      name = "Lidarr";
+      name = "Radarr (Host)";
+      group = "Sites (Media)";
+      url = "http://regulus.ip.allanshomelab.com:7878/ping";
+      conditions = [
+        "[STATUS] == 200"
+        "[BODY] == pat(*OK*)"
+      ];
+    }
+    {
+      name = "Lidarr (Traefik)";
       group = "Sites (Media)";
       url = "https://lidarr.media.allanshomelab.com/ping";
       conditions = [
@@ -156,13 +183,31 @@
       ];
     }
     {
-      name = "Bazarr";
+      name = "Lidarr (Host)";
+      group = "Sites (Media)";
+      url = "http://regulus.ip.allanshomelab.com:8686/ping";
+      conditions = [
+        "[STATUS] == 200"
+        "[BODY] == pat(*OK*)"
+      ];
+    }
+    {
+      name = "Bazarr (Traefik)";
       group = "Sites (Media)";
       url = "https://bazarr.media.allanshomelab.com";
       conditions = [
         "[STATUS] == 200"
         "[CERTIFICATE_EXPIRATION] > 168h"
         "[BODY] == pat(*authentik*)"
+      ];
+    }
+    {
+      name = "Bazarr (Host)";
+      group = "Sites (Media)";
+      url = "http://regulus.ip.allanshomelab.com:6767";
+      conditions = [
+        "[STATUS] == 200"
+        "[BODY] == pat(*Bazarr*)"
       ];
     }
     {
