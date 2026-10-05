@@ -26,6 +26,6 @@
   services.homelab.vaultwarden = {
     enable = true;
     environmentFile = config.sops.secrets.vaultwarden_env.path;
-    image = "vaultwarden/server:1.37.3@sha256:4ecafc9049c7d878c7717d1ce4f9059d706758c78b8fa42e5ead21f4b2dfc770";
+    image = "vaultwarden/server:1.37.4@sha256:2bb2e0344616c62a6d76ea10558497499f8ed3f731400e143dc7bf17b757b5b9";
   };
 }
