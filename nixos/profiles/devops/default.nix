@@ -26,7 +26,9 @@
     clang
     gnumake
     go
+    guestfs-tools
     just
+    libguestfs
     packer
     sops
     terraform

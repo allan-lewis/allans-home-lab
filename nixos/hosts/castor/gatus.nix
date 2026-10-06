@@ -7,66 +7,116 @@
 
 
   homelab.gatus.endpoints = secrets: [
-    ## HOSTS
+    ## HOSTS (LOCAL)
     {
       name = "Bellatrix (NixOS DevOps)";
-      group = "Hosts";
+      group = "Hosts (Local)";
       enabled = true;
       url = "icmp://bellatrix.ip.allanshomelab.com";
       conditions = [ "[CONNECTED] == true" ];
     }
     {
+      name = "Canopus (Local Backup)";
+      group = "Hosts (Local)";
+      enabled = true;
+      url = "icmp://canopus.ip.allanshomelab.com";
+      conditions = [ "[CONNECTED] == true" ];
+    }
+    {
       name = "Capella (NixOS VPN)";
-      group = "Hosts";
+      group = "Hosts (Local)";
       enabled = true;
       url = "icmp://capella.ip.allanshomelab.com";
       conditions = [ "[CONNECTED] == true" ];
     }
     {
       name = "Castor (NixOS Applications)";
-      group = "Hosts";
+      group = "Hosts (Local)";
       enabled = true;
       url = "icmp://castor.ip.allanshomelab.com";
       conditions = [ "[CONNECTED] == true" ];
     }
     {
       name = "Polaris (NAS)";
-      group = "Hosts";
+      group = "Hosts (Local)";
       enabled = true;
       url = "icmp://polaris.ip.allanshomelab.com";
       conditions = [ "[CONNECTED] == true" ];
     }
     {
       name = "Pollux (NixOS Applications)";
-      group = "Hosts";
+      group = "Hosts (Local)";
       enabled = true;
       url = "icmp://pollux.ip.allanshomelab.com";
       conditions = [ "[CONNECTED] == true" ];
     }
     {
+      name = "Procyon (Home Automation)";
+      group = "Hosts (Local)";
+      enabled = true;
+      url = "icmp://procyon.ip.allanshomelab.com";
+      conditions = [ "[CONNECTED] == true" ];
+    }
+    {
       name = "Regulus (NixOS R Stack)";
-      group = "Hosts";
+      group = "Hosts (Local)";
       enabled = true;
       url = "icmp://regulus.ip.allanshomelab.com";
       conditions = [ "[CONNECTED] == true" ];
     }
     {
-      name = "Rigel (Remote Backup)";
-      group = "Hosts";
+      name = "Arcturus (Retro Gaming)";
+      group = "Hosts (Local)";
       enabled = true;
-      url = "icmp://rigel.ip.allanshomelab.com";
+      url = "icmp://arcturus.ip.allanshomelab.com";
       conditions = [ "[CONNECTED] == true" ];
     }
     {
       name = "Sirius (Hypervisor)";
-      group = "Hosts";
+      group = "Hosts (Local)";
       enabled = true;
       url = "icmp://sirius.ip.allanshomelab.com";
       conditions = [ "[CONNECTED] == true" ];
     }
+    ## HOSTS (TAILSCALE)
+    {
+      name = "Bellatrix (NixOS DevOps)";
+      group = "Hosts (Tailscale)";
+      enabled = true;
+      url = "icmp://bellatrix.ts.allanshomelab.com";
+      conditions = [ "[CONNECTED] == true" ];
+    }
+    {
+      name = "Castor (NixOS Applications)";
+      group = "Hosts (Tailscale)";
+      enabled = true;
+      url = "icmp://castor.ts.allanshomelab.com";
+      conditions = [ "[CONNECTED] == true" ];
+    }
+    {
+      name = "Polaris (NAS)";
+      group = "Hosts (Tailscale)";
+      enabled = true;
+      url = "icmp://polaris.ts.allanshomelab.com";
+      conditions = [ "[CONNECTED] == true" ];
+    }
+    {
+      name = "Pollux (NixOS Applications)";
+      group = "Hosts (Tailscale)";
+      enabled = true;
+      url = "icmp://pollux.ts.allanshomelab.com";
+      conditions = [ "[CONNECTED] == true" ];
+    }
+    {
+      name = "Rigel (Remote Backup)";
+      group = "Hosts (Tailscale)";
+      enabled = true;
+      url = "icmp://rigel.ts.allanshomelab.com";
+      conditions = [ "[CONNECTED] == true" ];
+    }
     ## SITES (MEDIA)
     {
-      name = "Prowlarr";
+      name = "Prowlarr (Traefik)";
       group = "Sites (Media)";
       url = "https://prowlarr.media.allanshomelab.com/ping";
       conditions = [
@@ -76,7 +126,16 @@
       ];
     }
     {
-      name = "Sonarr";
+      name = "Prowlarr (Host)";
+      group = "Sites (Media)";
+      url = "http://regulus.ip.allanshomelab.com:9696/ping";
+      conditions = [
+        "[STATUS] == 200"
+        "[BODY] == pat(*OK*)"
+      ];
+    }
+    {
+      name = "Sonarr (Traefik)";
       group = "Sites (Media)";
       url = "https://sonarr.media.allanshomelab.com/ping";
       conditions = [
@@ -86,7 +145,16 @@
       ];
     }
     {
-      name = "Radarr";
+      name = "Sonarr (Host)";
+      group = "Sites (Media)";
+      url = "http://regulus.ip.allanshomelab.com:8989/ping";
+      conditions = [
+        "[STATUS] == 200"
+        "[BODY] == pat(*OK*)"
+      ];
+    }
+    {
+      name = "Radarr (Traefik)";
       group = "Sites (Media)";
       url = "https://radarr.media.allanshomelab.com/ping";
       conditions = [
@@ -96,7 +164,16 @@
       ];
     }
     {
-      name = "Lidarr";
+      name = "Radarr (Host)";
+      group = "Sites (Media)";
+      url = "http://regulus.ip.allanshomelab.com:7878/ping";
+      conditions = [
+        "[STATUS] == 200"
+        "[BODY] == pat(*OK*)"
+      ];
+    }
+    {
+      name = "Lidarr (Traefik)";
       group = "Sites (Media)";
       url = "https://lidarr.media.allanshomelab.com/ping";
       conditions = [
@@ -106,13 +183,31 @@
       ];
     }
     {
-      name = "Bazarr";
+      name = "Lidarr (Host)";
+      group = "Sites (Media)";
+      url = "http://regulus.ip.allanshomelab.com:8686/ping";
+      conditions = [
+        "[STATUS] == 200"
+        "[BODY] == pat(*OK*)"
+      ];
+    }
+    {
+      name = "Bazarr (Traefik)";
       group = "Sites (Media)";
       url = "https://bazarr.media.allanshomelab.com";
       conditions = [
         "[STATUS] == 200"
         "[CERTIFICATE_EXPIRATION] > 168h"
         "[BODY] == pat(*authentik*)"
+      ];
+    }
+    {
+      name = "Bazarr (Host)";
+      group = "Sites (Media)";
+      url = "http://regulus.ip.allanshomelab.com:6767";
+      conditions = [
+        "[STATUS] == 200"
+        "[BODY] == pat(*Bazarr*)"
       ];
     }
     {
@@ -235,16 +330,16 @@
         "[BODY] == pat(*whoami.nixos.allanshomelab.com*)"
       ];
     }
-      # {
-      #   name = "Derry";
-      #   group = "Sites (Hosts)";
-      #   url = "https://derry.hosts.allanshomelab.com";
-      #   conditions = [
-      #     "[STATUS] == 200"
-      #     "[CERTIFICATE_EXPIRATION] > 168h"
-      #     "[BODY] == pat(*portal*)"
-      #   ];
-      # }
+    {
+      name = "Canopus";
+      group = "Sites (Hosts)";
+      url = "https://canopus.hosts.allanshomelab.com";
+      conditions = [
+        "[STATUS] == 200"
+        "[CERTIFICATE_EXPIRATION] > 168h"
+        "[BODY] == pat(*portal*)"
+      ];
+    }
       {
         name = "Sirius";
         group = "Sites (Hosts)";
@@ -303,6 +398,16 @@
           "[STATUS] == 200"
           "[CERTIFICATE_EXPIRATION] > 168h"
           "[BODY] == pat(*Dashboard*)"
+        ];
+      }
+      {
+        name = "Home Assistant";
+        group = "Sites (Allan's Home Lab)";
+        url = "https://home.allanshomelab.com";
+        conditions = [
+          "[STATUS] == 200"
+          "[CERTIFICATE_EXPIRATION] > 168h"
+          "[BODY] == pat(*Home Assistant*)"
         ];
       }
       {

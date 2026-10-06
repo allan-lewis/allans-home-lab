@@ -46,9 +46,15 @@
         authentik = false;
       }
       {
+        name = "canopus";
+        host = "canopus.hosts.allanshomelab.com";
+        url = "http://canopus.ip.allanshomelab.com:8000";
+        authentik = false;
+      }
+      {
         name = "rigel";
         host = "rigel.hosts.allanshomelab.com";
-        url = "http://rigel.ip.allanshomelab.com";
+        url = "http://rigel.ts.allanshomelab.com";
         authentik = false;
       }
       {
@@ -216,7 +222,17 @@
         url = "http://100.67.41.102:8123";
         authentik = false;
       }
+      {
+        name = "home-assistant-2";
+        host = "home.allanshomelab.com";
+        url = "http://procyon.ip.allanshomelab.com";
+        authentik = false;
+      }
+      {
+        name = "homelab-dev";
+        host = "homelab-dev.nixos.allanshomelab.com";
+        url = "http://bellatrix.ip.allanshomelab.com:3000";
+      }
     ];
   };
-
 }
