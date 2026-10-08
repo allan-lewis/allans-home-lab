@@ -18,7 +18,7 @@
       {
         name = "allans-home-lab";
         host = "allanshomelab.com";
-        url = "http://castor.ip.allanshomelab.com:8976";
+        url = "http://pollux.ip.allanshomelab.com:8976";
         authentik = false;
       }
       {
@@ -72,7 +72,7 @@
       {
         name = "homepage";
         host = "homepage.nixos.allanshomelab.com";
-        url = "http://castor.ip.allanshomelab.com:3007";
+        url = "http://pollux.ip.allanshomelab.com:3007";
         authentik = false;
       }
       {

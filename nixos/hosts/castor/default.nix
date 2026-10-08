@@ -10,8 +10,6 @@
 
     ../../profiles/authentik
     ../../profiles/cloudflare
-    ../../profiles/homelab-dashboard
-    ../../profiles/homepage
     ../../profiles/prometheus-stack
     ../../profiles/s3-mirror
     ../../profiles/twingate

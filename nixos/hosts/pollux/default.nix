@@ -8,6 +8,8 @@
     ../../modules/oci-containers/nginx
     ../../modules/tailscale
 
+    ../../profiles/homelab-dashboard
+    ../../profiles/homepage
     ../../profiles/immich
     ../../profiles/jellyfin
     ../../profiles/plex
