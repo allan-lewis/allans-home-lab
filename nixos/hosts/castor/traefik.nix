@@ -162,7 +162,7 @@
       {
         name = "tautulli";
         host = "tautulli.media.allanshomelab.com";
-        url = "http://pollux.ip.allanshomelab.com:8181";
+        url = "http://antares.ip.allanshomelab.com:8181";
         authentik = false;
       }
       {
