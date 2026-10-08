@@ -127,6 +127,10 @@ in
             targets = [ "arcturus.ip.allanshomelab.com:9100" ];
             labels.__meta_friendly_instance = "arcturus";
           }
+          {
+            targets = [ "antares.ip.allanshomelab.com:9100" ];
+            labels.__meta_friendly_instance = "antares";
+          }
         ];
         relabel_configs = friendlyRelabelConfigs;
       }
@@ -190,6 +194,10 @@ in
           {
             targets = [ "regulus.ip.allanshomelab.com:9102" ];
             labels.__meta_friendly_instance = "regulus";
+          }
+          {
+            targets = [ "antares.ip.allanshomelab.com:9102" ];
+            labels.__meta_friendly_instance = "antares";
           }
         ];
         relabel_configs = friendlyRelabelConfigs;

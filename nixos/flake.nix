@@ -70,6 +70,7 @@
   in
   {
     nixosConfigurations = {
+      antares = mkHost "antares";
       capella = mkHost "capella";
       bellatrix = mkHost "bellatrix";
       castor = mkHost "castor";
