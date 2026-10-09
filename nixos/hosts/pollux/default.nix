@@ -3,14 +3,12 @@
 {
   imports = [
     ../../modules/bare-metal
-    ../../modules/oci-containers/frigate
     ../../modules/oci-containers/it-tools
     ../../modules/oci-containers/nginx
     ../../modules/tailscale
 
     ../../profiles/homelab-dashboard
     ../../profiles/homepage
-    ../../profiles/immich
     ../../profiles/trilium
     ../../profiles/twingate
   ];

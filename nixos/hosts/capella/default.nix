@@ -3,6 +3,7 @@
 {
   imports = [
     ../../modules/bare-metal
+    ../../modules/oci-containers/frigate
   ];
 
   networking.hostName = hostName;

@@ -30,7 +30,7 @@
       conditions = [ "[CONNECTED] == true" ];
     }
     {
-      name = "Capella (NixOS Applications)";
+      name = "Capella (NixOS NVR)";
       group = "Hosts (Local)";
       enabled = true;
       url = "icmp://capella.ip.allanshomelab.com";
