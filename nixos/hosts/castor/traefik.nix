@@ -90,7 +90,7 @@
       {
         name = "jellyfin";
         host = "jellyfin.media.allanshomelab.com";
-        url = "http://pollux.ip.allanshomelab.com:8096";
+        url = "http://antares.ip.allanshomelab.com:8096";
         authentik = false;
       }
       {
@@ -120,7 +120,7 @@
       {
         name = "plex";
         host = "plex.media.allanshomelab.com";
-        url = "http://pollux.ip.allanshomelab.com:32400";
+        url = "http://antares.ip.allanshomelab.com:32400";
         authentik = false;
       }
       {

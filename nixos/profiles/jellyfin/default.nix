@@ -3,6 +3,8 @@
 {
   imports = [
     ../../modules/oci-containers/jellyfin
+    
+    ../../profiles/media-library-nfs
   ];
 
   homelab.managedDirectories.entries = {
