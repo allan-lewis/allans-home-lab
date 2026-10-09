@@ -36,7 +36,7 @@
       {
         name = "frigate";
         host = "nvr.allanshomelab.com";
-        url = "http://pollux.ip.allanshomelab.com:8971";
+        url = "http://capella.ip.allanshomelab.com:8971";
         authentik = false;
       }
       {
@@ -78,7 +78,7 @@
       {
         name = "immich";
         host = "photos.allanandvaia.com";
-        url = "http://pollux.ip.allanshomelab.com:2283";
+        url = "http://antares.ip.allanshomelab.com:2283";
         authentik = false;
       }
       {
