@@ -1,4 +1,4 @@
-{ config, remoteBackupRoot, ... }:
+{ config, remoteBackupRoot, frigateStorageDir, ... }:
 
 {
   virtualisation.oci-containers.containers.frigate = {
@@ -15,7 +15,7 @@
 
     volumes = [
       "/srv/frigate/config:/config"
-      "/srv/frigate/storage:/media/frigate"
+      "${frigateStorageDir}:/media/frigate"
       "/etc/localtime:/etc/localtime:ro"
     ];
 
@@ -49,7 +49,7 @@
   systemd.tmpfiles.rules = [
     "d /srv/frigate 0755 root root -"
     "d /srv/frigate/config 0755 root root -"
-    "d /srv/frigate/storage 0755 root root -"
+    "d /data/frigate 0755 root root -"
   ];
 
   systemd.services.podman-frigate = {
