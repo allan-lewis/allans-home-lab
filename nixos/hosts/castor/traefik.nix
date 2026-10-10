@@ -18,7 +18,7 @@
       {
         name = "allans-home-lab";
         host = "allanshomelab.com";
-        url = "http://castor.ip.allanshomelab.com:8976";
+        url = "http://pollux.ip.allanshomelab.com:8976";
         authentik = false;
       }
       {
@@ -36,7 +36,7 @@
       {
         name = "frigate";
         host = "nvr.allanshomelab.com";
-        url = "http://pollux.ip.allanshomelab.com:8971";
+        url = "http://capella.ip.allanshomelab.com:8971";
         authentik = false;
       }
       {
@@ -72,13 +72,13 @@
       {
         name = "homepage";
         host = "homepage.nixos.allanshomelab.com";
-        url = "http://castor.ip.allanshomelab.com:3007";
+        url = "http://pollux.ip.allanshomelab.com:3007";
         authentik = false;
       }
       {
         name = "immich";
         host = "photos.allanandvaia.com";
-        url = "http://pollux.ip.allanshomelab.com:2283";
+        url = "http://antares.ip.allanshomelab.com:2283";
         authentik = false;
       }
       {
@@ -90,7 +90,7 @@
       {
         name = "jellyfin";
         host = "jellyfin.media.allanshomelab.com";
-        url = "http://pollux.ip.allanshomelab.com:8096";
+        url = "http://antares.ip.allanshomelab.com:8096";
         authentik = false;
       }
       {
@@ -120,7 +120,7 @@
       {
         name = "plex";
         host = "plex.media.allanshomelab.com";
-        url = "http://pollux.ip.allanshomelab.com:32400";
+        url = "http://antares.ip.allanshomelab.com:32400";
         authentik = false;
       }
       {
@@ -162,7 +162,7 @@
       {
         name = "tautulli";
         host = "tautulli.media.allanshomelab.com";
-        url = "http://pollux.ip.allanshomelab.com:8181";
+        url = "http://antares.ip.allanshomelab.com:8181";
         authentik = false;
       }
       {

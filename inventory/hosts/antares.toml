@@ -1,0 +1,40 @@
+name = "antares"
+hostname = "antares"
+
+platform = "nixos"
+variant = "nixos"
+
+role = "media"
+description = "Media Server"
+
+groups = ["nixos"]
+
+[management]
+provisioner = "terraform"
+converger = "nixos"
+
+[runtime]
+kind = "vm"
+hypervisor = "proxmox"
+node = "sirius"
+
+[resources.cpu]
+cores = 8
+sockets = 1
+
+[resources]
+memory_mb = 32768
+disk_gb = 256
+
+[network]
+mode = "static"
+dns = ["192.168.10.1"]
+
+[network.ipv4]
+address = "192.168.10.113"
+gateway = "192.168.10.1"
+
+[provisioning.terraform]
+cloud_init = true
+agent = true
+

@@ -3,6 +3,8 @@
 {
   imports = [
     ../../modules/oci-containers/plex
+
+    ../../profiles/media-library-nfs
   ];
 
   homelab.managedDirectories.entries = {

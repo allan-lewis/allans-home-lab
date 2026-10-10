@@ -9,6 +9,13 @@
   homelab.gatus.endpoints = secrets: [
     ## HOSTS (LOCAL)
     {
+      name = "Antares (NixOS Media)";
+      group = "Hosts (Local)";
+      enabled = true;
+      url = "icmp://antares.ip.allanshomelab.com";
+      conditions = [ "[CONNECTED] == true" ];
+    }
+    {
       name = "Bellatrix (NixOS DevOps)";
       group = "Hosts (Local)";
       enabled = true;
@@ -23,7 +30,7 @@
       conditions = [ "[CONNECTED] == true" ];
     }
     {
-      name = "Capella (NixOS VPN)";
+      name = "Capella (NixOS NVR)";
       group = "Hosts (Local)";
       enabled = true;
       url = "icmp://capella.ip.allanshomelab.com";
