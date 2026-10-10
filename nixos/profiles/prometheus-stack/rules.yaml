@@ -175,7 +175,7 @@ groups:
           nixos_system_booted_is_current == 0
         for: 15m
         labels:
-          severity: warning
+          severity: info
           rulegroup: homelabRules
         annotations:
           summary: "NixOS host pending reboot: {{ $labels.instance }}"
