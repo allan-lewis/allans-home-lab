@@ -154,6 +154,12 @@
         authentik = false;
       }
       {
+        name = "seerr";
+        host = "seer.media.allanshomelab.com";
+        url = "http://regulus.ip.allanshomelab.com:5055";
+        authentik = false;
+      }
+      {
         name = "sonarr";
         host = "sonarr.media.allanshomelab.com";
         url = "http://regulus.ip.allanshomelab.com:8989";
