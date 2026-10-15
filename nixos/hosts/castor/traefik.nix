@@ -155,7 +155,7 @@
       }
       {
         name = "seerr";
-        host = "seer.media.allanshomelab.com";
+        host = "seerr.media.allanshomelab.com";
         url = "http://regulus.ip.allanshomelab.com:5055";
         authentik = false;
       }

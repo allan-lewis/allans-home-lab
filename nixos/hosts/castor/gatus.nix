@@ -143,9 +143,9 @@
       ];
     }
     {
-      name = "Seer";
+      name = "Seerr";
       group = "Sites (Media)";
-      url = "https://seer.media.allanshomelab.com/api/v1/status";
+      url = "https://seerr.media.allanshomelab.com/api/v1/status";
       conditions = [
         "[STATUS] == 200"
         "[BODY] == pat(*version*)"
