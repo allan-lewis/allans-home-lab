@@ -31,7 +31,7 @@
         name = "bazarr";
         host = "bazarr.media.allanshomelab.com";
         url = "http://regulus.ip.allanshomelab.com:6767";
-        authentik = true;
+        authentik = false;
       }
       {
         name = "frigate";
@@ -97,7 +97,7 @@
         name = "lidarr";
         host = "lidarr.media.allanshomelab.com";
         url = "http://regulus.ip.allanshomelab.com:8686";
-        authentik = true;
+        authentik = false;
       }
       {
         name = "nginx";
@@ -133,13 +133,13 @@
         name = "prowlarr";
         host = "prowlarr.media.allanshomelab.com";
         url = "http://regulus.ip.allanshomelab.com:9696";
-        authentik = true;
+        authentik = false;
       }
       {
         name = "radarr";
         host = "radarr.media.allanshomelab.com";
         url = "http://regulus.ip.allanshomelab.com:7878";
-        authentik = true;
+        authentik = false;
       }
       {
         name = "sirius";
@@ -154,10 +154,16 @@
         authentik = false;
       }
       {
+        name = "seerr";
+        host = "seerr.media.allanshomelab.com";
+        url = "http://regulus.ip.allanshomelab.com:5055";
+        authentik = false;
+      }
+      {
         name = "sonarr";
         host = "sonarr.media.allanshomelab.com";
         url = "http://regulus.ip.allanshomelab.com:8989";
-        authentik = true;
+        authentik = false;
       }
       {
         name = "tautulli";

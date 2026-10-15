@@ -112,7 +112,7 @@
         description: Subtitle management
         widget:
             type: bazarr
-            url: http://regulus.ip.allanshomelab.com:6767
+            url: https://bazarr.media.allanshomelab.com
             key: "{{HOMEPAGE_VAR_BAZARR_KEY}}"
     - Immich:
         icon: immich.png
@@ -144,7 +144,7 @@
         description: Music management
         widget:
             type: lidarr
-            url: http://regulus.ip.allanshomelab.com:8686
+            url: https://lidarr.media.allanshomelab.com
             key: "{{HOMEPAGE_VAR_LIDARR_KEY}}"
     - Plex:
         icon: plex.png
@@ -160,7 +160,7 @@
         description: Indexer manager
         widget:
             type: prowlarr
-            url: http://regulus.ip.allanshomelab.com:9696
+            url: https://prowlarr.media.allanshomelab.com
             key: "{{HOMEPAGE_VAR_PROWLARR_KEY}}"
     - Radarr:
         icon: radarr.png
@@ -168,15 +168,23 @@
         description: Movie management
         widget:
             type: radarr
-            url: http://regulus.ip.allanshomelab.com:7878
+            url: https://radarr.media.allanshomelab.com
             key: "{{HOMEPAGE_VAR_RADARR_KEY}}"
+    - Seerr:
+        icon: seerr.png
+        href: https://seerr.media.allanshomelab.com
+        description: Request manager
+        widget:
+            type: seerr
+            url: https://seerr.media.allanshomelab.com
+            key: "{{HOMEPAGE_VAR_SEERR_KEY}}"
     - Sonarr:
         icon: sonarr.png
         href: https://sonarr.media.allanshomelab.com
         description: Show management
         widget:
             type: sonarr
-            url: http://regulus.ip.allanshomelab.com:8989
+            url: https://sonarr.media.allanshomelab.com
             key: "{{HOMEPAGE_VAR_SONARR_KEY}}"
     - Tautulli:
         icon: tautulli.png

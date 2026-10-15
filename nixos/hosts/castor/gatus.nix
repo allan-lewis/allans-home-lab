@@ -123,97 +123,61 @@
     }
     ## SITES (MEDIA)
     {
-      name = "Prowlarr (Traefik)";
+      name = "Prowlarr";
       group = "Sites (Media)";
       url = "https://prowlarr.media.allanshomelab.com/ping";
       conditions = [
         "[STATUS] == 200"
         "[CERTIFICATE_EXPIRATION] > 168h"
-        "[BODY] == pat(*authentik*)"
-      ];
-    }
-    {
-      name = "Prowlarr (Host)";
-      group = "Sites (Media)";
-      url = "http://regulus.ip.allanshomelab.com:9696/ping";
-      conditions = [
-        "[STATUS] == 200"
         "[BODY] == pat(*OK*)"
       ];
     }
     {
-      name = "Sonarr (Traefik)";
+      name = "Sonarr";
       group = "Sites (Media)";
       url = "https://sonarr.media.allanshomelab.com/ping";
       conditions = [
         "[STATUS] == 200"
         "[CERTIFICATE_EXPIRATION] > 168h"
-        "[BODY] == pat(*authentik*)"
-      ];
-    }
-    {
-      name = "Sonarr (Host)";
-      group = "Sites (Media)";
-      url = "http://regulus.ip.allanshomelab.com:8989/ping";
-      conditions = [
-        "[STATUS] == 200"
         "[BODY] == pat(*OK*)"
       ];
     }
     {
-      name = "Radarr (Traefik)";
+      name = "Seerr";
+      group = "Sites (Media)";
+      url = "https://seerr.media.allanshomelab.com/api/v1/status";
+      conditions = [
+        "[STATUS] == 200"
+        "[BODY] == pat(*version*)"
+      ];
+    }
+    {
+      name = "Radarr";
       group = "Sites (Media)";
       url = "https://radarr.media.allanshomelab.com/ping";
       conditions = [
         "[STATUS] == 200"
         "[CERTIFICATE_EXPIRATION] > 168h"
-        "[BODY] == pat(*authentik*)"
-      ];
-    }
-    {
-      name = "Radarr (Host)";
-      group = "Sites (Media)";
-      url = "http://regulus.ip.allanshomelab.com:7878/ping";
-      conditions = [
-        "[STATUS] == 200"
         "[BODY] == pat(*OK*)"
       ];
     }
     {
-      name = "Lidarr (Traefik)";
+      name = "Lidarr";
       group = "Sites (Media)";
       url = "https://lidarr.media.allanshomelab.com/ping";
       conditions = [
         "[STATUS] == 200"
         "[CERTIFICATE_EXPIRATION] > 168h"
-        "[BODY] == pat(*authentik*)"
-      ];
-    }
-    {
-      name = "Lidarr (Host)";
-      group = "Sites (Media)";
-      url = "http://regulus.ip.allanshomelab.com:8686/ping";
-      conditions = [
-        "[STATUS] == 200"
         "[BODY] == pat(*OK*)"
       ];
     }
     {
-      name = "Bazarr (Traefik)";
+      name = "Bazarr";
       group = "Sites (Media)";
       url = "https://bazarr.media.allanshomelab.com";
       conditions = [
         "[STATUS] == 200"
         "[CERTIFICATE_EXPIRATION] > 168h"
-        "[BODY] == pat(*authentik*)"
-      ];
-    }
-    {
-      name = "Bazarr (Host)";
-      group = "Sites (Media)";
-      url = "http://regulus.ip.allanshomelab.com:6767";
-      conditions = [
-        "[STATUS] == 200"
         "[BODY] == pat(*Bazarr*)"
       ];
     }

@@ -4,12 +4,43 @@
   lidarrConfigDir, 
   prowlarrConfigDir, 
   radarrConfigDir,
+  seerConfigDir,
   sonarrConfigDir,
   transmissionConfigDir, transmissionWatchDir,
   ... 
 }:
 
 {
+  virtualisation.oci-containers.containers.seer = {
+    image = "ghcr.io/seerr-team/seerr:v3.5.0@sha256:c33702abebcec295b69a1371417b3a350e31dfeacbae3158e790c86908dc3659";
+
+    autoStart = true;
+
+    ports = [ "5055:5055" ];
+
+    volumes = [
+      "${seerConfigDir}:/app/config"
+    ];
+
+    environment = {
+      TZ = config.time.timeZone;
+    };
+
+    networks = [ "media" ];
+
+    extraOptions = [
+      "--init"
+      "--security-opt=no-new-privileges"
+      "--cap-drop=ALL"
+      "--health-cmd=wget --no-verbose --tries=1 --spider http://localhost:5055/api/v1/settings/public || exit 1"
+      "--health-start-period=20s"
+      "--health-timeout=3s"
+      "--health-interval=15s"
+      "--health-retries=3"
+      "--health-on-failure=kill"
+    ];
+  };
+
   virtualisation.oci-containers.containers.prowlarr = {
     image = "ghcr.io/linuxserver/prowlarr:2.6.5@sha256:f2b26429893d4c4cb71941b7ee50b1bdecd9d5f9f9e02d5410615e9f4f7c8d95";
 
@@ -158,6 +189,7 @@
                "podman-lidarr.service"
                "podman-prowlarr.service"
                "podman-radarr.service"
+               "posman-seer.service"
                "podman-sonarr.service"
                "podman-transmission.service" 
     ];
@@ -216,6 +248,17 @@
   };
 
   systemd.services.podman-sonarr = {
+    requires = [
+      "podman-network-media.service"
+      "homelab-task-managed-state-restore.service"
+    ];
+    after = [
+      "podman-network-media.service"
+      "homelab-task-managed-state-restore.service"
+    ];
+  };
+
+  systemd.services.podman-seer = {
     requires = [
       "podman-network-media.service"
       "homelab-task-managed-state-restore.service"
