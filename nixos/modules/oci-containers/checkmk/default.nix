@@ -34,7 +34,7 @@ in
 
   config = lib.mkIf cfg.enable {
     virtualisation.oci-containers.containers.checkmk = {
-      image = "docker.io/checkmk/check-mk-community:2.5.0-latest";
+      image = "docker.io/checkmk/check-mk-community:2.5.0@sha256:9eb222d05fe03d751f70ac7d8022cc655637679ba1d38922ee408e4e25058c26";
 
       autoStart = true;
 
