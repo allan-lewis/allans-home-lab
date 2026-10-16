@@ -33,10 +33,6 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    systemd.tmpfiles.rules = [
-      "d ${cfg.dataDir} 0755 root root -"
-    ];
-
     virtualisation.oci-containers.containers.checkmk = {
       image = "docker.io/checkmk/check-mk-community:2.5.0-latest";
 
