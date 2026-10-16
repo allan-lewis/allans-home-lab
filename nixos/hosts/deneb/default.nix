@@ -2,6 +2,7 @@
 
 {
   imports = [
+    ../../modules/oci-containers/checkmk
     ../../modules/virtual-machine
   ];
 
