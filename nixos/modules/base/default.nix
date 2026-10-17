@@ -5,6 +5,7 @@ let
 in
 {
   imports = [
+    ../checkmk-agent
     ../default-user
     ../homelab-modules
     ../oci-containers

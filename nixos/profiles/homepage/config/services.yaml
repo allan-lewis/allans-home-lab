@@ -41,6 +41,16 @@
         icon: alertmanager.png
         href: https://alertmanager.nixos.allanshomelab.com
         description: Monitoring system
+    - Checkmk:
+        icon: checkmk.png
+        href: https://checkmk.allanshomelab.com
+        description: "Monitoring and observability platform"
+        widget:
+            type: checkmk
+            url: https://checkmk.allanshomelab.com
+            site: cmk
+            username: homepage
+            password: "{{HOMEPAGE_VAR_CHECKMK_PASSWORD}}"
     - Gatus:
         icon: gatus.png
         href: https://gatus.nixos.allanshomelab.com
