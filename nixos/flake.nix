@@ -4,27 +4,40 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
 
+    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
+
     home-manager.url = "github:nix-community/home-manager/release-26.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
+    home-manager-unstable.url = "github:nix-community/home-manager/master";
+    home-manager-unstable.inputs.nixpkgs.follows = "nixpkgs-unstable";
+
     sops-nix.url = "github:Mic92/sops-nix";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
+
+    sops-nix-unstable.url = "github:Mic92/sops-nix";
+    sops-nix-unstable.inputs.nixpkgs.follows = "nixpkgs-unstable";
   };
 
-  outputs = { nixpkgs, home-manager, sops-nix, ... }:
+  outputs = { nixpkgs, nixpkgs-unstable, home-manager, home-manager-unstable, sops-nix, sops-nix-unstable, ... }:
 
   let
     system = "x86_64-linux";
 
     nixosVersion = "26.05";
 
-    commonModules = [
-      home-manager.nixosModules.home-manager
-      sops-nix.nixosModules.sops
-    ];
-
     mkHost = hostName:
+      { nixpkgsFlake ? nixpkgs
+      , homeManagerFlake ? home-manager
+      , sopsNixFlake ? sops-nix
+      , hostNixosVersion ? nixosVersion
+      }:
       let
+        commonModules = [
+          homeManagerFlake.nixosModules.home-manager
+          sopsNixFlake.nixosModules.sops
+        ];
+
         hostPath = ./hosts/${hostName};
 
         inventoryConfig =
@@ -43,7 +56,7 @@
         remoteBackupRoot = 
           "allan@${defaultNasHost}:/mnt/pool1/allans-home-lab/backups-automated/${actualHostName}";
       in
-      nixpkgs.lib.nixosSystem {
+      nixpkgsFlake.lib.nixosSystem {
         inherit system;
 
         specialArgs = {
@@ -56,9 +69,9 @@
             hostIp4Address
             hostIp4Gateway
             remoteBackupRoot
-            nixosVersion
             ;
 
+          nixosVersion = hostNixosVersion;
           hostName = actualHostName;
         };
 
@@ -70,13 +83,18 @@
   in
   {
     nixosConfigurations = {
-      antares = mkHost "antares";
-      capella = mkHost "capella";
-      bellatrix = mkHost "bellatrix";
-      castor = mkHost "castor";
-      regulus = mkHost "regulus";
-      pollux = mkHost "pollux";
-      deneb = mkHost "deneb";
+      antares = mkHost "antares" { };
+      capella = mkHost "capella" { };
+      bellatrix = mkHost "bellatrix" { };
+      castor = mkHost "castor" { };
+      regulus = mkHost "regulus" { };
+      pollux = mkHost "pollux" { };
+      deneb = mkHost "deneb" {
+        nixpkgsFlake = nixpkgs-unstable;
+        homeManagerFlake = home-manager-unstable;
+        sopsNixFlake = sops-nix-unstable;
+        hostNixosVersion = "26.11";
+      };
     };
   };
 }
