@@ -28,10 +28,14 @@ let
           mode = d.mode;
           backup = d.backup;
           restore = d.restore;
+          backupExcludes = d.backupExcludes;
         })
       cfg.entries;
 
   yamlBool = b: if b then "true" else "false";
+
+  yamlStringList = items:
+    "[" + concatMapStringsSep ", " (i: ''"${i}"'') items + "]";
 
   managedDirectoriesYaml = pkgs.writeText "managed-directories.yaml" (
     ''
@@ -53,6 +57,7 @@ let
             mode: "${d.mode}"
             backup: ${yamlBool d.backup}
             restore: ${yamlBool d.restore}
+            backup_excludes: ${yamlStringList d.backupExcludes}
             marker: "${markerFile}"
         '') entriesList
     )
@@ -108,6 +113,12 @@ in
             type = types.bool;
             default = true;
             description = "Whether this directory participates in restore operations.";
+          };
+
+          backupExcludes = mkOption {
+            type = types.listOf types.str;
+            default = [];
+            description = "Rsync --exclude patterns applied only during backup (local -> remote), relative to the managed directory root. Not applied during restore, since the remote copy is static and safe to pull in full (e.g. volatile runtime paths that shouldn't be synced out).";
           };
         };
       }));
