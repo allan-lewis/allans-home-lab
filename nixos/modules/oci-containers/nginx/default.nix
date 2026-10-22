@@ -1,6 +1,6 @@
 {
   services.homelab.containers.nginx = {
-    image = "nginx:1.31.6@sha256:b1c153789d3849b12a7096e38b46f6c156dae034011663955e52eaf3ea961cee";
+    image = "nginx:1.31.8@sha256:d02f8188142c3e1940a530c4eb521b1a2cf7bb21ed4debeb131863e013ba9a3d";
     port = 80;
   };
 }
