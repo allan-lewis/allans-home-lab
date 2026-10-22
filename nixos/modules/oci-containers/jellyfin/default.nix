@@ -2,7 +2,7 @@
 
 {
   virtualisation.oci-containers.containers.jellyfin = {
-    image = "jellyfin/jellyfin:12.2@sha256:da3cd1e48322a35e4b60f3d0a49fca2649e7acce90346dd6e42db777f94e3bbd";
+    image = "docker.io/jellyfin/jellyfin:12.2@sha256:da3cd1e48322a35e4b60f3d0a49fca2649e7acce90346dd6e42db777f94e3bbd";
 
     autoStart = true;
 
