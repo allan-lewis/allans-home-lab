@@ -76,8 +76,13 @@ let
       commandLine = escapeArgv t.command;
       wrapper = mkTaskWrapperScript { inherit taskLabel commandLine; };
 
+      # Every task's ReadWritePaths includes cfg.textfileDir (below), which is
+      # only guaranteed to exist once tmpfiles has (re)created it. Without this
+      # ordering, a task forced to run early during switch-to-configuration
+      # reactivation (e.g. managed-state-restore) can race
+      # systemd-tmpfiles-resetup.service and fail namespacing with ENOENT.
       baseAfter =
-        [ "network.target" ]
+        [ "network.target" "systemd-tmpfiles-setup.service" "systemd-tmpfiles-resetup.service" ]
         ++ lib.optionals t.requiresNetworkOnline [ "network-online.target" ];
 
       baseWants =
