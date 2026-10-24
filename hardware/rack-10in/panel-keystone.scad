@@ -16,11 +16,11 @@ raise = 1;               // extra plate thickness behind the face, between the r
 raise_width = 220;       // the reference panel proves this clears the rails at this depth
 
 // Notch in the top edge for the USW-Flex power cord, which comes forward from
-// behind this panel and up into the switch's DC jack in the 1U above. Centered
-// under the jack: 25 mm in from the right edge of the centered 212.9 mm switch.
+// behind this panel and up into the switch's DC jack in the 1U above. It is
+// as wide as a port and lines up with one, near the jack.
 cord_notch = true;
-cord_notch_x = PANEL_WIDTH / 2 + 212.9 / 2 - 25;   // seen from the front
-cord_notch_size = [14, 5.9];                        // width, depth from the top edge
+cord_notch_port = 11;    // counted from the left, seen from the front
+cord_notch_depth = 6.5;  // from the top edge
 
 h = rack_panel_height(u);
 xs = [for (i = [0 : ports - 1]) PANEL_WIDTH / 2 + (i - (ports - 1) / 2) * pitch];
@@ -36,8 +36,9 @@ difference() {
   for (x = xs)
     translate([x, opening_bottom, 0]) keystone_opening();
 
+  // xs is symmetric, so it also gives port centers as seen from the front
   if (cord_notch)
     rack_front()
-      translate([cord_notch_x - cord_notch_size[0] / 2, h - cord_notch_size[1], -1])
-        cube([cord_notch_size[0], cord_notch_size[1] + 1, KEYSTONE_DEPTH + 2]);
+      translate([xs[cord_notch_port - 1] - KEYSTONE_OPENING[0] / 2, h - cord_notch_depth, -1])
+        cube([KEYSTONE_OPENING[0], cord_notch_depth + 1, KEYSTONE_DEPTH + 2]);
 }
