@@ -9,3 +9,4 @@ rm -rf .build
 rm -rf artifacts
 rm -rf .iso-build
 rm -rf .template-build-ubuntu
+rm -rf hardware/build
