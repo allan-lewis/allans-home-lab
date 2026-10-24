@@ -60,6 +60,12 @@ module rack_ribs(u, depth = PANEL_RIB_DEPTH, t = PANEL_RIB_THICKNESS) {
     translate([rack_ear_width(), y, 0]) cube([PANEL_REAR_WIDTH, t, depth]);
 }
 
+// Places children, drawn as seen from the front, into the as-printed panel
+// space. Works for 2D and 3D children.
+module rack_front() {
+  translate([PANEL_WIDTH, 0, 0]) mirror([1, 0, 0]) children();
+}
+
 // A complete panel: plate, mounting holes and ribs. Children are 2D cutouts
 // drawn as seen from the front, in the same X/Y space as the panel.
 module rack_panel(u = 1) {
@@ -68,7 +74,7 @@ module rack_panel(u = 1) {
       linear_extrude(PANEL_THICKNESS)
         difference() {
           rack_panel_outline(u);
-          translate([PANEL_WIDTH, 0]) mirror([1, 0]) children();
+          rack_front() children();
         }
       rack_ribs(u);
     }
