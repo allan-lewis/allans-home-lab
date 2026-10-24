@@ -37,7 +37,8 @@ Slicer project files (`.3mf` from Bambu Studio) are not committed. Print setting
 
 | Path | Purpose |
 | --- | --- |
-| `hardware/lib/` | Shared modules: rack standard dimensions, panel base, keystone cutout, vent patterns |
+| `hardware/lib/` | Shared modules: rack panel base (`rack10.scad`), vent patterns (`vents.scad`) |
+| `hardware/fonts/` | Fonts used by parts, committed with their licenses so renders match everywhere |
 | `hardware/rack-10in/` | Printable parts for the 10" rack, one `.scad` file per part |
 | `hardware/reference/` | Third-party models kept for measurement and comparison only |
 | `hardware/scripts/` | Render tooling |
@@ -95,9 +96,23 @@ Output mirrors the source tree under `hardware/build/`, e.g. `rack-10in/panel-ke
 
 - Units are millimeters
 - Parts are modeled in their print orientation, flat face on the Z=0 plane
+- Panels are built with `rack_panel(u) { ... }`, whose children are 2D cutouts drawn as seen from the front of the rack. Panels print face down, so the module mirrors cutouts to keep text reading correctly.
+- Text cut through a panel uses a stencil font, so the enclosed centers of letters like a, o and e stay attached. Keep stencil bridges at least ~1.2 mm wide (two nozzle widths plus margin).
 - Tunable values (counts, sizes, clearances) are top-level variables so they appear in OpenSCAD's Customizer
 - Fit-critical values (keystone snap, screw holes) live in `hardware/lib/` so every variant inherits a fix
+- Each part's header comment records its print orientation, supports and material
 - Files are named `<kind>-<variant>.scad`, e.g. `panel-blank.scad`, `panel-vent.scad`, `mount-<device>.scad`
+
+---
+
+## Materials
+
+Default material: **PETG**, for every part that goes in the rack.
+
+- Use one material and product line (e.g. all Bambu PETG HF) so parts match. The same color differs in shade and gloss between PLA and PETG, and between PETG lines.
+- PETG also tolerates the heat near switches and power supplies better than PLA, which softens around 55–60 °C.
+- PLA is fine for test prints that check fit or appearance. Reprint final parts in PETG.
+- Print PETG on a textured plate, or use glue stick as a release layer on smooth PEI.
 
 ---
 

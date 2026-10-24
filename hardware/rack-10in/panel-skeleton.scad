@@ -3,6 +3,7 @@
 // Print one, fit it in the rack, and fold any corrections back into rack10.scad.
 //
 // Print: front face down, no supports.
+// Material: any (test print).
 
 include <rack10.scad>
 
@@ -14,22 +15,10 @@ strut_width = 4;
 h = rack_panel_height(u);
 ear = rack_ear_width();
 
-difference() {
-  union() {
-    linear_extrude(PANEL_THICKNESS)
-      difference() {
-        rack_panel_outline(u);
-
-        // Open center, leaving a frame, solid ears and struts
-        for (i = [0 : struts]) {
-          x0 = ear + i * PANEL_REAR_WIDTH / (struts + 1) + (i == 0 ? 0 : strut_width / 2);
-          x1 = ear + (i + 1) * PANEL_REAR_WIDTH / (struts + 1) - (i == struts ? 0 : strut_width / 2);
-          translate([x0, frame]) square([x1 - x0, h - 2 * frame]);
-        }
-      }
-
-    rack_ribs(u);
+rack_panel(u)
+  // Open center, leaving a frame, solid ears and struts
+  for (i = [0 : struts]) {
+    x0 = ear + i * PANEL_REAR_WIDTH / (struts + 1) + (i == 0 ? 0 : strut_width / 2);
+    x1 = ear + (i + 1) * PANEL_REAR_WIDTH / (struts + 1) - (i == struts ? 0 : strut_width / 2);
+    translate([x0, frame]) square([x1 - x0, h - 2 * frame]);
   }
-
-  rack_holes(u);
-}
