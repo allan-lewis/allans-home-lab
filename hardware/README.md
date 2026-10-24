@@ -9,7 +9,7 @@ See [`docs/hardware.md`](../docs/hardware.md) for the full workflow.
 ```
 hardware/
 ├── fonts/        # Fonts used by parts, with licenses
-├── lib/          # Shared OpenSCAD modules (rack panel base, vents)
+├── lib/          # Shared OpenSCAD modules (rack panel base, vents, keystone)
 ├── rack-10in/    # Parts for the DeskPi RackMate T2 (10" rack)
 ├── reference/    # Third-party source models, kept for measurement only
 ├── scripts/      # Render tooling

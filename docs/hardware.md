@@ -37,7 +37,7 @@ Slicer project files (`.3mf` from Bambu Studio) are not committed. Print setting
 
 | Path | Purpose |
 | --- | --- |
-| `hardware/lib/` | Shared modules: rack panel base (`rack10.scad`), vent patterns (`vents.scad`) |
+| `hardware/lib/` | Shared modules: rack panel base (`rack10.scad`), vent patterns (`vents.scad`), keystone openings (`keystone.scad`) |
 | `hardware/fonts/` | Fonts used by parts, committed with their licenses so renders match everywhere |
 | `hardware/rack-10in/` | Printable parts for the 10" rack, one `.scad` file per part |
 | `hardware/reference/` | Third-party models kept for measurement and comparison only |
