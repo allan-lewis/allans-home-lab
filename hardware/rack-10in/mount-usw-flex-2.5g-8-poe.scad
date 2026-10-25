@@ -4,8 +4,8 @@
 // lips at the left and right ends of the faceplate window; the window is full
 // height so no port labels are covered. The switch sits high in the panel so
 // the space below it makes a thick, stiff bottom wall that carries its weight.
-// The top is mostly open and the bottom has large hexagonal openings, so the
-// switch's vents stay clear and the part prints quickly.
+// The top is open between solid strips along each side, and the bottom has
+// large hexagonal openings, so the switch's vents stay clear.
 //
 // Two bumps on the bottom wall's rear band hold the switch in. There is a
 // little headroom above the switch behind the faceplate, so their ramps lift
@@ -40,15 +40,14 @@ bump_width = 10;
 bump_height = 1.2;                   // also the headroom above the switch behind the faceplate
 ramp_length = 8;
 
-// Openings in the top and bottom walls, sized after the reference mount (see
-// hardware/reference), whose large openings leave the switch's vents clear
-vent_margin = 4;                     // solid border inside the side walls
+// Openings in the top and bottom walls. The bottom's hexagons are sized after
+// the reference mount (see hardware/reference), whose large openings leave the
+// switch's vents clear.
 vent_front = 10;                     // solid band behind the faceplate, where the load is highest
-vent_rear = 4;
+top_strip = 30;                      // solid top over each end of the switch; open between, through to the rear
+vent_margin = 4;                     // solid border inside the side walls, on the bottom
 bottom_hex = 14;                     // hexagon width, flat to flat
 bottom_web = 4;
-top_windows = 6;
-top_rib = 4;
 
 h = rack_panel_height(u);
 cavity = [switch_size[0] + 2 * clearance, switch_size[1] + 2 * clearance];
@@ -91,27 +90,17 @@ module bumps() {
           ]);
 }
 
-// Cuts 2D children, drawn in X/Z from the vent area's front left corner,
-// through a wall spanning y0..y1
+// Cuts 2D children, drawn in X/Z from the cavity's front left corner behind
+// the solid band, through a wall spanning y0..y1
 module wall_cut(y0, y1) {
-  translate([cavity_x + vent_margin, y1 + 1, PANEL_THICKNESS + vent_front])
+  translate([cavity_x, y1 + 1, PANEL_THICKNESS + vent_front])
     rotate([90, 0, 0])
       linear_extrude(y1 - y0 + 2) children();
 }
 
-vent_width = cavity[0] - 2 * vent_margin;
-top_area = [vent_width, sleeve_end - vent_rear - PANEL_THICKNESS - vent_front];
+open_length = sleeve_end - PANEL_THICKNESS - vent_front;
 // The bottom stops short of the bumps, leaving a solid band across the rear
-bottom_area = [vent_width, catch_z - bottom_web - PANEL_THICKNESS - vent_front];
-
-// Long windows side by side, pointed at the rear so they print without bridging
-module top_window_pattern() {
-  w = (top_area[0] - (top_windows - 1) * top_rib) / top_windows;
-  l = top_area[1];
-  for (i = [0 : top_windows - 1])
-    translate([i * (w + top_rib), 0])
-      polygon([[0, 0], [w, 0], [w, l - w / 2], [w / 2, l], [0, l - w / 2]]);
-}
+bottom_area = [cavity[0] - 2 * vent_margin, catch_z - bottom_web - PANEL_THICKNESS - vent_front];
 
 difference() {
   union() {
@@ -123,8 +112,10 @@ difference() {
   translate([cavity_x, cavity_y, lip_thickness])
     cube([cavity[0], cavity[1], PANEL_THICKNESS]);
 
-  wall_cut(0, cavity_y) hex_vents(bottom_area, d = bottom_hex, web = bottom_web);
-  wall_cut(h - top_wall, h) top_window_pattern();
+  wall_cut(0, cavity_y)
+    translate([vent_margin, 0]) hex_vents(bottom_area, d = bottom_hex, web = bottom_web);
+  wall_cut(h - top_wall, h)
+    translate([top_strip, 0]) square([cavity[0] - 2 * top_strip, open_length + 1]);
 }
 
 bumps();
