@@ -4,28 +4,59 @@
 // lips at the left and right ends of the faceplate window; the window is full
 // height so no port labels are covered. The switch sits high in the panel so
 // the space below it makes a thick, stiff bottom wall that carries its weight.
-// Power cable routing for the front DC jack is still to be designed.
+// The top is mostly open and the bottom has large hexagonal openings, so the
+// switch's vents stay clear and the part prints quickly.
+//
+// Two bumps on the bottom wall's rear band hold the switch in. There is a
+// little headroom above the switch behind the faceplate, so their ramps lift
+// it as it slides in and it drops in front of them, where their square faces
+// stop it being pushed back. To remove the switch, lift its rear edge over the
+// bumps and slide it out.
+//
+// The power cord comes up through a notch in the keystone panel below and
+// into the switch's DC jack at the front; see panel-keystone.scad.
 //
 // Print: front face down, no supports.
 // Material: PETG.
 
 include <rack10.scad>
+include <vents.scad>
 
 u = 1;
 
 // Switch: 212.9 x 99.4 x 33.5 mm (techspecs.ui.com)
 switch_size = [212.9, 33.5, 99.4];   // width, height, depth
 clearance = 0.3;                     // per side
+depth_clearance = 0.5;               // between the switch's back and the bumps
 
 lip = 4;                             // how far the side lips overlap the switch face
 lip_thickness = 1.6;                 // switch face sits this far behind the panel front
 top_wall = 2;                        // the bottom wall takes the rest of the panel height
-sleeve_depth = 25;                   // behind the faceplate; test print length
+
+// Retaining bumps
+bumps = 2;
+bump_spacing = 100;                  // center to center
+bump_width = 10;
+bump_height = 1.2;                   // also the headroom above the switch behind the faceplate
+ramp_length = 8;
+
+// Openings in the top and bottom walls, sized after the reference mount (see
+// hardware/reference), whose large openings leave the switch's vents clear
+vent_margin = 4;                     // solid border inside the side walls
+vent_front = 10;                     // solid band behind the faceplate, where the load is highest
+vent_rear = 4;
+bottom_hex = 14;                     // hexagon width, flat to flat
+bottom_web = 4;
+top_windows = 6;
+top_rib = 4;
 
 h = rack_panel_height(u);
 cavity = [switch_size[0] + 2 * clearance, switch_size[1] + 2 * clearance];
 cavity_x = (PANEL_WIDTH - cavity[0]) / 2;
-cavity_y = h - top_wall - cavity[1];
+cavity_y = h - top_wall - bump_height - cavity[1];
+
+catch_z = lip_thickness + switch_size[2] + depth_clearance;
+sleeve_end = catch_z + ramp_length;
 
 assert(cavity_x >= rack_ear_width() + 1.2, "sleeve side walls too thin to print");
 
@@ -39,10 +70,47 @@ module window() {
 module sleeve() {
   translate([rack_ear_width(), 0, PANEL_THICKNESS])
     difference() {
-      cube([PANEL_REAR_WIDTH, h, sleeve_depth]);
+      cube([PANEL_REAR_WIDTH, h, sleeve_end - PANEL_THICKNESS]);
       translate([cavity_x - rack_ear_width(), cavity_y, -1])
-        cube([cavity[0], cavity[1], sleeve_depth + 2]);
+        cube([cavity[0], cavity[1] + bump_height, sleeve_end]);
     }
+}
+
+// Bumps on the cavity floor behind the switch
+module bumps() {
+  for (i = [0 : bumps - 1])
+    translate([PANEL_WIDTH / 2 + (i - (bumps - 1) / 2) * bump_spacing - bump_width / 2, 0, 0])
+      // Side profile (Y, Z): a square face toward the switch, ramp toward the rear
+      rotate([90, 0, 90])
+        linear_extrude(bump_width)
+          polygon([
+            [cavity_y - 0.01, catch_z],
+            [cavity_y + bump_height, catch_z],
+            [cavity_y + bump_height, catch_z + 0.6],
+            [cavity_y - 0.01, sleeve_end],
+          ]);
+}
+
+// Cuts 2D children, drawn in X/Z from the vent area's front left corner,
+// through a wall spanning y0..y1
+module wall_cut(y0, y1) {
+  translate([cavity_x + vent_margin, y1 + 1, PANEL_THICKNESS + vent_front])
+    rotate([90, 0, 0])
+      linear_extrude(y1 - y0 + 2) children();
+}
+
+vent_width = cavity[0] - 2 * vent_margin;
+top_area = [vent_width, sleeve_end - vent_rear - PANEL_THICKNESS - vent_front];
+// The bottom stops short of the bumps, leaving a solid band across the rear
+bottom_area = [vent_width, catch_z - bottom_web - PANEL_THICKNESS - vent_front];
+
+// Long windows side by side, pointed at the rear so they print without bridging
+module top_window_pattern() {
+  w = (top_area[0] - (top_windows - 1) * top_rib) / top_windows;
+  l = top_area[1];
+  for (i = [0 : top_windows - 1])
+    translate([i * (w + top_rib), 0])
+      polygon([[0, 0], [w, 0], [w, l - w / 2], [w / 2, l], [0, l - w / 2]]);
 }
 
 difference() {
@@ -54,4 +122,9 @@ difference() {
   // Pocket for the switch nose, leaving the lips at the front
   translate([cavity_x, cavity_y, lip_thickness])
     cube([cavity[0], cavity[1], PANEL_THICKNESS]);
+
+  wall_cut(0, cavity_y) hex_vents(bottom_area, d = bottom_hex, web = bottom_web);
+  wall_cut(h - top_wall, h) top_window_pattern();
 }
+
+bumps();
