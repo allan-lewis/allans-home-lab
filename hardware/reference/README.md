@@ -12,4 +12,4 @@ The keystone panel is known to fit the DeskPi RackMate T2 and the keystone jacks
 
 The USW-Flex mount was used only to confirm the switch's outline and the clearance needed around it. `rack-10in/mount-usw-flex-2.5g-8-poe.scad` is an independent rear-loading design.
 
-The ZimaBoard 2 model is in meters. `rack-10in/shelf-zimaboard-2.scad` takes its outline, port heights and PCIe slot position from it.
+The ZimaBoard 2 model is in meters. `lib/zimaboard2.scad`, used by the ZimaBoard 2 shelf and its mock-up, takes its outline, port heights and PCIe slot position from it.
