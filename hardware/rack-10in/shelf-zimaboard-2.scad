@@ -10,12 +10,11 @@
 //
 // The floor is solid behind the faceplate, where the load is highest, at the
 // rear, and in strips under each rail and along the edges. The rails stand on
-// those strips and stiffen them, so large windows between them save print time
-// without losing much stiffness. The windows have pointed rear ends, steeper
-// than 45 degrees so PETG doesn't curl, so they print face down without
-// bridging. The right edge has no rail of its own, so
-// a low rib stands on it; without one, the bare strip is a tall, thin column
-// in the print that wobbles where the pointed ends start.
+// those strips and stiffen them. Between them the floor is a lattice of large
+// diamonds, whose crossed struts brace it like a truss. Every edge is at 45
+// degrees, so it prints face down without bridging, and every strut runs
+// between the strips, so no tall, thin column stands free in the print to
+// wobble. The right edge has no rail of its own, so a low rib stands on it.
 //
 // Print: front face down, no supports.
 // Material: PETG.
@@ -30,7 +29,8 @@ u = 1;
 
 floor_band = 12;                     // solid floor behind the faceplate and at the rear
 window_margin = 4;                   // solid floor beside each rail and along the edges
-window_end_angle = 60;               // pointed rear ends, from the bed as printed
+floor_diamond = 25;                  // diamond width and height, point to point
+floor_web = 4;                       // strut width
 edge_rib_height = 4;                 // right edge rib, above the floor; stays below the keystone jacks
 
 // Keystone ports, numbered as on panel-keystone.scad: 12 ports at 18 mm pitch,
@@ -66,22 +66,39 @@ text_x = port_x(ports[0]) - KEYSTONE_OPENING[0] / 2 - vent_gap + text_inset - la
 two_bottom = text_y + (label_metrics.offset[1] + two_metrics.position[1]) * text_scale + text_inset;
 two_height = two_metrics.size[1] * text_scale - 2 * text_inset;
 
-// Floor windows, as [left, right] seen from the front: under the board, under
-// the card, and right of the card's fence
+// Diamond fields in the floor, as [left, right] seen from the front: under
+// the board, under the card, and right of the card's fence
 edge_rib_x = rack_ear_width() + PANEL_REAR_WIDTH - rail_wall;
 window_z0 = PANEL_THICKNESS + floor_band;
-window_z1 = floor_end - floor_band;  // tip of the pointed rear end
+window_z1 = floor_end - floor_band;
 window_xs = [
   [pocket_x + window_margin, pocket_right - window_margin],
   [pocket_right + rail_wall + window_margin, support_x - window_margin],
   [fence_x + rail_wall + window_margin, edge_rib_x - window_margin],
 ];
 
-// Length of a window's pointed end
-function window_end(w) = (w[1] - w[0]) / 2 * tan(window_end_angle);
+// Diamonds on a staggered grid filling a size = [w, h] field anchored at the
+// origin. Rows stay whole at the field's front and rear ends, where a cut
+// diamond would leave a flat bridge in the print; at the sides they run into
+// the strips, cut to triangles with 45 degree tops, so every strut ends on a
+// strip, except on a side marked solid = [left, right], where cut diamonds are
+// left out. Slivers narrower than min_feature are left solid.
+module floor_lattice(size, solid = [false, false], d = floor_diamond, web = floor_web, min_feature = 2) {
+  pitch = d + web * sqrt(2);         // center spacing along a row; rows are pitch / 2 apart
+  rows = floor((size[1] - d) / (pitch / 2)) + 1;
+  y0 = (size[1] - d - (rows - 1) * pitch / 2) / 2 + d / 2;
+  n = ceil(size[0] / pitch) + 1;
 
-for (w = window_xs)
-  assert(window_z1 - window_end(w) > window_z0, "floor window too wide for its pointed end");
+  offset(delta = min_feature / 2) offset(delta = -min_feature / 2)
+    intersection() {
+      square(size);
+      for (j = [0 : rows - 1], i = [-n : n])
+        let (x = size[0] / 2 + (i + (j % 2) / 2) * pitch)
+          if (!(solid[0] && x < d / 2) && !(solid[1] && x > size[0] - d / 2))
+            translate([x, y0 + j * pitch / 2])
+              rotate(45) square(d / sqrt(2), center = true);
+    }
+}
 
 vent_x0 = port_x(1) - KEYSTONE_OPENING[0] / 2;
 vent_x1 = text_x + text_inset - vent_gap;
@@ -107,14 +124,12 @@ difference() {
             difference() {
               translate([rack_ear_width(), PANEL_THICKNESS])
                 square([PANEL_REAR_WIDTH, floor_end - PANEL_THICKNESS]);
-              for (w = window_xs)
-                polygon([
-                  [w[0], window_z0],
-                  [w[1], window_z0],
-                  [w[1], window_z1 - window_end(w)],
-                  [(w[0] + w[1]) / 2, window_z1],
-                  [w[0], window_z1 - window_end(w)],
-                ]);
+              // Solid out to the first whole diamonds at the shelf's left and right edges
+              for (k = [0 : len(window_xs) - 1])
+                let (w = window_xs[k])
+                  translate([w[0], window_z0])
+                    floor_lattice([w[1] - w[0], window_z1 - window_z0],
+                                  solid = [k == 0, k == len(window_xs) - 1]);
             }
       rail(edge_rib_x, PANEL_THICKNESS, floor_end, edge_rib_height);
       board_retention();
