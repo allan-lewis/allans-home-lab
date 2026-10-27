@@ -13,7 +13,6 @@ hardware/
 ├── rack-10in/    # Parts for the DeskPi RackMate T2 (10" rack)
 ├── reference/    # Third-party source models, kept for measurement only
 ├── scripts/      # Render tooling
-├── vendor/       # Third-party OpenSCAD libraries
 └── build/        # Render output (gitignored)
 ```
 

@@ -129,7 +129,7 @@ Note that rebuilds/switches may produce changes that need to be commmitted and p
 Provision the VM in Proxmox:
 
 ```bash
-just terraform todash apply 1
+just all-terraform todash apply 1
 ```
 
 - Use `0` instead of `1` for a dry run
@@ -175,7 +175,7 @@ Node Exporter and custom homelab metrics are enabled by default via shared modul
 Provision the VM in Proxmox:
 
 ```bash
-just terraform todash destroy 1
+just all-terraform todash destroy 1
 ```
 
 - Use `0` instead of `1` for a dry run

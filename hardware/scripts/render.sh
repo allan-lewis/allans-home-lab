@@ -27,17 +27,16 @@ else
   exit 1
 fi
 
-# Shared modules (lib/) and third-party code (vendor/) are importable via OPENSCADPATH
-export OPENSCADPATH="$HW_DIR/lib:$HW_DIR/vendor${OPENSCADPATH:+:$OPENSCADPATH}"
+# Shared modules (lib/) are importable via OPENSCADPATH
+export OPENSCADPATH="$HW_DIR/lib${OPENSCADPATH:+:$OPENSCADPATH}"
 
-# Printable models are every .scad outside lib/, vendor/, reference/ and build/
+# Printable models are every .scad outside lib/, reference/ and build/
 models=()
 while IFS= read -r model; do
   models+=("$model")
 done < <(
   find "$target" -name '*.scad' \
     -not -path '*/lib/*' \
-    -not -path '*/vendor/*' \
     -not -path '*/reference/*' \
     -not -path '*/build/*' \
     | sed 's|^\./||' | sort
