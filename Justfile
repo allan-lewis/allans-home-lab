@@ -52,6 +52,14 @@ arch-vm-template update_stable="yes":
   {{run_prefix}} linux/scripts/vm-template-arch.sh "{{update_stable}}"
 
 #############################
+#### HARDWARE ###############
+#############################
+
+# Render 3D-printable models to STL under hardware/build (optionally with PNG previews)
+hw-render target="." preview="no":
+  hardware/scripts/render.sh "{{target}}" "{{preview}}"
+
+#############################
 #### HAOS ###################
 #############################
 

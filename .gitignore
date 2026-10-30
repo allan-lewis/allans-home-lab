@@ -109,3 +109,10 @@ Icon?
 !/nixos/**/*
 /nixos/assets/nvim/lazyvim.json
 /nixos/assets/nvim/.neoconf.json
+
+# -----------------------------
+# Hardware (3D printing) render output
+# -----------------------------
+/hardware/build/
+/hardware/reference/*
+!/hardware/reference/README.md
