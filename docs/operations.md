@@ -21,7 +21,7 @@ The goal is consistent, repeatable workflows.
 
 ```bash
 just nixos-vm-template
-just terraform <host> apply 1
+just all-terraform <host> apply 1
 just nixos-switch <host>
 ```
 
@@ -38,8 +38,8 @@ just nixos-switch <host>
 ### Rebuild a NixOS Host
 
 ```bash
-just terraform <host> destroy 1
-just terraform <host> apply 1
+just all-terraform <host> destroy 1
+just all-terraform <host> apply 1
 just nixos-switch <host>
 ```
 
@@ -50,7 +50,7 @@ just nixos-switch <host>
 ```bash
 just haos-boot-disk-capture <vmid>
 just haos-vm-template
-just terraform <host> apply 1
+just all-terraform <host> apply 1
 ```
 
 (TrueNAS follows the same pattern with `truenas-*` commands)
@@ -60,8 +60,8 @@ just terraform <host> apply 1
 ### Rebuild an Appliance VM
 
 ```bash
-just terraform <host> destroy 1
-just terraform <host> apply 1
+just all-terraform <host> destroy 1
+just all-terraform <host> apply 1
 ```
 
 ---
@@ -71,7 +71,7 @@ just terraform <host> apply 1
 ```bash
 just arch-iso
 just arch-vm-template
-just terraform <host> apply 1
+just all-terraform <host> apply 1
 just linux-converge "" "<host>"
 ```
 
@@ -91,8 +91,8 @@ just linux-converge "" "<host>"
 ### Terraform
 
 ```bash
-just terraform <host> apply 1
-just terraform <host> destroy 1
+just all-terraform <host> apply 1
+just all-terraform <host> destroy 1
 ```
 
 - `1` = apply
