@@ -162,7 +162,7 @@ in
       backend = "podman";
 
       containers.whoami = {
-        image = "traefik/whoami:v1.12@sha256:c4717a8d1f0134a7444e24f881160e033991f23027c6c5a9a3f8fd22e70d1d44";
+        image = "docker.io/traefik/whoami:v1.12@sha256:c4717a8d1f0134a7444e24f881160e033991f23027c6c5a9a3f8fd22e70d1d44";
         pull = "missing";
         ports = [
           "127.0.0.1:8180:80/tcp"
