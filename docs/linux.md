@@ -66,7 +66,7 @@ Creates a Proxmox VM template using the custom ISO. By default template details 
 ### 3. Create VM
 
 ```bash
-just terraform <hostname> apply 1
+just all-terraform <hostname> apply 1
 ```
 
 - Use `0` instead of `1` for a dry run
@@ -86,7 +86,7 @@ Runs Ansible convergence for the host.
 ### 5. Remove VM
 
 ```bash
-just terraform <hostname> destroy 1
+just all-terraform <hostname> destroy 1
 ```
 
 - Use `0` instead of `1` for a dry run
@@ -110,8 +110,8 @@ Used for:
 ## Rebuild Arch VM
 
 ```bash
-just terraform <hostname> destroy 1
-just terraform <hostname> apply 1
+just all-terraform <hostname> destroy 1
+just all-terraform <hostname> apply 1
 just linux-converge "" "<hostname>"
 ```
 
@@ -142,7 +142,7 @@ Downloads a standard Ubuntu ISO and creates a Proxmox VM template. By default te
 ### 2. Create VM
 
 ```bash
-just terraform <hostname> apply 1
+just all-terraform <hostname> apply 1
 ```
 
 - Use `0` for a dry run
@@ -168,8 +168,8 @@ just linux-converge "" "<hostname>"
 ## Rebuild Ubuntu VM
 
 ```bash
-just terraform <hostname> destroy 1
-just terraform <hostname> apply 1
+just all-terraform <hostname> destroy 1
+just all-terraform <hostname> apply 1
 just linux-converge "" "<hostname>"
 ```
 
@@ -203,8 +203,8 @@ Defined in:
 ## Terraform Lifecycle
 
 ```bash
-just terraform <hostname> apply 1
-just terraform <hostname> destroy 1
+just all-terraform <hostname> apply 1
+just all-terraform <hostname> destroy 1
 ```
 
 - Use `0` for dry runs
