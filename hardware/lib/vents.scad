@@ -54,3 +54,29 @@ module hex_vents(size, d = 6, web = 1.5, keepout = [], min_feature = 1) {
       for (k = keepout) translate([k[0], k[1]]) square([k[2], k[3]]);
     }
 }
+
+// A lattice of diamonds on a staggered grid, for floors that print face down,
+// filling a size = [w, h] field anchored at the origin. Rows stay whole at the
+// field's front and rear ends, where a cut diamond would leave a flat bridge
+// in the print; at the sides they run into the strips, cut to triangles with
+// 45 degree tops, so every strut ends on a strip, except on a side marked
+// solid = [left, right], where cut diamonds are left out. Slivers narrower
+// than min_feature are left solid.
+//   d            diamond width and height, point to point
+//   web          strut width
+module diamond_lattice(size, d = 25, web = 4, solid = [false, false], min_feature = 2) {
+  pitch = d + web * sqrt(2);         // center spacing along a row; rows are pitch / 2 apart
+  rows = floor((size[1] - d) / (pitch / 2)) + 1;
+  y0 = (size[1] - d - (rows - 1) * pitch / 2) / 2 + d / 2;
+  n = ceil(size[0] / pitch) + 1;
+
+  offset(delta = min_feature / 2) offset(delta = -min_feature / 2)
+    intersection() {
+      square(size);
+      for (j = [0 : rows - 1], i = [-n : n])
+        let (x = size[0] / 2 + (i + (j % 2) / 2) * pitch)
+          if (!(solid[0] && x < d / 2) && !(solid[1] && x > size[0] - d / 2))
+            translate([x, y0 + j * pitch / 2])
+              rotate(45) square(d / sqrt(2), center = true);
+    }
+}

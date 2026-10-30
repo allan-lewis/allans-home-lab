@@ -77,29 +77,6 @@ window_xs = [
   [fence_x + rail_wall + window_margin, edge_rib_x - window_margin],
 ];
 
-// Diamonds on a staggered grid filling a size = [w, h] field anchored at the
-// origin. Rows stay whole at the field's front and rear ends, where a cut
-// diamond would leave a flat bridge in the print; at the sides they run into
-// the strips, cut to triangles with 45 degree tops, so every strut ends on a
-// strip, except on a side marked solid = [left, right], where cut diamonds are
-// left out. Slivers narrower than min_feature are left solid.
-module floor_lattice(size, solid = [false, false], d = floor_diamond, web = floor_web, min_feature = 2) {
-  pitch = d + web * sqrt(2);         // center spacing along a row; rows are pitch / 2 apart
-  rows = floor((size[1] - d) / (pitch / 2)) + 1;
-  y0 = (size[1] - d - (rows - 1) * pitch / 2) / 2 + d / 2;
-  n = ceil(size[0] / pitch) + 1;
-
-  offset(delta = min_feature / 2) offset(delta = -min_feature / 2)
-    intersection() {
-      square(size);
-      for (j = [0 : rows - 1], i = [-n : n])
-        let (x = size[0] / 2 + (i + (j % 2) / 2) * pitch)
-          if (!(solid[0] && x < d / 2) && !(solid[1] && x > size[0] - d / 2))
-            translate([x, y0 + j * pitch / 2])
-              rotate(45) square(d / sqrt(2), center = true);
-    }
-}
-
 vent_x0 = port_x(1) - KEYSTONE_OPENING[0] / 2;
 vent_x1 = text_x + text_inset - vent_gap;
 
@@ -128,8 +105,8 @@ difference() {
               for (k = [0 : len(window_xs) - 1])
                 let (w = window_xs[k])
                   translate([w[0], window_z0])
-                    floor_lattice([w[1] - w[0], window_z1 - window_z0],
-                                  solid = [k == 0, k == len(window_xs) - 1]);
+                    diamond_lattice([w[1] - w[0], window_z1 - window_z0], floor_diamond, floor_web,
+                                    solid = [k == 0, k == len(window_xs) - 1]);
             }
       rail(edge_rib_x, PANEL_THICKNESS, floor_end, edge_rib_height);
       board_retention();
