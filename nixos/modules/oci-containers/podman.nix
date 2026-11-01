@@ -37,6 +37,16 @@ in
   config = {
     virtualisation.podman.enable = true;
 
+    # --replace swaps the running container but leaves the previous image
+    # behind, so every version bump orphans an old image permanently.
+    # "-a" is needed because podman only treats truly untagged images as
+    # dangling; a digest-pinned image with no running container isn't.
+    virtualisation.podman.autoPrune = {
+      enable = true;
+      dates = "weekly";
+      flags = [ "-a" ];
+    };
+
     systemd.services.force-ipv4-forwarding = {
       description = "Force IPv4 forwarding on after networking settles";
       wantedBy = [ "multi-user.target" ];
