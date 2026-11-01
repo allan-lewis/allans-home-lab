@@ -17,6 +17,9 @@ A GitOps-driven homelab centered on NixOS host management, with supporting workf
 - **[Linux VMs](docs/linux.md)**  
   Arch and Ubuntu virtual machines provisioned with Terraform and configured using Ansible.
 
+- **[Hardware](docs/hardware.md)**  
+  3D-printed rack panels and mounts, maintained as parametric OpenSCAD source.
+
 - **[Operations](docs/operations.md)**  
   Command reference and common workflows for running and maintaining the homelab.
 
@@ -163,6 +166,7 @@ The repository is organized around the core areas of responsibility:
 - [`shared/`](shared/) — Cross-cutting logic and templates
 - [`docs/`](docs/) — Detailed documentation
 - [`dotfiles/`](dotfiles/) — Configuration files used across all operating systems
+- [`hardware/`](hardware/) — 3D-printable parts as OpenSCAD source
 - [`Justfile`](Justfile) — Operational entry point
 
 ---
@@ -176,6 +180,7 @@ For more detailed information:
 - NixOS → [`docs/nixos.md`](docs/nixos.md)
 - Appliances → [`docs/appliances.md`](docs/appliances.md)
 - Legacy → [`docs/legacy.md`](docs/legacy.md)
+- Hardware → [`docs/hardware.md`](docs/hardware.md)
 - Operations → [`docs/operations.md`](docs/operations.md)
 
 Start here for context, then move into the relevant section based on what you are trying to do.

@@ -239,6 +239,11 @@
         host = "homelab-dev.nixos.allanshomelab.com";
         url = "http://bellatrix.ip.allanshomelab.com:3000";
       }
+      {
+        name = "checkmk";
+        host = "checkmk.allanshomelab.com";
+        url = "http://pollux.ip.allanshomelab.com:8080";
+      }
     ];
   };
 }

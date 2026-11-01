@@ -180,6 +180,13 @@ let
         ])
 
 
+    def exclude_args(excludes: List[str]) -> List[str]:
+        args: List[str] = []
+        for pattern in excludes:
+            args += ["--exclude", pattern]
+        return args
+
+
     def rsync_restore(remote: str, local_dir: str) -> bool:
         remote_norm = remote.rstrip("/") + "/"
         local_norm = local_dir.rstrip("/") + "/"
@@ -196,7 +203,7 @@ let
         return run(cmd).returncode == 0
 
 
-    def rsync_backup(local_dir: str, remote: str) -> bool:
+    def rsync_backup(local_dir: str, remote: str, excludes: List[str]) -> bool:
         src_norm = local_dir.rstrip("/") + "/"
         dest_norm = remote.rstrip("/") + "/"
 
@@ -204,6 +211,7 @@ let
             "${pkgs.rsync}/bin/rsync",
             *RSYNC_BACKUP_FLAGS,
             "--exclude", MARKER,
+            *exclude_args(excludes),
             "-e", rsync_ssh_cmd(),
             "--progress",
             src_norm,
@@ -270,7 +278,11 @@ let
                 "backup": parse_bool(raw.get("backup"), True),
                 "restore": parse_bool(raw.get("restore"), True),
                 "marker": str(raw.get("marker") or MARKER).strip() or MARKER,
+                "backup_excludes": raw.get("backup_excludes") or [],
             }
+
+            if not isinstance(entry["backup_excludes"], list) or not all(isinstance(x, str) for x in entry["backup_excludes"]):
+                die(f"name={entry['name']} backup_excludes must be a list of strings")
 
             if entry["marker"] != MARKER:
                 die(f"name={entry['name']} unsupported marker='{entry['marker']}' expected='{MARKER}'")
@@ -391,7 +403,7 @@ let
             return False
 
         log("START", f"name={name} backup '{local_dir}/' -> '{remote}/'")
-        if not rsync_backup(local_dir, remote):
+        if not rsync_backup(local_dir, remote, entry["backup_excludes"]):
             log("ERROR", f"name={name} rsync backup failed")
             return False
 

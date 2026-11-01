@@ -7,6 +7,7 @@
     ../../modules/oci-containers/nginx
     ../../modules/tailscale
 
+    ../../profiles/checkmk
     ../../profiles/homelab-dashboard
     ../../profiles/homepage
     ../../profiles/trilium

@@ -24,6 +24,7 @@
     air
     ansible
     clang
+    claude-code
     gnumake
     go
     guestfs-tools

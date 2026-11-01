@@ -67,7 +67,7 @@ This pulls the disk from S3 and registers a reusable template.  By default templ
 Provision the VM using Terraform:
 
 ```bash
-just terraform <hostname> apply 1
+just all-terraform <hostname> apply 1
 ```
 
 - Use `0` instead of `1` for a dry run
@@ -91,8 +91,8 @@ HAOS manages its own updates internally.
 If you need to rebuild:
 
 ```bash
-just terraform <hostname> destroy 1
-just terraform <hostname> apply 1
+just all-terraform <hostname> destroy 1
+just all-terraform <hostname> apply 1
 ```
 
 This recreates the VM from the current template.
@@ -140,7 +140,7 @@ By default template details will be recorded in `appliance/truenas/spec/vm-templ
 Provision the VM:
 
 ```bash
-just terraform <hostname> apply 1
+just all-terraform <hostname> apply 1
 ```
 
 - Use `0` for a dry run
@@ -177,8 +177,8 @@ These disks are separate from the boot disk and are used to build storage pools.
 Rebuild flow:
 
 ```bash
-just terraform <hostname> destroy 1
-just terraform <hostname> apply 1
+just all-terraform <hostname> destroy 1
+just all-terraform <hostname> apply 1
 ```
 
 Then reattach disks:
@@ -246,13 +246,13 @@ This:
 Create VM:
 
 ```bash
-just terraform <hostname> apply 1
+just all-terraform <hostname> apply 1
 ```
 
 Destroy VM:
 
 ```bash
-just terraform <hostname> destroy 1
+just all-terraform <hostname> destroy 1
 ```
 
 - Use `0` for dry runs

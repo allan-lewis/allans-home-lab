@@ -1,7 +1,7 @@
 { defaultNasHost, remoteBackupRoot, config, ... }:
 
 let
-  immichVersion = "v3.2.4";
+  immichVersion = "v3.3.5";
 in 
 {
   imports = [

@@ -521,6 +521,16 @@
           "[BODY] == pat(*authentik*)"
         ];
       }
+      {
+        name = "Checkmk";
+        group = "Sites (Allan's Home Lab)";
+        url = "https://checkmk.allanshomelab.com";
+        conditions = [
+          "[STATUS] == 200"
+          "[CERTIFICATE_EXPIRATION] > 168h"
+          "[BODY] == pat(*checkmk*)"
+        ];
+      }
   ];
 
 }
