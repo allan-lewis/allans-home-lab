@@ -37,6 +37,16 @@ in
   config = {
     virtualisation.podman.enable = true;
 
+    # --replace swaps the running container but leaves the previous image
+    # behind, so every version bump orphans an old image permanently.
+    # "-a" is needed because podman only treats truly untagged images as
+    # dangling; a digest-pinned image with no running container isn't.
+    virtualisation.podman.autoPrune = {
+      enable = true;
+      dates = "weekly";
+      flags = [ "-a" ];
+    };
+
     systemd.services.force-ipv4-forwarding = {
       description = "Force IPv4 forwarding on after networking settles";
       wantedBy = [ "multi-user.target" ];
@@ -74,23 +84,5 @@ in
 
     networking.firewall.allowedTCPPorts =
       lib.mapAttrsToList (_: c: c.port) cfg;
-
-    # --replace swaps the running container but leaves the previous image
-    # behind, so every version bump orphans an old image permanently.
-    systemd.services.podman-prune = {
-      description = "Prune unused podman images";
-      after = [ "podman.service" ];
-      serviceConfig.Type = "oneshot";
-      script = "${pkgs.podman}/bin/podman image prune -a -f";
-    };
-
-    systemd.timers.podman-prune = {
-      description = "Prune unused podman images weekly";
-      wantedBy = [ "timers.target" ];
-      timerConfig = {
-        OnCalendar = "weekly";
-        Persistent = true;
-      };
-    };
   };
 }

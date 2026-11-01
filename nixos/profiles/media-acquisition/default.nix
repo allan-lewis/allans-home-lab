@@ -12,7 +12,7 @@
     lidarrConfigDir = "/etc/lidarr";
     prowlarrConfigDir = "/etc/prowlarr";
     radarrConfigDir = "/etc/radarr";
-    seerConfigDir = "/etc/seer";
+    seerrConfigDir = "/etc/seerr";
     sonarrConfigDir = "/etc/sonarr";
     transmissionConfigDir = "/etc/transmission";
     transmissionWatchDir = "/var/lib/transmission/watch";
@@ -55,9 +55,9 @@
       group = "lab";
       mode = "0755";
     };
-    seerConfig = {
-      local = "/etc/seer";
-      remote = "${remoteBackupRoot}/seer/config";
+    seerrConfig = {
+      local = "/etc/seerr";
+      remote = "${remoteBackupRoot}/seerr/config";
       restore = true;
       backup = true;
       owner = "lab";
