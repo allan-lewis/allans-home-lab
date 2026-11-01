@@ -90,6 +90,9 @@ in
         Type = "oneshot";
         RemainAfterExit = true;
         WorkingDirectory = cfg.appDir;
+        # Guards against transient DNS/network failures in preStart's curl at boot.
+        Restart = "on-failure";
+        RestartSec = "5s";
       };
 
       preStart = ''
