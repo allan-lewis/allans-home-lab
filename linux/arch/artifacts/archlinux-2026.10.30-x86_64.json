@@ -1,0 +1,8 @@
+{
+  "iso_name": "archlinux-2026.10.30-x86_64.iso",
+  "built_at": "2026-10-30T23:23:50Z",
+  "git_sha": "6581f9578bd708a751a5288021d1ee1023ce702c",
+  "proxmox_node": "sirius",
+  "proxmox_storage": "local",
+  "uploader_host": "bellatrix"
+}

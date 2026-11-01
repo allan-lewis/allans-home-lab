@@ -106,6 +106,11 @@ in
         Type = "oneshot";
         RemainAfterExit = true;
         WorkingDirectory = cfg.appDir;
+        # network-online.target fires before Tailscale (accept-dns) finishes its
+        # control-plane login, so the preStart curl can race a dead DNS stub at
+        # boot. Retry rather than staying failed.
+        Restart = "on-failure";
+        RestartSec = "5s";
       };
 
       preStart = ''

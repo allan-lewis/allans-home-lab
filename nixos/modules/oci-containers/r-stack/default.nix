@@ -4,14 +4,14 @@
   lidarrConfigDir, 
   prowlarrConfigDir, 
   radarrConfigDir,
-  seerConfigDir,
+  seerrConfigDir,
   sonarrConfigDir,
   transmissionConfigDir, transmissionWatchDir,
   ... 
 }:
 
 {
-  virtualisation.oci-containers.containers.seer = {
+  virtualisation.oci-containers.containers.seerr = {
     image = "ghcr.io/seerr-team/seerr:v3.5.1@sha256:2636191726a315dbd75228537f7be74b2fa7498998bb22e37b5b5c8756018fba";
 
     autoStart = true;
@@ -19,7 +19,7 @@
     ports = [ "5055:5055" ];
 
     volumes = [
-      "${seerConfigDir}:/app/config"
+      "${seerrConfigDir}:/app/config"
     ];
 
     environment = {
@@ -189,7 +189,7 @@
                "podman-lidarr.service"
                "podman-prowlarr.service"
                "podman-radarr.service"
-               "posman-seer.service"
+               "podman-seerr.service"
                "podman-sonarr.service"
                "podman-transmission.service" 
     ];
@@ -223,6 +223,7 @@
       "podman-network-media.service"
       "homelab-task-managed-state-restore.service"
     ];
+    unitConfig.RequiresMountsFor = [ mediaLibraryDir ];
   };
 
   systemd.services.podman-prowlarr = {
@@ -245,6 +246,7 @@
       "podman-network-media.service"
       "homelab-task-managed-state-restore.service"
     ];
+    unitConfig.RequiresMountsFor = [ mediaLibraryDir ];
   };
 
   systemd.services.podman-sonarr = {
@@ -256,9 +258,10 @@
       "podman-network-media.service"
       "homelab-task-managed-state-restore.service"
     ];
+    unitConfig.RequiresMountsFor = [ mediaLibraryDir ];
   };
 
-  systemd.services.podman-seer = {
+  systemd.services.podman-seerr = {
     requires = [
       "podman-network-media.service"
       "homelab-task-managed-state-restore.service"
@@ -278,5 +281,6 @@
       "podman-network-media.service"
       "homelab-task-managed-state-restore.service"
     ];
+    unitConfig.RequiresMountsFor = [ mediaLibraryDir ];
   };
 }
