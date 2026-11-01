@@ -74,5 +74,23 @@ in
 
     networking.firewall.allowedTCPPorts =
       lib.mapAttrsToList (_: c: c.port) cfg;
+
+    # --replace swaps the running container but leaves the previous image
+    # behind, so every version bump orphans an old image permanently.
+    systemd.services.podman-prune = {
+      description = "Prune unused podman images";
+      after = [ "podman.service" ];
+      serviceConfig.Type = "oneshot";
+      script = "${pkgs.podman}/bin/podman image prune -a -f";
+    };
+
+    systemd.timers.podman-prune = {
+      description = "Prune unused podman images weekly";
+      wantedBy = [ "timers.target" ];
+      timerConfig = {
+        OnCalendar = "weekly";
+        Persistent = true;
+      };
+    };
   };
 }
