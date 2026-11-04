@@ -45,9 +45,9 @@ module rack_panel_outline(u, r = PANEL_CORNER_R) {
       translate([x, y]) circle(r = r, $fn = 48);
 }
 
-// Mounting holes, to be subtracted from a panel
-module rack_holes(u, holes = PANEL_HOLES, d = PANEL_HOLE_D, slot = PANEL_HOLE_SLOT) {
-  for (x = rack_hole_xs(), y = rack_hole_ys(u, holes))
+// Mounting holes, to be subtracted from a panel. ys overrides the hole heights.
+module rack_holes(u, holes = PANEL_HOLES, d = PANEL_HOLE_D, slot = PANEL_HOLE_SLOT, ys = undef) {
+  for (x = rack_hole_xs(), y = is_undef(ys) ? rack_hole_ys(u, holes) : ys)
     translate([x, y, -1])
       hull()
         for (dx = [-slot / 2, slot / 2])
@@ -67,8 +67,9 @@ module rack_front() {
 }
 
 // A complete panel: plate, mounting holes and ribs. Children are 2D cutouts
-// drawn as seen from the front, in the same X/Y space as the panel.
-module rack_panel(u = 1) {
+// drawn as seen from the front, in the same X/Y space as the panel. hole_ys
+// overrides the mounting hole heights, e.g. to skip the inner holes of a 2U panel.
+module rack_panel(u = 1, hole_ys = undef) {
   difference() {
     union() {
       linear_extrude(PANEL_THICKNESS)
@@ -78,6 +79,6 @@ module rack_panel(u = 1) {
         }
       rack_ribs(u);
     }
-    rack_holes(u);
+    rack_holes(u, ys = hole_ys);
   }
 }
