@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ../../modules/cloudflare
+    ../../modules/oci-containers/cloudflared
   ];
 
   sops.secrets.cloudflared_tunnel_token = {
@@ -18,7 +18,7 @@
     group = "root";
     mode = "0400";
     content = ''
-      CLOUDFLARE_TUNNEL_TOKEN=${config.sops.placeholder.cloudflared_tunnel_token}
+      TUNNEL_TOKEN=${config.sops.placeholder.cloudflared_tunnel_token}
     '';
   };
 
