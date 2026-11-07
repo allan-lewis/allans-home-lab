@@ -1,0 +1,24 @@
+groups:
+  - name: homelab.slo.fast
+    interval: 5m
+    rules:
+      - record: homelab_slo_1h
+        expr: |
+          sum by (name, key, group) (increase(gatus_results_total{success="true"}[1h]))
+          /
+          sum by (name, key, group) (increase(gatus_results_total[1h]))
+
+  - name: homelab.slo.slow
+    interval: 1h
+    rules:
+      - record: homelab_slo_7d
+        expr: |
+          sum by (name, key, group) (increase(gatus_results_total{success="true"}[7d]))
+          /
+          sum by (name, key, group) (increase(gatus_results_total[7d]))
+
+      - record: homelab_slo_28d
+        expr: |
+          sum by (name, key, group) (increase(gatus_results_total{success="true"}[28d]))
+          /
+          sum by (name, key, group) (increase(gatus_results_total[28d]))
