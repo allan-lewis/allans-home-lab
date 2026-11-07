@@ -1,5 +1,5 @@
 groups:
-  - name: homelab.slo.fast
+  - name: homelab.slo
     interval: 5m
     rules:
       - record: homelab_slo_1h
@@ -8,9 +8,6 @@ groups:
           /
           sum by (name, key, group) (increase(gatus_results_total[1h]))
 
-  - name: homelab.slo.slow
-    interval: 1h
-    rules:
       - record: homelab_slo_7d
         expr: |
           sum by (name, key, group) (increase(gatus_results_total{success="true"}[7d]))
