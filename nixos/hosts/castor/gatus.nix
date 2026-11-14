@@ -444,7 +444,7 @@
           slo_public = "true";
           slo_name = "Grafana";
           slo_desc = "Metrics dashboards";
-          slo_url = "grafana.allanshomelab.com";
+          slo_url = "https://grafana.allanshomelab.com";
         };
       }
       {
@@ -456,6 +456,12 @@
           "[CERTIFICATE_EXPIRATION] > 168h"
           "[BODY] == pat(*Vaultwarden*)"
         ];
+        extra-labels = {
+          slo_public = "true";
+          slo_name = "Vaultwarden";
+          slo_desc = "Password manager";
+          slo_url = "https://vault.allanshomelab.com";
+        };
       }
       {
         name = "129 Monroe";
@@ -526,6 +532,12 @@
           "[CERTIFICATE_EXPIRATION] > 168h"
           "[BODY] == pat(*authentik*)"
         ];
+        extra-labels = {
+          slo_public = "true";
+          slo_name = "Authentik";
+          slo_desc = "Identity provider";
+          slo_url = "https://authn.allanshomelab.com";
+        };
       }
       {
         name = "Checkmk";
