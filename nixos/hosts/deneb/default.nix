@@ -2,6 +2,7 @@
 
 {
   imports = [
+    ./gatus.nix
     ./prometheus.nix
 
     ../../modules/virtual-machine

@@ -440,6 +440,12 @@
           "[CERTIFICATE_EXPIRATION] > 168h"
           "[BODY] == pat(*Grafana*)"
         ];
+        extra-labels = {
+          slo_public = "true";
+          slo_name = "Grafana";
+          slo_desc = "Metrics dashboards";
+          slo_url = "grafana.allanshomelab.com";
+        };
       }
       {
         name = "Vaultwarden (Allan's Home Lab)";
