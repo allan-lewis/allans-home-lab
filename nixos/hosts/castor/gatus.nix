@@ -380,6 +380,12 @@
           "[CERTIFICATE_EXPIRATION] > 168h"
           "[BODY] == pat(*Home Assistant*)"
         ];
+        extra-labels = {
+          slo_public = "true";
+          slo_name = "Home Assistant";
+          slo_desc = "Home automation";
+          slo_url = "https://home.allanshomelab.com";
+        };
       }
       {
         name = "Allan & Vaia";
