@@ -3,6 +3,7 @@
 {
   imports = [
     ./gatus.nix
+    ./prometheus.nix
     ./traefik.nix
 
     ../../modules/bare-metal
@@ -27,6 +28,9 @@
   };
 
   services.homelab.managedState.schedule = "*:30";
+
+  #: castor is the source of truth for SLO windows up to 28d, so retain beyond the 14d default
+  services.homelab.prometheus.retentionTime = "35d";
 
   homelab.twingate = {
     enable = true;

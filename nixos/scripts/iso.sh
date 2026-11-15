@@ -10,8 +10,8 @@ OUT=".build/nix-iso/${HOSTNAME}"
 : "${OUT:?--out is required}"
 
 USER_NAME="lab"
-STATE_VERSION="26.05"
-NIXPKGS_REF="nixos-26.05"
+STATE_VERSION="26.11"
+NIXPKGS_REF="nixos-unstable"
 
 die() {
   echo "ERROR: $*" >&2
