@@ -158,7 +158,7 @@
   };
 
   virtualisation.oci-containers.containers.transmission = {
-    image = "ghcr.io/linuxserver/transmission:4.1.4@sha256:5b3c27a96c8a37c878a525ebf377a32032c3a3acfe845ecaa7c3eb10b09c2caa";
+    image = "ghcr.io/linuxserver/transmission:4.1.4@sha256:5baf08cd73a566699f35baad3c4a84ba7d7057220566c5fb29969bf2292dc2ff";
 
     autoStart = true;
 
