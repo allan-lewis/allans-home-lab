@@ -2,7 +2,7 @@
 
 {
   virtualisation.oci-containers.containers.tautulli = {
-    image = "ghcr.io/tautulli/tautulli:v2.19.1@sha256:239cd6dbc429a0eb441bdf88a7a015871e2d4d6e02b6e6039af30c0487528a8e";
+    image = "ghcr.io/tautulli/tautulli:v2.19.1@sha256:4734b5d6afbac9f364bb93577135684d7c84a7be66b055f4f6b17d2bfc9721fa";
 
     autoStart = true;
 
