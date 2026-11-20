@@ -12,7 +12,7 @@
 
 {
   virtualisation.oci-containers.containers.seerr = {
-    image = "ghcr.io/seerr-team/seerr:v3.5.1@sha256:2636191726a315dbd75228537f7be74b2fa7498998bb22e37b5b5c8756018fba";
+    image = "ghcr.io/seerr-team/seerr:v3.5.2";
 
     autoStart = true;
 
