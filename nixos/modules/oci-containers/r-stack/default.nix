@@ -86,7 +86,7 @@
   };
 
   virtualisation.oci-containers.containers.lidarr = {
-    image = "ghcr.io/linuxserver/lidarr:3.1.6@sha256:8fb40ada166dd1880cb1b166df5bcbb081107523f20ab60df05c313e2052a467";
+    image = "ghcr.io/linuxserver/lidarr:3.1.6@sha256:dbece386c6cf33ce27eb6f517d5c476f5495de3731439189357e3576562d3ed5";
 
     autoStart = true;
 
