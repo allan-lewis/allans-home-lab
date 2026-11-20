@@ -59,7 +59,7 @@ in
 
     services.homelab.twingateConnector = {
       enable = true;
-      image = "twingate/connector:1.96.0@sha256:f02bcac59a7cd1617fcfb63a462b1ac6bcea81c55a54b295ba79373945c7e83a";
+      image = "twingate/connector:1.96.0@sha256:55e724534d7a6ecc9f68012ceaf1bb94934ad8fa2efb24a07e071c2a80f34b85";
       environmentFile = config.sops.templates."twingate-connector.env".path;
     };
   };
