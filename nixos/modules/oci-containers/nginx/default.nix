@@ -1,6 +1,6 @@
 {
   services.homelab.containers.nginx = {
-    image = "docker.io/library/nginx:1.31.9";
+    image = "docker.io/library/nginx:docker.io/library/nginx:1.31.9@sha256:84f7876d21d154885f99554d7ae325d8c2213f9169726ea7ab60642f2573a787";
     port = 80;
   };
 }
