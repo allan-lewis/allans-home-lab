@@ -2,7 +2,7 @@
 
 {
   virtualisation.oci-containers.containers.frigate = {
-    image = "ghcr.io/blakeblackshear/frigate:0.18.2@sha256:fd60f99ffd4eb6c42360ed4e14953e270586f239309ab3983e55b2e97ffac09a";
+    image = "ghcr.io/blakeblackshear/frigate:0.18.3@sha256:52ee4a7b4aa403347c1f31974d4faafc7157f97933c08c905c08ec6599f4f27a";
 
     autoStart = true;
 
