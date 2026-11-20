@@ -6,12 +6,12 @@ let
   connectors = {
     modestAnteater = {
       networkName = "allanshomelab";
-      image = "twingate/connector:1.95.0@sha256:0ef390ef3e526ba7cfb1c6504b794518226188c005087c95205fa9a5b769372a";
+      image = "twingate/connector:1.96.0";
     };
 
     valiantStingray = {
       networkName = "allanshomelab";
-      image = "twingate/connector:1.95.0@sha256:0ef390ef3e526ba7cfb1c6504b794518226188c005087c95205fa9a5b769372a";
+      image = "twingate/connector:1.96.0";
     };
   };
 
