@@ -6,12 +6,10 @@ let
   connectors = {
     modestAnteater = {
       networkName = "allanshomelab";
-      image = "twingate/connector:1.95.0@sha256:0ef390ef3e526ba7cfb1c6504b794518226188c005087c95205fa9a5b769372a";
     };
 
     valiantStingray = {
       networkName = "allanshomelab";
-      image = "twingate/connector:1.95.0@sha256:0ef390ef3e526ba7cfb1c6504b794518226188c005087c95205fa9a5b769372a";
     };
   };
 
@@ -61,7 +59,7 @@ in
 
     services.homelab.twingateConnector = {
       enable = true;
-      image = selectedConnector.image;
+      image = "twingate/connector:1.95.0@sha256:0ef390ef3e526ba7cfb1c6504b794518226188c005087c95205fa9a5b769372a";
       environmentFile = config.sops.templates."twingate-connector.env".path;
     };
   };
