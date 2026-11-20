@@ -5,6 +5,7 @@
     ../../modules/aws
     ../../modules/docker
     ../../modules/doppler
+    ../../modules/java
     ../../modules/rust
   ];
 
