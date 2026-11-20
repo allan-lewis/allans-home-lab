@@ -42,7 +42,7 @@
   };
 
   virtualisation.oci-containers.containers.prowlarr = {
-    image = "ghcr.io/linuxserver/prowlarr:2.7.0@sha256:6660787a99b2e58203539583663c973b48979fc00ff2cb78dc0ea17429e1f6ef";
+    image = "ghcr.io/linuxserver/prowlarr:3.0.2@sha256:f17833641190c24deabfa99c8a59c9ad22a8f6f82968dda793cc802fb9f8fdeb";
 
     autoStart = true;
 
