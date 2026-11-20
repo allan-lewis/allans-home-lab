@@ -110,7 +110,7 @@
   };
 
   virtualisation.oci-containers.containers.radarr = {
-    image = "ghcr.io/linuxserver/radarr:6.4.4@sha256:084b3b2ab1d0ef930660727259546a241f2bdf67c9ed085d54bf1486a6887c9b";
+    image = "ghcr.io/linuxserver/radarr:6.4.4@sha256:7a20f20de63706eee2ff6e4ac1f989a70c961f456aa47ccb6c78f2bb7657d9ae";
 
     autoStart = true;
 
