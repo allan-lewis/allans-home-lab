@@ -1,7 +1,7 @@
 { remoteBackupRoot, config, ... }:
 
 let
-  authentikVersion = "2026.8.5";
+  authentikVersion = "2026.8.6";
 in
 {
   imports = [
