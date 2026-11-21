@@ -24,7 +24,7 @@ Verified on the DeskPi RackMate T2 by printing `rack-10in/panel-skeleton.scad` (
 
 - **Shelf:** `rack-10in/shelf-zimaboard.scad`. The faceplate has hex vents, a stencil name and keystones 11-12; the floor is 6 thick with diamond windows.
 - **Faceplate text:** Big Shoulders Stencil Bold, scaled so "allanshomelab.com" would be 130 wide, inset 0.3 to widen the bridges, with vents as tall as the letters.
-- **Plain panel:** `panel-keystone`, `panel-vanity` or `panel-vent`.
+- **Plain panel:** `panel-keystone`, `panel-vanity`, `panel-vent`, `panel-blank` (2U, 1U vent field across the middle) or `panel-solid` (1U, no cutouts).
 - **Rail-mounted accessory with no panel:** `hook-cable-loop.scad`, an 18-wide plate with teardrop-topped slots that prints on its side.
 
 `just hw-render rack-10in/<part>.scad [yes]` takes a path relative to `hardware/`.

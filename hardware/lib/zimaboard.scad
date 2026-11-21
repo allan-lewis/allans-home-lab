@@ -71,7 +71,6 @@ cage_z1 = ssd_z + ssd_size[2] - ssd_grip;
 
 assert(floor_thickness + board_size[1] + 1 <= rack_panel_height(1) + PANEL_GAP / 2, "board would reach into the next U");
 assert(lip_height < board_port_bottom, "rear lip would block the ports");
-assert(cage_z0 >= PANEL_THICKNESS, "drive cage would run into the faceplate");
 assert(floor_thickness + cage_height < rack_panel_height(1), "drive cage taller than the panel");
 
 // Wall along Z on the floor, from z0 to z1 and height above the floor. A wall
@@ -116,6 +115,7 @@ module board_retention() {
 // The drive cage's side walls, each with its grooves on the side facing the
 // drives
 module drive_cage() {
+  assert(cage_z0 >= PANEL_THICKNESS, "drive cage would run into the faceplate");
   for (side = [[cage_x0, cage_x0 + cage_wall], [cage_x1 - cage_side, cage_x1 - cage_side - 1]])
     difference() {
       rail(side[0], cage_z0, cage_z1, cage_height, ramp = true, width = cage_side);
