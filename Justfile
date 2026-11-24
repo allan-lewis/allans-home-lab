@@ -39,6 +39,10 @@ all-inventory-build:
 all-terraform host action approve="0": all-inventory-build
   {{run_prefix}} shared/terraform/provision.sh "{{host}}" "{{action}}" "{{approve}}"
 
+# Upgrade Terraform provider/module versions for host provisioning (init only, no plan/apply)
+all-terraform-upgrade:
+  {{run_prefix}} shared/terraform/init-upgrade.sh
+
 #############################
 #### ARCH ###################
 #############################
