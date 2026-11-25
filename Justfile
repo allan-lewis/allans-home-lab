@@ -39,6 +39,14 @@ all-inventory-build:
 all-terraform host action approve="0": all-inventory-build
   {{run_prefix}} shared/terraform/provision.sh "{{host}}" "{{action}}" "{{approve}}"
 
+# Encrypt a file with GPG using BACKUP_ENCRYPTION_KEY (default output: <input>.gpg)
+all-encrypt input output="":
+  {{run_prefix}} shared/scripts/gpg-crypt.sh encrypt "{{input}}" {{ if output == "" { "" } else { quote(output) } }}
+
+# Decrypt a GPG file using BACKUP_ENCRYPTION_KEY (default output: <input> without .gpg)
+all-decrypt input output="":
+  {{run_prefix}} shared/scripts/gpg-crypt.sh decrypt "{{input}}" {{ if output == "" { "" } else { quote(output) } }}
+
 # Upgrade Terraform provider/module versions for host provisioning (init only, no plan/apply)
 all-terraform-upgrade:
   {{run_prefix}} shared/terraform/init-upgrade.sh

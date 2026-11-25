@@ -236,6 +236,37 @@ docker exec -i immich_postgres pg_restore \
 
 ---
 
+## Encrypt / Decrypt a File with GPG
+
+Symmetric AES256 encryption using the passphrase in `BACKUP_ENCRYPTION_KEY`, supplied by Doppler.
+
+Encrypt (writes `~/Downloads/file.json.gpg`, leaving the original in place):
+
+```bash
+just all-encrypt ~/Downloads/file.json
+```
+
+Decrypt (writes `~/Downloads/file.json`):
+
+```bash
+just all-decrypt ~/Downloads/file.json.gpg
+```
+
+Both take an optional output path as a second argument:
+
+```bash
+just all-decrypt ~/Downloads/file.json.gpg ~/Downloads/file-restored.json
+```
+
+Notes:
+
+- Existing files are never overwritten; delete the target or pass a different output path.
+- The recipe fails if `BACKUP_ENCRYPTION_KEY` is unset or empty, or if `gpg` isn't installed (`brew install gnupg`).
+- Output files are created with `0600` permissions.
+- A failed run (e.g. wrong key) leaves no partial output behind.
+
+---
+
 ## Merge a Git Branch with Main
 
 Checkout and update the main branch.
